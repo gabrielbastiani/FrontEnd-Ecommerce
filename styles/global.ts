@@ -8,13 +8,17 @@ export default createGlobalStyle`
   }
 
   body {
-    background: ${props => props.theme.colors.background};
-    color: ${props => props.theme.colors.text};
+    background: ${props => props.theme.colors.white};
+    color: ${props => props.theme.colors.black};
     font: 400 16px Roboto, sans-serif;
   }
 
   a {
-    color: ${props => props.theme.colors.background};
+    color: ${props => props.theme.colors.black};
     text-decoration: none;
+  }
+
+  button {
+    cursor: pointer;
   }
 `
