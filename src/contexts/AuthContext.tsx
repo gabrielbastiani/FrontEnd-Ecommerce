@@ -5,7 +5,6 @@ import { destroyCookie, parseCookies, setCookie } from 'nookies';
 import Router from 'next/router';
 
 
-
 type AuthContextData = {
   user: UserProps;
   isAuthenticated: boolean;
@@ -73,7 +72,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
         password
       })
-      // console.log(response.data);
+      console.log(response.data);
 
       const { id, nameComplete, loja_id, token } = response.data;
 

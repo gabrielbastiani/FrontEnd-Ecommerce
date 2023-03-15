@@ -1,4 +1,6 @@
 import React from "react";
+import { canSSRAuth } from "../../utils/canSSRAuth";
+import { setupAPIClient } from "../../services/api";
 
 
 export default function MyAccount() {
@@ -9,3 +11,12 @@ export default function MyAccount() {
         </>
     )
 }
+
+export const getServerSideProps = canSSRAuth(async (ctx) => {
+    const apiClient = setupAPIClient(ctx);
+ 
+    return {
+       props: {}
+    }
+ 
+ });

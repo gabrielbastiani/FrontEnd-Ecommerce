@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef, FormEvent } from 'react';
+import { useContext, useState, useRef, FormEvent } from 'react';
 import logoLoginImg from '../../assets/LogoBuilderBlack.png';
 import { Button } from '../../components/ui/Button/index';
 import { toast } from 'react-toastify';
@@ -15,6 +15,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import Link from 'next/link';
 import Image from 'next/image';
 import Head from 'next/head';
+import { canSSRGuest } from '../../utils/canSSRGuest';
 
 
 export default function loginClient() {
@@ -42,7 +43,7 @@ export default function loginClient() {
         }
         /* @ts-ignore */
         if (email === '' || password === '') {
-            toast.warning('Preencha os campos! (Email e Senha)')
+            toast.warning('Preencha os campos! (Email e Senha)');
             return;
         }
 
@@ -52,9 +53,6 @@ export default function loginClient() {
             email,
             password
         }
-
-        console.log(data)
-
         /* @ts-ignore */
         await signIn(data);
 
@@ -71,7 +69,7 @@ export default function loginClient() {
     return (
         <>
             <Head>
-                <title>Blog Builder Seu Negócio Online - Login</title>
+                <title>Loja Builder Seu Negócio Online - Login</title>
             </Head>
 
             <ContainerCenter>
@@ -130,3 +128,9 @@ export default function loginClient() {
         </>
     )
 }
+
+export const getServerSideProps = canSSRGuest(async (ctx) => {
+    return {
+        props: {}
+    }
+});

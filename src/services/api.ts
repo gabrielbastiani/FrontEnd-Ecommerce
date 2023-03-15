@@ -1,8 +1,8 @@
-import axios, { AxiosError } from 'axios'
-import { parseCookies } from 'nookies'
-import { AuthTokenError } from './errors/AuthTokenError'
+import axios, { AxiosError } from 'axios';
+import { parseCookies } from 'nookies';
+import { AuthTokenError } from './errors/AuthTokenError';
+import { signOut } from '../contexts/AuthContext';
 
-import { signOut } from '../contexts/AuthContext'
 
 export function setupAPIClient(ctx = undefined) {
   let cookies = parseCookies(ctx);
@@ -12,7 +12,7 @@ export function setupAPIClient(ctx = undefined) {
     headers: {
       Authorization: `Bearer ${cookies['@lojavirtual.token']}`
     }
-  })
+  });
 
   api.interceptors.response.use(response => {
     return response;
@@ -29,7 +29,7 @@ export function setupAPIClient(ctx = undefined) {
 
     return Promise.reject(error);
 
-  })
+  });
 
   return api;
 
