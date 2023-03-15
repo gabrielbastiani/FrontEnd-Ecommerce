@@ -7,14 +7,18 @@ import 'react-toastify/dist/ReactToastify.css'
 import { AuthProvider } from '../contexts/AuthContext';
 
 
-export default function App({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
+    <>
       <ThemeProvider theme={theme}>
-        <Component {...pageProps} />
-        <ToastContainer autoClose={4000} />
+        <AuthProvider>
+          <Component {...pageProps} />
+          <ToastContainer autoClose={4000} />
+        </AuthProvider>
         <GlobalStyle />
-      </ThemeProvider>
-    </AuthProvider>
+      </ThemeProvider >
+    </>
   )
 }
+
+export default MyApp

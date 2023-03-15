@@ -31,35 +31,33 @@ export default function loginClient() {
 
     async function handleLogin(event: FormEvent) {
         event.preventDefault();
-        try {
-            if (captcha.current.getValue()) {
-                console.log('Usuario válido!');
-                setUserValid(true);
-            } else {
-                console.log('Por favor, acerte o recaptcha!');
-                toast.error('Por favor, acerte o recaptcha!');
 
-                return;
-            }
-            /* @ts-ignore */
-            if (email === '' || password === '') {
-                toast.warning('Preencha os campos! (Email e Senha)');
-                return;
-            }
+        if (captcha.current.getValue()) {
+            console.log('Usuario válido!');
+            setUserValid(true);
+        } else {
+            console.log('Por favor, acerte o recaptcha!');
+            toast.error('Por favor, acerte o recaptcha!');
 
-            setLoading(true)
-
-            let data = {
-                email,
-                password
-            }
-            /* @ts-ignore */
-            await signIn(data);
-
-            setLoading(false);
-        } catch (error) {
-            console.log(error.response.data)
+            return;
         }
+        /* @ts-ignore */
+        if (email === '' || password === '') {
+            toast.warning('Preencha os campos! (Email e Senha)');
+            return;
+        }
+
+        setLoading(true);
+
+        let data = {
+            email,
+            password
+        }
+        /* @ts-ignore */
+        await signIn(data);
+
+        setLoading(false);
+
     }
 
     const onChange = () => {
@@ -135,4 +133,4 @@ export const getServerSideProps = canSSRGuest(async (ctx) => {
     return {
         props: {}
     }
-});
+})

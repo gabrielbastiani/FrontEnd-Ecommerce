@@ -1,8 +1,8 @@
 import { createContext, ReactNode, useState, useEffect } from 'react';
 import { api } from '../services/apiClient';
-import { toast } from 'react-toastify';
-import { destroyCookie, parseCookies, setCookie } from 'nookies';
+import { destroyCookie, setCookie, parseCookies } from 'nookies'
 import Router from 'next/router';
+import { toast } from 'react-toastify'
 
 
 type AuthContextData = {
@@ -32,7 +32,7 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function signOut() {
   try {
-    destroyCookie(undefined, '@lojavirtual.token')
+    destroyCookie(undefined, '@blogoficinamecanica.token')
     Router.push('/')
   } catch {
     toast.error('Erro ao deslogar!')
@@ -72,11 +72,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
         password
       })
-      /* console.log(response.data); */
+      // console.log(response.data);
 
       const { id, nameComplete, loja_id, token } = response.data;
 
-      setCookie(undefined, '@lojabuilder.token', token, {
+      setCookie(undefined, '@lojavirtual.token', token, {
         maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
         path: "/" // Quais caminhos terao acesso ao cookie
       })
@@ -93,8 +93,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       toast.success('Logado com sucesso!')
 
-      //Redirecionar o user para /dashboard
-      Router.push('/myAccount');
+      //Redirecionar o user para /myAccount
+      Router.push('/myAccount')
 
 
     } catch (err) {
