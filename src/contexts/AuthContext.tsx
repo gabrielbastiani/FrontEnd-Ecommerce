@@ -1,8 +1,9 @@
 import { createContext, ReactNode, useState, useEffect } from 'react';
 import { api } from '../services/apiClient';
-import { destroyCookie, parseCookies, setCookie } from '../../node_modules/nookies/dist/index';
-import Router from '../../node_modules/next/router';
-import { toast } from '../../node_modules/react-toastify/dist/index';
+import { toast } from 'react-toastify';
+import { destroyCookie, parseCookies, setCookie } from 'nookies';
+import Router from 'next/router';
+
 
 
 type AuthContextData = {
