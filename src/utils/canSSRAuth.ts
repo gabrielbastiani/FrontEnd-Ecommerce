@@ -13,7 +13,7 @@ export function canSSRAuth<P>(fn: GetServerSideProps<P>){
     if(!token){
       return{
         redirect:{
-          destination: '/login',
+          destination: '/loginClient',
           permanent: false,
         }
       }
@@ -27,7 +27,7 @@ export function canSSRAuth<P>(fn: GetServerSideProps<P>){
 
         return{
           redirect:{
-            destination: '/login',
+            destination: '/loginClient',
             permanent: false
           }
         }

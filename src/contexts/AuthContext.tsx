@@ -14,9 +14,9 @@ type AuthContextData = {
 
 type UserProps = {
   id: string;
-  photo: string;
-  name: string;
+  nameComplete: string;
   email: string;
+  loja_id: string;
 }
 
 type SignInProps = {
@@ -30,17 +30,17 @@ type AuthProviderProps = {
 
 export const AuthContext = createContext({} as AuthContextData)
 
-export function signOut(){
-  try{
+export function signOut() {
+  try {
     destroyCookie(undefined, '@lojavirtual.token')
-    Router.push('/login')
-  }catch{
+    Router.push('/')
+  } catch {
     toast.error('Erro ao deslogar!')
     console.log('erro ao deslogar')
   }
 }
 
-export function AuthProvider({ children }: AuthProviderProps){
+export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserProps>()
   const isAuthenticated = !!user;
 
@@ -49,43 +49,43 @@ export function AuthProvider({ children }: AuthProviderProps){
     // tentar pegar algo no cookie
     const { '@lojavirtual.token': token } = parseCookies();
 
-    if(token){
+    if (token) {
       api.get('/me').then(response => {
-        const { id, photo, name, email } = response.data;
+        const { id, nameComplete, email, loja_id } = response.data;
 
         setUser({
           id,
-          photo,
-          name,
-          email
+          nameComplete,
+          email,
+          loja_id
         })
 
       })
-      
+
     }
 
   }, [])
 
-  async function signIn({ email, password }: SignInProps){
-    try{
+  async function signIn({ email, password }: SignInProps) {
+    try {
       const response = await api.post('/session', {
         email,
         password
       })
       // console.log(response.data);
 
-      const { id, photo, name, token } = response.data;
+      const { id, nameComplete, loja_id, token } = response.data;
 
-      setCookie(undefined, '@lojavirtual.token', token, {
+      setCookie(undefined, '@lojabuilder.token', token, {
         maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
         path: "/" // Quais caminhos terao acesso ao cookie
       })
 
       setUser({
         id,
-        photo,
-        name,
+        nameComplete,
         email,
+        loja_id
       })
 
       //Passar para proximas requisiçoes o nosso token
@@ -94,16 +94,16 @@ export function AuthProvider({ children }: AuthProviderProps){
       toast.success('Logado com sucesso!')
 
       //Redirecionar o user para /dashboard
-      Router.push('/dashboard')
+      Router.push('/myAccount');
 
 
-    }catch(err){
+    } catch (err) {
       toast.error("Erro ao acessar, confirmou seu cadastro em seu email?")
       console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err)
     }
   }
 
-  return(
+  return (
     <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
       {children}
     </AuthContext.Provider>

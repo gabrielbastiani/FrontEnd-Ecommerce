@@ -12,7 +12,7 @@ export function canSSRGuest<P>(fn: GetServerSideProps<P>) {
     if(cookies['@lojavirtual.token']){
       return {
         redirect:{
-          destination: '/dashboard',
+          destination: '/myAccount',
           permanent: false,
         }
       }
