@@ -32,11 +32,11 @@ export default function loginClient() {
         event.preventDefault();
 
         if (captcha.current.getValue()) {
-            console.log('Usuario válido!')
-            setUserValid(true)
+            console.log('Usuario válido!');
+            setUserValid(true);
         } else {
-            console.log('Por favor, acerte o recaptcha!')
-            toast.error('Por favor, acerte o recaptcha!')
+            console.log('Por favor, acerte o recaptcha!');
+            toast.error('Por favor, acerte o recaptcha!');
 
             return;
         }
@@ -52,16 +52,19 @@ export default function loginClient() {
             email,
             password
         }
-        /* @ts-ignore */
-        await signIn(data)
 
-        setLoading(false)
+        console.log(data)
+
+        /* @ts-ignore */
+        await signIn(data);
+
+        setLoading(false);
 
     }
 
     const onChange = () => {
         if (captcha.current.getValue()) {
-            console.log('Usuario não é um robo!')
+            console.log('Usuario não é um robo!');
         }
     }
 

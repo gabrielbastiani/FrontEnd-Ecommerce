@@ -1,6 +1,6 @@
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { destroyCookie, parseCookies } from '../../node_modules/nookies/dist/index';
 import { AuthTokenError } from '../services/errors/AuthTokenError'
+import { destroyCookie, parseCookies } from 'nookies';
 
 
 //funcao para paginas que só users logados podem ter acesso.

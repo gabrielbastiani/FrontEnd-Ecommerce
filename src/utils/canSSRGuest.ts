@@ -1,5 +1,6 @@
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { parseCookies } from '../../node_modules/nookies/dist/index';
+import { parseCookies } from 'nookies';
+
 
 
 //funcao para paginas que só pode ser acessadas por visitantes
