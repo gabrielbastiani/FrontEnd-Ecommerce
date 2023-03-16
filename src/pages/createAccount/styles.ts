@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 export const ContainerCenter = styled.div`
-  height: 100vh;
   display: flex;
   flex: 1;
   justify-content: center;
@@ -11,7 +10,7 @@ export const ContainerCenter = styled.div`
 
 export const ContLogin = styled.div`
   margin-top: 2rem;
-  width: 1300px;
+  width: 80%;
   display: flex;
   align-items: center;
   padding: 2rem 1.5rem;
@@ -22,7 +21,13 @@ export const ContLogin = styled.div`
   }
 `
 
-export const BoxTop = styled.div``
+export const BoxTop = styled.div`
+  width: 85%;
+
+  @media (max-width: 580px) {
+    width: 95%;
+  }
+`
 
 export const RadioBotton = styled.input`
   margin-right: 5px;
@@ -32,7 +37,22 @@ export const TextCadastro = styled.span`
   ${props => props?.theme?.colors?.black};
 `
 
-export const FormularioCadastroPessoaFisica = styled.form``
+export const CadastroPessoaFisica = styled.div`
+  display: grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  margin-top: 30px;
+
+  @media (max-width: 580px) {
+    grid-template-columns: auto;
+  }
+`
+
+export const BlockInputs = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+`
 
 export const Etiqueta = styled.label`
   margin-right: 11px;
@@ -46,6 +66,12 @@ export const BoxRadios = styled.div`
   margin-bottom: 50px;
 `
 
-export const EtiquetaInput = styled.label`
+export const EtiquetaInput = styled.label``;
 
-`;
+/* export const BoxNews = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  margin-top: 30px;
+  margin-bottom: 50px;
+`; */

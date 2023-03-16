@@ -5,10 +5,12 @@ import {
     ContLogin,
     TextCadastro,
     RadioBotton,
-    FormularioCadastroPessoaFisica,
+    CadastroPessoaFisica,
     Etiqueta,
     BoxRadios,
-    EtiquetaInput
+    EtiquetaInput,
+    BlockInputs,
+    BoxNews
 } from './styles';
 import Head from "next/head";
 import { HeaderAccount } from "../../components/HeaderAccount";
@@ -55,108 +57,149 @@ export default function createAccount() {
                             titulo="Dados Pessoais"
                         />
 
-                        <FormularioCadastroPessoaFisica onSubmit={() => alert('clicou')}>
+                        <CadastroPessoaFisica>
 
-                            <EtiquetaInput>Nome Completo</EtiquetaInput>
-                            <Input
-                                placeholder="Nome Completo"
-                            />
+                            <BlockInputs>
+                                <BoxNews>
+                                    <EtiquetaInput>Nome Completo</EtiquetaInput>
+                                    <Input
+                                        placeholder="Nome Completo"
+                                    />
+                                </BoxNews>
+                            </BlockInputs>
 
-                            <EtiquetaInput>E-mail</EtiquetaInput>
-                            <Input
-                                name='email'
-                                value={''}
-                                placeholder="E-mail"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>E-mail</EtiquetaInput>
+                                <Input
+                                    name='email'
+                                    value={''}
+                                    placeholder="E-mail"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>CPF</EtiquetaInput>
-                            <Input
-                                /* @ts-ignore */
-                                as={IMaskInput}
-                                /* @ts-ignore */
-                                mask="000.000.000-00"
-                                type="text"
-                                placeholder="CPF"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>CPF</EtiquetaInput>
+                                <Input
+                                    /* @ts-ignore */
+                                    as={IMaskInput}
+                                    /* @ts-ignore */
+                                    mask="000.000.000-00"
+                                    type="text"
+                                    placeholder="CPF"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Data de Nascimento</EtiquetaInput>
-                            <Input
-                                /* @ts-ignore */
-                                as={IMaskInput}
-                                /* @ts-ignore */
-                                mask="00/00/0000"
-                                type="text"
-                                placeholder="dd/mm/aaaa"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>Data de Nascimento</EtiquetaInput>
+                                <Input
+                                    /* @ts-ignore */
+                                    as={IMaskInput}
+                                    /* @ts-ignore */
+                                    mask="00/00/0000"
+                                    type="text"
+                                    placeholder="dd/mm/aaaa"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Gênero</EtiquetaInput>
-                            <select></select>
+                            <BlockInputs>
+                                <EtiquetaInput>Gênero</EtiquetaInput>
+                                <select></select>
+                            </BlockInputs>
 
-                            <EtiquetaInput>Telefone</EtiquetaInput>
-                            <Input
-                                /* @ts-ignore */
-                                as={IMaskInput}
-                                /* @ts-ignore */
-                                mask="(00) 0000-0000"
-                                type="text"
-                                placeholder="(00) 0000-0000"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>Telefone</EtiquetaInput>
+                                <Input
+                                    /* @ts-ignore */
+                                    as={IMaskInput}
+                                    /* @ts-ignore */
+                                    mask="(00) 0000-0000"
+                                    type="text"
+                                    placeholder="(00) 0000-0000"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Senha</EtiquetaInput>
-                            <Input
-                                type="password"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>Senha</EtiquetaInput>
+                                <Input
+                                    type="password"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Receba nossas ofertas</EtiquetaInput>
-                            <RadioBotton type="checkbox" id="css" name="fav_language" value="CSS" />
+                            <BlockInputs>
+                                <EtiquetaInput>Repitir a senha</EtiquetaInput>
+                                <Input
+                                    type="password"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Endereço</EtiquetaInput>
-                            <Input
-                                type="text"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>Receba nossas ofertas</EtiquetaInput>
+                                <RadioBotton type="checkbox" id="css" name="fav_language" value="CSS" />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Número</EtiquetaInput>
-                            <Input
-                                type="text"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>Endereço</EtiquetaInput>
+                                <Input
+                                    type="text"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Complemento</EtiquetaInput>
-                            <Input
-                                type="text"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>Número</EtiquetaInput>
+                                <Input
+                                    type="text"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Bairro</EtiquetaInput>
-                            <Input
-                                type="text"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>Complemento</EtiquetaInput>
+                                <Input
+                                    type="text"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>CEP</EtiquetaInput>
-                            <Input
-                                /* @ts-ignore */
-                                as={IMaskInput}
-                                /* @ts-ignore */
-                                mask="00000-000"
-                                type="text"
-                                placeholder="CEP"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>Bairro</EtiquetaInput>
+                                <Input
+                                    type="text"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Cidade</EtiquetaInput>
-                            <Input
-                                type="text"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>CEP</EtiquetaInput>
+                                <Input
+                                    /* @ts-ignore */
+                                    as={IMaskInput}
+                                    /* @ts-ignore */
+                                    mask="00000-000"
+                                    type="text"
+                                    placeholder="CEP"
+                                />
+                            </BlockInputs>
 
-                            <EtiquetaInput>Estado</EtiquetaInput>
-                            <Input
-                                type="text"
-                            />
+                            <BlockInputs>
+                                <EtiquetaInput>Cidade</EtiquetaInput>
+                                <Input
+                                    type="text"
+                                />
+                            </BlockInputs>
 
-                            <Button
-                                type="submit"
-                            >
-                                Cadastrar
-                            </Button>
+                            <BlockInputs>
+                                <EtiquetaInput>Estado</EtiquetaInput>
+                                <Input
+                                    type="text"
+                                />
+                            </BlockInputs>
 
-                        </FormularioCadastroPessoaFisica>
+                            <BlockInputs>
+                                <Button
+                                    type="submit"
+                                >
+                                    Cadastrar
+                                </Button>
+                            </BlockInputs>
+
+                        </CadastroPessoaFisica>
 
                     </BoxTop>
                 </ContLogin>
