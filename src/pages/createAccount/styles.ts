@@ -10,6 +10,7 @@ export const ContainerCenter = styled.div`
 
 export const ContLogin = styled.div`
   margin-top: 2rem;
+  margin-bottom: 50px;
   width: 80%;
   display: flex;
   align-items: center;
@@ -66,12 +67,32 @@ export const BoxRadios = styled.div`
   margin-bottom: 50px;
 `
 
-export const EtiquetaInput = styled.label``;
+export const SelectGenero = styled.select`
+  padding: 5px;
+  border-radius: 10px;
+`;
 
-/* export const BoxNews = styled.div`
+export const OpcoesGenero = styled.option`
+
+`;
+
+export const EtiquetaInput = styled.label`
+  font-weight: 600;
+  padding-bottom: 5px;
+`;
+
+export const BoxNews = styled.div`
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
   margin-top: 30px;
   margin-bottom: 50px;
-`; */
+`
+
+export const ButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+  width: 100%;
+`

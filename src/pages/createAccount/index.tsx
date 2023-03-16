@@ -10,7 +10,10 @@ import {
     BoxRadios,
     EtiquetaInput,
     BlockInputs,
-    BoxNews
+    BoxNews,
+    ButtonBox,
+    OpcoesGenero,
+    SelectGenero
 } from './styles';
 import Head from "next/head";
 import { HeaderAccount } from "../../components/HeaderAccount";
@@ -60,12 +63,10 @@ export default function createAccount() {
                         <CadastroPessoaFisica>
 
                             <BlockInputs>
-                                <BoxNews>
-                                    <EtiquetaInput>Nome Completo</EtiquetaInput>
-                                    <Input
-                                        placeholder="Nome Completo"
-                                    />
-                                </BoxNews>
+                                <EtiquetaInput>Nome Completo</EtiquetaInput>
+                                <Input
+                                    placeholder="Nome Completo"
+                                />
                             </BlockInputs>
 
                             <BlockInputs>
@@ -103,7 +104,12 @@ export default function createAccount() {
 
                             <BlockInputs>
                                 <EtiquetaInput>Gênero</EtiquetaInput>
-                                <select></select>
+                                <SelectGenero name="genero">
+                                    <OpcoesGenero value="">Selecione...</OpcoesGenero>
+                                    <OpcoesGenero value="Masculino">Masculino</OpcoesGenero>
+                                    <OpcoesGenero value="Feminino">Feminino</OpcoesGenero>
+                                    <OpcoesGenero value="Outros">Outros</OpcoesGenero>
+                                </SelectGenero>
                             </BlockInputs>
 
                             <BlockInputs>
@@ -122,6 +128,7 @@ export default function createAccount() {
                                 <EtiquetaInput>Senha</EtiquetaInput>
                                 <Input
                                     type="password"
+                                    placeholder="Senha"
                                 />
                             </BlockInputs>
 
@@ -129,18 +136,22 @@ export default function createAccount() {
                                 <EtiquetaInput>Repitir a senha</EtiquetaInput>
                                 <Input
                                     type="password"
+                                    placeholder="Repitir a senha"
                                 />
                             </BlockInputs>
 
                             <BlockInputs>
-                                <EtiquetaInput>Receba nossas ofertas</EtiquetaInput>
-                                <RadioBotton type="checkbox" id="css" name="fav_language" value="CSS" />
+                                <BoxNews>
+                                    <EtiquetaInput>Receba nossas ofertas</EtiquetaInput>
+                                    <RadioBotton type="checkbox" id="css" name="fav_language" value="CSS" />
+                                </BoxNews>
                             </BlockInputs>
 
                             <BlockInputs>
                                 <EtiquetaInput>Endereço</EtiquetaInput>
                                 <Input
                                     type="text"
+                                    placeholder="Endereço"
                                 />
                             </BlockInputs>
 
@@ -148,13 +159,15 @@ export default function createAccount() {
                                 <EtiquetaInput>Número</EtiquetaInput>
                                 <Input
                                     type="text"
+                                    placeholder="Número"
                                 />
                             </BlockInputs>
 
                             <BlockInputs>
-                                <EtiquetaInput>Complemento</EtiquetaInput>
+                                <EtiquetaInput>Referência</EtiquetaInput>
                                 <Input
                                     type="text"
+                                    placeholder="Referência"
                                 />
                             </BlockInputs>
 
@@ -162,6 +175,7 @@ export default function createAccount() {
                                 <EtiquetaInput>Bairro</EtiquetaInput>
                                 <Input
                                     type="text"
+                                    placeholder="Bairro"
                                 />
                             </BlockInputs>
 
@@ -181,25 +195,54 @@ export default function createAccount() {
                                 <EtiquetaInput>Cidade</EtiquetaInput>
                                 <Input
                                     type="text"
+                                    placeholder="Cidade"
                                 />
                             </BlockInputs>
 
                             <BlockInputs>
                                 <EtiquetaInput>Estado</EtiquetaInput>
-                                <Input
-                                    type="text"
-                                />
-                            </BlockInputs>
-
-                            <BlockInputs>
-                                <Button
-                                    type="submit"
-                                >
-                                    Cadastrar
-                                </Button>
+                                <SelectGenero name="estado">
+                                    <OpcoesGenero value="">Selecione...</OpcoesGenero>
+                                    <OpcoesGenero value="Acre">Acre</OpcoesGenero>
+                                    {label: "Alagoas", value: "Alagoas" },
+                                    {label: "Amapá", value: "Amapá" },
+                                    {label: "Amazonas", value: "Amazonas" },
+                                    {label: "Bahia", value: "Bahia" },
+                                    {label: "Ceara", value: "Ceara" },
+                                    {label: "Distrito Federal", value: "Distrito Federal" },
+                                    {label: "Espírito Santo", value: "Espírito Santo" },
+                                    {label: "Goiás", value: "Goiás" },
+                                    {label: "Maranhão", value: "Maranhão" },
+                                    {label: "Mato Grosso", value: "Mato Grosso" },
+                                    {label: "Mato Grosso do Sul", value: "Mato Grosso do Sul" },
+                                    {label: "Minas Gerais", value: "Minas Gerais" },
+                                    {label: "Pará", value: "Pará" },
+                                    {label: "Paraíba", value: "Paraíba" },
+                                    {label: "Paraná", value: "Paraná" },
+                                    {label: "Pernambuco", value: "Pernambuco" },
+                                    {label: "Piauí", value: "Piauí" },
+                                    {label: "Rio de Janeiro", value: "Rio de Janeiro" },
+                                    {label: "Rio Grande do Norte", value: "Rio Grande do Norte" },
+                                    {label: "Rio Grande do Sul", value: "Rio Grande do Sul" },
+                                    {label: "Rondônia", value: "Rondônia" },
+                                    {label: "Roraima", value: "Roraima" },
+                                    {label: "Santa Catarina", value: "Santa Catarina" },
+                                    {label: "São Paulo", value: "São Paulo" },
+                                    {label: "Sergipe", value: "Sergipe" },
+                                    {label: "Tocantins", value: "Tocantins" }
+                                </SelectGenero>
                             </BlockInputs>
 
                         </CadastroPessoaFisica>
+
+                        <ButtonBox>
+                            <Button
+                                style={{ width: '95%' }}
+                                type="submit"
+                            >
+                                Cadastrar
+                            </Button>
+                        </ButtonBox>
 
                     </BoxTop>
                 </ContLogin>
