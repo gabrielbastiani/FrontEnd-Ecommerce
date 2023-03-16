@@ -2,6 +2,7 @@ import React from "react";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
 import Head from "next/head";
+import { HeaderAccount } from "../../components/HeaderAccount";
 
 
 export default function MyAccount() {
@@ -12,7 +13,7 @@ export default function MyAccount() {
                 <title>Sua Conta na Loja</title>
             </Head>
 
-            <h1>Minha Conta</h1>
+            <HeaderAccount />
 
         </>
     )
