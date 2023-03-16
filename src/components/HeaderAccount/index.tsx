@@ -16,7 +16,7 @@ export const HeaderAccount = () => (
                         <TextVoltar>VOLTAR</TextVoltar>
                     </Link>
                 </BlockBack>
-                <Image src={logoLoginWhite} width={200} height={50} alt="Logo Builder Seu Negocio Online" />
+                <Image src={logoLoginWhite} width={180} height={50} alt="Logo Builder Seu Negocio Online" />
                 <BlockSecurity>
                     <TbLock color='white' size={25} />
                     <TextSecurity>Ambiente 100% seguro</TextSecurity>

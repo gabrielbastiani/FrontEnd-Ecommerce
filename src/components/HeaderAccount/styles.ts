@@ -14,7 +14,7 @@ export const ContentHeader = styled.div`
   justify-content: space-around;
   width: 100%;
 
-  @media (max-width: 540px) {
+  @media (max-width: 542px) {
     flex-direction: column;
     padding: 20px 0;
 

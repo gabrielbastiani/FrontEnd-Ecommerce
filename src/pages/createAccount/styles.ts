@@ -32,7 +32,7 @@ export const TextCadastro = styled.span`
   ${props => props?.theme?.colors?.black};
 `
 
-export const FormularioCadastro = styled.form``
+export const FormularioCadastroPessoaFisica = styled.form``
 
 export const Etiqueta = styled.label`
   margin-right: 11px;
@@ -45,3 +45,7 @@ export const BoxRadios = styled.div`
   margin-top: 30px;
   margin-bottom: 50px;
 `
+
+export const EtiquetaInput = styled.label`
+
+`;
