@@ -39,13 +39,11 @@ export default function createAccount() {
     const [inscricao, setInscricao] = useState('');
 
     const [check, setCheck] = useState(false);
-    const [news, setNews] = useState('');
+    const [news, setNews] = useState('Nao');
 
-    const handleChecked = (e) => {
+    const handleChecked = (e: any) => {
         setCheck(e.target.checked);
     };
-
-    console.log(news)
 
     const [phones, setPhones] = useState('');
     const [nascimento, setNascimento] = useState('');
