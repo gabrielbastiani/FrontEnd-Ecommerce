@@ -23,6 +23,7 @@ import { IMaskInput } from "react-imask";
 import { Button } from "../../components/ui/Button";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../services/api";
+import Router from "next/router";
 
 
 export default function createAccount() {
@@ -96,8 +97,6 @@ export default function createAccount() {
                 nascimento === '' ||
                 generoSelected === '' ||
                 enderecos === '' ||
-                numeros === '' ||
-                referencias === '' ||
                 bairros === '' ||
                 ceps === '' ||
                 cidades === '' ||
@@ -155,6 +154,82 @@ export default function createAccount() {
             setCeps('');
             setCidades('');
             setCpfs('');
+
+            Router.push('/');
+
+        } catch (error) {
+            console.log(error.response.data);
+            toast.error('Ops erro ao cadastrar o cliente!')
+        }
+    }
+
+    async function handleRegisterClientCNPJ() {
+        try {
+            if (names === '' ||
+                emails === '' ||
+                confirmPassword === '' ||
+                cnpjs === '' ||
+                phones === '' ||
+                inscricao === '' ||
+                enderecos === '' ||
+                bairros === '' ||
+                ceps === '' ||
+                cidades === '' ||
+                estadosSelected === ''
+            ) {
+                toast.error('Preencha todos os campos');
+                return
+            }
+
+            if (!isEmail(emails)) {
+                toast.error('Por favor digite um email valido!');
+                return;
+            }
+
+            if (confirmPassword != passwords) {
+                toast.error('Senhas diferentes');
+                return;
+            }
+
+            setLoading(true);
+
+            const apiClient = setupAPIClient();
+            await apiClient.post('/createUser', {
+                nameComplete: names,
+                email: emails,
+                password: confirmPassword,
+                cnpj: cnpjs,
+                phone: phones,
+                inscricaoEstadual: inscricao,
+                local: enderecos,
+                numero: numeros,
+                complemento: referencias,
+                bairro: bairros,
+                CEP: ceps,
+                cidade: cidades,
+                estado: estadosSelected,
+                newslatter: news,
+                loja_id: lojas_id
+            });
+
+            toast.success('Cadastrado realizado com sucesso!!!');
+
+            setLoading(false);
+
+            setNames('');
+            setEmails('');
+            setConfirmPassword('');
+            setPhones('');
+            setInscricao('');
+            setEnderecos('');
+            setNumeros('');
+            setReferencias('');
+            setBairros('');
+            setCnpjs('');
+            setCidades('');
+            setCeps('');
+
+            Router.push('/');
 
         } catch (error) {
             console.log(error.response.data);
@@ -446,7 +521,10 @@ export default function createAccount() {
                                     <BlockInputs>
                                         <EtiquetaInput>Razão Social</EtiquetaInput>
                                         <Input
+                                            type="text"
                                             placeholder="Razão Social"
+                                            value={names}
+                                            onChange={(e) => setNames(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -454,8 +532,9 @@ export default function createAccount() {
                                         <EtiquetaInput>E-mail</EtiquetaInput>
                                         <Input
                                             name='email'
-                                            value={''}
                                             placeholder="E-mail"
+                                            value={emails}
+                                            onChange={(e) => setEmails(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -468,14 +547,18 @@ export default function createAccount() {
                                             mask="00.000.000/0000-00"
                                             type="text"
                                             placeholder="CNPJ"
+                                            value={cnpjs}
+                                            onChange={(e) => setCnpjs(e.target.value)}
                                         />
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Inscrição Estadual</EtiquetaInput>
+                                        <EtiquetaInput>Inscrição Estadual<br /> (Se for ISENTO, escreva ISENTO abaixo)</EtiquetaInput>
                                         <Input
                                             type="text"
                                             placeholder="Inscrição Estadual"
+                                            value={inscricao}
+                                            onChange={(e) => setInscricao(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -488,6 +571,8 @@ export default function createAccount() {
                                             mask="(00) 0000-0000"
                                             type="text"
                                             placeholder="(00) 0000-0000"
+                                            value={phones}
+                                            onChange={(e) => setPhones(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -496,6 +581,8 @@ export default function createAccount() {
                                         <Input
                                             type="password"
                                             placeholder="Senha"
+                                            value={passwords}
+                                            onChange={(e) => setPasswords(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -504,13 +591,21 @@ export default function createAccount() {
                                         <Input
                                             type="password"
                                             placeholder="Repitir a senha"
+                                            value={confirmPassword}
+                                            onChange={(e) => setConfirmPassword(e.target.value)}
                                         />
                                     </BlockInputs>
 
                                     <BlockInputs>
                                         <BoxNews>
                                             <EtiquetaInput>Receba nossas ofertas</EtiquetaInput>
-                                            <RadioBotton type="checkbox" id="news" name="news" value={''} />
+                                            <RadioBotton
+                                                type="checkbox"
+                                                value={news}
+                                                onClick={handleChecked}
+                                                onChange={(e) => setNews(check ? "Nao" : "Sim")}
+                                                checked={check}
+                                            />
                                         </BoxNews>
                                     </BlockInputs>
 
@@ -519,6 +614,8 @@ export default function createAccount() {
                                         <Input
                                             type="text"
                                             placeholder="Endereço"
+                                            value={enderecos}
+                                            onChange={(e) => setEnderecos(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -527,6 +624,8 @@ export default function createAccount() {
                                         <Input
                                             type="text"
                                             placeholder="Número"
+                                            value={numeros}
+                                            onChange={(e) => setNumeros(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -535,6 +634,8 @@ export default function createAccount() {
                                         <Input
                                             type="text"
                                             placeholder="Referência"
+                                            value={referencias}
+                                            onChange={(e) => setReferencias(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -543,6 +644,8 @@ export default function createAccount() {
                                         <Input
                                             type="text"
                                             placeholder="Bairro"
+                                            value={bairros}
+                                            onChange={(e) => setBairros(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -555,6 +658,8 @@ export default function createAccount() {
                                             mask="00000-000"
                                             type="text"
                                             placeholder="CEP"
+                                            value={ceps}
+                                            onChange={(e) => setCeps(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -563,12 +668,17 @@ export default function createAccount() {
                                         <Input
                                             type="text"
                                             placeholder="Cidade"
+                                            value={cidades}
+                                            onChange={(e) => setCidades(e.target.value)}
                                         />
                                     </BlockInputs>
 
                                     <BlockInputs>
                                         <EtiquetaInput>Estado</EtiquetaInput>
-                                        <SelectGenero name="estado">
+                                        <SelectGenero
+                                            value={estadosSelected}
+                                            onChange={handleChangeEstado}
+                                        >
                                             <OpcoesGenero value="">Selecione...</OpcoesGenero>
                                             <OpcoesGenero value="Acre">Acre</OpcoesGenero>
                                             <OpcoesGenero value="Alagoas">Alagoas</OpcoesGenero>
@@ -606,6 +716,8 @@ export default function createAccount() {
                                     <Button
                                         style={{ width: '95%' }}
                                         type="submit"
+                                        loading={loading}
+                                        onClick={handleRegisterClientCNPJ}
                                     >
                                         Cadastrar
                                     </Button>
