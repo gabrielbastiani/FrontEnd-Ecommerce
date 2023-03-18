@@ -32,7 +32,7 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function signOut() {
   try {
-    destroyCookie(undefined, '@blogoficinamecanica.token')
+    destroyCookie(undefined, '@lojavirtual.token')
     Router.push('/')
   } catch {
     toast.error('Erro ao deslogar!')

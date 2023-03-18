@@ -1,5 +1,4 @@
 import { useContext, useState, useRef, FormEvent } from 'react';
-import logoLoginImg from '../../assets/LogoBuilderBlack.png';
 import { Button } from '../../components/ui/Button/index';
 import { toast } from 'react-toastify';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -9,13 +8,18 @@ import {
     Recaptcha,
     Formulario,
     TextLink,
+    LinkCreateAccount,
+    ButtonCreateAccount,
+    TextInfo
 } from './styles';
 import { Input } from '../../components/ui/Input';
 import { AuthContext } from '../../contexts/AuthContext';
 import Link from 'next/link';
-import Image from 'next/image';
 import Head from 'next/head';
 import { canSSRGuest } from '../../utils/canSSRGuest';
+import FooterAccount from '../../components/FooterAccount';
+import { HeaderAccount } from '../../components/HeaderAccount';
+import Titulos from '../../components/Titulos';
 
 
 export default function loginClient() {
@@ -72,12 +76,17 @@ export default function loginClient() {
                 <title>Loja Builder Seu Negócio Online - Login</title>
             </Head>
 
+            <HeaderAccount />
+
             <ContainerCenter>
 
-                <Image src={logoLoginImg} width={440} height={150} alt="Logo Builder Seu Negocio Online" />
-
                 <ContLogin>
+                    <Titulos
+                        tipo="h1"
+                        titulo="Entrar para continuar"
+                    />
                     <Formulario onSubmit={handleLogin}>
+                        <TextInfo>Se você já possui cadastro na loja, informe seu e-mail e senha para continuar.</TextInfo>
                         <Input
                             placeholder='Digite seu email'
                             type='text'
@@ -111,13 +120,24 @@ export default function loginClient() {
 
                     </Formulario>
 
-                    <Link href="/createAccount">
-                        <TextLink>Não possui uma conta? Cadastre-se</TextLink>
-                    </Link>
-
-                    <Link href="/recoveryPassword">
+                    <Link
+                        style={{ marginBottom: "10px" }}
+                        href="/recoveryPassword">
                         <TextLink>Esqueceu sua senha?</TextLink>
                     </Link>
+
+                    <Titulos
+                        tipo="h3"
+                        titulo="Ainda não tem uma conta na loja?"
+                    />
+
+                    <ButtonCreateAccount>
+                        <LinkCreateAccount
+                            href="/createAccount"
+                        >
+                            Cadastre-se aqui!
+                        </LinkCreateAccount>
+                    </ButtonCreateAccount>
 
                     <Link href="/">
                         <TextLink>Ir para loja</TextLink>
@@ -125,6 +145,8 @@ export default function loginClient() {
 
                 </ContLogin>
             </ContainerCenter>
+
+            <FooterAccount />
         </>
     )
 }

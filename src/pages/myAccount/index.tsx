@@ -3,6 +3,11 @@ import { canSSRAuth } from "../../utils/canSSRAuth";
 import { setupAPIClient } from "../../services/api";
 import Head from "next/head";
 import { HeaderAccount } from "../../components/HeaderAccount";
+import Aside from "../../components/dateClientUx/Aside";
+import { Container } from "../../components/dateClientUx/ContainerContent/styles";
+import { Grid } from "../../components/dateClientUx/Estrutura/styles";
+import { Card } from "../../components/dateClientUx/CardContent/styles";
+import MainHeader from "../../components/dateClientUx/MainHeader";
 
 
 export default function MyAccount() {
@@ -14,6 +19,16 @@ export default function MyAccount() {
             </Head>
 
             <HeaderAccount />
+
+            <Grid>
+                <MainHeader />
+                <Aside />
+                <Container>
+                    <Card>
+
+                    </Card>
+                </Container>
+            </Grid>
 
         </>
     )
