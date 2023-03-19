@@ -20,6 +20,7 @@ import { InputCheck, TextNews } from "./styles";
 import moment from 'moment';
 import { IMaskInput } from "react-imask";
 import { toast } from "react-toastify";
+import Titulos from "../../../components/Titulos";
 
 
 export default function Meusdados() {
@@ -401,7 +402,7 @@ export default function Meusdados() {
     return (
         <>
             <Head>
-                <title>Meus Pedidos</title>
+                <title>Meus Dados</title>
             </Head>
 
             <HeaderAccount />
@@ -412,7 +413,10 @@ export default function Meusdados() {
                 <Container>
                     <Card>
                         <BlockTop>
-
+                            <Titulos
+                                tipo="h1"
+                                titulo="Meus Dados"
+                            />
                         </BlockTop>
                         <GridDate>
                             <SectionDate>
