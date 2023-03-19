@@ -55,17 +55,17 @@ export const Aside = () => {
                     Meus Pedidos
                 </Link>
 
-                <Link href="/meuscreditos">
+                <Link href="/myAccount/meuscreditos">
                     <FaRegMoneyBillAlt />
                     Meus Créditos
                 </Link>
 
-                <Link href="/meusprodutosdigitais">
+                <Link href="/myAccount/meusprodutosdigitais">
                     <AiOutlineCloudDownload />
                     Meus Produtos Digitais
                 </Link>
 
-                <Link href="/meusdados">
+                <Link href="/myAccount/meusdados">
                     <MdOutlineCategory />
                     Meus Dados
                 </Link>

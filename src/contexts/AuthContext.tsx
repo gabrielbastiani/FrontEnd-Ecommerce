@@ -94,7 +94,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       toast.success('Logado com sucesso!')
 
       //Redirecionar o user para /myAccount
-      Router.push('/myAccount')
+      Router.push('/myAccount/meusdados')
 
 
     } catch (err) {
