@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Container = styled.main`
   grid-area: CT;
   color: ${(props) => props?.theme?.colors?.white};
-  background-color: ${(props) => props?.theme?.colors?.white};
+  background-color: ${(props) => props?.theme?.colors?.gray};
 
   padding: 25px;
 

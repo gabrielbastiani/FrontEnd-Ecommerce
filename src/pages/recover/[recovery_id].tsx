@@ -10,16 +10,13 @@ import Image from 'next/image';
 import Router, { useRouter } from 'next/router';
 
 
-export default function recover() {
+export default function Recover() {
 
     const [newPassword, setNewPassword] = useState('');
     const [password, setPassword] = useState('');
 
     const router = useRouter();
     let recovery_id = router.query.recovery_id;
-    
-    console.log(recovery_id)
-
 
     async function handleRecovery(event: FormEvent) {
         event.preventDefault();
