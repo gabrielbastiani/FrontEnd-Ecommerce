@@ -66,6 +66,14 @@ export const DropDownContent = styled.div`
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
+
+  @media (max-width: 440px) {
+    left: 20px;
+  }
+
+  @media (max-width: 350px) {
+    width: 300px;
+  }
 `
 
 export const BlockContact = styled.div`
