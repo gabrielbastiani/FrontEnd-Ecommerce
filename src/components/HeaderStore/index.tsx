@@ -99,23 +99,47 @@ export const HeaderStore = () => {
                                 <DropDownContent>
                                     <BlockContact>
                                         <TitleContac>TELEVENDAS</TitleContac>
-                                        <TextContent><FontStrong>Telefone</FontStrong>&emsp;&emsp;&emsp;&emsp;&emsp;{phoneLoja}</TextContent>
+                                        <TextContent>
+                                            <FontStrong>Telefone</FontStrong>
+                                            &emsp;&emsp;&emsp;&emsp;&emsp;
+                                            {phoneLoja}
+                                        </TextContent>
                                     </BlockContact>
                                     <br />
                                     <br />
                                     <BlockContact>
                                         <TitleContac>ATENDIMENTO POR WHATSAPP</TitleContac>
-                                        <TextContent><FontStrong>WhatsApp</FontStrong>&emsp;&emsp;&emsp;&emsp;&emsp;<Link style={{ color: 'black' }} href='https://api.whatsapp.com/send?phone=5554996860104' target="_blank">(54) 99686-0104</Link></TextContent>
+                                        <TextContent>
+                                            <FontStrong>WhatsApp</FontStrong>
+                                            &emsp;&emsp;&emsp;&emsp;&emsp;
+                                            <Link
+                                                style={{ color: 'black' }}
+                                                href='https://api.whatsapp.com/send?phone=5554996860104' target="_blank"
+                                            >
+                                                (54) 99686-0104
+                                            </Link>
+                                        </TextContent>
                                     </BlockContact>
                                     <br />
                                     <br />
                                     <BlockContact>
                                         <TitleContac>ATENDIMENTO POR EMAIL</TitleContac>
-                                        <TextContent><FontStrong>Email</FontStrong>&emsp;&emsp;<Link style={{ color: 'black' }} href={'mailto:' + emailLoja}>{emailLoja}</Link></TextContent>
+                                        <TextContent>
+                                            <FontStrong>Email</FontStrong>
+                                            &emsp;&emsp;
+                                            <Link
+                                                style={{ color: 'black' }}
+                                                href={'mailto:' + emailLoja}
+                                            >
+                                                {emailLoja}
+                                            </Link>
+                                        </TextContent>
                                     </BlockContact>
                                     <br />
                                     <br />
-                                    <SmallText>Atendimento disponível de segunda a sexta das<br /> 08h às 12h e das 13h às 17h30</SmallText>
+                                    <SmallText>
+                                        Atendimento disponível de segunda a sexta das<br /> 08h às 12h e das 13h às 17h30
+                                    </SmallText>
                                     <br />
                                     <br />
                                     <BlockContact>
@@ -130,7 +154,12 @@ export const HeaderStore = () => {
                             </DropDownLi>
                             <StyledLi>
                                 <StyledA>
-                                    <Link href='/loginClient'><BiUser color='white' size={20} />Login | Cadastre-se</Link>
+                                    <Link
+                                        href='/loginClient'
+                                    >
+                                        <BiUser color='white' size={20} />
+                                        Login | Cadastre-se
+                                    </Link>
                                 </StyledA>
                             </StyledLi>
                             <DropDownLi>
