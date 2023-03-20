@@ -18,7 +18,9 @@ import {
     ButtonAtentimento,
     FontStrong,
     SmallText,
-    TextNameCategory
+    TextNameCategory,
+    DataResult,
+    ListItems
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { RiCustomerService2Fill } from 'react-icons/ri';
@@ -38,6 +40,11 @@ export const HeaderStore = () => {
     const [phoneLoja, setPhoneLoja] = useState('');
 
     const [categoryNames, setCategoryNames] = useState([]);
+
+    const [initialFilter, setInitialFilter] = useState([]);
+    const [products, setProducts] = useState([]);
+
+    const [click, setClick] = useState([0]);
 
 
     useEffect(() => {
@@ -71,6 +78,51 @@ export const HeaderStore = () => {
         loadCategorys();
     }, []);
 
+    useEffect(() => {
+        async function filterProductsAll() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/allProductsFilter`);
+
+                setProducts(response?.data || []);
+                setInitialFilter(response?.data);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        filterProductsAll();
+    }, []);
+
+    const handleChange = ({ target }) => {
+        if (!target.value) {
+            setProducts(initialFilter);
+            return;
+        }
+
+        const filterProducts = products.filter((filt) => filt.nameProduct.toLowerCase().includes(target.value));
+        setProducts(filterProducts);
+
+    }
+
+    const search = () => {
+
+        const arraySearch = [0];
+            for (let i = 1; i <= click.length; i++) {
+            arraySearch.push(i);
+        }
+        setClick(arraySearch)
+    }
+
+    function cancel(event: any) {
+        if (event.key === "Backspace" ||
+            event.key === "Escape" ||
+            event.key === "ArrowLeft" ||
+            event.key === "Delete")
+        {
+            setClick([]);
+        }
+    }
 
 
     return (
@@ -80,15 +132,26 @@ export const HeaderStore = () => {
                     <BlockLogo>
                         <Image src={logoLoginWhite} width={180} height={50} alt="Logo Builder Seu Negocio Online" />
                         <PesquisaHeaderStore
-                            valor={''}
-                            onChange={function (): void {
-                                throw new Error('Function not implemented.');
-                            }}
+                            /* @ts-ignore */
+                            onChange={handleChange}
+                            onKeyUp={search}
+                            /* @ts-ignore */
+                            onKeyDown={cancel}
                             placeholder='Busque aqui...'
-                            onClick={function (): void {
-                                throw new Error('Function not implemented.');
-                            }}
                         />
+                        {click.length > 1 && (
+                            <DataResult>
+                            <>
+                                {products.map((value) => {
+                                    return (
+                                        <Link key={value.id} href={`/produto/${value.nameProduct}`} target="_blank">
+                                            <ListItems>{value?.nameProduct}</ListItems>
+                                        </Link>
+                                    )
+                                })}
+                            </>
+                        </DataResult>
+                        )}
                     </BlockLogo>
 
                     <BlockItems>

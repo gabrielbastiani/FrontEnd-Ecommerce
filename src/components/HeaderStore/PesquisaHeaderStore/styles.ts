@@ -8,4 +8,5 @@ export const InputSearch = styled.input`
   font-size: 1rem;
   border-radius: 5px;
   width: 100%;
+  color: ${props => props?.theme?.colors?.gray};
 `;

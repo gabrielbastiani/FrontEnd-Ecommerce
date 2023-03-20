@@ -35,9 +35,7 @@ export const StyledLi = styled.li`
   float: left;
 `
 
-export const SmallText = styled.small`
-
-`
+export const SmallText = styled.small``
 
 export const Dropbtn = styled.div`
   display: inline-block;
@@ -125,6 +123,7 @@ export const BlockLogo = styled.div`
   display: flex;
   width: 35%;
   align-items: center;
+  justify-content: center;
 
   input {
     margin-left: 50px;
@@ -151,4 +150,32 @@ export const CategorysHeader = styled.div`
 
 export const TextNameCategory = styled.span`
   color: ${props => props?.theme?.colors?.white};
+`
+
+export const DataResult = styled.div`
+  top: 70px;
+  width: 250px;
+  height: 230px;
+  background-color: ${props => props?.theme?.colors?.white};
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  overflow: hidden;
+  overflow-y: auto;
+  position: absolute;
+
+  a {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    color: ${props => props?.theme?.colors?.black};
+  }
+`
+
+export const ListItems = styled.span`
+  padding: 10px;
+  cursor: pointer;
+
+  :hover {
+    color: ${props => props?.theme?.colors?.info};
+  }
 `
