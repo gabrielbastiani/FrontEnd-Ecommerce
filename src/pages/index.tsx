@@ -1,4 +1,5 @@
 import Head from "next/head"
+import { HeaderStore } from "../components/HeaderStore"
 
 export default function Home() {
   return (
@@ -6,9 +7,9 @@ export default function Home() {
       <Head>
         <title>Loja Virtual Builder Seu Negócio Online</title>
       </Head>
-      <div>
-        <h1>E-commerce</h1>
-      </div>
+
+      <HeaderStore />
+
     </>
   )
 }
