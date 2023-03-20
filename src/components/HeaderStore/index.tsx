@@ -17,7 +17,8 @@ import {
     ButtonContact,
     ButtonAtentimento,
     FontStrong,
-    SmallText
+    SmallText,
+    TextNameCategory
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { RiCustomerService2Fill } from 'react-icons/ri';
@@ -33,17 +34,10 @@ export const HeaderStore = () => {
 
     const { user } = useContext(AuthContext);
 
-    const [loja_id, setLoja_id] = useState('');
-    const [nameLoja, setNameLoja] = useState('');
-    const [cnpjLoja, setCnpjLoja] = useState('');
     const [emailLoja, setEmailLoja] = useState('');
     const [phoneLoja, setPhoneLoja] = useState('');
-    const [ruaLoja, setRuaLoja] = useState('');
-    const [numeroLoja, setNumeroLoja] = useState('');
-    const [bairroLoja, setBairroLoja] = useState('');
-    const [cepLoja, setCepLoja] = useState('');
-    const [cityLoja, setCityLoja] = useState('');
-    const [stateLoja, setStateLoja] = useState('');
+
+    const [categoryNames, setCategoryNames] = useState([]);
 
 
     useEffect(() => {
@@ -52,24 +46,32 @@ export const HeaderStore = () => {
             try {
                 const response = await apiClient.get(`/loja`);
 
-                setLoja_id(response.data.loja_id || "");
-                setNameLoja(response.data.nameLoja || "");
-                setCnpjLoja(response.data.cnpjLoja || "");
                 setEmailLoja(response.data.emailLoja || "");
                 setPhoneLoja(response.data.phoneLoja || "");
-                setRuaLoja(response.data.ruaLoja || "");
-                setNumeroLoja(response.data.numeroLoja || "");
-                setBairroLoja(response.data.bairroLoja || "");
-                setCepLoja(response.data.cepLoja || "");
-                setCityLoja(response.data.cityLoja || "");
-                setStateLoja(response.data.stateLoja || "");
 
             } catch (error) {
-                console.log(error);
+                console.log(error.response.data);
             }
         }
         loadStore();
     }, []);
+
+    useEffect(() => {
+        async function loadCategorys() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/allCategorys`);
+
+                setCategoryNames(response?.data || []);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadCategorys();
+    }, []);
+
+
 
     return (
         <>
@@ -164,10 +166,19 @@ export const HeaderStore = () => {
                             </StyledLi>
                             <DropDownLi>
                                 <StyledA>
-                                    <Link href=''><AiOutlineShoppingCart size={20} /></Link>
+                                    <Link href='/carrinho'><AiOutlineShoppingCart size={20} /></Link>
                                 </StyledA>
                                 <DropDownContent>
-                                    <TextContent>fdregergergergegegf</TextContent>
+                                    <BlockContact>
+                                        <FontStrong>TOTAL</FontStrong>
+                                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                                        {'R$0,00'}
+                                        <br />
+                                        <br />
+                                        <Link href='/carrinho' target="_blank">
+                                            <ButtonAtentimento>IR PARA O CARRINHO</ButtonAtentimento>
+                                        </Link>
+                                    </BlockContact>
                                 </DropDownContent>
                             </DropDownLi>
                         </StyledUl>
@@ -175,8 +186,17 @@ export const HeaderStore = () => {
                 </ContentHeaderStore>
 
                 <CategorysHeader>
-
+                    {categoryNames.map((item) => {
+                        return (
+                            <Link key={item.id} href={'/categoria/' + `${item?.codigo}`}>
+                                <TextNameCategory>
+                                    {item?.categoryName}
+                                </TextNameCategory>
+                            </Link>
+                        )
+                    })}
                 </CategorysHeader>
+
             </ContainerHeaderStore>
         </>
     )

@@ -6,6 +6,7 @@ export const ContainerHeaderStore = styled.header`
   background-color: ${props => props?.theme?.colors?.black};
   width: 100%;
   padding: 15px 0;
+  flex-direction: column;
 `
 
 export const ContentHeaderStore = styled.div`
@@ -141,4 +142,13 @@ export const BlockItems = styled.div`
   }
 `
 
-export const CategorysHeader = styled.div``
+export const CategorysHeader = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 25px;
+`
+
+export const TextNameCategory = styled.span`
+  color: ${props => props?.theme?.colors?.white};
+`
