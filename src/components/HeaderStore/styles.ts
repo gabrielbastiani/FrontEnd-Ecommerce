@@ -23,16 +23,29 @@ export const ContentHeaderStore = styled.div`
       margin: 20px;
     }
   }
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `
 export const StyledUl = styled.ul`
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
+
+  @media (max-width: 607px) {
+    display: flex;
+    flex-direction: column;
+  }
 `
 
 export const StyledLi = styled.li`
   float: left;
+
+  @media (max-width: 607px) {
+    padding: 15px;
+  }
 `
 
 export const SmallText = styled.small``
@@ -128,6 +141,19 @@ export const BlockLogo = styled.div`
   input {
     margin-left: 50px;
   }
+
+  @media (max-width: 900px) {
+    width: 85%;
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 460px) {
+    flex-direction: column;
+
+    input {
+      width: 80%;
+    }
+  }
 `
 
 export const BlockItems = styled.div`
@@ -146,6 +172,10 @@ export const CategorysHeader = styled.div`
   justify-content: space-evenly;
   align-items: center;
   margin-top: 25px;
+
+  @media (max-width: 900px) {
+    display: none;
+  }
 `
 
 export const TextNameCategory = styled.span`
@@ -178,4 +208,29 @@ export const ListItems = styled.span`
   :hover {
     color: ${props => props?.theme?.colors?.info};
   }
+`
+
+export const CategorysHeaderMobile = styled.div`
+  display: none;
+  margin-top: 25px;
+
+  svg {
+    margin-bottom: 20px;
+  }
+
+  a {
+    padding: 15px;
+  }
+
+  @media (max-width: 900px) {
+    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+`
+
+export const TextNameCategoryMobile = styled.span`
+  color: ${props => props?.theme?.colors?.white};
 `

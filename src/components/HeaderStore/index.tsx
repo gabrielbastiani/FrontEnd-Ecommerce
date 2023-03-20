@@ -20,9 +20,12 @@ import {
     SmallText,
     TextNameCategory,
     DataResult,
-    ListItems
+    ListItems,
+    CategorysHeaderMobile,
+    TextNameCategoryMobile
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import { RiCustomerService2Fill } from 'react-icons/ri';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { BiUser } from 'react-icons/bi';
@@ -45,6 +48,12 @@ export const HeaderStore = () => {
     const [products, setProducts] = useState([]);
 
     const [click, setClick] = useState([0]);
+
+    const [element, setElement] = useState(false);
+
+    const showOrHide = () => {
+        setElement(!element);
+    }
 
 
     useEffect(() => {
@@ -108,7 +117,7 @@ export const HeaderStore = () => {
     const search = () => {
 
         const arraySearch = [0];
-            for (let i = 1; i <= click.length; i++) {
+        for (let i = 1; i <= click.length; i++) {
             arraySearch.push(i);
         }
         setClick(arraySearch)
@@ -118,8 +127,7 @@ export const HeaderStore = () => {
         if (event.key === "Backspace" ||
             event.key === "Escape" ||
             event.key === "ArrowLeft" ||
-            event.key === "Delete")
-        {
+            event.key === "Delete") {
             setClick([]);
         }
     }
@@ -141,16 +149,16 @@ export const HeaderStore = () => {
                         />
                         {click.length > 1 && (
                             <DataResult>
-                            <>
-                                {products.map((value) => {
-                                    return (
-                                        <Link key={value.id} href={`/produto/${value.nameProduct}`} target="_blank">
-                                            <ListItems>{value?.nameProduct}</ListItems>
-                                        </Link>
-                                    )
-                                })}
-                            </>
-                        </DataResult>
+                                <>
+                                    {products.map((value) => {
+                                        return (
+                                            <Link key={value.id} href={`/produto/${value.nameProduct}`} target="_blank">
+                                                <ListItems>{value?.nameProduct}</ListItems>
+                                            </Link>
+                                        )
+                                    })}
+                                </>
+                            </DataResult>
                         )}
                     </BlockLogo>
 
@@ -259,6 +267,28 @@ export const HeaderStore = () => {
                         )
                     })}
                 </CategorysHeader>
+
+                <CategorysHeaderMobile>
+
+                    <GiHamburgerMenu color='white' size={35} onClick={showOrHide} />
+
+                    {element ?
+                        <>
+                            {categoryNames.map((item) => {
+                                return (
+                                    <Link key={item.id} href={'/categoria/' + `${item?.codigo}`}>
+                                        <TextNameCategoryMobile>
+                                            {item?.categoryName}
+                                        </TextNameCategoryMobile>
+                                    </Link>
+                                )
+                            })}
+                        </>
+                        :
+                        null
+                    }
+
+                </CategorysHeaderMobile>
 
             </ContainerHeaderStore>
         </>
