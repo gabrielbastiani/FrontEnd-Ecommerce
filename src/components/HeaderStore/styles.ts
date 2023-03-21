@@ -193,11 +193,10 @@ export const TextNameCategory = styled.span`
 export const DataResult = styled.div`
   top: 70px;
   width: 250px;
-  height: 230px;
+  height: auto;
   background-color: ${props => props?.theme?.colors?.white};
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   overflow: hidden;
-  overflow-y: auto;
   position: absolute;
 
   a {
