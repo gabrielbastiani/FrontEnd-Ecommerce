@@ -12,25 +12,56 @@ export const ImageBox = styled.div`
   height: 400px;
   overflow: hidden;
   position: relative;
+  border: 1px solid ${props => props?.theme?.colors?.black};
 
   img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-
-    &:last-child {
+    &:nth-child(1) {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
       z-index: 1;
+    }
 
-      &:hover {
+    :hover {
+      &:last-child {
         z-index: 2;
       }
     }
   }
 `
 
-export const TitleProduct = styled.h2`
-  color: ${props => props?.theme?.colors?.black};
+export const TextDestaque = styled.span`
+  color: ${props => props?.theme?.colors?.white};
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  background-color: ${props => props?.theme?.colors?.warning};
+  padding: 3px 5px;
+  z-index: 3;
+  font-weight: 500;
+  font-size: 12px;
 `
 
-export const PriceBox = styled.div``
+export const TitleProduct = styled.h2`
+  color: ${props => props?.theme?.colors?.black};
+  padding-bottom: 10px;
+`
+
+export const PriceOld = styled.h2`
+  color: ${props => props?.theme?.colors?.warning};
+  font-size: 16px;
+  font-weight: 400;
+  text-decoration: line-through;
+`
+
+export const PriceNew = styled.h3`
+  color: ${props => props?.theme?.colors?.black};
+  font-size: 18px;
+  font-weight: 500;
+`
+
+export const PriceBox = styled.div`
+  display: flex;
+  gap: 20px;
+`
