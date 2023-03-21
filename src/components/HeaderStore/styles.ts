@@ -225,10 +225,6 @@ export const CategorysHeaderMobile = styled.div`
     margin-bottom: 20px;
   }
 
-  a {
-    padding: 15px;
-  }
-
   @media (max-width: 900px) {
     display: block;
     display: flex;
@@ -238,6 +234,18 @@ export const CategorysHeaderMobile = styled.div`
   }
 `
 
-export const TextNameCategoryMobile = styled.span`
+export const BoxItemsMobile = styled.ul`
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+`
+
+export const TextNameCategoryMobile = styled.li`
   color: ${props => props?.theme?.colors?.white};
+  list-style: none;
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
 `

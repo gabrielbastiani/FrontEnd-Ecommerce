@@ -22,7 +22,8 @@ import {
     DataResult,
     ListItems,
     CategorysHeaderMobile,
-    TextNameCategoryMobile
+    TextNameCategoryMobile,
+    BoxItemsMobile
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -276,20 +277,21 @@ export const HeaderStore = () => {
                         <>
                             {categoryNames.map((item) => {
                                 return (
-                                    <Link key={item.id} href={'/categoria/' + `${item?.codigo}`}>
-                                        <TextNameCategoryMobile>
-                                            {item?.categoryName}
-                                        </TextNameCategoryMobile>
-                                    </Link>
+                                    <BoxItemsMobile key={item.id}>
+                                        <Link href={'/categoria/' + `${item?.codigo}`}>
+                                            <TextNameCategoryMobile>
+                                                {item?.categoryName}
+                                            </TextNameCategoryMobile>
+                                        </Link>
+                                    </BoxItemsMobile>
+
                                 )
                             })}
                         </>
                         :
                         null
                     }
-
                 </CategorysHeaderMobile>
-
             </ContainerHeaderStore>
         </>
     )
