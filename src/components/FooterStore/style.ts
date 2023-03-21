@@ -3,6 +3,7 @@ import styled from 'styled-components'
 export const FooterContainer = styled.footer`
   background-color: ${props => props?.theme?.colors?.black};
   padding-bottom: 75px;
+  padding-top: 80px;
 `
 
 export const GridContainerUm = styled.div`

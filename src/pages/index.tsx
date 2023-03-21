@@ -3,6 +3,7 @@ import { HeaderStore } from "../components/HeaderStore"
 import { FooterStore } from "../components/FooterStore"
 import FooterAccount from "../components/FooterAccount"
 import CarrosselBannerHome from "../components/CarrosselBannerHome"
+import DestaqueProducts from "../components/DestaqueProducts"
 
 export default function Home() {
   return (
@@ -13,6 +14,8 @@ export default function Home() {
 
       <HeaderStore />
       <CarrosselBannerHome />
+      <DestaqueProducts type="destaque" />
+      <DestaqueProducts type="tendencia" />
 
 
       <FooterStore />
