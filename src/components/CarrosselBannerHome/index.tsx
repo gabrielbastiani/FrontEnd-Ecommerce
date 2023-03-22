@@ -51,8 +51,8 @@ const CarrosselBannerHome = () => {
 
     return (
         <Container>
-            <Link href={config[imageIndex]?.url} target="_blank">
-                <Image src={config[imageIndex]?.image} width={1800} height={700} alt="Banners Loja Builder Seu Negocio Online" />
+            <Link href={String(config[imageIndex]?.url)} target="_blank">
+                <Image src={String(config[imageIndex]?.image)} width={1800} height={700} alt="Banners Loja Builder Seu Negocio Online" />
             </Link>
             <NavButton right onClick={next}>
                 <FaArrowRight size={35} color='white' />
