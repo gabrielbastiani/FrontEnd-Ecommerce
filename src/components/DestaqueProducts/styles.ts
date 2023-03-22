@@ -1,29 +1,50 @@
 import styled from "styled-components";
 
 export const SectionDestaqueProducts = styled.section`
-    margin: 100px 20px;
+    
 `
 
-export const Top = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 50px;
+export const Title = styled.h2`
+
 `
 
-export const TitleSection = styled.h1`
-    color: ${props => props?.theme?.colors?.black};
-    flex: 2;
-    text-transform: capitalize;
+
+export const Logo = styled.div`
+    
 `
 
-export const ContentText = styled.p`
-    color: ${props => props?.theme?.colors?.gray};
-    flex: 3
+export const Carousel = styled.div`
+    
 `
 
-export const Bottom = styled.div`
-    display: flex;
-    justify-content: center;
-    gap: 50px;
+export const Item = styled.div`
+    
+`
+
+export const Images = styled.div`
+    
+`
+
+export const Info = styled.div`
+
+`
+
+export const Name = styled.span`
+
+`
+
+export const OldPrice = styled.span`
+
+`
+
+export const Price = styled.span`
+
+`
+
+export const Buttons = styled.div`
+
+`
+
+export const Button = styled.button`
+
 `
