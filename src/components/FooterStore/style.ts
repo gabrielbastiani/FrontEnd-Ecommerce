@@ -40,7 +40,7 @@ export const GridContainerDois = styled.div`
   @media (max-width: 555px) {
     margin: 0 100px;
     grid-gap: 25px;
-    grid-template-columns: 100;
+    grid-template-columns: 200px;
   }
 `
 

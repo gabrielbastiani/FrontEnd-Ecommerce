@@ -8,6 +8,7 @@ export default createGlobalStyle`
   }
 
   body {
+    overflow-x: hidden;
     background: ${props => props.theme.colors.white};
     color: ${props => props.theme.colors.black};
     font: 400 16px Roboto, sans-serif;

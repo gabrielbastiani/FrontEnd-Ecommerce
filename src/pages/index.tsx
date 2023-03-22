@@ -14,8 +14,8 @@ export default function Home() {
 
       <HeaderStore />
       <CarrosselBannerHome />
-      <DestaqueProducts type="destaque" />
-      <DestaqueProducts type="tendencia" />
+      {/* <DestaqueProducts type="destaque" />
+      <DestaqueProducts type="tendencia" /> */}
 
 
       <FooterStore />

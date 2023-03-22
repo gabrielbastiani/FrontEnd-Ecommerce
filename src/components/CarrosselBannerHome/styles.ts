@@ -1,14 +1,13 @@
 import styled, { css } from 'styled-components'
 
 export const Container = styled.section`
-  height: calc(100vh - 80px);
   width: 100vw;
   position: relative;
 
   img {
     width: 100vw;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 `
 
@@ -40,6 +39,10 @@ export const DotContainer = styled.div`
   bottom: 3%;
   left: 50%;
   transform: translate(-50%, 0);
+
+  a {
+    cursor: pointer;
+  }
 `
 
 export const Dot = styled.div`

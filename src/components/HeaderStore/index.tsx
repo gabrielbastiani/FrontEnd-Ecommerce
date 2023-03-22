@@ -274,20 +274,17 @@ export const HeaderStore = () => {
                     <GiHamburgerMenu color='white' size={35} onClick={showOrHide} />
 
                     {element ?
-                        <>
+                        <BoxItemsMobile>
                             {categoryNames.map((item) => {
                                 return (
-                                    <BoxItemsMobile key={item.id}>
-                                        <Link href={'/categoria/' + `${item?.codigo}`}>
-                                            <TextNameCategoryMobile>
-                                                {item?.categoryName}
-                                            </TextNameCategoryMobile>
-                                        </Link>
-                                    </BoxItemsMobile>
-
+                                    <Link key={item.id} href={'/categoria/' + `${item?.codigo}`}>
+                                        <TextNameCategoryMobile>
+                                            {item?.categoryName}
+                                        </TextNameCategoryMobile>
+                                    </Link>
                                 )
                             })}
-                        </>
+                        </BoxItemsMobile>
                         :
                         null
                     }

@@ -191,6 +191,7 @@ export const TextNameCategory = styled.span`
 `
 
 export const DataResult = styled.div`
+  z-index: 999;
   top: 70px;
   width: 250px;
   height: auto;
@@ -236,10 +237,25 @@ export const CategorysHeaderMobile = styled.div`
 
 export const BoxItemsMobile = styled.ul`
   display: flex;
-  position: relative;
+  position: absolute;
   flex-direction: column;
   width: 100%;
   justify-content: center;
+  z-index: 999;
+  background-color: ${props => props?.theme?.colors?.black};
+  top: 190px;
+
+  @media (max-width: 607px) {
+    top: 320px;
+  }
+
+  @media (max-width: 540px) {
+    top: 400px;
+  }
+
+  @media (max-width: 460px) {
+    top: 430px;
+  }
 `
 
 export const TextNameCategoryMobile = styled.li`
@@ -248,4 +264,5 @@ export const TextNameCategoryMobile = styled.li`
   cursor: pointer;
   padding: 10px;
   text-align: center;
+  z-index: 999;
 `
