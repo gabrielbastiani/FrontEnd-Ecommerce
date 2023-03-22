@@ -15,7 +15,7 @@ export const ImageBox = styled.div`
   border: 1px solid ${props => props?.theme?.colors?.black};
 
   img {
-    &:nth-child(1) {
+    &:first-child {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -23,8 +23,8 @@ export const ImageBox = styled.div`
       z-index: 1;
     }
 
-    :hover {
-      &:last-child {
+    &:last-child {
+      :hover {
         z-index: 2;
       }
     }

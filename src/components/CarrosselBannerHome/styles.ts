@@ -1,16 +1,9 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-export const SectionCarrossel = styled.section`
-  height: calc(100vh -80px);
+export const Container = styled.section`
+  height: calc(100vh - 80px);
   width: 100vw;
   position: relative;
-`
-
-export const ContainerBanner = styled.div`
-  width: 300vw;
-  height: 100%;
-  display: flex;
-  transition: all 2s ease;
 
   img {
     width: 100vw;
@@ -19,23 +12,39 @@ export const ContainerBanner = styled.div`
   }
 `
 
-export const Icons = styled.div`
-  width: fit-content;
+export const NavButton = styled.button`
+  width: 35px;
+  height: 35px;
+  outline: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
   position: absolute;
-  left: 0;
-  right: 0;
-  margin: auto;
-  bottom: 35px;
-  display: flex;
-  gap: 15px;
+  top: 50%;
+  border-radius: 50%;
+  color: ${props => props?.theme?.colors?.white};
+  box-shadow: 0px 4px 60px 20px rgba(3, 3, 3, 0.9),
+  inset 0 -- 3em 3em rgba(3, 3, 3, 0.5);
+  transform: translate(0, -50%);
+  /* @ts-ignore */
+  ${(props) => props.right === true ? css`right: 2%;` : css` left: 2%;`};
 `
 
-export const Icon = styled.div`
-  width: 50px;
-  height: 50px;
-  border: 2px solid ${props => props?.theme?.colors?.white};
+export const DotContainer = styled.div`
   display: flex;
-  align-items: center;
+  gap: 5px;
   justify-content: center;
-  cursor: pointer;
+  align-items: center;
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translate(-50%, 0);
+`
+
+export const Dot = styled.div`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  ${(props) => props.active === true ? css`background-color: white` : css`background-color: grey`};
 `
