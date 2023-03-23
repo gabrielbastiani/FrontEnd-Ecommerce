@@ -13,7 +13,7 @@ export const Container = styled.div`
   max-width: 75vw;
 `
 
-export const Title = styled.h2`
+export const Title = styled.h1`
   color: ${props => props?.theme?.colors?.black};
 `
 
@@ -31,9 +31,10 @@ export const Item = styled.div`
   background-color: ${props => props?.theme?.colors?.white};
   margin: 10px;
   padding: 10px;
-  width: 280px;
-  border-radius: 16px;
+  width: 320px;
   flex: none;
+  border: solid 1px ${props => props?.theme?.colors?.gray};
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `
 
 export const Images = styled.div`
@@ -48,47 +49,24 @@ export const Info = styled.div`
   height: 140px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: flex-start;
 `
 
 export const Name = styled.span`
-  display: block;
-  text-align: center;
-  color: #1e1e1e;
-  padding: 5px;
-  border-radius: 10px;
-
-  display: block;
-  text-align: center;
-  color: #1e1e1e;
-  padding: 5px;
-  border-radius: 10px;
+  color: ${props => props?.theme?.colors?.black};
+  padding-bottom: 17px;
 `
 
 export const OldPrice = styled.span`
   font-size: 0.8rem;
   text-decoration: line-through;
-  flex-grow: 1;
-  color: #e81a5d;
-
-  display: block;
-  text-align: center;
-  color: #1e1e1e;
-  padding: 5px;
-  border-radius: 10px;
+  color: ${props => props?.theme?.colors?.gray};
 `
 
 export const Price = styled.span`
-  margin-top: 10px;
-  font-size: 1.2rem;
+  padding-top: 2px;
+  font-size: 1.3rem;
   font-weight: bold;
-  background-color: #ff7e3b;
-
-  display: block;
-  text-align: center;
-  color: #1e1e1e;
-  padding: 5px;
-  border-radius: 10px;
 `
 
 export const Buttons = styled.div`
@@ -102,4 +80,70 @@ export const Buttons = styled.div`
 export const Button = styled.button`
   border: none;
   cursor: pointer;
+`
+
+export const BoxBuy = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 40px;
+  margin-top: 10px;
+`
+
+export const Quantidade = styled.div`
+  display: flex;
+  border: 1px solid;
+  margin-right: 10px;
+  width: calc(40% - 10px);
+`
+
+export const Min = styled.span`
+  display: block;
+  width: 33.33%;
+  line-height: 40px;
+  text-align: center;
+  color: #838282;
+  cursor: pointer;
+`
+
+export const ValueQuant = styled.span`
+  display: block;
+  width: 33.33%;
+  line-height: 40px;
+  text-align: center;
+  color: #838282;
+`
+
+export const Max = styled.span`
+  display: block;
+  width: 33.33%;
+  line-height: 40px;
+  text-align: center;
+  color: #838282;
+  cursor: pointer;
+`
+
+export const Add = styled.button`
+  letter-spacing: 1px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  text-align: center;
+  background-color: ${props => props?.theme?.colors?.warning};
+  color: ${props => props?.theme?.colors?.white};
+  line-height: 40px;
+  font-size: 15px;
+  cursor: pointer;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  -moz-transition: opacity 0.5s ease-in-out;
+  -ms-transition: opacity 0.5s ease-in-out;
+  -o-transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+
+  :hover {
+    opacity: 0.7;
+  }
 `

@@ -92,7 +92,7 @@ export const HeaderStore = () => {
         async function filterProductsAll() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/allProductsFilter`);
+                const response = await apiClient.get(`/allProductsStore`);
 
                 setProducts(response?.data || []);
                 setInitialFilter(response?.data);

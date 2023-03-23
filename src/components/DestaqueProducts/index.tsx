@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import destaque1 from '../../assets/banners/Maquina de Solda1.png';
 import destaque2 from '../../assets/banners/Maquina de Solda2.png';
 import destaque3 from '../../assets/banners/Maquina de Solda3.png';
@@ -19,10 +19,18 @@ import {
     Price,
     Buttons,
     Button,
-    Container
+    Container,
+    BoxBuy,
+    Quantidade,
+    Min,
+    ValueQuant,
+    Max,
+    Add
 } from './styles';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { setupAPIClient } from '../../services/api';
 
 
 
@@ -32,127 +40,40 @@ interface DestaqueRequest {
 
 const DestaqueProducts = ({ type }: DestaqueRequest) => {
 
-    const dataImages: any[] = [
-        {
-            id: 1,
-            image: destaque1,
-            img2: destaque8,
-            name: 'Maquina de Solda1',
-            isNew: true,
-            oldPrice: 4000,
-            price: 3299
-        },
-        {
-            id: 2,
-            image: destaque2,
-            img2: destaque7,
-            name: 'Tocha de Solda1',
-            isNew: true,
-            oldPrice: 599,
-            price: 499
-        },
-        {
-            id: 3,
-            image: destaque3,
-            img2: destaque6,
-            name: 'Maquina de Solda2',
-            isNew: true,
-            oldPrice: 7520,
-            price: 6299
-        },
-        {
-            id: 4,
-            image: destaque4,
-            img2: destaque5,
-            name: 'Tocha de Solda2',
-            isNew: true,
-            oldPrice: 800,
-            price: 699
-        },
-        {
-            id: 5,
-            image: destaque5,
-            img2: destaque4,
-            name: 'Maquina de Solda3',
-            isNew: true,
-            oldPrice: 11800,
-            price: 10699
-        },
-        {
-            id: 6,
-            image: destaque6,
-            img2: destaque3,
-            name: 'Tocha de Solda3',
-            isNew: true,
-            oldPrice: 1200,
-            price: 999
-        },
-        {
-            id: 7,
-            image: destaque7,
-            img2: destaque2,
-            name: 'Maquina de Solda4',
-            isNew: true,
-            oldPrice: 10200,
-            price: 10499
-        },
-        {
-            id: 8,
-            image: destaque8,
-            img2: destaque1,
-            name: 'Tocha de Solda4',
-            isNew: true,
-            oldPrice: 659,
-            price: 555
-        },
-        {
-            id: 9,
-            image: destaque7,
-            img2: destaque2,
-            name: 'Maquina de Solda4',
-            isNew: true,
-            oldPrice: 10200,
-            price: 10499
-        },
-        {
-            id: 10,
-            image: destaque8,
-            img2: destaque1,
-            name: 'Tocha de Solda4',
-            isNew: true,
-            oldPrice: 659,
-            price: 555
-        },
-        {
-            id: 11,
-            image: destaque7,
-            img2: destaque2,
-            name: 'Maquina de Solda4',
-            isNew: true,
-            oldPrice: 10200,
-            price: 10499
-        },
-        {
-            id: 12,
-            image: destaque8,
-            img2: destaque1,
-            name: 'Tocha de Solda4',
-            isNew: true,
-            oldPrice: 659,
-            price: 555
-        },
-        {
-            id: 13,
-            image: destaque7,
-            img2: destaque2,
-            name: 'Maquina de Solda4',
-            isNew: true,
-            oldPrice: 10200,
-            price: 10499
-        },
-    ]
 
-    const [datas, setDatas] = useState([]);
+    const [products, setProducts] = useState([]);
+    const [photos, setPhotos] = useState([]);
+
+
+    console.log(photos)
+
+
+    useEffect(() => {
+        async function loadFirstPhotoProduct() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient('/firstPhotoProduct');
+                setPhotos(response.data || []);
+            } catch (error) {
+                console.log(error.response.data);
+            };
+        };
+        loadFirstPhotoProduct();
+    }, []);
+
+    useEffect(() => {
+        async function loadProducts() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient('/allProductsStore');
+                setProducts(response.data || []);
+            } catch (error) {
+                console.log(error.response.data);
+            };
+        };
+        loadProducts();
+    }, []);
+
     const carousel = useRef(null);
 
     function handleLeftClick(e: any) {
@@ -165,9 +86,8 @@ const DestaqueProducts = ({ type }: DestaqueRequest) => {
         carousel.current.scrollLeft += carousel.current.offsetWidth;
     };
 
-    setInterval(handleRightClick, 2000)
+    if (!products || !products.length) return null;
 
-    if (!dataImages || !dataImages.length) return null;
 
 
     return (
@@ -176,17 +96,36 @@ const DestaqueProducts = ({ type }: DestaqueRequest) => {
                 <Container>
                     <Title>{type}</Title>
                     <Carousel ref={carousel}>
-                        {dataImages.map((item) => {
-                            const { id, name, price, oldPrice, image } = item;
+                        {products.map((item) => {
                             return (
-                                <Item key={id}>
+                                <Item key={item?.id}>
                                     <Images>
-                                        <Image src={image} width={450} height={400} alt={name} />
+                                        <Image src={'http://localhost:3333/files/' + photos} width={450} height={400} alt={item?.nameProduct} />
                                     </Images>
+                                    {/* {photos.map((itemphoto) => {
+                                        return (
+                                            <>
+                                                <Images key={itemphoto.id}>
+                                                    <Image src={'http://localhost:3333/files/' + itemphoto[0].photo} width={450} height={400} alt={item?.nameProduct} />
+                                                </Images>
+                                            </>
+                                        )
+                                    })} */}
                                     <Info>
-                                        <Name>{name}</Name>
-                                        <OldPrice>R${oldPrice}</OldPrice>
-                                        <Price>R${price}</Price>
+                                        <Name>{item?.nameProduct}</Name>
+                                        <OldPrice>De {item?.promocao.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
+                                        <Price>Por {item?.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                        <BoxBuy>
+                                            <Quantidade>
+                                                <Min>-</Min>
+                                                <ValueQuant>1</ValueQuant>
+                                                <Max>+</Max>
+                                            </Quantidade>
+                                            <Add>
+                                                <AiOutlineShoppingCart color='white' size={25} />
+                                                &emsp;Adicionar
+                                            </Add>
+                                        </BoxBuy>
                                     </Info>
                                 </Item>
                             );
