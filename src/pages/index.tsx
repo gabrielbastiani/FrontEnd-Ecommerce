@@ -5,6 +5,7 @@ import FooterAccount from "../components/FooterAccount"
 import CarrosselBannerHome from "../components/CarrosselBannerHome"
 import DestaqueProducts from "../components/DestaqueProducts"
 
+
 export default function Home() {
   return (
     <>
@@ -14,8 +15,8 @@ export default function Home() {
 
       <HeaderStore />
       <CarrosselBannerHome />
-      <DestaqueProducts type="destaque" />
-      {/* <DestaqueProducts type="tendencia" /> */}
+  
+      <DestaqueProducts type='Produtos destaques' />
 
 
       <FooterStore />

@@ -1,5 +1,4 @@
-
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import destaque1 from '../../assets/banners/Maquina de Solda1.png';
 import destaque2 from '../../assets/banners/Maquina de Solda2.png';
 import destaque3 from '../../assets/banners/Maquina de Solda3.png';
@@ -12,7 +11,6 @@ import {
     SectionDestaqueProducts,
     Title,
     Carousel,
-    Logo,
     Item,
     Images,
     Info,
@@ -20,7 +18,8 @@ import {
     OldPrice,
     Price,
     Buttons,
-    Button
+    Button,
+    Container
 } from './styles';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -33,29 +32,7 @@ interface DestaqueRequest {
 
 const DestaqueProducts = ({ type }: DestaqueRequest) => {
 
-    const [data, setData] = useState([]);
-    const carousel = useRef(null);
-
-    /* useEffect(() => {
-        fetch('http://localhost:3000/static/shoes.json')
-            .then((response) => response.json())
-            .then(setData);
-    }, []); */
-
-    const handleLeftClick = (e) => {
-        e.preventDefault();
-        carousel.current.scrollLeft -= carousel.current.offsetWidth;
-    };
-
-    const handleRightClick = (e) => {
-        e.preventDefault();
-
-        carousel.current.scrollLeft += carousel.current.offsetWidth;
-    };
-
-    if (!data || !data.length) return null;
-
-    const dataImages = [
+    const dataImages: any[] = [
         {
             id: 1,
             image: destaque1,
@@ -127,43 +104,103 @@ const DestaqueProducts = ({ type }: DestaqueRequest) => {
             isNew: true,
             oldPrice: 659,
             price: 555
-        }
+        },
+        {
+            id: 9,
+            image: destaque7,
+            img2: destaque2,
+            name: 'Maquina de Solda4',
+            isNew: true,
+            oldPrice: 10200,
+            price: 10499
+        },
+        {
+            id: 10,
+            image: destaque8,
+            img2: destaque1,
+            name: 'Tocha de Solda4',
+            isNew: true,
+            oldPrice: 659,
+            price: 555
+        },
+        {
+            id: 11,
+            image: destaque7,
+            img2: destaque2,
+            name: 'Maquina de Solda4',
+            isNew: true,
+            oldPrice: 10200,
+            price: 10499
+        },
+        {
+            id: 12,
+            image: destaque8,
+            img2: destaque1,
+            name: 'Tocha de Solda4',
+            isNew: true,
+            oldPrice: 659,
+            price: 555
+        },
+        {
+            id: 13,
+            image: destaque7,
+            img2: destaque2,
+            name: 'Maquina de Solda4',
+            isNew: true,
+            oldPrice: 10200,
+            price: 10499
+        },
     ]
 
-    setData(dataImages);
+    const [datas, setDatas] = useState([]);
+    const carousel = useRef(null);
+
+    function handleLeftClick(e: any) {
+        e.preventDefault();
+        carousel.current.scrollLeft -= carousel.current.offsetWidth;
+    };
+
+    function handleRightClick(e: any) {
+        e.preventDefault();
+        carousel.current.scrollLeft += carousel.current.offsetWidth;
+    };
+
+    setInterval(handleRightClick, 2000)
+
+    if (!dataImages || !dataImages.length) return null;
+
 
     return (
         <>
             <SectionDestaqueProducts>
-                <Title>{type}</Title>
-                <Logo>
-                    <Image src={destaque1} width={450} height={400} alt="carrossel Loja Builder Seu Negocio Online" />
-                </Logo>
-                <Carousel ref={carousel}>
-                    {data.map((item) => {
-                        const { id, name, price, oldPrice, image } = item;
-                        return (
-                            <Item key={id}>
-                                <Images>
-                                    <Image src={image} width={450} height={400} alt={name} />
-                                </Images>
-                                <Info>
-                                    <Name>{name}</Name>
-                                    <OldPrice>R${oldPrice}</OldPrice>
-                                    <Price>R${price}</Price>
-                                </Info>
-                            </Item>
-                        );
-                    })}
-                </Carousel>
-                <Buttons>
-                    <Button onClick={handleLeftClick}>
-                        <FaArrowRight size={35} color='white' />
-                    </Button>
-                    <Button onClick={handleRightClick}>
-                        <FaArrowLeft size={35} color='white' />
-                    </Button>
-                </Buttons>
+                <Container>
+                    <Title>{type}</Title>
+                    <Carousel ref={carousel}>
+                        {dataImages.map((item) => {
+                            const { id, name, price, oldPrice, image } = item;
+                            return (
+                                <Item key={id}>
+                                    <Images>
+                                        <Image src={image} width={450} height={400} alt={name} />
+                                    </Images>
+                                    <Info>
+                                        <Name>{name}</Name>
+                                        <OldPrice>R${oldPrice}</OldPrice>
+                                        <Price>R${price}</Price>
+                                    </Info>
+                                </Item>
+                            );
+                        })}
+                    </Carousel>
+                    <Buttons>
+                        <Button onClick={handleLeftClick}>
+                            <FaArrowLeft size={35} color='gray' />
+                        </Button>
+                        <Button onClick={handleRightClick}>
+                            <FaArrowRight size={35} color='gray' />
+                        </Button>
+                    </Buttons>
+                </Container>
             </SectionDestaqueProducts>
         </>
     );
