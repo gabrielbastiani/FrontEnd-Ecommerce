@@ -1,12 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import destaque1 from '../../assets/banners/Maquina de Solda1.png';
-import destaque2 from '../../assets/banners/Maquina de Solda2.png';
-import destaque3 from '../../assets/banners/Maquina de Solda3.png';
-import destaque4 from '../../assets/banners/Maquina de Solda4.png';
-import destaque5 from '../../assets/banners/Tocha de Solda1.png';
-import destaque6 from '../../assets/banners/Tocha de Solda2.png';
-import destaque7 from '../../assets/banners/Tocha de Solda3.png';
-import destaque8 from '../../assets/banners/Tocha de Solda4.png';
 import {
     SectionDestaqueProducts,
     Title,
@@ -31,7 +23,6 @@ import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { setupAPIClient } from '../../services/api';
-
 
 
 interface DestaqueRequest {
