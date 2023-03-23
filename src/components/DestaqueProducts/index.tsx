@@ -100,7 +100,7 @@ const DestaqueProducts = ({ type }: DestaqueRequest) => {
                             return (
                                 <Item key={item?.id}>
                                     <Images>
-                                        <Image src={'http://localhost:3333/files/' + photos} width={450} height={400} alt={item?.nameProduct} />
+                                        <Image src={'http://localhost:3333/files/' + item.photoproducts[0].photo} width={450} height={400} alt={item?.nameProduct} />
                                     </Images>
                                     {/* {photos.map((itemphoto) => {
                                         return (
