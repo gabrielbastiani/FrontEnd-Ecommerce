@@ -52,7 +52,7 @@ const DestaqueProducts = ({ type }: DestaqueRequest) => {
         async function loadFirstPhotoProduct() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient('/firstPhotoProduct');
+                const response = await apiClient('/allPhotosProductsStore');
                 setPhotos(response.data || []);
             } catch (error) {
                 console.log(error.response.data);
