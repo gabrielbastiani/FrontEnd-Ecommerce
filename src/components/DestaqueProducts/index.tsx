@@ -79,7 +79,7 @@ const DestaqueProducts = ({ type }: DestaqueRequest) => {
                     <Carousel ref={carousel}>
                         {products.map((item) => {
                             return (
-                                <Item key={item?.id}>
+                                <Item key={item.id}>
                                     <Images>
                                         <Image src={'http://localhost:3333/files/' + item.photoproducts[0].photo} width={450} height={400} alt={item?.nameProduct} />
                                     </Images>
