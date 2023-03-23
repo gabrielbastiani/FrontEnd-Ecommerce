@@ -40,26 +40,7 @@ interface DestaqueRequest {
 
 const DestaqueProducts = ({ type }: DestaqueRequest) => {
 
-
     const [products, setProducts] = useState([]);
-    const [photos, setPhotos] = useState([]);
-
-
-    console.log(photos)
-
-
-    useEffect(() => {
-        async function loadFirstPhotoProduct() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient('/allPhotosProductsStore');
-                setPhotos(response.data || []);
-            } catch (error) {
-                console.log(error.response.data);
-            };
-        };
-        loadFirstPhotoProduct();
-    }, []);
 
     useEffect(() => {
         async function loadProducts() {
@@ -102,15 +83,6 @@ const DestaqueProducts = ({ type }: DestaqueRequest) => {
                                     <Images>
                                         <Image src={'http://localhost:3333/files/' + item.photoproducts[0].photo} width={450} height={400} alt={item?.nameProduct} />
                                     </Images>
-                                    {/* {photos.map((itemphoto) => {
-                                        return (
-                                            <>
-                                                <Images key={itemphoto.id}>
-                                                    <Image src={'http://localhost:3333/files/' + itemphoto[0].photo} width={450} height={400} alt={item?.nameProduct} />
-                                                </Images>
-                                            </>
-                                        )
-                                    })} */}
                                     <Info>
                                         <Name>{item?.nameProduct}</Name>
                                         <OldPrice>De {item?.promocao.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
