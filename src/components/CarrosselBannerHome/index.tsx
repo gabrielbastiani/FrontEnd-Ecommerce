@@ -55,6 +55,7 @@ const CarrosselBannerHome = () => {
 
     /* setInterval(next, 5000); */
 
+
     return (
         <Container>
             <Link href={String(config[imageIndex]?.url)} target="_blank">
