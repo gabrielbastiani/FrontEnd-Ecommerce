@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import semimagem from '../../assets/semfoto.png';
 import {
     SectionDestaqueProducts,
     Title,
@@ -17,12 +18,14 @@ import {
     Min,
     ValueQuant,
     Max,
-    Add
+    Add,
+    BoxTitle
 } from './styles';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { setupAPIClient } from '../../services/api';
+import Link from 'next/link';
 
 
 interface DestaqueRequest {
@@ -64,20 +67,30 @@ const DestaqueProducts = ({ type }: DestaqueRequest) => {
 
     return (
         <>
+            <BoxTitle>
+                <Title>{type}</Title>
+            </BoxTitle>
             <SectionDestaqueProducts>
                 <Container>
-                    <Title>{type}</Title>
                     <Carousel ref={carousel}>
                         {products.map((item) => {
                             return (
                                 <Item key={item.id}>
-                                    <Images>
-                                        <Image src={'http://localhost:3333/files/' + item.photoproducts[0].photo} width={450} height={400} alt={item?.nameProduct} />
-                                    </Images>
+                                    <Link href={'/produto/' + item?.nameProduct}>
+                                        <Images>
+                                            {item.photoproducts[0] ? (
+                                                <Image src={'http://localhost:3333/files/' + item.photoproducts[0].photo} width={450} height={300} alt={item?.nameProduct} />
+                                            ) :
+                                                <Image src={semimagem} width={450} height={400} alt={item?.nameProduct} />
+                                            }
+                                        </Images>
+                                    </Link>
                                     <Info>
-                                        <Name>{item?.nameProduct}</Name>
-                                        <OldPrice>De {item?.promocao.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
-                                        <Price>Por {item?.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                        <Link href={'/produto/' + item?.nameProduct}>
+                                            <Name>{item?.nameProduct}</Name>
+                                            <OldPrice>De {item?.promocao.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
+                                            <Price>Por {item?.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                        </Link>
                                         <BoxBuy>
                                             <Quantidade>
                                                 <Min>-</Min>
