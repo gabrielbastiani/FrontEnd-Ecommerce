@@ -4,6 +4,7 @@ import { FooterStore } from "../components/FooterStore"
 import FooterAccount from "../components/FooterAccount"
 import CarrosselBannerHome from "../components/CarrosselBannerHome"
 import DestaqueProducts from "../components/DestaqueProducts"
+import ProdutosOfertas from "../components/ProdutosOfertas"
 
 
 export default function Home() {
@@ -15,8 +16,12 @@ export default function Home() {
 
       <HeaderStore />
       <CarrosselBannerHome />
-  
-      <DestaqueProducts type='Produtos destaques' />
+      
+
+      <ProdutosOfertas title="Ofertas do mês" />
+
+
+      <DestaqueProducts title='Produtos destaques' />
 
 
       <FooterStore />

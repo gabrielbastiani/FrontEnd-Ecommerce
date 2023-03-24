@@ -32,7 +32,7 @@ interface DestaqueRequest {
     title: string;
 }
 
-const DestaqueProducts = ({ title }: DestaqueRequest) => {
+const ProdutosOfertas = ({ title }: DestaqueRequest) => {
 
     const [products, setProducts] = useState([]);
 
@@ -121,4 +121,4 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
     );
 };
 
-export default DestaqueProducts;
+export default ProdutosOfertas;
