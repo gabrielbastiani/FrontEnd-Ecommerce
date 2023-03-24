@@ -5,7 +5,7 @@ import {
     NavButton,
     DotContainer,
     Dot,
-    NavButtonLeft
+    NavButtonLeft,
 } from './styles';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import bannerHome1 from '../../assets/banners/bannerHome-1.png';

@@ -1,16 +1,16 @@
 import styled, { css } from 'styled-components'
 
 interface PropType {
-  right: boolean;
+  right: boolean
 }
 
 interface PropType2 {
-  left: boolean;
+  left: boolean
 }
 
 type PropTypeKey = {
-  key: string;
-  active: boolean;
+  key: string
+  active: boolean
 }
 
 export const Container = styled.section`
