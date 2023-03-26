@@ -34,19 +34,19 @@ interface DestaqueRequest {
 
 const DestaqueProducts = ({ title }: DestaqueRequest) => {
 
-    const [products, setProducts] = useState([]);
+    const [productsDestaque, setProductsDestaque] = useState([]);
 
     useEffect(() => {
-        async function loadProducts() {
+        async function loadDestaques() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient('/allProductsStore');
-                setProducts(response.data || []);
+                const response = await apiClient.get(`/listProductsDestaque`);
+                setProductsDestaque(response.data);
             } catch (error) {
-                console.log(error.response.data);
-            };
-        };
-        loadProducts();
+                console.log(error.response);
+            }
+        }
+        loadDestaques();
     }, []);
 
     const carousel = useRef(null);
@@ -61,7 +61,7 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
         carousel.current.scrollLeft += carousel.current.offsetWidth;
     };
 
-    if (!products || !products.length) return null;
+    if (!productsDestaque || !productsDestaque.length) return null;
 
     function removerAcentos(s: any) {
         return s.normalize('NFD')
@@ -81,7 +81,7 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
             <SectionDestaqueProducts>
                 <Container>
                     <Carousel ref={carousel}>
-                        {products.map((item) => {
+                        {productsDestaque.map((item) => {
                             return (
                                 <Item key={item.id}>
                                     <Link href={'/produto/' + removerAcentos(item?.nameProduct)}>
