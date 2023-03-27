@@ -7,6 +7,8 @@ export const ContainerHeaderStore = styled.header`
   width: 100%;
   padding: 15px 0;
   flex-direction: column;
+  z-index: 99;
+  position: fixed;
 `
 
 export const ContentHeaderStore = styled.div`

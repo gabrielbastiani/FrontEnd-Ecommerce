@@ -40,7 +40,7 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
         async function loadProducts() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient('/allProductsStore');
+                const response = await apiClient('/listProductsOfertas');
                 setProducts(response.data || []);
             } catch (error) {
                 console.log(error.response.data);

@@ -21,6 +21,23 @@ export const Container = styled.section`
     width: 100vw;
     height: 100%;
     object-fit: contain;
+    margin-top: 123px;
+
+    @media (max-width: 900px) {
+      margin-top: 200px;
+    }
+
+    @media (max-width: 600px) {
+      margin-top: 331px;
+    }
+
+    @media (max-width: 544px) {
+      margin-top: 411px;
+    }
+
+    @media (max-width: 455px) {
+      margin-top: 448px;
+    }
   }
 `
 
@@ -47,6 +64,18 @@ export const NavButton = styled.button<PropType>`
       : css`
           left: 2%;
         `};
+
+  @media (max-width: 900px) {
+    top: 65%;
+  }
+
+  @media (max-width: 600px) {
+    top: 78%;
+  }
+
+  @media (max-width: 455px) {
+    top: 83%;
+  }
 `
 
 export const NavButtonLeft = styled.button<PropType2>`
@@ -72,6 +101,18 @@ export const NavButtonLeft = styled.button<PropType2>`
       : css`
           right: 2%;
         `};
+
+  @media (max-width: 900px) {
+    top: 65%;
+  }
+
+  @media (max-width: 600px) {
+    top: 78%;
+  }
+
+  @media (max-width: 455px) {
+    top: 83%;
+  }
 `
 
 export const DotContainer = styled.div`
