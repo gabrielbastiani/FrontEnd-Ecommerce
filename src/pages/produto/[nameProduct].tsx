@@ -8,7 +8,11 @@ export default function Produto() {
     let nameProduct = router.query.nameProduct;
 
     useEffect(() => {
-        
+        try {
+            
+        } catch (error) {
+            console.log(error.response.data);
+        }
     }, []);
 
 
