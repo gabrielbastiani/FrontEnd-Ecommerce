@@ -29,6 +29,7 @@ export const MosaicoHome = () => {
         }
         loadHomeBanner();
     }, []);
+    
 
     return (
         <>

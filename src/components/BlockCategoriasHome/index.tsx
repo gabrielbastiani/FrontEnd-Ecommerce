@@ -30,15 +30,6 @@ const BlockCategoriasHome = () => {
         loadCategorys();
     }, []);
 
-    function removerAcentos(s: any) {
-        return s.normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .replace(/ +/g, "-")
-            .replace(/-{2,}/g, "-")
-            .replace(/[/]/g, "-");
-    }
-
 
     return (
         <>
@@ -49,7 +40,7 @@ const BlockCategoriasHome = () => {
                 <GridContainer>
                     {orderArray.map((item) => {
                         return (
-                            <Link href={`/categoria/${removerAcentos(item.categoryName)}`} target="_blank">
+                            <Link href={`/categoria/${item.slug}`} target="_blank">
                                 <BoxCategory>
                                     <MdCategory color='white' size={55} />
                                     {item.categoryName}

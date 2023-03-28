@@ -134,15 +134,6 @@ export const HeaderStore = () => {
         }
     }
 
-    function removerAcentos(s: any) {
-        return s.normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .replace(/ +/g, "-")
-            .replace(/-{2,}/g, "-")
-            .replace(/[/]/g, "-");
-    }
-
 
     return (
         <>
@@ -163,7 +154,7 @@ export const HeaderStore = () => {
                                 <>
                                     {products.map((value) => {
                                         return (
-                                            <Link key={value.id} href={`/produto/${removerAcentos(value.nameProduct)}`} target="_blank">
+                                            <Link key={value.id} href={`/produto/${value.slug}`} target="_blank">
                                                 <ListItems>{value?.nameProduct}</ListItems>
                                             </Link>
                                         )
@@ -270,7 +261,7 @@ export const HeaderStore = () => {
                 <CategorysHeader>
                     {orderArray.map((item) => {
                         return (
-                            <Link key={item.id} href={'/categoria/' + `${removerAcentos(item?.categoryName)}`}>
+                            <Link key={item.id} href={'/categoria/' + `${item?.slug}`}>
                                 <TextNameCategory>
                                     {item?.categoryName}
                                 </TextNameCategory>
@@ -287,7 +278,7 @@ export const HeaderStore = () => {
                         <BoxItemsMobile>
                             {orderArray.map((item) => {
                                 return (
-                                    <Link key={item.id} href={'/categoria/' + `${removerAcentos(item?.categoryName)}`}>
+                                    <Link key={item.id} href={'/categoria/' + `${item?.slug}`}>
                                         <TextNameCategoryMobile>
                                             {item?.categoryName}
                                         </TextNameCategoryMobile>

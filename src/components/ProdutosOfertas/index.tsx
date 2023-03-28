@@ -63,15 +63,6 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
 
     if (!products || !products.length) return null;
 
-    function removerAcentos(s: any) {
-        return s.normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .replace(/ +/g, "-")
-            .replace(/-{2,}/g, "-")
-            .replace(/[/]/g, "-");
-    }
-
 
     return (
         <>
@@ -84,7 +75,7 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
                         {products.map((item) => {
                             return (
                                 <Item key={item.id}>
-                                    <Link href={'/produto/' + removerAcentos(item?.nameProduct)}>
+                                    <Link href={'/produto/' + item?.slug}>
                                         <Images>
                                             {item.photoproducts[0] ? (
                                                 <Image src={'http://localhost:3333/files/' + item.photoproducts[0].photo} width={450} height={300} alt={item?.nameProduct} />
@@ -94,7 +85,7 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
                                         </Images>
                                     </Link>
                                     <Info>
-                                        <Link href={'/produto/' + removerAcentos(item?.nameProduct)}>
+                                        <Link href={'/produto/' + item?.slug}>
                                             <Name>{item?.nameProduct}</Name>
                                             <OldPrice>De {item?.promocao.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
                                             <Price>Por {item?.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
