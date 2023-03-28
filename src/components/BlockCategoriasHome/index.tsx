@@ -7,6 +7,7 @@ import {
     BoxCategory
 } from './styles';
 import { setupAPIClient } from '../../services/api';
+import { MdCategory } from 'react-icons/md';
 
 
 const BlockCategoriasHome = () => {
@@ -50,6 +51,7 @@ const BlockCategoriasHome = () => {
                         return (
                             <Link href={`/categoria/${removerAcentos(item.categoryName)}`} target="_blank">
                                 <BoxCategory>
+                                    <MdCategory color='white' size={55} />
                                     {item.categoryName}
                                 </BoxCategory>
                             </Link>

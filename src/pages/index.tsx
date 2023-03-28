@@ -7,6 +7,7 @@ import DestaqueProducts from "../components/DestaqueProducts"
 import ProdutosOfertas from "../components/ProdutosOfertas"
 import { MosaicoHome } from "../components/MosaicoHome"
 import BlockCategoriasHome from "../components/BlockCategoriasHome"
+import VizualizadosRecentemete from "../components/VizualizadosRecentemete"
 
 
 export default function Home() {
@@ -22,7 +23,7 @@ export default function Home() {
       <BlockCategoriasHome />
       <MosaicoHome />
       <DestaqueProducts title='Produtos destaques' />
-
+      <VizualizadosRecentemete title="Vizualizados recentemete" />
 
       <FooterStore />
       <FooterAccount />

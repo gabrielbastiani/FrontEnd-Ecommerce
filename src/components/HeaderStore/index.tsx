@@ -37,7 +37,7 @@ import { setupAPIClient } from '../../services/api';
 
 
 export const HeaderStore = () => {
-
+    
     const { user } = useContext(AuthContext);
 
     const [emailLoja, setEmailLoja] = useState('');

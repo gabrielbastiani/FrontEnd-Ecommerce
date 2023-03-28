@@ -15,13 +15,17 @@ export const GridContainer = styled.div`
 `
 
 export const BoxCategory = styled.button`
-  background-color: ${props => props?.theme?.colors?.info};
+  background-color: ${props => props?.theme?.colors?.warning};
   width: 330px;
-  padding: 12%;
-  color: ${props => props?.theme?.colors?.black};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${props => props?.theme?.colors?.white};
   font-size: 1.5rem;
   font-weight: 600;
   border-radius: 5px;
+  padding-bottom: 25px;
+  padding-top: 25px;
 
   -webkit-transition: opacity 0.5s ease-in-out;
   -moz-transition: opacity 0.5s ease-in-out;
@@ -29,6 +33,10 @@ export const BoxCategory = styled.button`
   -o-transition: opacity 0.5s ease-in-out;
   transition: opacity 0.5s ease-in-out;
   opacity: 1;
+
+  svg {
+    margin-right: 15px;
+  }
 
   :hover {
     opacity: 0.7;
