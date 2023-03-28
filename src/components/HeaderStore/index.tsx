@@ -44,6 +44,7 @@ export const HeaderStore = () => {
     const [phoneLoja, setPhoneLoja] = useState('');
 
     const [categoryNames, setCategoryNames] = useState([]);
+    const orderArray = categoryNames.slice(0, 8);
 
     const [initialFilter, setInitialFilter] = useState([]);
     const [products, setProducts] = useState([]);
@@ -267,7 +268,7 @@ export const HeaderStore = () => {
                 </ContentHeaderStore>
 
                 <CategorysHeader>
-                    {categoryNames.map((item) => {
+                    {orderArray.map((item) => {
                         return (
                             <Link key={item.id} href={'/categoria/' + `${removerAcentos(item?.categoryName)}`}>
                                 <TextNameCategory>
@@ -284,7 +285,7 @@ export const HeaderStore = () => {
 
                     {element ?
                         <BoxItemsMobile>
-                            {categoryNames.map((item) => {
+                            {orderArray.map((item) => {
                                 return (
                                     <Link key={item.id} href={'/categoria/' + `${removerAcentos(item?.categoryName)}`}>
                                         <TextNameCategoryMobile>

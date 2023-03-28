@@ -6,6 +6,7 @@ import CarrosselBannerHome from "../components/CarrosselBannerHome"
 import DestaqueProducts from "../components/DestaqueProducts"
 import ProdutosOfertas from "../components/ProdutosOfertas"
 import { MosaicoHome } from "../components/MosaicoHome"
+import BlockCategoriasHome from "../components/BlockCategoriasHome"
 
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
       <HeaderStore />
       <CarrosselBannerHome />
       <ProdutosOfertas title="Ofertas do mês" />
+      <BlockCategoriasHome />
       <MosaicoHome />
       <DestaqueProducts title='Produtos destaques' />
 

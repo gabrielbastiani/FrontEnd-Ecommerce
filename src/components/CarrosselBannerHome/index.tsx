@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import bannerHomePadrao from '../../assets/sembannerhome.png';
 import {
     Container,
     NavButton,
@@ -45,25 +46,38 @@ const CarrosselBannerHome = () => {
 
 
     return (
-        <Container>
-            <Link href={String(bannersHome[imageIndex]?.url)} target="_blank">
-                <Image src={'http://localhost:3333/files/' + bannersHome[imageIndex]?.banner} width={1800} height={700} alt="Banners Loja Builder Seu Negocio Online" />
-            </Link>
-            <NavButton right onClick={next}>
-                <FaArrowRight size={35} color='white' />
-            </NavButton>
-            <NavButtonLeft left onClick={prev}>
-                <FaArrowLeft size={35} color='white' />
-            </NavButtonLeft>
-            <DotContainer>
-                {
-                    bannersHome.map((dot, index) => (/* @ts-ignore */
-                        <Dot key={dot?.banner} active={(index === imageIndex)} />
-                    ))
-                }
-            </DotContainer>
-        </Container>
-    );
+        <>
+            {bannersHome.length < 1 ? (
+                <Container>
+                    <Image
+                        src={bannerHomePadrao}
+                        width={1800}
+                        height={100}
+                        alt="Banners Loja Builder Seu Negocio Online"
+                    />
+                </Container>
+            ) :
+                <Container>
+                    <Link href={String(bannersHome[imageIndex]?.url)} target="_blank">
+                        <Image src={'http://localhost:3333/files/' + bannersHome[imageIndex]?.banner} width={1800} height={700} alt="Banners Loja Builder Seu Negocio Online" />
+                    </Link>
+                    <NavButton right onClick={next}>
+                        <FaArrowRight size={35} color='white' />
+                    </NavButton>
+                    <NavButtonLeft left onClick={prev}>
+                        <FaArrowLeft size={35} color='white' />
+                    </NavButtonLeft>
+                    <DotContainer>
+                        {
+                            bannersHome.map((dot, index) => (/* @ts-ignore */
+                                <Dot key={dot?.banner} active={(index === imageIndex)} />
+                            ))
+                        }
+                    </DotContainer>
+                </Container>
+            }
+        </>
+    )
 };
 
 export default CarrosselBannerHome;
