@@ -16,11 +16,11 @@ export const ContainerGaleria = styled.section`
 `
 
 export const ItemGaleria1 = styled.div`
-  width: 650px;
+  max-width: 539px;
   margin: 2px;
 
   @media (max-width: 1265px) {
-    width: 450px;
+    max-width: 450px;
   }
 
   @media (max-width: 932px) {
@@ -29,7 +29,7 @@ export const ItemGaleria1 = styled.div`
   }
 
   @media (max-width: 485px) {
-    width: 320px;
+    max-width: 320px;
     margin-bottom: -2px;
   }
 
@@ -40,15 +40,15 @@ export const ItemGaleria1 = styled.div`
 `
 
 export const ItemGaleria2 = styled.div`
-  width: 650px;
+  max-width: 539px;
   margin: 2px;
 
   @media (max-width: 1265px) {
-    width: 450px;
+    max-width: 450px;
   }
 
   @media (max-width: 485px) {
-    width: 320px;
+    max-width: 320px;
   }
 
   img {
@@ -73,20 +73,20 @@ export const ContainerGaleriaBotton = styled.section`
 `
 
 export const ItemGaleriaBotton1 = styled.div`
-  width: 858px;
+  max-width: 858px;
   margin: 2px;
 
   @media (max-width: 1265px) {
-    width: 605px;
+    max-width: 605px;
   }
 
   @media (max-width: 932px) {
     flex-direction: column;
-    width: 450px;
+    max-width: 450px;
   }
 
   @media (max-width: 485px) {
-    width: 330px;
+    max-width: 330px;
   }
 
   img {
@@ -96,19 +96,19 @@ export const ItemGaleriaBotton1 = styled.div`
 `
 
 export const ItemGaleriaBotton2 = styled.div`
-  width: 440px;
+  max-width: 440px;
   margin: 2px;
 
   @media (max-width: 1265px) {
-    width: 300px;
+    max-width: 300px;
   }
 
   @media (max-width: 932px) {
-    width: 450px;
+    max-width: 450px;
   }
 
   @media (max-width: 485px) {
-    width: 330px;
+    max-width: 330px;
   }
 
   img {
