@@ -30,7 +30,7 @@ export const ItemGaleria1 = styled.div`
 
   @media (max-width: 485px) {
     width: 320px;
-    margin-bottom: -140px;
+    margin-bottom: -2px;
   }
 
   img {
@@ -68,7 +68,7 @@ export const ContainerGaleriaBotton = styled.section`
   }
 
   @media (max-width: 475px) {
-    margin-top: -110px;
+    margin-top: -2px;
   }
 `
 
