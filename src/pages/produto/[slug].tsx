@@ -5,7 +5,7 @@ import { useEffect } from "react";
 export default function Produto() {
 
     const router = useRouter();
-    let nameProduct = router.query.nameProduct;
+    let slug = router.query.slug;
 
     useEffect(() => {
         try {
@@ -19,7 +19,7 @@ export default function Produto() {
 
     return (
         <>
-            <h1>Produto {nameProduct}</h1>
+            <h1>Produto {slug}</h1>
         </>
     )
 }
