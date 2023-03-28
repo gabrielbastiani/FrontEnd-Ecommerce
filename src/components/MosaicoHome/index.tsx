@@ -1,12 +1,11 @@
 import Image from 'next/image';
 import {
-    MosaicoHomeSection,
-    MosaicoHome1,
-    MosaicoHome2,
-    MosaicoHome3,
-    MosaicoHome4,
-    GridContatinerTop,
-    GridContatinerBotton
+    ContainerGaleria,
+    ItemGaleria1,
+    ItemGaleria2,
+    ContainerGaleriaBotton,
+    ItemGaleriaBotton1,
+    ItemGaleriaBotton2
 } from './styles';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -31,47 +30,48 @@ export const MosaicoHome = () => {
     }, []);
 
     return (
-        <MosaicoHomeSection>
-            <GridContatinerTop>
+        <>
+            <ContainerGaleria>
                 {mosaicoBanners.splice(3).map((mos1) => {
                     return (
-                        <MosaicoHome1 key={mos1.id}>
+                        <ItemGaleria1>
                             <Link href={mos1.url}>
                                 <Image src={'http://localhost:3333/files/' + mos1.bannerMosaico} width={650} height={300} alt="Mosaico Home Loja" />
                             </Link>
-                        </MosaicoHome1>
+                        </ItemGaleria1>
                     )
                 })}
                 {mosaicoBanners.splice(2).map((mos2) => {
                     return (
-                        <MosaicoHome2 key={mos2.id}>
+                        <ItemGaleria2>
                             <Link href={mos2.url}>
                                 <Image src={'http://localhost:3333/files/' + mos2.bannerMosaico} width={650} height={300} alt="Mosaico Home Loja" />
                             </Link>
-                        </MosaicoHome2>
+                        </ItemGaleria2>
                     )
                 })}
-            </GridContatinerTop>
-            <GridContatinerBotton>
+            </ContainerGaleria>
+
+            <ContainerGaleriaBotton>
                 {mosaicoBanners.splice(1).map((mos3) => {
                     return (
-                        <MosaicoHome3 key={mos3.id}>
+                        <ItemGaleriaBotton1>
                             <Link href={mos3.url}>
-                                <Image src={'http://localhost:3333/files/' + mos3.bannerMosaico} width={858} height={402} alt="Mosaico Home Loja" />
+                                <Image src={'http://localhost:3333/files/' + mos3.bannerMosaico} width={858} height={350} alt="Mosaico Home Loja" />
                             </Link>
-                        </MosaicoHome3>
+                        </ItemGaleriaBotton1>
                     )
                 })}
                 {mosaicoBanners.splice(0).map((mos4) => {
                     return (
-                        <MosaicoHome4 key={mos4.id}>
+                        <ItemGaleriaBotton2>
                             <Link href={mos4.url}>
-                                <Image src={'http://localhost:3333/files/' + mos4.bannerMosaico} width={440} height={402} alt="Mosaico Home Loja" />
+                                <Image src={'http://localhost:3333/files/' + mos4.bannerMosaico} width={440} height={350} alt="Mosaico Home Loja" />
                             </Link>
-                        </MosaicoHome4>
+                        </ItemGaleriaBotton2>
                     )
                 })}
-            </GridContatinerBotton>
-        </MosaicoHomeSection>
+            </ContainerGaleriaBotton>
+        </>
     )
 }

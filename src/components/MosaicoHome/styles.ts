@@ -1,105 +1,118 @@
 import styled from 'styled-components'
 
-export const MosaicoHomeSection = styled.section`
-  width: 1300px;
-  margin: auto;
+export const ContainerGaleria = styled.section`
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 100%;
 
-  @media (max-width: 1360px) {
-    width: 1000px;
-    margin: 0 50px;
+  @media (max-width: 932px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 475px) {
+    margin-top: -110px;
   }
 `
 
-export const GridContatinerTop = styled.div`
-  display: grid;
-  grid-template-columns: 650px 650px;
-  gap: 10px;
+export const ItemGaleria1 = styled.div`
+  width: 650px;
+  margin: 2px;
 
-  @media (max-width: 1360px) {
-    grid-template-columns: 550px 550px;
+  @media (max-width: 1265px) {
+    width: 450px;
   }
 
-  @media (max-width: 1182px) {
-    grid-template-columns: 450px 450px;
+  @media (max-width: 932px) {
+    flex-direction: column;
+    margin-bottom: -70px;
   }
 
-  @media (max-width: 1049px) {
-    grid-template-columns: 758px;
+  @media (max-width: 485px) {
+    width: 320px;
+    margin-bottom: -140px;
   }
-`
-
-export const MosaicoHome1 = styled.div`
-  text-align: center;
-  padding: 20px 0;
 
   img {
-    @media (max-width: 1360px) {
-      width: 550px;
-    }
-
-    @media (max-width: 1182px) {
-      width: 450px;
-    }
+    object-fit: fill;
+    width: 100%;
   }
 `
 
-export const MosaicoHome2 = styled.div`
-  text-align: center;
-  padding: 20px 0;
+export const ItemGaleria2 = styled.div`
+  width: 650px;
+  margin: 2px;
+
+  @media (max-width: 1265px) {
+    width: 450px;
+  }
+
+  @media (max-width: 485px) {
+    width: 320px;
+  }
 
   img {
-    @media (max-width: 1360px) {
-      width: 550px;
-    }
-
-    @media (max-width: 1182px) {
-      width: 450px;
-    }
+    object-fit: fill;
+    width: 100%;
   }
 `
 
-export const GridContatinerBotton = styled.div`
-  display: grid;
-  grid-template-columns: 858px 340px;
-  gap: 10px;
+export const ContainerGaleriaBotton = styled.section`
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 100%;
 
-  @media (max-width: 1360px) {
-    grid-template-columns: 758px 240px;
+  @media (max-width: 932px) {
+    flex-direction: column;
   }
 
-  @media (max-width: 1182px) {
-    grid-template-columns: 658px 140px;
-  }
-
-  @media (max-width: 1049px) {
-    grid-template-columns: 758px;
+  @media (max-width: 475px) {
+    margin-top: -110px;
   }
 `
 
-export const MosaicoHome3 = styled.div`
-  text-align: center;
+export const ItemGaleriaBotton1 = styled.div`
+  width: 858px;
+  margin: 2px;
+
+  @media (max-width: 1265px) {
+    width: 605px;
+  }
+
+  @media (max-width: 932px) {
+    flex-direction: column;
+    width: 450px;
+  }
+
+  @media (max-width: 485px) {
+    width: 330px;
+  }
 
   img {
-    @media (max-width: 1360px) {
-      width: 758px;
-    }
-
-    @media (max-width: 1182px) {
-      width: 658px;
-    }
+    object-fit: fill;
+    width: 100%;
   }
 `
 
-export const MosaicoHome4 = styled.div`
-  text-align: center;
+export const ItemGaleriaBotton2 = styled.div`
+  width: 440px;
+  margin: 2px;
+
+  @media (max-width: 1265px) {
+    width: 300px;
+  }
+
+  @media (max-width: 932px) {
+    width: 450px;
+  }
+
+  @media (max-width: 485px) {
+    width: 330px;
+  }
 
   img {
-    @media (max-width: 1360px) {
-      width: 340px;
-    }
-
-    @media (max-width: 1182px) {
-      width: 240px;
-    }
+    object-fit: fill;
+    width: 100%;
   }
 `
