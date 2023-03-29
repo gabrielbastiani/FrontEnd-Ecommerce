@@ -19,7 +19,8 @@ import {
     ValueQuant,
     Max,
     Add,
-    BoxTitle
+    BoxTitle,
+    ImagesHover
 } from './styles';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -83,6 +84,13 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
                                                 <Image src={semimagem} width={450} height={400} alt={item?.nameProduct} />
                                             }
                                         </Images>
+                                        <ImagesHover>
+                                            {item.photoproducts[1] ? (
+                                                <Image src={'http://localhost:3333/files/' + item.photoproducts[1].photo} width={450} height={300} alt={item?.nameProduct} />
+                                            ) :
+                                                <Image src={semimagem} width={450} height={400} alt={item?.nameProduct} />
+                                            }
+                                        </ImagesHover>
                                     </Link>
                                     <Info>
                                         <Link href={'/produto/' + item?.slug}>

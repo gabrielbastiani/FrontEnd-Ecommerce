@@ -76,7 +76,7 @@ export default function Produto() {
                 setCategorieName(responseProduct.data.category.categoryName);
 
             } catch (error) {
-                console.log(error.response.data);
+                console.log(error);
             }
         }
         loadProduct();

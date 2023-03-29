@@ -52,11 +52,27 @@ export const Item = styled.div`
 export const Images = styled.div`
   height: 300px;
   margin-bottom: 10px;
+  opacity: 1;
+  z-index:1;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+`
+
+export const ImagesHover = styled.div`
+  margin-top: -300px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  :hover {
+    opacity:0;
   }
 `
 
