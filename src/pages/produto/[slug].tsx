@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
+import { destroyCookie, setCookie, parseCookies } from 'nookies';
 
 
 export default function Produto() {
@@ -28,6 +29,26 @@ export default function Produto() {
     const [disponibilidades, setDisponibilidades] = useState('');
     const [destaques, setDestaques] = useState('');
     const [ofertas, setOfertas] = useState('');
+
+    useEffect(() => {
+        let urls = new Array();
+
+        // Verifica se a propriedade no localStorage
+        if(localStorage.hasOwnProperty("urls")){
+            // Recuperar os valores da propriedade urls do localStorage
+            // Converte de String para Object
+            urls = JSON.parse(localStorage.getItem("urls"));
+        }
+    
+        // Adiciona um novo objeto no array criado
+        urls.push({nameProducts, slug});
+    
+        // Salva no localStorage
+        localStorage.setItem("urls", JSON.stringify(urls));
+   
+    },[nameProducts, slug]);
+
+    
 
     useEffect(() => {
         async function loadProduct() {

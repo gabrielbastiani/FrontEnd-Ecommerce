@@ -15,7 +15,6 @@ import {
 } from './styles';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-import { setupAPIClient } from '../../services/api';
 import Link from 'next/link';
 
 
@@ -23,22 +22,14 @@ interface VizualizadosRequest {
     title: string;
 }
 
-const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
 
+const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
+    
     const [productsDestaque, setProductsDestaque] = useState([]);
 
-    useEffect(() => {
-        async function loadDestaques() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient.get(`/allProductsStore`);
-                setProductsDestaque(response.data);
-            } catch (error) {
-                console.log(error.response);
-            }
-        }
-        loadDestaques();
-    }, []);
+    let dados = localStorage.getItem('urls');
+
+    console.log(dados)
 
     const carousel = useRef(null);
 
@@ -54,15 +45,6 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
 
     if (!productsDestaque || !productsDestaque.length) return null;
 
-    function removerAcentos(s: any) {
-        return s.normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .replace(/ +/g, "-")
-            .replace(/-{2,}/g, "-")
-            .replace(/[/]/g, "-");
-    }
-
 
     return (
         <>
@@ -74,18 +56,18 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
                     <Carousel ref={carousel}>
                         {productsDestaque.map((item) => {
                             return (
-                                <Item key={item.id}>
-                                    <Link href={'/produto/' + removerAcentos(item?.nameProduct)}>
+                                <Item>
+                                    <Link href={'/produto/' + item?.slug}>
                                         <Images>
-                                            {item.photoproducts[0] ? (
+                                            {/* {item.photoproducts[0] ? (
                                                 <Image src={'http://localhost:3333/files/' + item.photoproducts[0].photo} width={450} height={300} alt={item?.nameProduct} />
                                             ) :
                                                 <Image src={semimagem} width={450} height={400} alt={item?.nameProduct} />
-                                            }
+                                            } */}
                                         </Images>
                                     </Link>
                                     <Info>
-                                        <Link href={'/produto/' + removerAcentos(item?.nameProduct)}>
+                                        <Link href={'/produto/' + item?.slug}>
                                             <Name>{item?.nameProduct}</Name>
                                         </Link>
                                     </Info>
