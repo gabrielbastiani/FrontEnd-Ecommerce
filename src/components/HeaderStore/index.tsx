@@ -68,7 +68,7 @@ export const HeaderStore = () => {
                 setPhoneLoja(response.data.phoneLoja || "");
 
             } catch (error) {
-                console.log(error.response.data);
+                console.log(error);
             }
         }
         loadStore();

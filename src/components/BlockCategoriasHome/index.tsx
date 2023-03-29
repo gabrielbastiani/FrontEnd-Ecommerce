@@ -33,23 +33,29 @@ const BlockCategoriasHome = () => {
 
     return (
         <>
-            <BoxTitle>
-                <Title>Categorias</Title>
-            </BoxTitle>
-            <SectionCategorysHome>
-                <GridContainer>
-                    {orderArray.map((item) => {
-                        return (
-                            <Link href={`/categoria/${item.slug}`} target="_blank">
-                                <BoxCategory>
-                                    <MdCategory color='white' size={55} />
-                                    {item.categoryName}
-                                </BoxCategory>
-                            </Link>
-                        )
-                    })}
-                </GridContainer>
-            </SectionCategorysHome>
+            {orderArray.length < 1 ? (
+                null
+            ) :
+                <>
+                    <BoxTitle>
+                        <Title>Categorias</Title>
+                    </BoxTitle>
+                    <SectionCategorysHome>
+                        <GridContainer>
+                            {orderArray.map((item) => {
+                                return (
+                                    <Link href={`/categoria/${item.slug}`} target="_blank">
+                                        <BoxCategory>
+                                            <MdCategory color='white' size={55} />
+                                            {item.categoryName}
+                                        </BoxCategory>
+                                    </Link>
+                                )
+                            })}
+                        </GridContainer>
+                    </SectionCategorysHome>
+                </>
+            }
         </>
     )
 }
