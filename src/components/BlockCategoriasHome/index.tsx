@@ -44,7 +44,7 @@ const BlockCategoriasHome = () => {
                         <GridContainer>
                             {orderArray.map((item) => {
                                 return (
-                                    <Link href={`/categoria/${item.slug}`} target="_blank">
+                                    <Link key={item.id} href={`/categoria/${item.slug}`} target="_blank">
                                         <BoxCategory>
                                             <MdCategory color='white' size={55} />
                                             {item.categoryName}

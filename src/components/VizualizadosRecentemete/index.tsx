@@ -23,16 +23,16 @@ interface VizualizadosRequest {
 }
 
 const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
-    
-    const [productsDestaque, setProductsDestaque] = useState([]);
+
+    const [productsVizualizados, setProductsVizualizados] = useState([]);
 
     useEffect(() => {
-        let dados = localStorage.getItem("@MaisVizualizados");
+        let dadosProducts = localStorage.getItem("@MaisVizualizados");
 
-        const dadosArray = JSON.parse(dados);
+        let dadosArray = JSON.parse(dadosProducts);
 
-        setProductsDestaque(dadosArray);
-    },[]);
+        setProductsVizualizados(dadosArray);
+    }, []);
 
     const carousel = useRef(null);
 
@@ -46,7 +46,7 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
         carousel.current.scrollLeft += carousel.current.offsetWidth;
     };
 
-    if (!productsDestaque || !productsDestaque.length) return null;
+    if (!productsVizualizados || !productsVizualizados.length) return null;
 
 
     return (
@@ -57,24 +57,31 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
             <SectionDestaqueProducts>
                 <Container>
                     <Carousel ref={carousel}>
-                        {productsDestaque.map((item) => {
+                        {productsVizualizados.map((item) => {
                             return (
-                                <Item key={item.slug}>
-                                    <Link href={'/produto/' + item.slug}>
-                                        <Images>
-                                            {item.photoProduct ? (
-                                                <Image src={'http://localhost:3333/files/' + item.photoProduct} width={450} height={300} alt={item?.nameProduct} />
-                                            ) :
-                                                <Image src={semimagem} width={450} height={400} alt={item?.nameProduct} />
-                                            }
-                                        </Images>
-                                    </Link>
-                                    <Info>
-                                        <Link href={'/produto/' + item.slug}>
-                                            <Name>{item.nameProducts}</Name>
-                                        </Link>
-                                    </Info>
-                                </Item>
+                                <>
+                                    {item.nameProducts ? (
+                                        <Item>
+                                            <Link href={'/produto/' + item.slug}>
+                                                <Images>
+                                                    {item.photoProduct ? (
+                                                        <Image src={'http://localhost:3333/files/' + item.photoProduct} width={450} height={300} alt={item?.nameProducts} />
+                                                    ) :
+                                                        <Image src={semimagem} width={450} height={400} alt={item?.nameProducts} />
+                                                    }
+                                                </Images>
+                                            </Link>
+                                            <Info>
+                                                <Link href={'/produto/' + item.slug}>
+                                                    <Name>{item.nameProducts}</Name>
+                                                </Link>
+                                            </Info>
+                                        </Item>
+                                    ) :
+                                        null
+                                    }
+                                </>
+
                             );
                         })}
                     </Carousel>

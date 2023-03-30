@@ -83,19 +83,21 @@ export default function Produto() {
         }
         loadProduct();
     }, [slug]);
-
+    
     useEffect(() => {
-        let urls = new Array();
+        function addItem(){
+            let dados = new Array();
 
-        if(localStorage.hasOwnProperty("@MaisVizualizados")){
-            urls = JSON.parse(localStorage.getItem("@MaisVizualizados"));
-        };
-    
-        urls.push({nameProducts, slug, photoProduct});
-    
-        localStorage.setItem("@MaisVizualizados", JSON.stringify(urls));
-   
-    },[nameProducts, slug]);
+            if(localStorage.hasOwnProperty("@MaisVizualizados")){
+                dados = JSON.parse(localStorage.getItem("@MaisVizualizados"));
+            };
+        
+            dados.push({nameProducts, slug, photoProduct});
+        
+            localStorage.setItem("@MaisVizualizados", JSON.stringify(dados));
+         }
+         addItem();
+    },[slug, photoProduct, nameProducts]);
 
     return (
         <>
