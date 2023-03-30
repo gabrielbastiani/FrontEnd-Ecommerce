@@ -190,6 +190,10 @@ export const CategorysHeader = styled.div`
 
 export const TextNameCategory = styled.span`
   color: ${props => props?.theme?.colors?.white};
+
+  :hover {
+    color: ${props => props?.theme?.colors?.info};
+  }
 `
 
 export const DataResult = styled.div`

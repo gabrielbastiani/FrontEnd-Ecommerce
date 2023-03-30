@@ -140,7 +140,9 @@ export const HeaderStore = () => {
             <ContainerHeaderStore>
                 <ContentHeaderStore>
                     <BlockLogo>
-                        <Image src={logoLoginWhite} width={180} height={50} alt="Logo Builder Seu Negocio Online" />
+                        <Link href='http://localhost:3001'>
+                            <Image src={logoLoginWhite} width={180} height={50} alt="Logo Builder Seu Negocio Online" />
+                        </Link>
                         <PesquisaHeaderStore
                             /* @ts-ignore */
                             onChange={handleChange}

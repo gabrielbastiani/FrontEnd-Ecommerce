@@ -23,7 +23,7 @@ export default function Home() {
       <BlockCategoriasHome />
       <MosaicoHome />
       <DestaqueProducts title='Produtos destaques' />
-      <VizualizadosRecentemete title="Vizualizados recentemete" />
+      <VizualizadosRecentemete title="Vizualizados recentemente" />
 
       <FooterStore />
       <FooterAccount />
