@@ -8,6 +8,8 @@ import ProdutosOfertas from "../components/ProdutosOfertas"
 import { MosaicoHome } from "../components/MosaicoHome"
 import BlockCategoriasHome from "../components/BlockCategoriasHome"
 import VizualizadosRecentemete from "../components/VizualizadosRecentemete"
+import Newsletters from "../components/Newsletters"
+
 
 
 export default function Home() {
@@ -19,12 +21,12 @@ export default function Home() {
 
       <HeaderStore />
       <CarrosselBannerHome />
+      <Newsletters />
       <ProdutosOfertas title="Ofertas do mês" />
       <BlockCategoriasHome />
       <MosaicoHome />
       <DestaqueProducts title='Produtos destaques' />
       <VizualizadosRecentemete title="Vizualizados recentemente" />
-
       <FooterStore />
       <FooterAccount />
 
