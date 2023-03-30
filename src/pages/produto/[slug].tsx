@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
-import { destroyCookie, setCookie, parseCookies } from 'nookies';
 
 
 export default function Produto() {
@@ -10,7 +9,6 @@ export default function Produto() {
     let slug = router.query.slug;
 
     const [nameProducts, setNameProducts] = useState('');
-    const [dataName, setDataName] = useState('');
     const [descriptionProducts1, setDescriptionProducts1] = useState('');
     const [descriptionProducts2, setDescriptionProducts2] = useState('');
     const [descriptionProducts3, setDescriptionProducts3] = useState('');
@@ -29,26 +27,8 @@ export default function Produto() {
     const [disponibilidades, setDisponibilidades] = useState('');
     const [destaques, setDestaques] = useState('');
     const [ofertas, setOfertas] = useState('');
+    const [photoProduct, setPhotoProduct] = useState('');
 
-    useEffect(() => {
-        let urls = new Array();
-
-        // Verifica se a propriedade no localStorage
-        if(localStorage.hasOwnProperty("urls")){
-            // Recuperar os valores da propriedade urls do localStorage
-            // Converte de String para Object
-            urls = JSON.parse(localStorage.getItem("urls"));
-        }
-    
-        // Adiciona um novo objeto no array criado
-        urls.push({nameProducts, slug});
-    
-        // Salva no localStorage
-        localStorage.setItem("urls", JSON.stringify(urls));
-   
-    },[nameProducts, slug]);
-
-    
 
     useEffect(() => {
         async function loadProduct() {
@@ -95,13 +75,27 @@ export default function Produto() {
                 setDestaques(produtoDestaque);
                 setOfertas(produtoOferta);
                 setCategorieName(responseProduct.data.category.categoryName);
+                setPhotoProduct(responseProduct.data.photoproducts[0].photo)
 
             } catch (error) {
                 console.log(error);
             }
         }
         loadProduct();
-    }, [slug])
+    }, [slug]);
+
+    useEffect(() => {
+        let urls = new Array();
+
+        if(localStorage.hasOwnProperty("@MaisVizualizados")){
+            urls = JSON.parse(localStorage.getItem("@MaisVizualizados"));
+        };
+    
+        urls.push({nameProducts, slug, photoProduct});
+    
+        localStorage.setItem("@MaisVizualizados", JSON.stringify(urls));
+   
+    },[nameProducts, slug]);
 
     return (
         <>

@@ -22,14 +22,17 @@ interface VizualizadosRequest {
     title: string;
 }
 
-
 const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
     
     const [productsDestaque, setProductsDestaque] = useState([]);
 
-    let dados = localStorage.getItem('urls');
+    useEffect(() => {
+        let dados = localStorage.getItem("@MaisVizualizados");
 
-    console.log(dados)
+        const dadosArray = JSON.parse(dados);
+
+        setProductsDestaque(dadosArray);
+    },[]);
 
     const carousel = useRef(null);
 
@@ -56,19 +59,19 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
                     <Carousel ref={carousel}>
                         {productsDestaque.map((item) => {
                             return (
-                                <Item>
-                                    <Link href={'/produto/' + item?.slug}>
+                                <Item key={item.slug}>
+                                    <Link href={'/produto/' + item.slug}>
                                         <Images>
-                                            {/* {item.photoproducts[0] ? (
-                                                <Image src={'http://localhost:3333/files/' + item.photoproducts[0].photo} width={450} height={300} alt={item?.nameProduct} />
+                                            {item.photoProduct ? (
+                                                <Image src={'http://localhost:3333/files/' + item.photoProduct} width={450} height={300} alt={item?.nameProduct} />
                                             ) :
                                                 <Image src={semimagem} width={450} height={400} alt={item?.nameProduct} />
-                                            } */}
+                                            }
                                         </Images>
                                     </Link>
                                     <Info>
-                                        <Link href={'/produto/' + item?.slug}>
-                                            <Name>{item?.nameProduct}</Name>
+                                        <Link href={'/produto/' + item.slug}>
+                                            <Name>{item.nameProducts}</Name>
                                         </Link>
                                     </Info>
                                 </Item>
