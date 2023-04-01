@@ -2,6 +2,17 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { setupAPIClient } from "../../services/api";
 import Head from "next/head";
+import {
+    AsideConteiner,
+    Boxbreadcrumbs,
+    Bread,
+    ContainerContent,
+    ContentPage,
+    PageSection
+} from "../../components/dateStoreUx/styles";
+import { HeaderStore } from "../../components/HeaderStore";
+import { FooterStore } from "../../components/FooterStore";
+import FooterAccount from "../../components/FooterAccount";
 
 
 export default function Categoria() {
@@ -50,15 +61,35 @@ export default function Categoria() {
         setCurrentPage(1);
     }, []);
 
-    
+
 
     return (
         <>
             <Head>
                 <title>{nameCategory}</title>
             </Head>
-            
-            
+
+            <HeaderStore />
+
+            <PageSection>
+                <Bread>
+                    <Boxbreadcrumbs>
+                        bread
+                    </Boxbreadcrumbs>
+                </Bread>
+                <ContainerContent>
+                    <AsideConteiner>
+                        aside
+                    </AsideConteiner>
+
+                    <ContentPage>
+                        content
+                    </ContentPage>
+                </ContainerContent>
+            </PageSection>
+
+            <FooterStore />
+            <FooterAccount />
         </>
     )
 }
