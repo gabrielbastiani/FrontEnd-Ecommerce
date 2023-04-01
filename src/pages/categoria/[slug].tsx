@@ -1,9 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { setupAPIClient } from "../../services/api";
-import { HeaderStore } from "../../components/HeaderStore";
-import { FooterStore } from "../../components/FooterStore";
-import FooterAccount from "../../components/FooterAccount";
+import Head from "next/head";
 
 
 export default function Categoria() {
@@ -12,6 +10,8 @@ export default function Categoria() {
     let slug = router.query.slug;
 
     const [products, setProducts] = useState([]);
+    const [nameCategory, setNameCategory] = useState('');
+
 
     const [total, setTotal] = useState(0);
     const [limit, setLimit] = useState(4);
@@ -23,7 +23,9 @@ export default function Categoria() {
         async function loadCateroysProducts() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/exactCategoryProducts?slug=${currentPage}&limit=${limit}&slug=${slug}`);
+                const { data } = await apiClient.get(`/exactCategoryProducts?page=${currentPage}&limit=${limit}&slug=${slug}`);
+
+                setNameCategory(data.findUnique.categoryName);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -52,12 +54,11 @@ export default function Categoria() {
 
     return (
         <>
-            <HeaderStore />
-
-
-
-            <FooterStore />
-            <FooterAccount />
+            <Head>
+                <title>{nameCategory}</title>
+            </Head>
+            
+            
         </>
     )
 }
