@@ -5,6 +5,7 @@ export const SectionContato = styled.section`
   display: flex;
   justify-content: center;
   padding: 30px 0;
+  margin-bottom: 110px;
 
   @media (max-width: 720px) {
     flex-direction: column;

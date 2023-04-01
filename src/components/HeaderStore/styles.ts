@@ -135,7 +135,7 @@ export const StyledA = styled.button`
   align-items: center;
   color: ${props => props?.theme?.colors?.white};
   text-align: center;
-  margin: auto 50px;
+  margin: auto 30px;
 
   svg {
     margin: auto 5px;

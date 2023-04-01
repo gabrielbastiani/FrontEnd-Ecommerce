@@ -21,9 +21,9 @@ export default function Home() {
 
       <HeaderStore />
       <CarrosselBannerHome />
-      <Newsletters />
       <ProdutosOfertas title="Ofertas do mês" />
       <BlockCategoriasHome />
+      <Newsletters />
       <MosaicoHome />
       <DestaqueProducts title='Produtos destaques' />
       <VizualizadosRecentemete title="Vizualizados recentemente" />

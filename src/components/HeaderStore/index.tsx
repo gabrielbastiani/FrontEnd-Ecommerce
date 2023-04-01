@@ -28,7 +28,7 @@ import {
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { RiCustomerService2Fill } from 'react-icons/ri';
-import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { AiOutlineHeart, AiOutlineShoppingCart } from 'react-icons/ai';
 import { BiUser } from 'react-icons/bi';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
@@ -236,6 +236,16 @@ export const HeaderStore = () => {
                                     >
                                         <BiUser color='white' size={20} />
                                         Login | Cadastre-se
+                                    </Link>
+                                </StyledA>
+                            </StyledLi>
+                            <StyledLi>
+                                <StyledA>
+                                    <Link
+                                        href='/favoritos'
+                                    >
+                                        <AiOutlineHeart color='white' size={20} />
+                                        Favoritos
                                     </Link>
                                 </StyledA>
                             </StyledLi>
