@@ -81,7 +81,7 @@ export const FooterStore = () => {
             }
         }
         loadRedesSociais();
-    },[])
+    }, [])
 
     return (
         <>
@@ -105,19 +105,23 @@ export const FooterStore = () => {
                         })} */}
                     </Block2>
                     <Block3>
-                        <BoxTitle>
-                            <SubTitulo>Redes Socias</SubTitulo>
-                        </BoxTitle>
+                        {orderArrayRedes ? (
+                            <BoxTitle>
+                                <SubTitulo>Redes Socias</SubTitulo>
+                            </BoxTitle>
+                        ) :
+                            null
+                        }
                         <BlockRedesContent>
-                        {orderArrayRedes.map((item) => {
-                            return (
-                                <BlockRedes key={item.id}>
-                                    <Link href={item.link} target="_blank">
-                                        <Image src={'http://localhost:3333/files/' + item.imageRede} width={55} height={55} alt={nameLoja} />
-                                    </Link>
-                                </BlockRedes>
-                            )
-                        })}
+                            {orderArrayRedes.map((item) => {
+                                return (
+                                    <BlockRedes key={item.id}>
+                                        <Link href={item.link} target="_blank">
+                                            <Image src={'http://localhost:3333/files/' + item.imageRede} width={55} height={55} alt={nameLoja} />
+                                        </Link>
+                                    </BlockRedes>
+                                )
+                            })}
                         </BlockRedesContent>
                     </Block3>
                 </GridContainerUm>
