@@ -1,4 +1,4 @@
-import logoLoginWhite from '../../assets/LogoBuilderWhite.png';
+import noImage from '../../assets/semfoto.png';
 import Image from 'next/image';
 import {
     FooterContainer,
@@ -16,13 +16,10 @@ import {
     BlockRedes,
     BlockMunus,
     ItemMenu,
-    InfosStore
+    InfosStore,
+    BoxTitle,
+    BlockRedesContent
 } from './style';
-import { TfiFacebook } from 'react-icons/tfi';
-import { AiOutlineYoutube } from 'react-icons/ai';
-import { SlSocialInstagram } from 'react-icons/sl';
-import { FaLinkedinIn } from 'react-icons/fa';
-import { TbBrandTelegram } from 'react-icons/tb';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { setupAPIClient } from '../../services/api';
@@ -30,6 +27,8 @@ import { setupAPIClient } from '../../services/api';
 
 export const FooterStore = () => {
 
+    const [logo, setLogo] = useState('');
+    const [nameLoja, setNameLoja] = useState('');
     const [emailLoja, setEmailLoja] = useState('');
     const [phoneLoja, setPhoneLoja] = useState('');
     const [ruaLoja, setRuaLoja] = useState('');
@@ -39,6 +38,11 @@ export const FooterStore = () => {
     const [cityLoja, setCityLoja] = useState('');
     const [stateLoja, setStateLoja] = useState('');
 
+    const [redes, setRedes] = useState([]);
+    const orderArrayRedes = redes.slice(0, 5);
+
+    const [textLoja, setTextLoja] = useState([]);
+
 
     useEffect(() => {
         async function loadStore() {
@@ -46,6 +50,8 @@ export const FooterStore = () => {
             try {
                 const response = await apiClient.get(`/loja`);
 
+                setLogo(response.data.logoLoja || "");
+                setNameLoja(response.data.nameLoja || "")
                 setEmailLoja(response.data.emailLoja || "");
                 setPhoneLoja(response.data.phoneLoja || "");
                 setRuaLoja(response.data.ruaLoja || "");
@@ -62,39 +68,57 @@ export const FooterStore = () => {
         loadStore();
     }, []);
 
+    useEffect(() => {
+        async function loadRedesSociais() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/listRedesSociaisOrder?slugPosicao=rodape-loja`);
+
+                setRedes(response.data);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadRedesSociais();
+    },[])
+
     return (
         <>
             <FooterContainer>
                 <GridContainerUm>
                     <Block1>
                         <BoxLogo>
-                            <Image src={logoLoginWhite} width={180} height={50} alt="Logo Builder Seu Negocio Online" />
+                            {logo ? (
+                                <Image src={'http://localhost:3333/files/' + logo} width={180} height={50} alt={nameLoja} />
+                            ) :
+                                <Image src={noImage} width={180} height={50} alt={nameLoja} />
+                            }
                         </BoxLogo>
                     </Block1>
 
                     <Block2>
-                        <TextInstitucional>Fundada em 1980, a Sumig é especializada em soluções para solda e corte, sendo a maior fabricante de tochas de solda MIG/MAG, TIG e Corte Plasma da América Latina. Entregamos a solução completa em solda e corte com agilidade e confiabilidade, oferecendo um excelente apoio técnico e serviço de pós-venda especializado.</TextInstitucional>
+                        {/* {textLoja.map((text) => {
+                            return (
+                                <TextInstitucional>{text.textosinstitucionais}</TextInstitucional>
+                            )
+                        })} */}
                     </Block2>
                     <Block3>
-                        <SubTitulo>Redes Socias</SubTitulo>
-                        <BlockRedes>
-                            <Link href='https://www.facebook.com/builderseunegocioonline' target="_blank">
-                                <TfiFacebook size={55} color='white' />
-                            </Link>
-                            <Link href='https://builderseunegocioonline.com.br/canalnoyoutube' target="_blank">
-                                <AiOutlineYoutube size={55} color='white' />
-                            </Link>
-                            <Link href='https://www.instagram.com/builderseunegocioonline' target="_blank">
-                                <SlSocialInstagram size={55} color='white' />
-                            </Link>
-                            <Link href='https://www.linkedin.com/in/gabriel-campos-de-bastiani' target="_blank">
-                                <FaLinkedinIn size={55} color='white' />
-                            </Link>
-                            <Link href='' target="_blank">
-                                <TbBrandTelegram size={55} color='white' />
-                            </Link>
-
-                        </BlockRedes>
+                        <BoxTitle>
+                            <SubTitulo>Redes Socias</SubTitulo>
+                        </BoxTitle>
+                        <BlockRedesContent>
+                        {orderArrayRedes.map((item) => {
+                            return (
+                                <BlockRedes key={item.id}>
+                                    <Link href={item.link} target="_blank">
+                                        <Image src={'http://localhost:3333/files/' + item.imageRede} width={55} height={55} alt={nameLoja} />
+                                    </Link>
+                                </BlockRedes>
+                            )
+                        })}
+                        </BlockRedesContent>
                     </Block3>
                 </GridContainerUm>
                 <br />

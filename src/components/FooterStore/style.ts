@@ -8,12 +8,12 @@ export const FooterContainer = styled.footer`
 
 export const GridContainerUm = styled.div`
   display: grid;
-  grid-template-columns: 10% 50% 40%;
+  grid-template-columns: 10% 48% 55%;
   grid-gap: 100px;
   background-color: ${props => props?.theme?.colors?.black};
   margin: 0 200px;
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
     margin: 0 100px;
     grid-template-columns: 10% 80%;
   }
@@ -72,11 +72,10 @@ export const Block2 = styled.div`
 export const Block3 = styled.div`
   background-color: ${props => props?.theme?.colors?.black};
   display: flex;
-  justify-content: center;
   flex-direction: column;
   width: 70%;
 
-  @media (max-width: 900px) {
+/*   @media (max-width: 900px) {
     flex-direction: row;
     align-items: center;
     width: fit-content;
@@ -86,7 +85,15 @@ export const Block3 = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: -50px;
-  }
+  } */
+`
+
+export const BoxTitle = styled.div`
+
+`
+
+export const BlockRedesContent = styled.div`
+  display: flex;
 `
 
 export const SubTitulo = styled.h3`
@@ -96,16 +103,16 @@ export const SubTitulo = styled.h3`
 export const BlockRedes = styled.div`
   padding-top: 15px;
 
-  svg {
+  img {
     padding: 15px;
     border: solid 2px ${props => props?.theme?.colors?.white};
     cursor: pointer;
   }
 
-  @media (max-width: 900px) {
+ /*  @media (max-width: 900px) {
     display: flex;
     margin-left: 20px;
-  }
+  } */
 `
 
 export const Block4 = styled.div`
