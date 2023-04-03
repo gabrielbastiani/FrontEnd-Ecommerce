@@ -265,7 +265,7 @@ export const HeaderStore = () => {
                                     <br />
                                     <br />
                                     <BlockContact>
-                                        <Link href='https://api.whatsapp.com/send?phone=5554996860104' target="_blank">
+                                        <Link href={`https://api.whatsapp.com/send?phone=55${removerAcentos(cellPhone)}`} target="_blank">
                                             <ButtonAtentimento>ATENDIMENTO ONLINE</ButtonAtentimento>
                                         </Link>
                                         <Link href='/atendimento' target="_blank">
