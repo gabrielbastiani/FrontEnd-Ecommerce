@@ -50,7 +50,7 @@ export const HeaderStore = () => {
     const orderArray = categoryNames.slice(0, 8);
 
     const [textLoja, setTextLoja] = useState([]);
-    const orderArrayTextos = textLoja.slice(0, 2);
+    const orderArrayTextos = textLoja.slice(0, 1);
 
     const [initialFilter, setInitialFilter] = useState([]);
     const [products, setProducts] = useState([]);
