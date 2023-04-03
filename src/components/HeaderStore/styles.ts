@@ -50,7 +50,9 @@ export const StyledLi = styled.li`
   }
 `
 
-export const SmallText = styled.small``
+export const SmallText = styled.small`
+  
+`
 
 export const Dropbtn = styled.div`
   display: inline-block;

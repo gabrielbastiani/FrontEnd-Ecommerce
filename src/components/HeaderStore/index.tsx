@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import logoLoginWhite from '../../assets/LogoBuilderWhite.png';
+import noImage from '../../assets/semfoto.png';
 import {
     ContainerHeaderStore,
     ContentHeaderStore,
@@ -37,14 +37,20 @@ import { setupAPIClient } from '../../services/api';
 
 
 export const HeaderStore = () => {
-    
+
     const { user } = useContext(AuthContext);
 
+    const [logo, setLogo] = useState('');
+    const [nameLoja, setNameLoja] = useState('');
     const [emailLoja, setEmailLoja] = useState('');
     const [phoneLoja, setPhoneLoja] = useState('');
+    const [cellPhone, setCellPhone] = useState('');
 
     const [categoryNames, setCategoryNames] = useState([]);
     const orderArray = categoryNames.slice(0, 8);
+
+    const [textLoja, setTextLoja] = useState([]);
+    const orderArrayTextos = textLoja.slice(0, 1);
 
     const [initialFilter, setInitialFilter] = useState([]);
     const [products, setProducts] = useState([]);
@@ -64,14 +70,32 @@ export const HeaderStore = () => {
             try {
                 const response = await apiClient.get(`/loja`);
 
+                setLogo(response.data.logoLoja || "");
+                setNameLoja(response.data.nameLoja || "");
                 setEmailLoja(response.data.emailLoja || "");
                 setPhoneLoja(response.data.phoneLoja || "");
+                setCellPhone(response.data.cellPhoneLoja || "");
 
             } catch (error) {
                 console.log(error);
             }
         }
         loadStore();
+    }, []);
+
+    useEffect(() => {
+        async function loadTextosInstitucionais() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/listTextosInstitucionais?slugPosicao=popup-menu-topo`);
+
+                setTextLoja(response.data || []);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadTextosInstitucionais();
     }, []);
 
     useEffect(() => {
@@ -134,6 +158,18 @@ export const HeaderStore = () => {
         }
     }
 
+    function removerAcentos(s: any) {
+        return s.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace('(', "")
+            .replace(')', "")
+            .replace(' ', "")
+            .replace('-', "")
+            .replace('.', "")
+            .replace(',', "")
+    }
+
 
     return (
         <>
@@ -141,7 +177,11 @@ export const HeaderStore = () => {
                 <ContentHeaderStore>
                     <BlockLogo>
                         <Link href='http://localhost:3001'>
-                            <Image src={logoLoginWhite} width={180} height={50} alt="Logo Builder Seu Negocio Online" />
+                            {logo ? (
+                                <Image src={'http://localhost:3333/files/' + logo} width={180} height={50} alt={nameLoja} />
+                            ) :
+                                <Image src={noImage} width={180} height={50} alt={nameLoja} />
+                            }
                         </Link>
                         <PesquisaHeaderStore
                             /* @ts-ignore */
@@ -191,9 +231,9 @@ export const HeaderStore = () => {
                                             &emsp;&emsp;&emsp;&emsp;&emsp;
                                             <Link
                                                 style={{ color: 'black' }}
-                                                href='https://api.whatsapp.com/send?phone=5554996860104' target="_blank"
+                                                href={`https://api.whatsapp.com/send?phone=55${removerAcentos(cellPhone)}`} target="_blank"
                                             >
-                                                (54) 99686-0104
+                                                {cellPhone}
                                             </Link>
                                         </TextContent>
                                     </BlockContact>
@@ -214,9 +254,14 @@ export const HeaderStore = () => {
                                     </BlockContact>
                                     <br />
                                     <br />
-                                    <SmallText>
-                                        Atendimento disponível de segunda a sexta das<br /> 08h às 12h e das 13h às 17h30
-                                    </SmallText>
+                                    {orderArrayTextos.map((atend) => {
+                                        return (
+                                            <SmallText key={atend.id}>
+                                                {atend.description}
+                                            </SmallText>
+                                        )
+                                    })}
+
                                     <br />
                                     <br />
                                     <BlockContact>

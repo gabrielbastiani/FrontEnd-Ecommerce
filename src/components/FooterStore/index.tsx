@@ -18,7 +18,8 @@ import {
     ItemMenu,
     InfosStore,
     BoxTitle,
-    BlockRedesContent
+    BlockRedesContent,
+    SubTituloRede
 } from './style';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -42,7 +43,7 @@ export const FooterStore = () => {
     const orderArrayRedes = redes.slice(0, 5);
 
     const [textLoja, setTextLoja] = useState([]);
-
+    const orderArrayTextos = textLoja.slice(0, 1);
 
     useEffect(() => {
         async function loadStore() {
@@ -51,7 +52,7 @@ export const FooterStore = () => {
                 const response = await apiClient.get(`/loja`);
 
                 setLogo(response.data.logoLoja || "");
-                setNameLoja(response.data.nameLoja || "")
+                setNameLoja(response.data.nameLoja || "");
                 setEmailLoja(response.data.emailLoja || "");
                 setPhoneLoja(response.data.phoneLoja || "");
                 setRuaLoja(response.data.ruaLoja || "");
@@ -74,14 +75,30 @@ export const FooterStore = () => {
             try {
                 const response = await apiClient.get(`/listRedesSociaisOrder?slugPosicao=rodape-loja`);
 
-                setRedes(response.data);
+                setRedes(response.data || []);
 
             } catch (error) {
                 console.log(error);
             }
         }
         loadRedesSociais();
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        async function loadTextosInstitucionais() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/listTextosInstitucionais?slugPosicao=rodape-loja`);
+
+                setTextLoja(response.data || []);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadTextosInstitucionais();
+    }, []);
+
 
     return (
         <>
@@ -89,25 +106,27 @@ export const FooterStore = () => {
                 <GridContainerUm>
                     <Block1>
                         <BoxLogo>
-                            {logo ? (
-                                <Image src={'http://localhost:3333/files/' + logo} width={180} height={50} alt={nameLoja} />
-                            ) :
-                                <Image src={noImage} width={180} height={50} alt={nameLoja} />
-                            }
+                            <Link href='http://localhost:3001'>
+                                {logo ? (
+                                    <Image src={'http://localhost:3333/files/' + logo} width={180} height={50} alt={nameLoja} />
+                                ) :
+                                    <Image src={noImage} width={180} height={50} alt={nameLoja} />
+                                }
+                            </Link>
                         </BoxLogo>
                     </Block1>
 
                     <Block2>
-                        {/* {textLoja.map((text) => {
+                        {orderArrayTextos.map((text) => {
                             return (
-                                <TextInstitucional>{text.textosinstitucionais}</TextInstitucional>
+                                <TextInstitucional>{text.description}</TextInstitucional>
                             )
-                        })} */}
+                        })}
                     </Block2>
                     <Block3>
                         {orderArrayRedes ? (
                             <BoxTitle>
-                                <SubTitulo>Redes Socias</SubTitulo>
+                                <SubTituloRede>Redes Socias</SubTituloRede>
                             </BoxTitle>
                         ) :
                             null
@@ -176,7 +195,8 @@ export const FooterStore = () => {
                         </BlockMunus>
                     </Block5>
                     <Block6>
-                        <SubTitulo>Loja Builder</SubTitulo>
+                        <SubTitulo>{nameLoja}</SubTitulo>
+                        <br />
                         <br />
                         <InfosStore>{ruaLoja}, {numeroLoja}<br />{cityLoja}<br />{stateLoja}<br /><br />CEP: {cepLoja}<br />Fone: {phoneLoja}<br />{emailLoja}</InfosStore>
                     </Block6>

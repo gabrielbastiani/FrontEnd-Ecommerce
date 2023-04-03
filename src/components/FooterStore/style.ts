@@ -74,22 +74,10 @@ export const Block3 = styled.div`
   display: flex;
   flex-direction: column;
   width: 70%;
-
-/*   @media (max-width: 900px) {
-    flex-direction: row;
-    align-items: center;
-    width: fit-content;
-  }
-
-  @media (max-width: 555px) {
-    display: flex;
-    flex-direction: column;
-    margin-top: -50px;
-  } */
 `
 
 export const BoxTitle = styled.div`
-
+  width: 110%;
 `
 
 export const BlockRedesContent = styled.div`
@@ -97,6 +85,25 @@ export const BlockRedesContent = styled.div`
 `
 
 export const SubTitulo = styled.h3`
+  color: ${props => props?.theme?.colors?.white};
+
+  position: relative;
+  width: 55%;
+  display: inline-block;
+  white-space: pre-line;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (max-width: 1365px) {
+    width: 75%;
+  }
+
+  @media (max-width: 1095px) {
+    width: 110%;
+  }
+`
+
+export const SubTituloRede = styled.h3`
   color: ${props => props?.theme?.colors?.white};
 `
 
@@ -109,10 +116,6 @@ export const BlockRedes = styled.div`
     cursor: pointer;
   }
 
- /*  @media (max-width: 900px) {
-    display: flex;
-    margin-left: 20px;
-  } */
 `
 
 export const Block4 = styled.div`
