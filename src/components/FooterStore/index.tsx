@@ -43,7 +43,7 @@ export const FooterStore = () => {
     const orderArrayRedes = redes.slice(0, 5);
 
     const [textLoja, setTextLoja] = useState([]);
-    const orderArrayTextos = textLoja.slice(0, 1);
+    const orderArrayTextos = textLoja.slice(0, 2);
 
     useEffect(() => {
         async function loadStore() {
