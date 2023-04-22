@@ -63,6 +63,8 @@ export const HeaderStore = () => {
         setElement(!element);
     }
 
+    console.log(categoryNames)
+
 
     useEffect(() => {
         async function loadStore() {
@@ -102,9 +104,9 @@ export const HeaderStore = () => {
         async function loadCategorys() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/allCategorys`);
+                const response = await apiClient.get(`/listCategorysDisponivel`);
 
-                setCategoryNames(response?.data || []);
+                setCategoryNames(response.data || []);
 
             } catch (error) {
                 console.log(error.response.data);

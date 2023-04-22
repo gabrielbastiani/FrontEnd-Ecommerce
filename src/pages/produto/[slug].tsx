@@ -78,7 +78,7 @@ export default function Produto() {
                 setPhotoProduct(responseProduct.data.photoproducts[0].photo)
 
             } catch (error) {
-                console.log(error);
+                console.log(error.response.data);
             }
         }
         loadProduct();

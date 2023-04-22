@@ -21,7 +21,7 @@ export const Container = styled.section`
     width: 100vw;
     height: 100%;
     object-fit: contain;
-    margin-top: 123px;
+    margin-top: 128px;
 
     @media (max-width: 900px) {
       margin-top: 200px;

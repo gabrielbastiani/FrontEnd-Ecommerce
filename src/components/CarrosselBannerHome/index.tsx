@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { setupAPIClient } from '../../services/api';
 import Image from 'next/image';
 import bannerHomePadrao from '../../assets/sembannerhome.png';
 import {
@@ -10,7 +11,7 @@ import {
 } from './styles';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Link from 'next/link';
-import { setupAPIClient } from '../../services/api';
+
 
 
 const CarrosselBannerHome = () => {
@@ -21,7 +22,7 @@ const CarrosselBannerHome = () => {
         async function loadBannersHome() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/activeBannerHome`);
+                const response = await apiClient.get(`/activeBanner?slugPosicao=banner-topo`);
                 setBannersHome(response.data);
             } catch (error) {
                 console.log(error.response.data);
@@ -59,7 +60,12 @@ const CarrosselBannerHome = () => {
             ) :
                 <Container>
                     <Link href={String(bannersHome[imageIndex]?.url)} target="_blank">
-                        <Image src={'http://localhost:3333/files/' + bannersHome[imageIndex]?.banner} width={1800} height={700} alt="Banners Loja Builder Seu Negocio Online" />
+                        <Image
+                            src={'http://localhost:3333/files/' + bannersHome[imageIndex]?.banner}
+                            width={1800}
+                            height={700}
+                            alt="Banners Loja Builder Seu Negocio Online"
+                        />
                     </Link>
                     <NavButton right onClick={next}>
                         <FaArrowRight size={35} color='white' />
