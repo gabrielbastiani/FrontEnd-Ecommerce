@@ -38,7 +38,7 @@ export const MosaicoHome = () => {
                     return (
                         <ItemGaleria1 key={mos1.id}>
                             <Link href={mos1.url}>
-                                <Image src={'http://localhost:3333/files/' + mos1.banner} width={mos1.width} height={mos1.height} alt="Mosaico Home Loja" />
+                                <Image src={'http://localhost:3333/files/' + mos1.banner} width={mos1.width ? mos1.width : 539} height={mos1.height ? mos1.height : 300} alt="Mosaico Home Loja" />
                             </Link>
                         </ItemGaleria1>
                     )
@@ -47,7 +47,7 @@ export const MosaicoHome = () => {
                     return (
                         <ItemGaleria2 key={mos2.id}>
                             <Link href={mos2.url}>
-                                <Image src={'http://localhost:3333/files/' + mos2.banner} width={mos2.width} height={mos2.height} alt="Mosaico Home Loja" />
+                                <Image src={'http://localhost:3333/files/' + mos2.banner} width={mos2.width ? mos2.width : 539} height={mos2.height ? mos2.height : 300} alt="Mosaico Home Loja" />
                             </Link>
                         </ItemGaleria2>
                     )
@@ -59,7 +59,7 @@ export const MosaicoHome = () => {
                     return (
                         <ItemGaleriaBotton1 key={mos3.id}>
                             <Link href={mos3.url}>
-                                <Image src={'http://localhost:3333/files/' + mos3.banner} width={mos3.width} height={mos3.height} alt="Mosaico Home Loja" />
+                                <Image src={'http://localhost:3333/files/' + mos3.banner} width={mos3.width ? mos3.width : 858} height={mos3.height ? mos3.height : 350} alt="Mosaico Home Loja" />
                             </Link>
                         </ItemGaleriaBotton1>
                     )
@@ -68,7 +68,7 @@ export const MosaicoHome = () => {
                     return (
                         <ItemGaleriaBotton2 key={mos4.id}>
                             <Link href={mos4.url}>
-                                <Image src={'http://localhost:3333/files/' + mos4.banner} width={440} height={350} alt="Mosaico Home Loja" />
+                                <Image src={'http://localhost:3333/files/' + mos4.banner} width={mos4.width ? mos4.width : 440} height={mos4.height ? mos4.height : 350} alt="Mosaico Home Loja" />
                             </Link>
                         </ItemGaleriaBotton2>
                     )

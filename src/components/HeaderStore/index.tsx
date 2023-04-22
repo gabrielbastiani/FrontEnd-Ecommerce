@@ -63,8 +63,6 @@ export const HeaderStore = () => {
         setElement(!element);
     }
 
-    console.log(categoryNames)
-
 
     useEffect(() => {
         async function loadStore() {
