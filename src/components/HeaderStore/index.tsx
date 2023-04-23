@@ -18,12 +18,12 @@ import {
     ButtonAtentimento,
     FontStrong,
     SmallText,
-    TextNameCategory,
     DataResult,
     ListItems,
     CategorysHeaderMobile,
     TextNameCategoryMobile,
-    BoxItemsMobile
+    BoxItemsMobile,
+    Categ
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -47,10 +47,11 @@ export const HeaderStore = () => {
     const [cellPhone, setCellPhone] = useState('');
 
     const [categoryNames, setCategoryNames] = useState([]);
-    const orderArray = categoryNames.slice(0, 8);
 
     const [textLoja, setTextLoja] = useState([]);
     const orderArrayTextos = textLoja.slice(0, 1);
+
+    const [categories, setCategories] = useState([]);
 
     const [initialFilter, setInitialFilter] = useState([]);
     const [products, setProducts] = useState([]);
@@ -99,10 +100,10 @@ export const HeaderStore = () => {
     }, []);
 
     useEffect(() => {
-        async function loadCategorys() {
+        async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listCategorysDisponivel`);
+                const response = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo`);
 
                 setCategoryNames(response.data || []);
 
@@ -110,8 +111,20 @@ export const HeaderStore = () => {
                 console.log(error.response.data);
             }
         }
-        loadCategorys();
+        loadGroups();
     }, []);
+
+    async function load(id: string) {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/listCategoriesGroup?groupId=${id}`);
+
+            setCategories(response.data || []);
+
+        } catch (error) {
+            console.log(error.response.data);
+        }
+    }
 
     useEffect(() => {
         async function filterProductsAll() {
@@ -316,15 +329,30 @@ export const HeaderStore = () => {
                 </ContentHeaderStore>
 
                 <CategorysHeader>
-                    {orderArray.map((item) => {
-                        return (
-                            <Link key={item.id} href={'/categoria/' + `${item?.slug}`}>
-                                <TextNameCategory>
-                                    {item?.categoryName}
-                                </TextNameCategory>
-                            </Link>
-                        )
-                    })}
+                    <StyledUl>
+                        {categoryNames.map((item) => {
+                            return (
+                                <>
+                                    <DropDownLi>
+                                        <Link key={item.id} href={'/categoria/' + `${item?.category?.slug}`}>
+                                            <StyledA onMouseOver={() => load(item.id)} >
+                                                {item?.itemName}
+                                            </StyledA>
+                                        </Link>
+                                        <DropDownContent>
+                                            {categories.map((categ) => {
+                                                return (
+                                                    <Link key={item.id} href={'/categoria/' + `${categ?.category?.slug}`}>
+                                                        <Categ>{categ?.category?.categoryName}</Categ>
+                                                    </Link>
+                                                )
+                                            })}
+                                        </DropDownContent>
+                                    </DropDownLi>
+                                </>
+                            )
+                        })}
+                    </StyledUl>
                 </CategorysHeader>
 
                 <CategorysHeaderMobile>
@@ -333,11 +361,11 @@ export const HeaderStore = () => {
 
                     {element ?
                         <BoxItemsMobile>
-                            {orderArray.map((item) => {
+                            {categoryNames.map((item) => {
                                 return (
-                                    <Link key={item.id} href={'/categoria/' + `${item?.slug}`}>
+                                    <Link key={item.id} href={'/categoria/' + `${item?.category?.slug}`}>
                                         <TextNameCategoryMobile>
-                                            {item?.categoryName}
+                                            {item?.itemName}
                                         </TextNameCategoryMobile>
                                     </Link>
                                 )

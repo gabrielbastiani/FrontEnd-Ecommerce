@@ -50,9 +50,7 @@ export const StyledLi = styled.li`
   }
 `
 
-export const SmallText = styled.small`
-  
-`
+export const SmallText = styled.small``
 
 export const Dropbtn = styled.div`
   display: inline-block;
@@ -190,14 +188,6 @@ export const CategorysHeader = styled.div`
   }
 `
 
-export const TextNameCategory = styled.span`
-  color: ${props => props?.theme?.colors?.white};
-
-  :hover {
-    color: ${props => props?.theme?.colors?.info};
-  }
-`
-
 export const DataResult = styled.div`
   z-index: 999;
   top: 70px;
@@ -273,4 +263,12 @@ export const TextNameCategoryMobile = styled.li`
   padding: 10px;
   text-align: center;
   z-index: 999;
+`
+export const Categ = styled.span`
+  display: flex;
+  padding: 10px;
+
+  :hover {
+    color: ${props => props?.theme?.colors?.info};
+  }
 `
