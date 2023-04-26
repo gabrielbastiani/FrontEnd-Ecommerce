@@ -339,15 +339,18 @@ export const HeaderStore = () => {
                                                 {item?.itemName}
                                             </StyledA>
                                         </Link>
-                                        <DropDownContent>
-                                            {categories.map((categ) => {
-                                                return (
-                                                    <Link key={item.id} href={'/categoria/' + `${categ?.category?.slug}`}>
-                                                        <Categ>{categ?.category?.categoryName}</Categ>
-                                                    </Link>
-                                                )
-                                            })}
-                                        </DropDownContent>
+
+                                        {categories.length > 1 && (
+                                            <DropDownContent>
+                                                {categories.map((categ) => {
+                                                    return (
+                                                        <Link key={categ.id} href={'/categoria/' + `${categ?.category?.slug}`}>
+                                                            <Categ>{categ?.category?.categoryName}</Categ>
+                                                        </Link>
+                                                    )
+                                                })}
+                                            </DropDownContent>
+                                        )}
                                     </DropDownLi>
                                 </>
                             )
