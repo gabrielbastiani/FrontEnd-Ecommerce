@@ -270,7 +270,7 @@ export const HeaderStore = () => {
                                     {orderArrayTextos.map((atend) => {
                                         return (
                                             <SmallText key={atend.id}>
-                                                {atend.description}
+                                                {atend?.description}
                                             </SmallText>
                                         )
                                     })}
@@ -363,7 +363,10 @@ export const HeaderStore = () => {
                         <BoxItemsMobile>
                             {categoryNames.map((item) => {
                                 return (
-                                    <Link key={item.id} href={'/categoria/' + `${item?.category?.slug}`}>
+                                    <Link
+                                        key={item.id}
+                                        href={'/categoria/' + `${item?.category?.slug}`}
+                                    >
                                         <TextNameCategoryMobile>
                                             {item?.itemName}
                                         </TextNameCategoryMobile>
@@ -374,6 +377,7 @@ export const HeaderStore = () => {
                         :
                         null
                     }
+
                 </CategorysHeaderMobile>
             </ContainerHeaderStore>
         </>

@@ -7,6 +7,7 @@ import {
     BoxCategory
 } from './styles';
 import { setupAPIClient } from '../../services/api';
+import Image from 'next/image';
 
 
 const BlockCategoriasHome = () => {
@@ -17,7 +18,7 @@ const BlockCategoriasHome = () => {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo`);
+                const response = await apiClient.get(`/pocisaoListGroup?slugPosicao=home-page`);
 
                 setCategoryNames(response?.data || []);
 
@@ -43,13 +44,19 @@ const BlockCategoriasHome = () => {
                             {categoryNames.map((item) => {
                                 return (
                                     <Link key={item.id} href={`/categoria/${item?.category?.slug}`} target="_blank">
-                                        <div>
-                                            {item?.imagegroupcategories?.imageGroup}
-                                            <BoxCategory>
-                                                {item?.category?.categoryName}
-                                            </BoxCategory>
-                                        </div>
-                                        
+                                        {item?.imagegroupcategories[0]?.imageGroup ? (
+                                            <Image
+                                                src={'http://localhost:3333/files/' + item?.imagegroupcategories[0]?.imageGroup}
+                                                alt={item?.itemName}
+                                                width={330}
+                                                height={90}
+                                            />
+                                        ) :
+                                            null
+                                        }
+                                        <BoxCategory>
+                                            {item?.category?.categoryName}
+                                        </BoxCategory>
                                     </Link>
                                 )
                             })}
