@@ -209,7 +209,7 @@ export const HeaderStore = () => {
                                 <>
                                     {products.map((value) => {
                                         return (
-                                            <Link key={value.id} href={`/produto/${value.slug}`} target="_blank">
+                                            <Link key={value.id} href={`/produto/${value?.slug}`} target="_blank">
                                                 <ListItems>{value?.nameProduct}</ListItems>
                                             </Link>
                                         )

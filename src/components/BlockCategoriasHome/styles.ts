@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const SectionCategorysHome = styled.section``
 
@@ -15,12 +15,12 @@ export const GridContainer = styled.div`
 `
 
 export const BoxCategory = styled.button`
-  background-color: ${props => props?.theme?.colors?.warning};
+  background: transparent;
   width: 330px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${props => props?.theme?.colors?.white};
+  color: ${props => props?.theme?.colors?.black};
   font-size: 1.5rem;
   font-weight: 600;
   border-radius: 5px;

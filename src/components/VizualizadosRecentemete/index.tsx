@@ -60,20 +60,20 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
                         {productsVizualizados.map((item) => {
                             return (
                                 <>
-                                    {item.nameProducts ? (
+                                    {item?.nameProducts ? (
                                         <Item>
-                                            <Link href={'/produto/' + item.slug}>
+                                            <Link href={'/produto/' + item?.slug}>
                                                 <Images>
                                                     {item.photoProduct ? (
-                                                        <Image src={'http://localhost:3333/files/' + item.photoProduct} width={450} height={300} alt={item?.nameProducts} />
+                                                        <Image src={'http://localhost:3333/files/' + item?.photoProduct} width={450} height={300} alt={item?.nameProducts} />
                                                     ) :
                                                         <Image src={semimagem} width={450} height={400} alt={item?.nameProducts} />
                                                     }
                                                 </Images>
                                             </Link>
                                             <Info>
-                                                <Link href={'/produto/' + item.slug}>
-                                                    <Name>{item.nameProducts}</Name>
+                                                <Link href={'/produto/' + item?.slug}>
+                                                    <Name>{item?.nameProducts}</Name>
                                                 </Link>
                                             </Info>
                                         </Item>

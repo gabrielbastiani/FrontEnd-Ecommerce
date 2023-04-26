@@ -7,19 +7,17 @@ import {
     BoxCategory
 } from './styles';
 import { setupAPIClient } from '../../services/api';
-import { MdCategory } from 'react-icons/md';
 
 
 const BlockCategoriasHome = () => {
 
     const [categoryNames, setCategoryNames] = useState([]);
-    const orderArray = categoryNames.slice(0, 8);
 
     useEffect(() => {
-        async function loadCategorys() {
+        async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/allCategorys`);
+                const response = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo`);
 
                 setCategoryNames(response?.data || []);
 
@@ -27,13 +25,13 @@ const BlockCategoriasHome = () => {
                 console.log(error.response.data);
             }
         }
-        loadCategorys();
+        loadGroups();
     }, []);
 
 
     return (
         <>
-            {orderArray.length < 1 ? (
+            {categoryNames.length < 1 ? (
                 null
             ) :
                 <>
@@ -42,13 +40,16 @@ const BlockCategoriasHome = () => {
                     </BoxTitle>
                     <SectionCategorysHome>
                         <GridContainer>
-                            {orderArray.map((item) => {
+                            {categoryNames.map((item) => {
                                 return (
-                                    <Link key={item.id} href={`/categoria/${item.slug}`} target="_blank">
-                                        <BoxCategory>
-                                            <MdCategory color='white' size={55} />
-                                            {item.categoryName}
-                                        </BoxCategory>
+                                    <Link key={item.id} href={`/categoria/${item?.category?.slug}`} target="_blank">
+                                        <div>
+                                            {item?.imagegroupcategories?.imageGroup}
+                                            <BoxCategory>
+                                                {item?.category?.categoryName}
+                                            </BoxCategory>
+                                        </div>
+                                        
                                     </Link>
                                 )
                             })}
