@@ -136,9 +136,14 @@ export const StyledA = styled.button`
   color: ${props => props?.theme?.colors?.white};
   text-align: center;
   margin: auto 30px;
+  font-size: 16px;
 
   svg {
     margin: auto 5px;
+  }
+
+  &:hover {
+    color: ${props => props?.theme?.colors?.info};
   }
 `
 
