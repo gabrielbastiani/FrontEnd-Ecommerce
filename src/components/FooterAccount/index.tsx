@@ -24,6 +24,26 @@ const FooterAccount = () => {
     const [cepLoja, setCepLoja] = useState('');
     const [cityLoja, setCityLoja] = useState('');
 
+    const [imagesInstitucional, setImagesInstitucional] = useState([]);
+    const orderImageUm = imagesInstitucional.slice(0, 1);
+
+    const orderImageDois = imagesInstitucional.slice(1, 2);
+
+    useEffect(() => {
+        async function loadImagesInstitucional() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/listImagesLoja?slugPosicao=rodape-loja`);
+
+                setImagesInstitucional(response.data || []);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadImagesInstitucional();
+    }, []);
+
     useEffect(() => {
         async function loadStore() {
             const apiClient = setupAPIClient();
@@ -51,10 +71,22 @@ const FooterAccount = () => {
             <FooterContainer>
                 <ContentFooter>
                     <BlockPayments>
-                        <Image src={pagamentsFooterAccount} width={580} height={65} alt="Pagamentos Loja Builder Seu Negocio Online" />
+                        {orderImageUm.map((item) => {
+                            return (
+                                <>
+                                    <Image src={'http://localhost:3333/files/' + item?.image} width={580} height={65} alt="Pagamentos Loja Builder Seu Negocio Online" />
+                                </>
+                            )
+                        })}
                     </BlockPayments>
                     <BlockSecuryty>
-                        <Image src={selosSegurancaFooterAccount} width={450} height={65} alt="Selos de Seguranca Loja Builder Seu Negocio Online" />
+                        {orderImageDois.map((item) => {
+                            return (
+                                <>
+                                    <Image src={'http://localhost:3333/files/' + item?.image} width={450} height={65} alt="Selos de Seguranca Loja Builder Seu Negocio Online" />
+                                </>
+                            )
+                        })}
                     </BlockSecuryty>
                 </ContentFooter>
                 <LinhaDivisoria />
