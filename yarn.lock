@@ -300,6 +300,13 @@
   dependencies:
     "tslib" "^2.4.0"
 
+"@szhsin/react-accordion@^1.2.0":
+  "integrity" "sha512-aCw3BblvOGzV8Oz7ono6828omWhDB20eyuhtUwdvI/9aIx50L1+v84ynrUUsbdRkUCqmHJ+djN4d8UATG6f4Fg=="
+  "resolved" "https://registry.npmjs.org/@szhsin/react-accordion/-/react-accordion-1.2.0.tgz"
+  "version" "1.2.0"
+  dependencies:
+    "react-transition-state" "^2.1.0"
+
 "@types/eslint-scope@^3.7.3":
   "integrity" "sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA=="
   "resolved" "https://registry.npmjs.org/@types/eslint-scope/-/eslint-scope-3.7.4.tgz"
@@ -2422,7 +2429,7 @@
     "hoist-non-react-statics" "^3.3.0"
     "prop-types" "^15.5.0"
 
-"react-dom@^18.2.0", "react-dom@>= 16.8.0", "react-dom@>=16", "react-dom@18.2.0":
+"react-dom@^16.14 || ^17.0 || ^18.0", "react-dom@^18.2.0", "react-dom@>= 16.8.0", "react-dom@>=16", "react-dom@>=16.8.0", "react-dom@18.2.0":
   "integrity" "sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g=="
   "resolved" "https://registry.npmjs.org/react-dom/-/react-dom-18.2.0.tgz"
   "version" "18.2.0"
@@ -2463,7 +2470,12 @@
   dependencies:
     "clsx" "^1.1.1"
 
-"react@*", "react@^18.2.0", "react@>= 16.8.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>=0.14.0", "react@>=16", "react@>=16.4.1", "react@18.2.0":
+"react-transition-state@^2.1.0":
+  "integrity" "sha512-b8ldw2pbZk++XM43vcD4ETaFWlzTsjpUX33CmT8BBPPFYlQ2R50wxcY4ZeJ1TesJYziYZ9/rNPFnyA9tR0iKDw=="
+  "resolved" "https://registry.npmjs.org/react-transition-state/-/react-transition-state-2.1.0.tgz"
+  "version" "2.1.0"
+
+"react@*", "react@^16.14 || ^17.0 || ^18.0", "react@^18.2.0", "react@>= 16.8.0", "react@>= 16.8.0 || 17.x.x || ^18.0.0-0", "react@>=0.14.0", "react@>=16", "react@>=16.4.1", "react@>=16.8.0", "react@18.2.0":
   "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   "version" "18.2.0"

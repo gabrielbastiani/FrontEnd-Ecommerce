@@ -21,8 +21,6 @@ import {
     DataResult,
     ListItems,
     CategorysHeaderMobile,
-    TextNameCategoryMobile,
-    BoxItemsMobile,
     Categ
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
@@ -34,6 +32,78 @@ import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import { setupAPIClient } from '../../services/api';
+import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
+import styled from "styled-components";
+import chevronDown from "../../assets/chevron-down.svg";
+
+
+const ItemWithChevron = ({ header, ...rest }) => (
+    <Item
+        {...rest}
+        header={
+            <>
+                {header}
+                <Image className="chevron-down" src={chevronDown} width={18} height={18} alt="Chevron Down" />
+            </>
+        }
+    />
+);
+
+const AccordionItem: React.ExoticComponent<import('@szhsin/react-accordion').AccordionItemProps> = styled(ItemWithChevron)`
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    a {
+        padding: 14px;
+        color: ${props => props?.theme?.colors?.white};
+        }
+
+  .szh-accordion__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-btn {
+      cursor: pointer;
+      display: flex;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: ${props => props?.theme?.colors?.white};
+      background-color: transparent;
+      border: none;
+      text-align: center;
+    }
+
+    &-content {
+      transition: height 0.2s ease-in-out;
+    }
+
+    &-panel {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .chevron-down {
+    margin-left: auto;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  &.szh-accordion__item--expanded {
+    text-align: center;
+    .szh-accordion__item-btn {
+      background-color: ${props => props?.theme?.colors?.gray};
+      color: ${props => props?.theme?.colors?.black};
+    }
+    .chevron-down {
+      transform: rotate(180deg);
+    }
+  }
+`;
 
 
 export const HeaderStore = () => {
@@ -63,6 +133,7 @@ export const HeaderStore = () => {
     const showOrHide = () => {
         setElement(!element);
     }
+
 
 
     useEffect(() => {
@@ -362,22 +433,29 @@ export const HeaderStore = () => {
 
                     <GiHamburgerMenu color='white' size={35} onClick={showOrHide} />
 
-                    {element ?
-                        <BoxItemsMobile>
-                            {categoryNames.map((item) => {
-                                return (
-                                    <Link
-                                        key={item.id}
-                                        href={'/categoria/' + `${item?.category?.slug}`}
-                                    >
-                                        <TextNameCategoryMobile>
-                                            {item?.itemName}
-                                        </TextNameCategoryMobile>
-                                    </Link>
-                                )
-                            })}
-                        </BoxItemsMobile>
-                        :
+                    {element ? (
+                        <>
+                            <Accordion>
+                                {categoryNames.map((item) => {
+                                    return (
+                                        <AccordionItem
+                                            key={item.id}
+                                            onClick={() => load(item.id)}
+                                            header={item?.itemName}
+                                        >
+                                            {categories.map((categ) => {
+                                                return (
+                                                    <Link key={categ.id} href={'/categoria/' + `${categ?.category?.slug}`}>
+                                                        {categ?.category?.categoryName}
+                                                    </Link>
+                                                )
+                                            })}
+                                        </AccordionItem>
+                                    )
+                                })}
+                            </Accordion>
+                        </>
+                    ) :
                         null
                     }
 

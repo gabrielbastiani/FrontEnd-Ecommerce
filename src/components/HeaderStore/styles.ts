@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const ContainerHeaderStore = styled.header`
   display: flex;
@@ -233,37 +233,6 @@ export const CategorysHeaderMobile = styled.div`
   }
 `
 
-export const BoxItemsMobile = styled.ul`
-  display: flex;
-  position: absolute;
-  flex-direction: column;
-  width: 100%;
-  justify-content: center;
-  z-index: 999;
-  background-color: ${props => props?.theme?.colors?.black};
-  top: 190px;
-
-  @media (max-width: 607px) {
-    top: 320px;
-  }
-
-  @media (max-width: 540px) {
-    top: 400px;
-  }
-
-  @media (max-width: 460px) {
-    top: 430px;
-  }
-`
-
-export const TextNameCategoryMobile = styled.li`
-  color: ${props => props?.theme?.colors?.white};
-  list-style: none;
-  cursor: pointer;
-  padding: 10px;
-  text-align: center;
-  z-index: 999;
-`
 export const Categ = styled.span`
   display: flex;
   padding: 10px;
