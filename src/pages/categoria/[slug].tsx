@@ -13,6 +13,9 @@ import {
 import { HeaderStore } from "../../components/HeaderStore";
 import { FooterStore } from "../../components/FooterStore";
 import FooterAccount from "../../components/FooterAccount";
+import { IoIosHome } from 'react-icons/io';
+import { BsFillFilterSquareFill } from 'react-icons/bs';
+import Link from "next/link";
 
 
 export default function Categoria() {
@@ -36,7 +39,7 @@ export default function Categoria() {
                 const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/exactCategoryProducts?page=${currentPage}&limit=${limit}&slug=${slug}`);
 
-                setNameCategory(data.findUnique.categoryName);
+                setNameCategory(data.findFirst.categoryName);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -61,7 +64,13 @@ export default function Categoria() {
         setCurrentPage(1);
     }, []);
 
+    console.log(products.map((item) => {
+        return (
 
+            item?.groupcategories
+
+        )
+    }))
 
     return (
         <>
@@ -74,12 +83,17 @@ export default function Categoria() {
             <PageSection>
                 <Bread>
                     <Boxbreadcrumbs>
-                        bread
+                        <Link href="http://localhost:3001">
+                            <IoIosHome size={22} color="red" /> / &nbsp;
+                        </Link>
+                        <Link href={"http://localhost:3001/categoria/" + slug}>
+                            {nameCategory}
+                        </Link>
                     </Boxbreadcrumbs>
                 </Bread>
                 <ContainerContent>
                     <AsideConteiner>
-                        aside
+                        <BsFillFilterSquareFill size={22} />
                     </AsideConteiner>
 
                     <ContentPage>
