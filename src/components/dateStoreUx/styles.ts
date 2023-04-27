@@ -11,6 +11,7 @@ export const PageSection = styled.main`
 export const Bread = styled.section`
   display: flex;
   justify-content: center;
+  margin-bottom: 90px;
 
   @media (max-width: 680px) {
     display: none;
@@ -28,6 +29,8 @@ export const ContainerContent = styled.section`
 
 export const AsideConteiner = styled.aside`
   width: 400px;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 1078px) {
     display: none;

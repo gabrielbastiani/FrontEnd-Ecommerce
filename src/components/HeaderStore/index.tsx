@@ -416,7 +416,7 @@ export const HeaderStore = () => {
                                                 {categories.map((categ) => {
                                                     return (
                                                         <Link key={categ.id} href={'/categoria/' + `${categ?.category?.slug}`}>
-                                                            <Categ>{categ?.category?.categoryName}</Categ>
+                                                            <Categ>{categ?.itemName}</Categ>
                                                         </Link>
                                                     )
                                                 })}
@@ -446,7 +446,7 @@ export const HeaderStore = () => {
                                             {categories.map((categ) => {
                                                 return (
                                                     <Link key={categ.id} href={'/categoria/' + `${categ?.category?.slug}`}>
-                                                        {categ?.category?.categoryName}
+                                                        {categ?.itemName}
                                                     </Link>
                                                 )
                                             })}

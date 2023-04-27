@@ -42,8 +42,7 @@ const CarrosselBannerHome = () => {
         setImageIndex((state) => (state -= 1));
         if (imageIndex === 0) setImageIndex(bannersHome.length - 1);
     };
-
-    /* setInterval(next, 5000); */
+    
 
 
     return (
