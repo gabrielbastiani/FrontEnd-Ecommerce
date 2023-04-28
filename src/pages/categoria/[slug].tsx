@@ -43,11 +43,12 @@ export default function Categoria() {
         }
         loadGroups();
     }, [slug]);
+    
 
     return (
         <>
             <Head>
-                <title>{""}</title>
+                <title>{nameItens}</title>
             </Head>
 
             <HeaderStore />
