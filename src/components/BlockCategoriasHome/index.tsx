@@ -18,9 +18,9 @@ const BlockCategoriasHome = () => {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/pocisaoListGroup?slugPosicao=home-page`);
+                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=home-page&slugCategoryOrItem=home-page`);
 
-                setCategoryNames(response?.data || []);
+                setCategoryNames(data?.group || []);
 
             } catch (error) {
                 console.log(error.response.data);

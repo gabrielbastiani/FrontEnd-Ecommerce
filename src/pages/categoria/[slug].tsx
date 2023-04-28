@@ -23,7 +23,26 @@ export default function Categoria() {
     const router = useRouter();
     let slug = router.query.slug;
 
+    const [categoriesLateral, setCategoriesLateral] = useState([]);
+    const [nameItens, setNameItens] = useState("");
+
     
+
+    useEffect(() => {
+        async function loadGroups() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=lateral-esquerda&slugCategoryOrItem=${slug}`);
+
+                setCategoriesLateral(data?.group || []);
+                setNameItens(data?.names?.itemName);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadGroups();
+    }, [slug]);
 
     return (
         <>
@@ -40,7 +59,7 @@ export default function Categoria() {
                             <IoIosHome size={22} color="red" /> / &nbsp;
                         </Link>
                         <Link href={"http://localhost:3001/categoria/" + ""}>
-                            {""}
+                            {nameItens}
                         </Link>
                     </Boxbreadcrumbs>
                 </Bread>
@@ -49,7 +68,17 @@ export default function Categoria() {
 
                         <span>Sub categorias:</span>
 
-                        
+                        {categoriesLateral.length > 1 ? (
+                            <>
+                                {categoriesLateral.map((item) => {
+                                    return (
+                                        <span>{item?.itemName}</span>
+                                    )
+                                })}
+                           </>
+                        ) : 
+                            null
+                        }
 
                         <div>
                             <BsFillFilterSquareFill size={22} />&nbsp;&nbsp;

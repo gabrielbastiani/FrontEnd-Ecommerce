@@ -174,9 +174,9 @@ export const HeaderStore = () => {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo`);
+                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo&slugCategoryOrItem=home-page`);
 
-                setCategoryNames(response.data || []);
+                setCategoryNames(data?.group || []);
 
             } catch (error) {
                 console.log(error.response.data);
