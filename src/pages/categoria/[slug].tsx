@@ -67,10 +67,9 @@ export default function Categoria() {
                 <ContainerContent>
                     <AsideConteiner>
 
-                        <span>Sub categorias:</span>
-
                         {categoriesLateral.length > 1 ? (
                             <>
+                                <span>Sub categorias:</span>
                                 {categoriesLateral.map((item) => {
                                     return (
                                         <span>{item?.itemName}</span>
