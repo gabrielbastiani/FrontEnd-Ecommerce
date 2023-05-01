@@ -16,17 +16,64 @@ import FooterAccount from "../../components/FooterAccount";
 import { IoIosHome } from 'react-icons/io';
 import { BsFillFilterSquareFill } from 'react-icons/bs';
 import Link from "next/link";
+import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
+import styled from "styled-components";
+import { InputCategory, SectionCategories, SmallText, SubsCategs, Filtros, TextFilter, SubCategsBlockExtra, BoxText, TextTitle } from "./styles";
 
+
+const ItemWithChevron = ({ header, ...rest }) => (
+    <Item
+        {...rest}
+        header={
+            <>
+                {header}
+            </>
+        }
+    />
+);
+
+const AccordionItem: React.ExoticComponent<import('@szhsin/react-accordion').AccordionItemProps> = styled(ItemWithChevron)`
+    color: ${props => props?.theme?.colors?.black};
+    
+  .szh-accordion__item {
+    color: ${props => props?.theme?.colors?.black};
+
+    &-btn {
+      cursor: pointer;
+      color: ${props => props?.theme?.colors?.black};
+      background-color: transparent;
+      border: none;
+    }
+
+    &-content {
+      color: ${props => props?.theme?.colors?.black};
+    }
+
+    &-panel {
+      color: ${props => props?.theme?.colors?.black};
+    }
+  }
+
+  &.szh-accordion__item--expanded {
+    color: ${props => props?.theme?.colors?.black};
+    .szh-accordion__item-btn {
+      color: ${props => props?.theme?.colors?.black};
+    }
+  }
+`;
 
 export default function Categoria() {
 
     const router = useRouter();
     let slug = router.query.slug;
 
+    const [id, setID] = useState("");
     const [categoriesLateral, setCategoriesLateral] = useState([]);
+    const [subCategsFilter, setSubCategsFilter] = useState([]);
     const [nameItens, setNameItens] = useState("");
 
-    
+    const [filterCAtegory, setFilterCAtegory] = useState("");
+
 
     useEffect(() => {
         async function loadGroups() {
@@ -35,7 +82,8 @@ export default function Categoria() {
                 const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=lateral-esquerda&slugCategoryOrItem=${slug}`);
 
                 setCategoriesLateral(data?.group || []);
-                setNameItens(data?.names?.itemName);
+                setNameItens(data?.dados?.categoryName);
+                setID(data?.gruopId || "");
 
             } catch (error) {
                 console.log(error.response.data);
@@ -43,7 +91,25 @@ export default function Categoria() {
         }
         loadGroups();
     }, [slug]);
-    
+
+    async function load(id: string) {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/listCategoriesGroup?groupId=${id}`);
+
+            setSubCategsFilter(response.data || []);
+
+        } catch (error) {
+            console.log(error.response.data);
+        }
+    }
+
+    function filterCateg(slug: string) {
+        setFilterCAtegory(slug)
+    }
+
+
+
 
     return (
         <>
@@ -59,7 +125,7 @@ export default function Categoria() {
                         <Link href="http://localhost:3001">
                             <IoIosHome size={22} color="red" /> / &nbsp;
                         </Link>
-                        <Link href={"http://localhost:3001/categoria/" + ""}>
+                        <Link href={"http://localhost:3001/categoria/" + slug}>
                             {nameItens}
                         </Link>
                     </Boxbreadcrumbs>
@@ -67,24 +133,82 @@ export default function Categoria() {
                 <ContainerContent>
                     <AsideConteiner>
 
+                        <Filtros>
+                            <BsFillFilterSquareFill size={22} />&nbsp;&nbsp;
+                            <TextFilter>Filtrar por:</TextFilter>
+                        </Filtros>
+
                         {categoriesLateral.length > 1 ? (
                             <>
-                                <span>Sub categorias:</span>
-                                {categoriesLateral.map((item) => {
-                                    return (
-                                        <span>{item?.itemName}</span>
-                                    )
-                                })}
-                           </>
-                        ) : 
+                                <TextTitle>Categorias:</TextTitle>
+                                <Accordion>
+                                    {categoriesLateral.map((item) => {
+                                        return (
+                                            <>
+                                                <SectionCategories>
+                                                    <InputCategory
+                                                        type="radio"
+                                                        value={filterCAtegory}
+                                                        name="categs"
+                                                        onClick={() => filterCateg(item?.category?.slug)}
+                                                    />
+                                                    <SmallText>(+)</SmallText>
+                                                    <AccordionItem
+                                                        key={item?.id}
+                                                        onClick={() => load(item?.id)}
+                                                        header={item?.itemName}
+                                                        itemKey={item?.id}
+                                                    >
+                                                    </AccordionItem>
+                                                </SectionCategories>
+                                            </>
+                                        )
+                                    })}
+                                </Accordion>
+                            </>
+                        ) :
                             null
                         }
 
-                        <div>
-                            <BsFillFilterSquareFill size={22} />&nbsp;&nbsp;
-                            <span>Filtrar por:</span>
-                        </div>
-                        
+                        <Accordion allowMultiple>
+                            {subCategsFilter.length >= 1 && (
+                                <SubCategsBlockExtra>
+                                    <>
+                                        <BoxText>
+                                            <SmallText>MAIS CATEGORIAS...</SmallText>
+                                        </BoxText>
+                                        {subCategsFilter.map((filt) => {
+                                            return (
+                                                <>
+                                                    <SubsCategs>
+                                                        <InputCategory
+                                                            type="radio"
+                                                            value={filterCAtegory}
+                                                            name="categs"
+                                                            onClick={() => filterCateg(filt?.category?.slug)}
+                                                        />
+                                                        <SmallText>(+)</SmallText>
+                                                        <AccordionItem
+                                                            key={filt?.id}
+                                                            onClick={() => load(filt?.id)}
+                                                            header={filt?.itemName}
+                                                            itemKey={filt?.id}
+                                                        >
+                                                            <InputCategory
+                                                                type="radio"
+                                                                value={filterCAtegory}
+                                                                name="categs"
+                                                                onClick={() => filterCateg(filt?.category?.slug)}
+                                                            />
+                                                        </AccordionItem>
+                                                    </SubsCategs>
+                                                </>
+                                            )
+                                        })}
+                                    </>
+                                </SubCategsBlockExtra>
+                            )}
+                        </Accordion>
                     </AsideConteiner>
 
                     <ContentPage>

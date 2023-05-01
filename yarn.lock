@@ -2445,6 +2445,11 @@
     "prop-types" "^15.5.0"
     "react-async-script" "^1.1.1"
 
+"react-headless-accordion@^1.0.2":
+  "integrity" "sha512-wKBTB/+aAr9MGX5RYi3sdmKOSzevKdmbGRw9JTe7XONiHlTo+pC1OiggL9NUxp5QeQcTnX0rryhuySeGsqBfBg=="
+  "resolved" "https://registry.npmjs.org/react-headless-accordion/-/react-headless-accordion-1.0.2.tgz"
+  "version" "1.0.2"
+
 "react-icons@^4.8.0":
   "integrity" "sha512-N6+kOLcihDiAnj5Czu637waJqSnwlMNROzVZMhfX68V/9bu9qHaMIJC4UdozWoOk57gahFCNHwVvWzm0MTzRjg=="
   "resolved" "https://registry.npmjs.org/react-icons/-/react-icons-4.8.0.tgz"

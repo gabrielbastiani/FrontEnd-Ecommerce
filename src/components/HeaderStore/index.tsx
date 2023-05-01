@@ -174,7 +174,7 @@ export const HeaderStore = () => {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo&slugCategoryOrItem=home-page`);
+                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo&slugCategoryOrItem=neutro`);
 
                 setCategoryNames(data?.group || []);
 
@@ -411,7 +411,7 @@ export const HeaderStore = () => {
                                             </StyledA>
                                         </Link>
 
-                                        {categories.length > 1 && (
+                                        {categories.length >= 1 && (
                                             <DropDownContent>
                                                 {categories.map((categ) => {
                                                     return (
@@ -439,8 +439,8 @@ export const HeaderStore = () => {
                                 {categoryNames.map((item) => {
                                     return (
                                         <AccordionItem
-                                            key={item.id}
-                                            onClick={() => load(item.id)}
+                                            key={item?.id}
+                                            onClick={() => load(item?.id)}
                                             header={item?.itemName}
                                         >
                                             {categories.map((categ) => {
