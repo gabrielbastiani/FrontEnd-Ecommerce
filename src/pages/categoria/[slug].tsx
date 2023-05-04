@@ -138,7 +138,7 @@ export default function Categoria() {
                             <TextFilter>Filtrar por:</TextFilter>
                         </Filtros>
 
-                        {categoriesLateral.length > 1 ? (
+                        {categoriesLateral.length >= 1 ? (
                             <>
                                 <TextTitle>Categorias:</TextTitle>
                                 <Accordion>
