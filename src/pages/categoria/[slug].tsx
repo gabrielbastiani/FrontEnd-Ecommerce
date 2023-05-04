@@ -67,13 +67,20 @@ export default function Categoria() {
     const router = useRouter();
     let slug = router.query.slug;
 
-    const [id, setID] = useState("");
     const [categoriesLateral, setCategoriesLateral] = useState([]);
     const [subCategsFilter, setSubCategsFilter] = useState([]);
     const [nameItens, setNameItens] = useState("");
 
+    const [atributosLateral, setAtributosLateral] = useState([]);
+    const [atributoName, setAtributoName] = useState("");
+
     const [filterCAtegory, setFilterCAtegory] = useState("");
 
+    console.log(atributosLateral.map((atr) => {
+        return (
+            atr
+        )
+    }))
 
     useEffect(() => {
         async function loadGroups() {
@@ -83,13 +90,28 @@ export default function Categoria() {
 
                 setCategoriesLateral(data?.group || []);
                 setNameItens(data?.dados?.categoryName);
-                setID(data?.gruopId || "");
 
             } catch (error) {
                 console.log(error.response.data);
             }
         }
         loadGroups();
+    }, [slug]);
+
+    useEffect(() => {
+        async function loadFiltrosAtributos() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/pocisaoListAtributoFiltro?slugCategoryOrItem=${slug}`);
+
+                setAtributosLateral(data?.group || []);
+                setAtributoName(data?.dados?.categoryName);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadFiltrosAtributos();
     }, [slug]);
 
     async function load(id: string) {
@@ -209,6 +231,8 @@ export default function Categoria() {
                                 </SubCategsBlockExtra>
                             )}
                         </Accordion>
+
+
                     </AsideConteiner>
 
                     <ContentPage>
