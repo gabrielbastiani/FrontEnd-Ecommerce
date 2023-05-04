@@ -18,7 +18,7 @@ import { BsFillFilterSquareFill } from 'react-icons/bs';
 import Link from "next/link";
 import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
 import styled from "styled-components";
-import { InputCategory, SectionCategories, SmallText, SubsCategs, Filtros, TextFilter, SubCategsBlockExtra, BoxText, TextTitle } from "./styles";
+import { InputCategory, SectionCategories, SmallText, SubsCategs, Filtros, TextFilter, SubCategsBlockExtra, BoxText, TextTitle, AtributoText, SectionAtributes, SectionBoxAtributes, SubsAtribut } from "./styles";
 
 
 const ItemWithChevron = ({ header, ...rest }) => (
@@ -72,15 +72,29 @@ export default function Categoria() {
     const [nameItens, setNameItens] = useState("");
 
     const [atributosLateral, setAtributosLateral] = useState([]);
-    const [atributoName, setAtributoName] = useState("");
+    const [valorFilterAtribute, setValorFilterAtribute] = useState([]);
 
     const [filterCAtegory, setFilterCAtegory] = useState("");
+    const [filterAtributo, setFilterAtributo] = useState("");
 
-    console.log(atributosLateral.map((atr) => {
-        return (
-            atr
-        )
-    }))
+    console.log(filterCAtegory)
+    console.log(filterAtributo)
+
+
+    useEffect(() => {
+        async function loadSlugDate() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/findDateSlugCategory?slug=${slug}`);
+
+                setNameItens(response?.data?.categoryName);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadSlugDate();
+    }, [slug]);
 
     useEffect(() => {
         async function loadGroups() {
@@ -89,7 +103,6 @@ export default function Categoria() {
                 const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=lateral-esquerda&slugCategoryOrItem=${slug}`);
 
                 setCategoriesLateral(data?.group || []);
-                setNameItens(data?.dados?.categoryName);
 
             } catch (error) {
                 console.log(error.response.data);
@@ -105,7 +118,6 @@ export default function Categoria() {
                 const { data } = await apiClient.get(`/pocisaoListAtributoFiltro?slugCategoryOrItem=${slug}`);
 
                 setAtributosLateral(data?.group || []);
-                setAtributoName(data?.dados?.categoryName);
 
             } catch (error) {
                 console.log(error.response.data);
@@ -126,11 +138,25 @@ export default function Categoria() {
         }
     }
 
-    function filterCateg(slug: string) {
-        setFilterCAtegory(slug)
+    async function loadAtribute(id: string) {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.get(`/listGrupoIDAtributoFilter?groupId=${id}`);
+
+            setValorFilterAtribute(response.data || []);
+
+        } catch (error) {
+            console.log(error.response.data);
+        }
     }
 
+    function filterCateg(slug: string) {
+        setFilterCAtegory(slug);
+    }
 
+    function filterAtrib(slugValor: string) {
+        setFilterAtributo(slugValor);
+    }
 
 
     return (
@@ -231,8 +257,48 @@ export default function Categoria() {
                                 </SubCategsBlockExtra>
                             )}
                         </Accordion>
-
-
+                        <br />
+                        {atributosLateral.length >= 1 ? (
+                            <>
+                                <TextTitle>Atributos:</TextTitle>
+                                <SectionBoxAtributes>
+                                    <Accordion>
+                                        {atributosLateral.map((atr) => {
+                                            return (
+                                                <>
+                                                    <SectionAtributes>
+                                                        <AccordionItem
+                                                            key={atr?.id}
+                                                            onClick={() => loadAtribute(atr?.id)}
+                                                            header={atr?.itemName}
+                                                            itemKey={atr?.id}
+                                                        >
+                                                            {valorFilterAtribute.map((valu) => {
+                                                                return (
+                                                                    <>
+                                                                        <SubsAtribut>
+                                                                            <InputCategory
+                                                                                type="radio"
+                                                                                value={filterAtributo}
+                                                                                name="atribut"
+                                                                                onClick={() => filterCateg(valu?.atributo?.slugValor)}
+                                                                            />
+                                                                            <AtributoText>{valu?.atributo?.valor}</AtributoText>
+                                                                        </SubsAtribut>
+                                                                    </>
+                                                                )
+                                                            })}
+                                                        </AccordionItem>
+                                                    </SectionAtributes>
+                                                </>
+                                            )
+                                        })}
+                                    </Accordion>
+                                </SectionBoxAtributes>
+                            </>
+                        ) :
+                            null
+                        }
                     </AsideConteiner>
 
                     <ContentPage>

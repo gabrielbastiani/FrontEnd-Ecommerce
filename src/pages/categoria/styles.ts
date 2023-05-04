@@ -17,6 +17,11 @@ export const SectionCategories = styled.div`
   align-items: baseline;
 `
 
+export const SectionAtributes = styled.div`
+  display: flex;
+  align-items: baseline;
+`
+
 export const InputCategory = styled.input`
   margin-right: 10px;
   margin-left: 10px;
@@ -26,6 +31,12 @@ export const InputCategory = styled.input`
 export const SubsCategs = styled.div`
   display: flex;
   align-items: baseline;
+`
+
+export const SubsAtribut = styled.div`
+  display: flex;
+  align-items: baseline;
+  margin-top: 5px;
 `
 
 export const SubCategsBlockExtra = styled.div`
@@ -41,4 +52,12 @@ export const SmallText = styled.small`
 
 export const BoxText = styled.div`
   margin-bottom: 10px;
+`
+
+export const AtributoText = styled.small`
+  
+`
+
+export const SectionBoxAtributes = styled.div`
+  display: flex;
 `
