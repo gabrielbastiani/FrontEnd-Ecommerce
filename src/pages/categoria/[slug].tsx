@@ -18,7 +18,38 @@ import { BsFillFilterSquareFill } from 'react-icons/bs';
 import Link from "next/link";
 import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
 import styled from "styled-components";
-import { InputCategory, SectionCategories, SmallText, SubsCategs, Filtros, TextFilter, SubCategsBlockExtra, BoxText, TextTitle, AtributoText, SectionAtributes, SectionBoxAtributes, SubsAtribut } from "./styles";
+import {
+    InputCategory,
+    SectionCategories,
+    SmallText,
+    SubsCategs,
+    Filtros,
+    TextFilter,
+    SubCategsBlockExtra,
+    BoxText,
+    TextTitle,
+    AtributoText,
+    SectionAtributes,
+    SectionBoxAtributes,
+    SubsAtribut,
+    GridSectionProducts,
+    BoxProduct,
+    Info,
+    Name,
+    OldPrice,
+    Price,
+    BoxBuy,
+    Quantidade,
+    Min,
+    ValueQuant,
+    Max,
+    Add,
+    Images,
+    ImagesHover
+} from "./styles";
+import Image from "next/image";
+import semimagem from '../../assets/semfoto.png';
+import { AiOutlineShoppingCart } from "react-icons/ai";
 
 
 const ItemWithChevron = ({ header, ...rest }) => (
@@ -73,6 +104,8 @@ export default function Categoria() {
 
     const [atributosLateral, setAtributosLateral] = useState([]);
     const [valorFilterAtribute, setValorFilterAtribute] = useState([]);
+
+    const [products, setProducts] = useState([]);
 
     const [filterCAtegory, setFilterCAtegory] = useState("");
     const [filterAtributo, setFilterAtributo] = useState("");
@@ -149,6 +182,21 @@ export default function Categoria() {
             console.log(error.response.data);
         }
     }
+
+    useEffect(() => {
+        async function loadProducts() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/productsPageCategories?slug=${slug}`);
+
+                setProducts(response.data || []);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadProducts();
+    }, [slug]);
 
     function filterCateg(slug: string) {
         setFilterCAtegory(slug);
@@ -300,10 +348,70 @@ export default function Categoria() {
                         ) :
                             null
                         }
+                        <br />
+                        <TextTitle
+                            style={{ fontWeight: 'bold' }}
+                        >
+                            Preço por:
+                        </TextTitle>
+
+                        <input
+                            type="range"
+                            id="price"
+                            name="price"
+                            min="0"
+                            max="999999999999"
+                        />
+
                     </AsideConteiner>
 
                     <ContentPage>
-                        content
+
+                        <GridSectionProducts>
+                            {products.map((prod) => {
+                                return (
+                                    <BoxProduct key={prod?.id}>
+                                        <Link href={'/produto/' + prod?.product?.slug}>
+                                            <Images>
+                                                {/* {prod?.product?.photoproducts[0] ? (
+                                                    <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0].photo} width={450} height={300} alt={prod?.product?.nameProduct} />
+                                                ) :
+                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
+                                                } */}
+                                            </Images>
+                                            <ImagesHover>
+                                                {/* {prod?.product?.photoproducts[1] ? (
+                                                    <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[1].photo} width={450} height={300} alt={prod?.product?.nameProduct} />
+                                                ) :
+                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
+                                                } */}
+                                            </ImagesHover>
+                                        </Link>
+                                        <Info>
+                                            <Link href={'/produto/' + prod?.product?.slug}>
+                                                <Name>{prod?.product?.nameProduct}</Name>
+                                                <OldPrice>De {prod?.product?.promocao.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
+                                                <Price>Por {prod?.product?.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                            </Link>
+                                            <BoxBuy>
+                                                <Quantidade>
+                                                    <Min>-</Min>
+                                                    <ValueQuant>1</ValueQuant>
+                                                    <Max>+</Max>
+                                                </Quantidade>
+                                                <Add>
+                                                    <AiOutlineShoppingCart color='white' size={25} />
+                                                    &emsp;Adicionar
+                                                </Add>
+                                            </BoxBuy>
+                                        </Info>
+                                    </BoxProduct>
+                                )
+                            })}
+                        </GridSectionProducts>
+
+
+
                     </ContentPage>
                 </ContainerContent>
             </PageSection>
