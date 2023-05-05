@@ -193,7 +193,7 @@ export default function Categoria() {
                                     {categoriesLateral.map((item) => {
                                         return (
                                             <>
-                                                <SectionCategories>
+                                                <SectionCategories key={item?.id}>
                                                     <InputCategory
                                                         type="radio"
                                                         value={filterCAtegory}
@@ -228,7 +228,7 @@ export default function Categoria() {
                                         {subCategsFilter.map((filt) => {
                                             return (
                                                 <>
-                                                    <SubsCategs>
+                                                    <SubsCategs key={filt?.id}>
                                                         <InputCategory
                                                             type="radio"
                                                             value={filterCAtegory}
@@ -266,7 +266,8 @@ export default function Categoria() {
                                         {atributosLateral.map((atr) => {
                                             return (
                                                 <>
-                                                    <SectionAtributes>
+                                                    <SectionAtributes key={atr?.id}>
+                                                        <SmallText>(+)</SmallText>
                                                         <AccordionItem
                                                             key={atr?.id}
                                                             onClick={() => loadAtribute(atr?.id)}
@@ -276,12 +277,12 @@ export default function Categoria() {
                                                             {valorFilterAtribute.map((valu) => {
                                                                 return (
                                                                     <>
-                                                                        <SubsAtribut>
+                                                                        <SubsAtribut key={valu?.id}>
                                                                             <InputCategory
                                                                                 type="radio"
                                                                                 value={filterAtributo}
                                                                                 name="atribut"
-                                                                                onClick={() => filterCateg(valu?.atributo?.slugValor)}
+                                                                                onClick={() => filterAtrib(valu?.atributo?.slugValor)}
                                                                             />
                                                                             <AtributoText>{valu?.atributo?.valor}</AtributoText>
                                                                         </SubsAtribut>
