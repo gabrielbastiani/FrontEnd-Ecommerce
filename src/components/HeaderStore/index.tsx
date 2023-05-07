@@ -134,8 +134,6 @@ export const HeaderStore = () => {
         setElement(!element);
     }
 
-
-
     useEffect(() => {
         async function loadStore() {
             const apiClient = setupAPIClient();

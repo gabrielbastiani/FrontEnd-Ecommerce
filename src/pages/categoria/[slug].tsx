@@ -110,9 +110,6 @@ export default function Categoria() {
     const [filterCAtegory, setFilterCAtegory] = useState("");
     const [filterAtributo, setFilterAtributo] = useState("");
 
-    console.log(filterCAtegory)
-    console.log(filterAtributo)
-
 
     useEffect(() => {
         async function loadSlugDate() {

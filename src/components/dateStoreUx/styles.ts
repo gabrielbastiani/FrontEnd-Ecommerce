@@ -31,6 +31,9 @@ export const AsideConteiner = styled.aside`
   width: 400px;
   display: flex;
   flex-direction: column;
+  position: sticky;
+  height: 100%;
+  top: 160px;
 
   @media (max-width: 1078px) {
     display: none;
