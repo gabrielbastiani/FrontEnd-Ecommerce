@@ -373,18 +373,18 @@ export default function Categoria() {
                                     <BoxProduct key={prod?.id}>
                                         <Link href={'/produto/' + prod?.product?.slug}>
                                             <Images>
-                                                {/* {prod?.product?.photoproducts[0] ? (
-                                                    <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0].photo} width={450} height={300} alt={prod?.product?.nameProduct} />
+                                                {prod?.photoProduct1 ? (
+                                                    <Image src={'http://localhost:3333/files/' + prod?.photoProduct1?.photo} width={450} height={300} alt={prod?.product?.nameProduct} />
                                                 ) :
                                                     <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
-                                                } */}
+                                                }
                                             </Images>
                                             <ImagesHover>
-                                                {/* {prod?.product?.photoproducts[1] ? (
-                                                    <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[1].photo} width={450} height={300} alt={prod?.product?.nameProduct} />
+                                                {prod?.photoProduct ? (
+                                                    <Image src={'http://localhost:3333/files/' + prod?.photoProduct?.photo} width={450} height={300} alt={prod?.product?.nameProduct} />
                                                 ) :
                                                     <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
-                                                } */}
+                                                }
                                             </ImagesHover>
                                         </Link>
                                         <Info>
