@@ -52,7 +52,7 @@ import semimagem from '../../assets/semfoto.png';
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
 
-const ItemWithChevron = ({ header, ...rest }) => (
+/* const ItemWithChevron = ({ header, ...rest }) => (
     <Item
         {...rest}
         header={
@@ -91,14 +91,17 @@ const AccordionItem: React.ExoticComponent<import('@szhsin/react-accordion').Acc
       color: ${props => props?.theme?.colors?.black};
     }
   }
-`;
+`; */
 
-export default function Categoria() {
+export default function Search() {
 
     const router = useRouter();
-    let slug = router.query.slug;
+    let { slug } = router.query;
 
-    const [categoriesLateral, setCategoriesLateral] = useState([]);
+    console.log(slug[0])
+    
+
+    /* const [categoriesLateral, setCategoriesLateral] = useState([]);
     const [subCategsFilter, setSubCategsFilter] = useState([]);
     const [nameItens, setNameItens] = useState("");
 
@@ -201,12 +204,13 @@ export default function Categoria() {
 
     function filterAtrib(slugValor: string) {
         setFilterAtributo(slugValor);
-    }
+    } */
 
 
     return (
         <>
-            <Head>
+            <h1>Search</h1>
+            {/* <Head>
                 <title>{nameItens}</title>
             </Head>
 
@@ -361,7 +365,7 @@ export default function Categoria() {
                         />
 
                         <button>
-                            <Link href={`/search/${filterCAtegory}/${filterAtributo}`} >Aplicar Filtro</Link>
+                            <Link href={`/search/${''}/${''}`} >Aplicar Filtro</Link>
                         </button>
 
                     </AsideConteiner>
@@ -418,7 +422,7 @@ export default function Categoria() {
             </PageSection>
 
             <FooterStore />
-            <FooterAccount />
+            <FooterAccount /> */}
         </>
     )
 }
