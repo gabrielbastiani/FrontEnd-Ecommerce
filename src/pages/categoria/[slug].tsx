@@ -107,8 +107,8 @@ export default function Categoria() {
 
     const [products, setProducts] = useState([]);
 
-    const [filterCAtegory, setFilterCAtegory] = useState("");
-    const [filterAtributo, setFilterAtributo] = useState("");
+    const [filterCAtegory, setFilterCAtegory] = useState([]);
+    const [filterAtributo, setFilterAtributo] = useState([]);
 
 
     useEffect(() => {
@@ -196,13 +196,19 @@ export default function Categoria() {
     }, [slug]);
 
     function filterCateg(slug: string) {
-        setFilterCAtegory(slug);
+        setFilterCAtegory([slug]);
     }
 
     function filterAtrib(slugValor: string) {
-        setFilterAtributo(slugValor);
+        const arraySearch = new Array();
+        
+        arraySearch.push([slugValor]);
+        
+        setFilterAtributo(arraySearch);
     }
 
+    console.log(filterAtributo)
+    console.log(filterCAtegory)
 
     return (
         <>
@@ -240,7 +246,7 @@ export default function Categoria() {
                                             <>
                                                 <SectionCategories key={item?.id}>
                                                     <InputCategory
-                                                        type="radio"
+                                                        type="checkbox"
                                                         value={filterCAtegory}
                                                         name="categs"
                                                         onClick={() => filterCateg(item?.category?.slug)}
@@ -275,7 +281,7 @@ export default function Categoria() {
                                                 <>
                                                     <SubsCategs key={filt?.id}>
                                                         <InputCategory
-                                                            type="radio"
+                                                            type="checkbox"
                                                             value={filterCAtegory}
                                                             name="categs"
                                                             onClick={() => filterCateg(filt?.category?.slug)}
@@ -288,7 +294,7 @@ export default function Categoria() {
                                                             itemKey={filt?.id}
                                                         >
                                                             <InputCategory
-                                                                type="radio"
+                                                                type="checkbox"
                                                                 value={filterCAtegory}
                                                                 name="categs"
                                                                 onClick={() => filterCateg(filt?.category?.slug)}
@@ -324,7 +330,7 @@ export default function Categoria() {
                                                                     <>
                                                                         <SubsAtribut key={valu?.id}>
                                                                             <InputCategory
-                                                                                type="radio"
+                                                                                type="checkbox"
                                                                                 value={filterAtributo}
                                                                                 name="atribut"
                                                                                 onClick={() => filterAtrib(valu?.atributo?.slugValor)}
