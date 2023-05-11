@@ -64,12 +64,6 @@ export default function Categoria() {
 
     const [products, setProducts] = useState([]);
 
-    console.log(atributosLateral.map((item) => {
-        return(
-            item
-        )
-    }))
-
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -128,18 +122,21 @@ export default function Categoria() {
         }
     } */
 
-    /* async function loadAtribute(id: string) {
-        const apiClient = setupAPIClient();
-        try {
-            const response = await apiClient.get(`/listGrupoIDAtributoFilter?groupId=${id}`);
-
-            setValorFilterAtribute(response.data || []);
-
-        } catch (error) {
-            console.log(error.response.data);
+    useEffect(() => {
+        async function loadAtribute() {
+            const apiClient = setupAPIClient();
+            try {
+                const response = await apiClient.get(`/listGrupoIDAtributoFilter?groupId=${''}`);
+    
+                setValorFilterAtribute(response.data || []);
+    
+            } catch (error) {
+                console.log(error.response.data);
+            }
         }
-    } */
-
+        loadAtribute();
+    },[]);
+    
     useEffect(() => {
         async function loadProducts() {
             const apiClient = setupAPIClient();
