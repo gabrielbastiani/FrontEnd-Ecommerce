@@ -65,6 +65,13 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
 
+    console.log(atributosLateral.map((item) => {
+        return(
+            item
+        )
+    }))
+
+
     useEffect(() => {
         async function loadSlugDate() {
             const apiClient = setupAPIClient();
