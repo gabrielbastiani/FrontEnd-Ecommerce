@@ -56,29 +56,11 @@ export default function Categoria() {
     let slug = router.query.slug;
 
     const [categoriesLateral, setCategoriesLateral] = useState([]);
-    const [subCategsFilter, setSubCategsFilter] = useState([]);
     const [nameItens, setNameItens] = useState("");
 
     const [atributosLateral, setAtributosLateral] = useState([]);
-    const [atributos, setAtributos] = useState([]);
-    const [valorFilterAtribute, setValorFilterAtribute] = useState([]);
 
     const [products, setProducts] = useState([]);
-
-
-    console.log(atributosLateral.map((item) => {
-        return(
-            item
-        )
-    }));
-
-    /* console.log(atrId)
-
-    console.log(atributos.map((item) => {
-        return(
-            item.valor
-        )
-    })) */
 
 
     useEffect(() => {
@@ -116,7 +98,7 @@ export default function Categoria() {
             const apiClient = setupAPIClient();
             try {
                 const response = await apiClient.get(`/listFilterGroup?slugCategoryOrItem=${slug}`);
-                
+
                 setAtributosLateral(response?.data || []);
 
             } catch (error) {
@@ -124,21 +106,6 @@ export default function Categoria() {
             }
         }
         loadFiltrosAtributos();
-    }, [slug]);
-
-    useEffect(() => {
-        async function loadAtributos() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient.get(`/allAtributosGroups?slugCategoryOrItem=${slug}`);
-                
-                setAtributos(response?.data || []);
-
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        }
-        loadAtributos();
     }, [slug]);
 
     useEffect(() => {
@@ -190,9 +157,9 @@ export default function Categoria() {
                                 <TextTitle>Categorias:</TextTitle>
                                 <SubCategsBlockExtra>
                                     {categoriesLateral.map((item) => {
-                                        return(
+                                        return (
                                             <>
-                                                
+
                                             </>
                                         )
                                     })}
@@ -207,14 +174,21 @@ export default function Categoria() {
                                 <TextTitle>Atributos:</TextTitle>
                                 <SubCategsBlockExtra>
                                     {atributosLateral.map((atrib) => {
-                                        return(
+                                        return (
                                             <>
                                                 <span>{atrib?.atributoName}</span>
-                                                <span>{atrib?.filteratributos?.valor}</span>
+                                                {atrib?.filteratributos.map((item: { valor: string; }) => {
+                                                    return (
+                                                        <>
+                                                            <SubCategsBlockExtra>
+                                                                {item?.valor}
+                                                            </SubCategsBlockExtra>
+                                                        </>
+                                                    )
+                                                })}
                                             </>
                                         )
                                     })}
-                                    
                                 </SubCategsBlockExtra>
                             </>
                         ) :
