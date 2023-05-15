@@ -60,6 +60,7 @@ export default function Categoria() {
     const [nameItens, setNameItens] = useState("");
 
     const [atributosLateral, setAtributosLateral] = useState([]);
+    const [atributos, setAtributos] = useState([]);
     const [valorFilterAtribute, setValorFilterAtribute] = useState([]);
 
     const [products, setProducts] = useState([]);
@@ -69,7 +70,15 @@ export default function Categoria() {
         return(
             item
         )
-    }))
+    }));
+
+    /* console.log(atrId)
+
+    console.log(atributos.map((item) => {
+        return(
+            item.valor
+        )
+    })) */
 
 
     useEffect(() => {
@@ -106,8 +115,8 @@ export default function Categoria() {
         async function loadFiltrosAtributos() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/pocisaoListAtributoFiltro?slugCategoryOrItem=${slug}`);
-
+                const response = await apiClient.get(`/listFilterGroup?slugCategoryOrItem=${slug}`);
+                
                 setAtributosLateral(response?.data || []);
 
             } catch (error) {
@@ -117,33 +126,21 @@ export default function Categoria() {
         loadFiltrosAtributos();
     }, [slug]);
 
-    /* async function load(id: string) {
-        const apiClient = setupAPIClient();
-        try {
-            const response = await apiClient.get(`/listCategoriesGroup?groupId=${id}`);
-
-            setSubCategsFilter(response.data || []);
-
-        } catch (error) {
-            console.log(error.response.data);
-        }
-    } */
-
     useEffect(() => {
-        async function loadAtribute() {
+        async function loadAtributos() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listGrupoIDAtributoFilter?groupId=${''}`);
-    
-                setValorFilterAtribute(response.data || []);
-    
+                const response = await apiClient.get(`/allAtributosGroups?slugCategoryOrItem=${slug}`);
+                
+                setAtributos(response?.data || []);
+
             } catch (error) {
                 console.log(error.response.data);
             }
         }
-        loadAtribute();
-    },[]);
-    
+        loadAtributos();
+    }, [slug]);
+
     useEffect(() => {
         async function loadProducts() {
             const apiClient = setupAPIClient();
@@ -209,11 +206,11 @@ export default function Categoria() {
                             <>
                                 <TextTitle>Atributos:</TextTitle>
                                 <SubCategsBlockExtra>
-                                    {atributosLateral.map((item) => {
+                                    {atributosLateral.map((atrib) => {
                                         return(
                                             <>
-                                                <span>{item?.itemName}</span>
-                                                <span>{item?.atributo?.valor}</span>
+                                                <span>{atrib?.atributoName}</span>
+                                                <span>{atrib?.filteratributos?.valor}</span>
                                             </>
                                         )
                                     })}
