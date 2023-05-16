@@ -79,21 +79,6 @@ export default function Categoria() {
     }, [slug]);
 
     useEffect(() => {
-        async function loadGroups() {
-            const apiClient = setupAPIClient();
-            try {
-                const response = await apiClient.get(`/pocisaoListGroup?slugPosicao=lateral-esquerda&slugCategoryOrItem=${slug}`);
-
-                setCategoriesLateral(response?.data || []);
-
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        }
-        loadGroups();
-    }, [slug]);
-
-    useEffect(() => {
         async function loadFiltrosAtributos() {
             const apiClient = setupAPIClient();
             try {
@@ -152,7 +137,9 @@ export default function Categoria() {
                             <TextFilter>Filtrar por:</TextFilter>
                         </Filtros>
 
-                        {categoriesLateral.length >= 1 ? (
+                        
+
+                        {/* {categoriesLateral.length >= 1 ? (
                             <>
                                 <TextTitle>Categorias:</TextTitle>
                                 <SubCategsBlockExtra>
@@ -167,7 +154,7 @@ export default function Categoria() {
                             </>
                         ) :
                             null
-                        }
+                        } */}
 
                         {atributosLateral.length >= 1 ? (
                             <>
