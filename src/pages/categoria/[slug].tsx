@@ -176,12 +176,14 @@ export default function Categoria() {
                                     {atributosLateral.map((atrib) => {
                                         return (
                                             <>
+                                                <br />
                                                 <span>{atrib?.atributoName}</span>
+
                                                 {atrib?.filteratributos.map((item: { valor: string; }) => {
                                                     return (
                                                         <>
                                                             <SubCategsBlockExtra>
-                                                                {item?.valor}
+                                                                <small>{item?.valor}</small>
                                                             </SubCategsBlockExtra>
                                                         </>
                                                     )
