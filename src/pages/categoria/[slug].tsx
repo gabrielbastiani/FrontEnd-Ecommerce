@@ -63,6 +63,21 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
 
+    console.log(products.map((atrb) => {
+        return (
+            atrb.product.relationProductAtributos.map((tip) => {
+                return (
+                    tip.atributoTipo.atributoValores.map((atr) => {
+                        return (
+                            atr.valor
+                        )
+                    })
+                )
+            })
+        )
+    }))
+
+
     useEffect(() => {
         async function loadSlugDate() {
             const apiClient = setupAPIClient();
@@ -169,11 +184,30 @@ export default function Categoria() {
                             null
                         }
 
+                        {products.map((atrb) => {
+                            return (
+                                atrb.product.relationProductAtributos.map((tip: any) => {
+                                    return (
+                                        <>
+                                            <span>{tip?.atributoTipo?.tipo}</span>
+                                            {tip.atributoTipo.atributoValores.map((atr: any) => {
+                                                return (
+                                                    <>
+                                                        <span>{atr.valor}</span>
+                                                    </>
+                                                )
+                                            })}
+                                        </>
+                                    )
+                                })
+                            )
+                        })}
+
                         {atributosLateral.length >= 1 ? (
                             <>
                                 <TextTitle>Atributos:</TextTitle>
                                 <SubCategsBlockExtra>
-                                    {atributosLateral.map((atrib) => {
+                                    {/* {atributosLateral.map((atrib) => {
                                         return (
                                             <>
                                                 <span>{atrib?.atributoName}</span>
@@ -188,7 +222,8 @@ export default function Categoria() {
                                                 })}
                                             </>
                                         )
-                                    })}
+                                    })} */}
+
                                 </SubCategsBlockExtra>
                             </>
                         ) :
