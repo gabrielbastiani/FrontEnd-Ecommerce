@@ -62,6 +62,15 @@ export default function Categoria() {
 
     const [products, setProducts] = useState([]);
 
+    console.log(products.map((item) => {
+        return (
+            item.product.typeAtributes.map((typ) => {
+                return (
+                    typ.valueAtribute
+                )
+            })
+        )
+    }))
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -208,14 +217,14 @@ export default function Categoria() {
                                     <BoxProduct key={prod?.id}>
                                         <Link href={'/produto/' + prod?.product?.slug}>
                                             <Images>
-                                                {prod?.product?.photoproducts ? (
+                                                {prod?.product?.photoproducts[0] ? (
                                                     <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.photo} width={450} height={300} alt={prod?.product?.nameProduct} />
                                                 ) :
                                                     <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
                                                 }
                                             </Images>
                                             <ImagesHover>
-                                                {prod?.product?.photoproducts ? (
+                                                {prod?.product?.photoproducts[1] ? (
                                                     <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[1]?.photo} width={450} height={300} alt={prod?.product?.nameProduct} />
                                                 ) :
                                                     <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
