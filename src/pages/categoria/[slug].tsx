@@ -65,6 +65,17 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
 
+    console.log(products.map((item) => {
+        return (
+            item.product.typeAtributes.map((typ) => {
+                return (
+                    typ
+                )
+            })
+        )
+    }))
+
+
     useEffect(() => {
         async function loadSlugDate() {
             const apiClient = setupAPIClient();
@@ -139,6 +150,33 @@ export default function Categoria() {
                             <TextFilter>Filtrar por:</TextFilter>
                         </Filtros>
 
+
+                        {products.map((item) => {
+                            return (
+                                item.product.typeAtributes.map((typ) => {
+                                    return (
+                                        <>
+                                            <span>{typ.tipo}</span>
+                                            {typ.valueAtributes.map((val) => {
+                                                return(
+                                                    <>
+                                                        {val.valor.map((arr) => {
+                                                            return(
+                                                                <>
+                                                                    <li>{arr.valor}</li>
+                                                                </>
+                                                            )
+                                                        })}
+                                                    </>
+                                                )
+                                            })}
+                                        </>
+                                    )
+                                })
+                            )
+                        })}
+
+
                         {/* {categoriesLateral.length >= 1 ? (
                             <>
                                 <TextTitle>Categorias:</TextTitle>
@@ -158,25 +196,12 @@ export default function Categoria() {
 
                         <TextAtribute>Atributos:</TextAtribute>
                         <SubCategsBlockExtra>
-                            {products.map((item) => {
-                                return (
-                                    item.product.typeAtributes.map((typ: any) => {
-                                        return (
-                                            <>
-                                                <br />
-                                                <TypeAtribute>{typ.tipo}</TypeAtribute>
-                                                {typ.valueAtributes.map((val: any) => {
-                                                    return (
-                                                        <>
-                                                            <AtributoText>{val.valor}</AtributoText>
-                                                        </>
-                                                    )
-                                                })}
-                                            </>
-                                        )
-                                    })
-                                )
-                            })}
+
+
+
+
+
+
                         </SubCategsBlockExtra>
                         <br />
                         <TextTitle
