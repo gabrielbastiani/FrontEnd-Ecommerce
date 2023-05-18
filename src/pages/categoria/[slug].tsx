@@ -62,7 +62,11 @@ export default function Categoria() {
 
     const [products, setProducts] = useState([]);
 
-    
+    console.log(products.map((item) => {
+        return (
+            item.product.typeAtributes
+        )
+    }))
 
     useEffect(() => {
         async function loadSlugDate() {
