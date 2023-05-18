@@ -4,10 +4,23 @@ export const Filtros = styled.div`
   margin-bottom: 20px;
 `
 
-export const TextFilter = styled.span``
+export const TextFilter = styled.span`
+  font-size: 20px;
+`
 
 export const TextTitle = styled.span`
+  
+`
+
+export const TextAtribute = styled.span`
+  margin-bottom: -20px;
+  font-size: 19px;
+`
+
+export const TypeAtribute = styled.span`
+  font-weight: bold;
   margin-bottom: 10px;
+  font-size: 17px;
 `
 
 export const SectionCategories = styled.div`
@@ -43,16 +56,18 @@ export const SubCategsBlockExtra = styled.div`
   margin-top: 15px;
 `
 
-export const SmallText = styled.small`
-  font-size: 11px;
-  margin-right: 4px;
+export const SmallText = styled.span`
+  font-size: 15px;
 `
 
 export const BoxText = styled.div`
   margin-bottom: 10px;
 `
 
-export const AtributoText = styled.small``
+export const AtributoText = styled.small`
+  font-size: 14px;
+  margin-bottom: 8px;
+`
 
 export const SectionBoxAtributes = styled.div`
   display: flex;

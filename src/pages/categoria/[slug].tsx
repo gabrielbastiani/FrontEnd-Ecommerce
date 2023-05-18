@@ -21,11 +21,13 @@ import {
     SectionCategories,
     SmallText,
     SubsCategs,
+    TypeAtribute,
     Filtros,
     TextFilter,
     SubCategsBlockExtra,
     BoxText,
     TextTitle,
+    TextAtribute,
     AtributoText,
     SectionAtributes,
     SectionBoxAtributes,
@@ -62,11 +64,6 @@ export default function Categoria() {
 
     const [products, setProducts] = useState([]);
 
-    console.log(products.map((item) => {
-        return (
-            item.product.typeAtributes
-        )
-    }))
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -142,8 +139,6 @@ export default function Categoria() {
                             <TextFilter>Filtrar por:</TextFilter>
                         </Filtros>
 
-                        
-
                         {/* {categoriesLateral.length >= 1 ? (
                             <>
                                 <TextTitle>Categorias:</TextTitle>
@@ -161,33 +156,28 @@ export default function Categoria() {
                             null
                         } */}
 
-                        {atributosLateral.length >= 1 ? (
-                            <>
-                                <TextTitle>Atributos:</TextTitle>
-                                <SubCategsBlockExtra>
-                                    {atributosLateral.map((atrib) => {
+                        <TextAtribute>Atributos:</TextAtribute>
+                        <SubCategsBlockExtra>
+                            {products.map((item) => {
+                                return (
+                                    item.product.typeAtributes.map((typ: any) => {
                                         return (
                                             <>
                                                 <br />
-                                                <span>{atrib?.atributoName}</span>
-
-                                                {atrib?.filteratributos.map((item: { valor: string; }) => {
+                                                <TypeAtribute>{typ.tipo}</TypeAtribute>
+                                                {typ.valueAtributes.map((val: any) => {
                                                     return (
                                                         <>
-                                                            <SubCategsBlockExtra>
-                                                                <small>{item?.valor}</small>
-                                                            </SubCategsBlockExtra>
+                                                            <AtributoText>{val.valor}</AtributoText>
                                                         </>
                                                     )
                                                 })}
                                             </>
                                         )
-                                    })}
-                                </SubCategsBlockExtra>
-                            </>
-                        ) :
-                            null
-                        }
+                                    })
+                                )
+                            })}
+                        </SubCategsBlockExtra>
                         <br />
                         <TextTitle
                             style={{ fontWeight: 'bold' }}
