@@ -65,9 +65,6 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
 
-    
-
-
     useEffect(() => {
         async function loadSlugDate() {
             const apiClient = setupAPIClient();
@@ -143,7 +140,7 @@ export default function Categoria() {
                         </Filtros>
 
 
-                       
+                        
 
 
                         {/* {categoriesLateral.length >= 1 ? (
