@@ -65,6 +65,13 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
 
+    console.log(atributosLateral.map((item) => {
+        return (
+            item
+        )
+    }))
+
+
     useEffect(() => {
         async function loadSlugDate() {
             const apiClient = setupAPIClient();
@@ -140,7 +147,7 @@ export default function Categoria() {
                         </Filtros>
 
 
-                        
+
 
 
                         {/* {categoriesLateral.length >= 1 ? (
@@ -160,16 +167,29 @@ export default function Categoria() {
                             null
                         } */}
 
-                        <TextAtribute>Atributos:</TextAtribute>
-                        <SubCategsBlockExtra>
+                        {atributosLateral.length < 1 ? (
+                            null
+                        ) :
+                            <>
+                                <TextAtribute>Atributos:</TextAtribute>
+                                <SubCategsBlockExtra>
+                                    {atributosLateral.map((item) => {
+                                        return (
+                                            <>
+                                                <TypeAtribute>{item?.atributoName}</TypeAtribute>
+                                                {item.filteratributos.map((val: any) => {
+                                                    return (
+                                                        <AtributoText>{val?.valor}</AtributoText>
+                                                    )
+                                                })}
+                                            </>
+                                        )
+                                    })}
+                                </SubCategsBlockExtra>
+                                <br />
+                            </>
+                        }
 
-
-
-
-
-
-                        </SubCategsBlockExtra>
-                        <br />
                         <TextTitle
                             style={{ fontWeight: 'bold' }}
                         >

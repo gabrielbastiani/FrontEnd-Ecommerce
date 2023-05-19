@@ -13,7 +13,7 @@ export const TextTitle = styled.span`
 `
 
 export const TextAtribute = styled.span`
-  margin-bottom: -20px;
+  margin-bottom: -5px;
   font-size: 19px;
 `
 
