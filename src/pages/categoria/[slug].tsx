@@ -65,15 +65,7 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
 
-    console.log(products.map((item) => {
-        return (
-            item.product.typeAtributes.map((typ) => {
-                return (
-                    typ
-                )
-            })
-        )
-    }))
+    
 
 
     useEffect(() => {
@@ -151,30 +143,7 @@ export default function Categoria() {
                         </Filtros>
 
 
-                        {products.map((item) => {
-                            return (
-                                item.product.typeAtributes.map((typ) => {
-                                    return (
-                                        <>
-                                            <span>{typ.tipo}</span>
-                                            {typ.valueAtributes.map((val) => {
-                                                return(
-                                                    <>
-                                                        {val.valor.map((arr) => {
-                                                            return(
-                                                                <>
-                                                                    <li>{arr.valor}</li>
-                                                                </>
-                                                            )
-                                                        })}
-                                                    </>
-                                                )
-                                            })}
-                                        </>
-                                    )
-                                })
-                            )
-                        })}
+                       
 
 
                         {/* {categoriesLateral.length >= 1 ? (
