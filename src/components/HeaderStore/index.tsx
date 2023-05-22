@@ -172,7 +172,7 @@ export const HeaderStore = () => {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo&slugCategoryOrItem=neutro`);
+                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo&slugCategory=neutro`);
 
                 setCategoryNames(data?.group || []);
 

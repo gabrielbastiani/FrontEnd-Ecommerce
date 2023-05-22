@@ -97,7 +97,7 @@ export default function Categoria() {
         async function loadFiltrosAtributos() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listFilterGroup?slugCategoryOrItem=${slug}`);
+                const response = await apiClient.get(`/listFilterGroup?slugCategory=${slug}`);
 
                 setAtributosLateral(response?.data || []);
 

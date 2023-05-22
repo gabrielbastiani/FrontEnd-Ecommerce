@@ -133,7 +133,7 @@ export default function Search() {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=lateral-esquerda&slugCategoryOrItem=${slug}`);
+                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=lateral-esquerda&slugCategory=${slug}`);
 
                 setCategoriesLateral(data?.group || []);
 
@@ -148,7 +148,7 @@ export default function Search() {
         async function loadFiltrosAtributos() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/pocisaoListAtributoFiltro?slugCategoryOrItem=${slug}`);
+                const { data } = await apiClient.get(`/pocisaoListAtributoFiltro?slugCategory=${slug}`);
 
                 setAtributosLateral(data?.group || []);
 

@@ -18,7 +18,7 @@ const BlockCategoriasHome = () => {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=home-page&slugCategoryOrItem=neutro`);
+                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=home-page&slugCategory=neutro`);
 
                 setCategoryNames(data?.group || []);
 
