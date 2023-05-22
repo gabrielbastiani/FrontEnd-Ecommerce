@@ -65,11 +65,17 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
 
-    console.log(atributosLateral.map((item) => {
-        return (
-            item
+    console.log(products)
+
+    /* console.log(products.map((item) => {
+        return(
+            item.product.valueatributes.map((atr) => {
+                return(
+                    atr.valor
+                )
+            })
         )
-    }))
+    })) */
 
 
     useEffect(() => {
@@ -147,7 +153,7 @@ export default function Categoria() {
                         </Filtros>
 
 
-
+                       
 
 
                         {/* {categoriesLateral.length >= 1 ? (
@@ -167,7 +173,7 @@ export default function Categoria() {
                             null
                         } */}
 
-                        {atributosLateral.length < 1 ? (
+                        {/* {atributosLateral.length < 1 ? (
                             null
                         ) :
                             <>
@@ -188,7 +194,7 @@ export default function Categoria() {
                                 </SubCategsBlockExtra>
                                 <br />
                             </>
-                        }
+                        } */}
 
                         <TextTitle
                             style={{ fontWeight: 'bold' }}
