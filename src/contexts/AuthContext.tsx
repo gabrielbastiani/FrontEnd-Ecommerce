@@ -9,7 +9,7 @@ type AuthContextData = {
   customer: UserProps;
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
-  signOut: () => void;
+  signOut(): void;
 }
 
 type UserProps = {

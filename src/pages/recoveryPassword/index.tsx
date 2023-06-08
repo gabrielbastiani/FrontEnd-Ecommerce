@@ -40,7 +40,7 @@ export default function recoveryPassword() {
             setLoading(true);
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/customer/recoverCustomer', {
+            await apiClient.post('/customer/recoverPasswordEmail', {
                 email: email
             });
 

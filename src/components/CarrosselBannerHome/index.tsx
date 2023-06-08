@@ -43,7 +43,6 @@ const CarrosselBannerHome = () => {
     };
     
 
-
     return (
         <>
             {bannersHome.length < 1 ? (

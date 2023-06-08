@@ -338,9 +338,10 @@ export const HeaderStore = () => {
                                     <br />
                                     {orderArrayTextos.map((atend) => {
                                         return (
-                                            <SmallText key={atend.id}>
-                                                {atend?.description}
-                                            </SmallText>
+                                            <SmallText
+                                                key={atend.id}
+                                                dangerouslySetInnerHTML={{ __html: atend?.description }}
+                                            ></SmallText>
                                         )
                                     })}
 

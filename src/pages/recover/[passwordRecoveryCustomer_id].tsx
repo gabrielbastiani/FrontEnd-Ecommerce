@@ -28,7 +28,7 @@ export default function Recover() {
             }
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/customer/recoverCustomer?passwordRecoveryCustomer_id=${passwordRecoveryCustomer_id}`, { password })
+            await apiClient.put(`/customer/recoverCustomer?passwordRecoveryCustomer_id=${passwordRecoveryCustomer_id}`, { password: password })
 
             toast.success('Senha atualizada com sucesso.');
 

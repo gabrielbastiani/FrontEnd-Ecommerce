@@ -119,7 +119,9 @@ export const FooterStore = () => {
                     <Block2>
                         {orderArrayTextos.map((text) => {
                             return (
-                                <TextInstitucional>{text.description}</TextInstitucional>
+                                <TextInstitucional
+                                    dangerouslySetInnerHTML={{ __html: text?.description }}
+                                ></TextInstitucional>
                             )
                         })}
                     </Block2>

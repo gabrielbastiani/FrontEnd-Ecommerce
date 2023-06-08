@@ -21,6 +21,7 @@ import moment from 'moment';
 import { IMaskInput } from "react-imask";
 import { toast } from "react-toastify";
 import Titulos from "../../../components/Titulos";
+import { Button } from "../../../components/ui/Button";
 
 
 export default function Meusdados() {
@@ -46,13 +47,19 @@ export default function Meusdados() {
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
 
-    const [newslatters, setNewslatters] = useState("Nao");
-    const [check, setCheck] = useState(false);
+    const [newslatters, setNewslatters] = useState("");
+    const [check, setCheck] = useState(Boolean);
 
-    const handleChecked = (e: any) => {
-        setCheck(e.target.checked);
-        updateNews();
+    const handleChecked = () => {
+        setCheck(!check);
+        if (check === false) {
+            setNewslatters("Nao");
+        } else {
+            setNewslatters("Sim");
+        }
     };
+
+    console.log(newslatters)
 
     function isEmail(emails: string) {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
@@ -215,12 +222,12 @@ export default function Meusdados() {
             console.log(error);
             toast.error('Ops erro ao atualizar o preferencia pela newslatters.');
         }
-        if (newslatters === "Nao") {
+        if (newslatters === "Sim") {
             toast.success(`A preferencia da Newslatters foi ativada.`);
             return;
         }
 
-        if (newslatters === "Sim") {
+        if (newslatters === "Nao") {
             toast.error(`A preferencia da Newslatters foi desativada.`);
             return;
         }
@@ -356,7 +363,7 @@ export default function Meusdados() {
                                                 placeholder={emails}
                                                 value={emails}
                                                 onChange={(e) => setEmails(e.target.value)}
-                                                handleSubmit={updateDataCustomer}
+                                                handleSubmit={updateEmail}
                                             />
                                         }
                                     />
@@ -393,12 +400,28 @@ export default function Meusdados() {
                                                 type="checkbox"
                                                 value={newslatters}
                                                 onClick={handleChecked}
-                                                onChange={(e) => setNewslatters(check ? "Nao" : "Sim")}
                                                 checked={check}
                                             />
                                         }
                                     />
                                     &ensp;<TextNews>{newslatters}</TextNews>
+                                    &ensp;&ensp;
+                                    {newslatters === "Sim" ? (
+                                        <Button
+                                            style={{ padding: '5px', backgroundColor: 'green' }}
+                                            onClick={updateNews}
+                                        >
+                                            Salvar essa<br />prefêrencia para (SIM)
+                                        </Button>
+                                    ) :
+                                        <Button
+                                            style={{ padding: '5px' }}
+                                            onClick={updateNews}
+                                        >
+                                            Salvar essa<br />prefêrencia para (NÃO)
+                                        </Button>
+                                    }
+
                                 </BlockDados>
                             </SectionDate>
 
