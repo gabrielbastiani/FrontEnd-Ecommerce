@@ -108,7 +108,7 @@ const AccordionItem: React.ExoticComponent<import('@szhsin/react-accordion').Acc
 
 export const HeaderStore = () => {
 
-    const { user } = useContext(AuthContext);
+    const { customer } = useContext(AuthContext);
 
     const [logo, setLogo] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -138,13 +138,13 @@ export const HeaderStore = () => {
         async function loadStore() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/loja`);
+                const response = await apiClient.get(`/store`);
 
-                setLogo(response.data.logoLoja || "");
-                setNameLoja(response.data.nameLoja || "");
-                setEmailLoja(response.data.emailLoja || "");
-                setPhoneLoja(response.data.phoneLoja || "");
-                setCellPhone(response.data.cellPhoneLoja || "");
+                setLogo(response.data.logo || "");
+                setNameLoja(response.data.name || "");
+                setEmailLoja(response.data.email || "");
+                setPhoneLoja(response.data.phone || "");
+                setCellPhone(response.data.cellPhone || "");
 
             } catch (error) {
                 console.log(error);
@@ -157,7 +157,7 @@ export const HeaderStore = () => {
         async function loadTextosInstitucionais() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listTextosInstitucionais?slugPosicao=popup-menu-topo`);
+                const response = await apiClient.get(`/listInstitutionalText?slugPosition=popup-menu-topo`);
 
                 setTextLoja(response.data || []);
 
@@ -172,7 +172,7 @@ export const HeaderStore = () => {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=menu-topo&slugCategory=neutro`);
+                const { data } = await apiClient.get(`/positionListMenu?slugPosition=menu-topo&slugCategory=neutro`);
 
                 setCategoryNames(data?.group || []);
 
@@ -186,7 +186,7 @@ export const HeaderStore = () => {
     async function load(id: string) {
         const apiClient = setupAPIClient();
         try {
-            const response = await apiClient.get(`/listCategoriesGroup?groupId=${id}`);
+            const response = await apiClient.get(`/listCategoryMenu?parentId=${id}`);
 
             setCategories(response.data || []);
 
@@ -217,7 +217,7 @@ export const HeaderStore = () => {
             return;
         }
 
-        const filterProducts = products.filter((filt) => filt.nameProduct.toLowerCase().includes(target.value));
+        const filterProducts = products.filter((filt) => filt.name.toLowerCase().includes(target.value));
         setProducts(filterProducts);
 
     }
@@ -279,7 +279,7 @@ export const HeaderStore = () => {
                                     {products.map((value) => {
                                         return (
                                             <Link key={value.id} href={`/produto/${value?.slug}`} target="_blank">
-                                                <ListItems>{value?.nameProduct}</ListItems>
+                                                <ListItems>{value?.name}</ListItems>
                                             </Link>
                                         )
                                     })}
@@ -405,7 +405,7 @@ export const HeaderStore = () => {
                                     <DropDownLi>
                                         <Link key={item.id} href={'/categoria/' + `${item?.category?.slug}`}>
                                             <StyledA onMouseOver={() => load(item.id)} >
-                                                {item?.itemName}
+                                                {item?.categoryName}
                                             </StyledA>
                                         </Link>
 
@@ -414,7 +414,7 @@ export const HeaderStore = () => {
                                                 {categories.map((categ) => {
                                                     return (
                                                         <Link key={categ.id} href={'/categoria/' + `${categ?.category?.slug}`}>
-                                                            <Categ>{categ?.itemName}</Categ>
+                                                            <Categ>{categ?.categoryName}</Categ>
                                                         </Link>
                                                     )
                                                 })}
@@ -439,12 +439,12 @@ export const HeaderStore = () => {
                                         <AccordionItem
                                             key={item?.id}
                                             onClick={() => load(item?.id)}
-                                            header={item?.itemName}
+                                            header={item?.categoryName}
                                         >
                                             {categories.map((categ) => {
                                                 return (
                                                     <Link key={categ.id} href={'/categoria/' + `${categ?.category?.slug}`}>
-                                                        {categ?.itemName}
+                                                        {categ?.categoryName}
                                                     </Link>
                                                 )
                                             })}

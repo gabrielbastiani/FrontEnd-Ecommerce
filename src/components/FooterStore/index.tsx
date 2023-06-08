@@ -49,18 +49,18 @@ export const FooterStore = () => {
         async function loadStore() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/loja`);
+                const response = await apiClient.get(`/store`);
 
-                setLogo(response.data.logoLoja || "");
-                setNameLoja(response.data.nameLoja || "");
-                setEmailLoja(response.data.emailLoja || "");
-                setPhoneLoja(response.data.phoneLoja || "");
-                setRuaLoja(response.data.ruaLoja || "");
-                setNumeroLoja(response.data.numeroLoja || "");
-                setBairroLoja(response.data.bairroLoja || "");
-                setCepLoja(response.data.cepLoja || "");
-                setCityLoja(response.data.cityLoja || "");
-                setStateLoja(response.data.stateLoja || "");
+                setLogo(response.data.logo || "");
+                setNameLoja(response.data.name || "");
+                setEmailLoja(response.data.email || "");
+                setPhoneLoja(response.data.phone || "");
+                setRuaLoja(response.data.address || "");
+                setNumeroLoja(response.data.number || "");
+                setBairroLoja(response.data.neighborhood || "");
+                setCepLoja(response.data.cep || "");
+                setCityLoja(response.data.city || "");
+                setStateLoja(response.data.state || "");
 
             } catch (error) {
                 console.log(error);
@@ -73,7 +73,7 @@ export const FooterStore = () => {
         async function loadRedesSociais() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listRedesSociaisOrder?slugPosicao=rodape-loja`);
+                const response = await apiClient.get(`/listSocialMediaOrder?slugPosition=rodape-loja`);
 
                 setRedes(response.data || []);
 
@@ -88,7 +88,7 @@ export const FooterStore = () => {
         async function loadTextosInstitucionais() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listTextosInstitucionais?slugPosicao=rodape-loja`);
+                const response = await apiClient.get(`/listInstitutionalText?slugPosition=rodape-loja`);
 
                 setTextLoja(response.data || []);
 
@@ -136,7 +136,7 @@ export const FooterStore = () => {
                                 return (
                                     <BlockRedes key={item.id}>
                                         <Link href={item.link} target="_blank">
-                                            <Image src={'http://localhost:3333/files/' + item.imageRede} width={55} height={55} alt={nameLoja} />
+                                            <Image src={'http://localhost:3333/files/' + item.image} width={55} height={55} alt={nameLoja} />
                                         </Link>
                                     </BlockRedes>
                                 )

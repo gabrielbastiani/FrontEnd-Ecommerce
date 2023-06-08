@@ -27,7 +27,7 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
     const [productsVizualizados, setProductsVizualizados] = useState([]);
 
     useEffect(() => {
-        let dadosProducts = localStorage.getItem("@MaisVizualizados");
+        let dadosProducts = localStorage.getItem("@moreViewed");
 
         let dadosArray = JSON.parse(dadosProducts);
 
@@ -60,20 +60,20 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
                         {productsVizualizados.map((item) => {
                             return (
                                 <>
-                                    {item?.nameProducts ? (
+                                    {item?.name ? (
                                         <Item>
                                             <Link href={'/produto/' + item?.slug}>
                                                 <Images>
                                                     {item.photoProduct ? (
-                                                        <Image src={'http://localhost:3333/files/' + item?.photoProduct} width={450} height={300} alt={item?.nameProducts} />
+                                                        <Image src={'http://localhost:3333/files/' + item?.photoProduct} width={450} height={300} alt={item?.name} />
                                                     ) :
-                                                        <Image src={semimagem} width={450} height={400} alt={item?.nameProducts} />
+                                                        <Image src={semimagem} width={450} height={400} alt={item?.name} />
                                                     }
                                                 </Images>
                                             </Link>
                                             <Info>
                                                 <Link href={'/produto/' + item?.slug}>
-                                                    <Name>{item?.nameProducts}</Name>
+                                                    <Name>{item?.name}</Name>
                                                 </Link>
                                             </Info>
                                         </Item>

@@ -10,13 +10,13 @@ import { AuthContext } from '../../../contexts/AuthContext';
 
 export const MainHeader = () => {
 
-    const { user } = useContext(AuthContext);
+    const { customer } = useContext(AuthContext);
 
     return (
         <Container>
             <Profile>
                 <Welcome>Olá</Welcome>
-                <UserName>{user?.nameComplete}</UserName>
+                <UserName>{customer?.name}</UserName>
             </Profile>
         </Container>
     );

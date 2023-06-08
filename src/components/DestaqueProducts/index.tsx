@@ -79,24 +79,24 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
                                     <Link href={'/produto/' + item?.slug}>
                                         <Images>
                                             {item.photoproducts[0] ? (
-                                                <Image src={'http://localhost:3333/files/' + item.photoproducts[0].photo} width={450} height={300} alt={item?.nameProduct} />
+                                                <Image src={'http://localhost:3333/files/' + item.photoproducts[0].image} width={450} height={300} alt={item?.name} />
                                             ) :
-                                                <Image src={semimagem} width={450} height={400} alt={item?.nameProduct} />
+                                                <Image src={semimagem} width={450} height={400} alt={item?.name} />
                                             }
                                         </Images>
                                         <ImagesHover>
                                             {item.photoproducts[1] ? (
-                                                <Image src={'http://localhost:3333/files/' + item.photoproducts[1].photo} width={450} height={300} alt={item?.nameProduct} />
+                                                <Image src={'http://localhost:3333/files/' + item.photoproducts[1].image} width={450} height={300} alt={item?.name} />
                                             ) :
-                                                <Image src={semimagem} width={450} height={400} alt={item?.nameProduct} />
+                                                <Image src={semimagem} width={450} height={400} alt={item?.name} />
                                             }
                                         </ImagesHover>
                                     </Link>
                                     <Info>
                                         <Link href={'/produto/' + item?.slug}>
-                                            <Name>{item?.nameProduct}</Name>
-                                            <OldPrice>De {item?.promocao.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
-                                            <Price>Por {item?.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                            <Name>{item?.name}</Name>
+                                            <OldPrice>De {item?.promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
+                                            <Price>Por {item?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
                                         </Link>
                                         <BoxBuy>
                                             <Quantidade>

@@ -16,7 +16,7 @@ export default function Recover() {
     const [password, setPassword] = useState('');
 
     const router = useRouter();
-    let recovery_id = router.query.recovery_id;
+    let passwordRecoveryCustomer_id = router.query.passwordRecoveryCustomer_id;
 
     async function handleRecovery(event: FormEvent) {
         event.preventDefault();
@@ -28,7 +28,7 @@ export default function Recover() {
             }
 
             const apiClient = setupAPIClient();
-            await apiClient.put(`/recover?recovery_id=${recovery_id}`, { password })
+            await apiClient.put(`/customer/recoverCustomer?passwordRecoveryCustomer_id=${passwordRecoveryCustomer_id}`, { password })
 
             toast.success('Senha atualizada com sucesso.');
 

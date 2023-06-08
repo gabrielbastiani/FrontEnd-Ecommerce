@@ -65,8 +65,6 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
 
-    console.log(products)
-
     /* console.log(products.map((item) => {
         return(
             item.product.valueatributes.map((atr) => {
@@ -84,7 +82,7 @@ export default function Categoria() {
             try {
                 const response = await apiClient.get(`/findDateSlugCategory?slug=${slug}`);
 
-                setNameItens(response?.data?.categoryName);
+                setNameItens(response?.data?.name);
 
             } catch (error) {
                 console.log(error.response.data);
@@ -221,24 +219,24 @@ export default function Categoria() {
                                         <Link href={'/produto/' + prod?.product?.slug}>
                                             <Images>
                                                 {prod?.product?.photoproducts[0] ? (
-                                                    <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.photo} width={450} height={300} alt={prod?.product?.nameProduct} />
+                                                    <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.image} width={450} height={300} alt={prod?.product?.name} />
                                                 ) :
-                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
+                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.name} />
                                                 }
                                             </Images>
                                             <ImagesHover>
                                                 {prod?.product?.photoproducts[1] ? (
-                                                    <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[1]?.photo} width={450} height={300} alt={prod?.product?.nameProduct} />
+                                                    <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[1]?.image} width={450} height={300} alt={prod?.product?.name} />
                                                 ) :
-                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
+                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.name} />
                                                 }
                                             </ImagesHover>
                                         </Link>
                                         <Info>
                                             <Link href={'/produto/' + prod?.product?.slug}>
-                                                <Name>{prod?.product?.nameProduct}</Name>
-                                                <OldPrice>De {prod?.product?.promocao.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
-                                                <Price>Por {prod?.product?.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                                <Name>{prod?.product?.name}</Name>
+                                                <OldPrice>De {prod?.product?.promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
+                                                <Price>Por {prod?.product?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
                                             </Link>
                                             <BoxBuy>
                                                 <Quantidade>

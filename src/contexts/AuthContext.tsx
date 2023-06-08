@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 
 type AuthContextData = {
-  user: UserProps;
+  customer: UserProps;
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
   signOut: () => void;
@@ -14,9 +14,9 @@ type AuthContextData = {
 
 type UserProps = {
   id: string;
-  nameComplete: string;
+  name: string;
   email: string;
-  loja_id: string;
+  store_id: string;
 }
 
 type SignInProps = {
@@ -32,7 +32,7 @@ export const AuthContext = createContext({} as AuthContextData);
 
 export function signOut() {
   try {
-    destroyCookie(undefined, '@lojavirtual.token')
+    destroyCookie(undefined, '@storevirtual.token')
     Router.push('/');
   } catch {
     toast.error('Erro ao deslogar!');
@@ -41,23 +41,23 @@ export function signOut() {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<UserProps>();
-  const isAuthenticated = !!user;
+  const [customer, setUser] = useState<UserProps>();
+  const isAuthenticated = !!customer;
 
   useEffect(() => {
 
     // tentar pegar algo no cookie
-    const { '@lojavirtual.token': token } = parseCookies();
+    const { '@storevirtual.token': token } = parseCookies();
 
     if (token) {
-      api.get('/me').then(response => {
-        const { id, nameComplete, email, loja_id } = response.data;
+      api.get('/customer/me').then(response => {
+        const { id, name, email, store_id } = response.data;
 
         setUser({
           id,
-          nameComplete,
+          name,
           email,
-          loja_id
+          store_id
         });
 
       });
@@ -68,24 +68,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, password }: SignInProps) {
     try {
-      const response = await api.post('/session', {
+      const response = await api.post('/customer/session', {
         email,
         password
       });
       // console.log(response.data);
 
-      const { id, nameComplete, loja_id, token } = response.data;
+      const { id, name, store_id, token } = response.data;
 
-      setCookie(undefined, '@lojavirtual.token', token, {
+      setCookie(undefined, '@storevirtual.token', token, {
         maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
         path: "/" // Quais caminhos terao acesso ao cookie
       });
 
       setUser({
         id,
-        nameComplete,
+        name,
         email,
-        loja_id
+        store_id
       });
 
       //Passar para proximas requisiçoes o nosso token
@@ -93,7 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       toast.success('Logado com sucesso!');
 
-      //Redirecionar o user para /myAccount
+      //Redirecionar o customer para /myAccount
       Router.push('/myAccount/meusdados');
 
 
@@ -104,7 +104,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signOut }}>
+    <AuthContext.Provider value={{ customer, isAuthenticated, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   )

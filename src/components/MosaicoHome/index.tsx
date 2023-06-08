@@ -21,7 +21,7 @@ export const MosaicoHome = () => {
         async function loadHomeBanner() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/activeBanner?slugPosicao=banner-mosaico-pagina-principal`);
+                const response = await apiClient.get(`/activeBanner?slugPosition=banner-mosaico-pagina-principal`);
                 setMosaicoBanners(response.data || []);
             } catch (error) {
                 console.log(error.response.data);

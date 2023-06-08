@@ -70,9 +70,9 @@ export default function createAccount() {
 
     const [currentRadioValue, setCurrentValue] = useState('off');
 
-    const handleRadioChange = value => {
+    /* const handleRadioChange = value => {
         setCurrentValue(value);
-    };
+    }; */
 
     function isEmail(emails: string) {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails);
@@ -81,7 +81,7 @@ export default function createAccount() {
     useEffect(() => {
         async function loadLoja() {
             const apiClient = setupAPIClient();
-            const { data } = await apiClient.get('/loja');
+            const { data } = await apiClient.get('/store');
             setLojas_id(data?.id);
         }
         loadLoja();
@@ -119,23 +119,23 @@ export default function createAccount() {
             setLoading(true);
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/createUser', {
-                nameComplete: names,
+            await apiClient.post('/customer/createCustomer', {
+                name: names,
                 email: emails,
                 password: confirmPassword,
                 cpf: cpfs,
                 phone: phones,
-                dataNascimento: nascimento,
-                genero: generoSelected,
-                local: enderecos,
-                numero: numeros,
-                complemento: referencias,
-                bairro: bairros,
-                CEP: ceps,
-                cidade: cidades,
-                estado: estadosSelected,
+                dateOfBirth: nascimento,
+                gender: generoSelected,
+                address: enderecos,
+                number: numeros,
+                complement: referencias,
+                neighborhood: bairros,
+                cep: ceps,
+                city: cidades,
+                state: estadosSelected,
                 newslatter: news,
-                loja_id: lojas_id
+                store_id: lojas_id
             });
 
             toast.success('Cadastrado realizado com sucesso!!!');
@@ -177,7 +177,7 @@ export default function createAccount() {
                 cidades === '' ||
                 estadosSelected === ''
             ) {
-                toast.error('Preencha todos os campos');
+                toast.error('Preencha todos os campos.');
                 return
             }
 
@@ -194,22 +194,22 @@ export default function createAccount() {
             setLoading(true);
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/createUser', {
-                nameComplete: names,
+            await apiClient.post('/customer/createCustomer', {
+                name: names,
                 email: emails,
                 password: confirmPassword,
                 cnpj: cnpjs,
                 phone: phones,
-                inscricaoEstadual: inscricao,
-                local: enderecos,
-                numero: numeros,
-                complemento: referencias,
-                bairro: bairros,
-                CEP: ceps,
-                cidade: cidades,
-                estado: estadosSelected,
+                stateRegistration: inscricao,
+                address: enderecos,
+                number: numeros,
+                complement: referencias,
+                neighborhood: bairros,
+                cep: ceps,
+                city: cidades,
+                state: estadosSelected,
                 newslatter: news,
-                loja_id: lojas_id
+                store_id: lojas_id
             });
 
             toast.success('Cadastrado realizado com sucesso!!!');

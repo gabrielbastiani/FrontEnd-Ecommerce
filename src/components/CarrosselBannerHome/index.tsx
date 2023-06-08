@@ -13,7 +13,6 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Link from 'next/link';
 
 
-
 const CarrosselBannerHome = () => {
 
     const [bannersHome, setBannersHome] = useState([]);
@@ -22,7 +21,7 @@ const CarrosselBannerHome = () => {
         async function loadBannersHome() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/activeBanner?slugPosicao=banner-topo`);
+                const response = await apiClient.get(`/activeBanner?slugPosition=banner-topo`);
                 setBannersHome(response.data);
             } catch (error) {
                 console.log(error.response.data);

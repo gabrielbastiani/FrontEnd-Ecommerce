@@ -25,13 +25,13 @@ import Titulos from "../../../components/Titulos";
 
 export default function Meusdados() {
 
-    const { user } = useContext(AuthContext);
-    let user_id = user?.id;
+    const { customer } = useContext(AuthContext);
+    let customer_id = customer?.id;
 
     const [nameCompletes, setNameCompletes] = useState('');
     const [cpfs, setCpfs] = useState('');
     const [cnpjs, setCnpjs] = useState('');
-    const [inscricaoEstaduals, setInscricaoEstaduals] = useState('');
+    const [stateRegistration, setStateRegistration] = useState('');
     const [phones, setPhones] = useState('');
     const [emails, setEmails] = useState('');
     const [dataNascimentos, setDataNascimentos] = useState('');
@@ -54,31 +54,29 @@ export default function Meusdados() {
         updateNews();
     };
 
-
     function isEmail(emails: string) {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
-    }
-
+    };
 
     async function refreshUser() {
         const apiClient = setupAPIClient();
 
-        const response = await apiClient.get(`/listExactUser?user_id=${user_id}`);
+        const response = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
 
-        setNameCompletes(response?.data?.nameComplete);
+        setNameCompletes(response?.data?.name);
         setCpfs(response?.data?.cpf);
         setCnpjs(response?.data?.cnpj)
-        setInscricaoEstaduals(response?.data?.inscricaoEstadual);
+        setStateRegistration(response?.data?.stateRegistration);
         setPhones(response?.data?.phone);
         setEmails(response?.data?.email);
-        setDataNascimentos(response?.data?.dataNascimento);
-        setLocals(response?.data?.local);
-        setNumeros(response?.data?.numero);
-        setBairros(response?.data?.bairro);
-        setCidades(response?.data?.cidade);
-        setEstados(response?.data?.estado);
-        setCeps(response?.data?.CEP);
-        setGeneros(response?.data?.genero);
+        setDataNascimentos(response?.data?.dateOfBirth);
+        setLocals(response?.data?.address);
+        setNumeros(response?.data?.number);
+        setBairros(response?.data?.neighborhood);
+        setCidades(response?.data?.city);
+        setEstados(response?.data?.state);
+        setCeps(response?.data?.cep);
+        setGeneros(response?.data?.gender);
         setNewslatters(response?.data?.newslatter);
 
     }
@@ -87,39 +85,39 @@ export default function Meusdados() {
         async function loadUser() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listExactUser?user_id=${user_id}`);
+                const response = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
                 const {
-                    nameComplete,
+                    name,
                     email,
                     cpf,
                     cnpj,
-                    inscricaoEstadual,
+                    stateRegistration,
                     phone,
-                    dataNascimento,
-                    genero,
+                    dateOfBirth,
+                    gender,
                     newslatter,
-                    local,
-                    numero,
-                    bairro,
-                    CEP,
-                    cidade,
-                    estado
+                    address,
+                    number,
+                    neighborhood,
+                    cep,
+                    city,
+                    state
                 } = response.data;
 
-                setNameCompletes(nameComplete);
+                setNameCompletes(name);
                 setCnpjs(cnpj);
                 setCpfs(cpf);
-                setInscricaoEstaduals(inscricaoEstadual);
+                setStateRegistration(stateRegistration);
                 setPhones(phone);
                 setEmails(email);
-                setDataNascimentos(dataNascimento);
-                setLocals(local);
-                setNumeros(numero);
-                setBairros(bairro);
-                setCidades(cidade);
-                setEstados(estado);
-                setCeps(CEP);
-                setGeneros(genero);
+                setDataNascimentos(dateOfBirth);
+                setLocals(address);
+                setNumeros(number);
+                setBairros(neighborhood);
+                setCidades(city);
+                setEstados(state);
+                setCeps(cep);
+                setGeneros(gender);
                 setNewslatters(newslatter);
 
             } catch (error) {
@@ -136,7 +134,7 @@ export default function Meusdados() {
                 toast.error('Não deixe o nome em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/nameUserUpdate?user_id=${user_id}`, { nameComplete: nameCompletes });
+                await apiClient.put(`/customer/updateNameCustomer?customer_id=${customer_id}`, { name: nameCompletes });
                 toast.success('Nome atualizado com sucesso.');
                 refreshUser();
             }
@@ -146,71 +144,42 @@ export default function Meusdados() {
         }
     }
 
-    async function updateCpf() {
+    function handleChangeGenero(e: any) {
+        setGeneroSelected(e.target.value)
+    }
+
+    function handleChangeEstado(e: any) {
+        setEstadoSelected(e.target.value)
+    }
+
+    async function updateDataCustomer() {
         try {
             const apiClient = setupAPIClient();
             if (cpfs === '') {
-                toast.error('Não deixe o CPF em branco!!!');
+                toast.error('Não deixe o campo em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/cpfUserUpdate?user_id=${user_id}`, { cpf: cpfs });
-                toast.success('CPF atualizado com sucesso.');
+                await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, {
+                    cpf: cpfs,
+                    cnpj: cnpjs,
+                    stateRegistration: stateRegistration,
+                    phone: phones,
+                    dateOfBirth: dataNascimentos,
+                    gender: generoSelected,
+                    newslatter: newslatters,
+                    address: locals,
+                    number: numeros,
+                    neighborhood: bairros,
+                    cep: ceps,
+                    city: cidades,
+                    state: estadoSelected
+                });
+                toast.success('Dado atualizado com sucesso.');
                 refreshUser();
             }
         } catch (error) {
             console.log(error);
-            toast.error('Ops erro ao atualizar o CPF.');
-        }
-    }
-
-    async function updateCnpj() {
-        try {
-            const apiClient = setupAPIClient();
-            if (cnpjs === '') {
-                toast.error('Não deixe o CNPJ em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/cnpjUserUpdate?user_id=${user_id}`, { cnpj: cnpjs });
-                toast.success('CNPJ atualizado com sucesso.');
-                refreshUser();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o CNPJ.');
-        }
-    }
-
-    async function updatePhone() {
-        try {
-            const apiClient = setupAPIClient();
-            if (phones === '') {
-                toast.error('Não deixe o telefone em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/phoneUserUpdate?user_id=${user_id}`, { phone: phones });
-                toast.success('Telefone atualizado com sucesso.');
-                refreshUser();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o telefone.');
-        }
-    }
-
-    async function updateInscricaoEstadual() {
-        try {
-            const apiClient = setupAPIClient();
-            if (inscricaoEstaduals === '') {
-                toast.error('Não deixe a inscrição estadual em branco, caro seja isento, escreva a palavra ISENTO nesse campo!!!');
-                return;
-            } else {
-                await apiClient.put(`/inscricaoEstadualUserUpdate?user_id=${user_id}`, { inscricaoEstadual: inscricaoEstaduals });
-                toast.success('Inscrição estadual atualizado com sucesso.');
-                refreshUser();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar a inscrição estadual.');
+            toast.error('Ops erro ao atualizar o dado.');
         }
     }
 
@@ -225,7 +194,7 @@ export default function Meusdados() {
                 toast.error('Não deixe o email em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/emailUserUpdate?user_id=${user_id}`, { email: emails });
+                await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, { email: emails });
                 toast.success('Email atualizado com sucesso.');
                 refreshUser();
             }
@@ -235,27 +204,10 @@ export default function Meusdados() {
         }
     }
 
-    async function updateDataNascimento() {
-        try {
-            const apiClient = setupAPIClient();
-            if (dataNascimentos === '') {
-                toast.error('Não deixe a data de nascimento em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/dataDeNascimentoUserUpdate?user_id=${user_id}`, { dataNascimento: dataNascimentos });
-                toast.success('Data de nascimento atualizado com sucesso.');
-                refreshUser();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar a data de nascimento.');
-        }
-    }
-
     async function updateNews() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/newslatterUserUpdate?user_id=${user_id}`, { newslatter: newslatters });
+            await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, { newslatter: newslatters });
 
             refreshUser();
 
@@ -271,129 +223,6 @@ export default function Meusdados() {
         if (newslatters === "Sim") {
             toast.error(`A preferencia da Newslatters foi desativada.`);
             return;
-        }
-    }
-
-    function handleChangeGenero(e: any) {
-        setGeneroSelected(e.target.value)
-    }
-
-    async function updateGenero() {
-        try {
-            if (generoSelected === "") {
-                toast.error(`Selecione o genero, ou cancele a atualização apertando no botão vermelho!`);
-                return;
-            }
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/generoUserUpdate?user_id=${user_id}`, { genero: generoSelected });
-            toast.success('Genero atualizado com sucesso.');
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o genero.');
-        }
-    }
-
-    async function updateEndereco() {
-        try {
-            const apiClient = setupAPIClient();
-            if (locals === '') {
-                toast.error('Não deixe o endereço em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/ruaUserUpdate?user_id=${user_id}`, { local: locals });
-                toast.success('Endereço atualizado com sucesso.');
-                refreshUser();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o endereço.');
-        }
-    }
-
-    async function updateNumero() {
-        try {
-            const apiClient = setupAPIClient();
-            if (numeros === '') {
-                toast.error('Não deixe o número em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/numeroUserUpdate?user_id=${user_id}`, { numero: numeros });
-                toast.success('Número atualizado com sucesso.');
-                refreshUser();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o número.');
-        }
-    }
-
-    async function updateBairro() {
-        try {
-            const apiClient = setupAPIClient();
-            if (bairros === '') {
-                toast.error('Não deixe o bairro em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/bairroUserUpdate?user_id=${user_id}`, { bairro: bairros });
-                toast.success('Bairro atualizado com sucesso.');
-                refreshUser();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o bairro.');
-        }
-    }
-
-    async function updateCidade() {
-        try {
-            const apiClient = setupAPIClient();
-            if (cidades === '') {
-                toast.error('Não deixe a cidade em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/cityUserUpdate?user_id=${user_id}`, { cidade: cidades });
-                toast.success('Cidade atualizada com sucesso.');
-                refreshUser();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar a cidade.');
-        }
-    }
-
-    function handleChangeEstado(e: any) {
-        setEstadoSelected(e.target.value)
-    }
-
-    async function updateEstado() {
-        try {
-            if (estadoSelected === "") {
-                toast.error(`Selecione o estado, ou cancele a atualização apertando no botão vermelho!`);
-                return;
-            }
-            const apiClient = setupAPIClient();
-            await apiClient.put(`/estadoUserUpdate?user_id=${user_id}`, { estado: estadoSelected });
-            toast.success('Estado atualizado com sucesso.');
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o estado.');
-        }
-    }
-
-    async function updateCep() {
-        try {
-            const apiClient = setupAPIClient();
-            if (ceps === '') {
-                toast.error('Não deixe o CEP em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/cepUserUpdate?user_id=${user_id}`, { CEP: ceps });
-                toast.success('CEP atualizado com sucesso.');
-                refreshUser();
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error('Ops erro ao atualizar o CEP.');
         }
     }
 
@@ -449,7 +278,7 @@ export default function Meusdados() {
                                                     placeholder={cpfs}
                                                     value={cpfs}
                                                     onChange={(e) => setCpfs(e.target.value)}
-                                                    handleSubmit={updateCpf}
+                                                    handleSubmit={updateDataCustomer}
                                                 />
                                             }
                                         />
@@ -470,7 +299,7 @@ export default function Meusdados() {
                                                     placeholder={cnpjs}
                                                     value={cnpjs}
                                                     onChange={(e) => setCnpjs(e.target.value)}
-                                                    handleSubmit={updateCnpj}
+                                                    handleSubmit={updateDataCustomer}
                                                 />
                                             }
                                         />
@@ -486,12 +315,12 @@ export default function Meusdados() {
                                             chave={"Inscrição estadual"}
                                             dados={
                                                 <InputUpdate
-                                                    dado={inscricaoEstaduals}
+                                                    dado={stateRegistration}
                                                     type="text"
-                                                    placeholder={inscricaoEstaduals}
-                                                    value={inscricaoEstaduals}
-                                                    onChange={(e) => setInscricaoEstaduals(e.target.value)}
-                                                    handleSubmit={updateInscricaoEstadual}
+                                                    placeholder={stateRegistration}
+                                                    value={stateRegistration}
+                                                    onChange={(e) => setStateRegistration(e.target.value)}
+                                                    handleSubmit={updateDataCustomer}
                                                 />
                                             }
                                         />
@@ -511,7 +340,7 @@ export default function Meusdados() {
                                                 placeholder={phones}
                                                 value={phones}
                                                 onChange={(e) => setPhones(e.target.value)}
-                                                handleSubmit={updatePhone}
+                                                handleSubmit={updateDataCustomer}
                                             />
                                         }
                                     />
@@ -527,7 +356,7 @@ export default function Meusdados() {
                                                 placeholder={emails}
                                                 value={emails}
                                                 onChange={(e) => setEmails(e.target.value)}
-                                                handleSubmit={updateEmail}
+                                                handleSubmit={updateDataCustomer}
                                             />
                                         }
                                     />
@@ -549,7 +378,7 @@ export default function Meusdados() {
                                                     placeholder={dataNascimentos}
                                                     value={dataNascimentos}
                                                     onChange={(e) => setDataNascimentos(e.target.value)}
-                                                    handleSubmit={updateDataNascimento}
+                                                    handleSubmit={updateDataCustomer}
                                                 />
                                             }
                                         />
@@ -594,7 +423,7 @@ export default function Meusdados() {
                                                             { label: "Outro", value: "Outro" },
                                                         ]
                                                     }
-                                                    handleSubmit={updateGenero}
+                                                    handleSubmit={updateDataCustomer}
                                                 />
                                             }
                                         />
@@ -611,7 +440,7 @@ export default function Meusdados() {
                                                 placeholder={locals}
                                                 value={locals}
                                                 onChange={(e) => setLocals(e.target.value)}
-                                                handleSubmit={updateEndereco}
+                                                handleSubmit={updateDataCustomer}
                                             />
                                         }
                                     />
@@ -627,7 +456,7 @@ export default function Meusdados() {
                                                 placeholder={numeros}
                                                 value={numeros}
                                                 onChange={(e) => setNumeros(e.target.value)}
-                                                handleSubmit={updateNumero}
+                                                handleSubmit={updateDataCustomer}
                                             />
                                         }
                                     />
@@ -643,7 +472,7 @@ export default function Meusdados() {
                                                 placeholder={bairros}
                                                 value={bairros}
                                                 onChange={(e) => setBairros(e.target.value)}
-                                                handleSubmit={updateBairro}
+                                                handleSubmit={updateDataCustomer}
                                             />
                                         }
                                     />
@@ -659,7 +488,7 @@ export default function Meusdados() {
                                                 placeholder={cidades}
                                                 value={cidades}
                                                 onChange={(e) => setCidades(e.target.value)}
-                                                handleSubmit={updateCidade}
+                                                handleSubmit={updateDataCustomer}
                                             />
                                         }
                                     />
@@ -706,7 +535,7 @@ export default function Meusdados() {
                                                         { label: "Tocantins", value: "Tocantins" }
                                                     ]
                                                 }
-                                                handleSubmit={updateEstado}
+                                                handleSubmit={updateDataCustomer}
                                             />
                                         }
                                     />
@@ -714,7 +543,7 @@ export default function Meusdados() {
 
                                 <BlockDados>
                                     <TextoDados
-                                        chave={"CEP"}
+                                        chave={"Cep"}
                                         dados={
                                             <InputUpdate
                                                 dado={ceps}
@@ -725,7 +554,7 @@ export default function Meusdados() {
                                                 placeholder={ceps}
                                                 value={ceps}
                                                 onChange={(e) => setCeps(e.target.value)}
-                                                handleSubmit={updateCep}
+                                                handleSubmit={updateDataCustomer}
                                             />
                                         }
                                     />

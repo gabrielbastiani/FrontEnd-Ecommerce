@@ -13,14 +13,23 @@ import { BlockTop } from "../../../components/dateClientUx/BlockTops/styles";
 import Titulos from "../../../components/Titulos";
 import TabelasAccount from "../../../components/TabelasAccount";
 import { Avisos } from "../../../components/Avisos";
-import { ButtonPage, ContainerCategoryPage, ContainerPagination, Next, Previus, TextPage, TextTotal, TotalBoxItems } from "../../../components/PagesUx/styles";
+import {
+    ButtonPage,
+    ContainerCategoryPage,
+    ContainerPagination,
+    Next,
+    Previus,
+    TextPage,
+    TextTotal,
+    TotalBoxItems
+} from "../../../components/PagesUx/styles";
 import moment from "moment";
 
 
 export default function Meuspedidos() {
 
-    const { user } = useContext(AuthContext);
-    let user_id = user?.id;
+    const { customer } = useContext(AuthContext);
+    let customer_id = customer?.id;
 
     const [search, setSearch] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
@@ -34,7 +43,7 @@ export default function Meuspedidos() {
         async function allPedidosUser() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/allPedidosPageUser?page=${currentPage}&limit=${limit}&user_id=${user_id}`);
+                const { data } = await apiClient.get(`/allPedidosPageUser?page=${currentPage}&limit=${limit}&customer_id=${customer_id}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -53,7 +62,7 @@ export default function Meuspedidos() {
             }
         }
         allPedidosUser();
-    }, [currentPage, limit, total, user_id]);
+    }, [currentPage, limit, total, customer_id]);
 
     const dados = [];
     (search || []).forEach((item) => {

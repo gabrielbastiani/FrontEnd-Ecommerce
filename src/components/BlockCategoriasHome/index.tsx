@@ -18,7 +18,7 @@ const BlockCategoriasHome = () => {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=home-page&slugCategory=neutro`);
+                const { data } = await apiClient.get(`/positionListMenu?slugPosition=home-page&slugCategory=neutro`);
 
                 setCategoryNames(data?.group || []);
 
@@ -44,10 +44,10 @@ const BlockCategoriasHome = () => {
                             {categoryNames.map((item) => {
                                 return (
                                     <Link key={item.id} href={`/categoria/${item?.category?.slug}`} target="_blank">
-                                        {item?.imagegroupcategories[0]?.imageGroup ? (
+                                        {item?.imagemenucategories[0]?.image ? (
                                             <Image
-                                                src={'http://localhost:3333/files/' + item?.imagegroupcategories[0]?.imageGroup}
-                                                alt={item?.itemName}
+                                                src={'http://localhost:3333/files/' + item?.imagemenucategories[0]?.image}
+                                                alt={item?.categoryName}
                                                 width={330}
                                                 height={90}
                                             />
@@ -55,7 +55,7 @@ const BlockCategoriasHome = () => {
                                             null
                                         }
                                         <BoxCategory>
-                                            {item?.category?.categoryName}
+                                            {item?.category?.name}
                                         </BoxCategory>
                                     </Link>
                                 )

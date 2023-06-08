@@ -14,13 +14,13 @@ const Newsletters = () => {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [loja_id, setLoja_id] = useState('');
+    const [store_id, setLoja_id] = useState('');
 
     useEffect(() => {
         async function loadStore() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/loja`);
+                const response = await apiClient.get(`/store`);
                 setLoja_id(response.data.id || "");
                 
             } catch (error) {
@@ -52,7 +52,7 @@ const Newsletters = () => {
             }
 
             const apiClient = setupAPIClient();
-            await apiClient.post('/createNewsletter', {name: name, email: email, loja_id: loja_id});
+            await apiClient.post('/createNewsletter', {name: name, email: email, store_id: store_id});
 
             toast.success('Dados enviados com sucesso!');
 

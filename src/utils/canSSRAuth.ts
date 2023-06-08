@@ -8,7 +8,7 @@ export function canSSRAuth<P>(fn: GetServerSideProps<P>){
   return async (ctx: GetServerSidePropsContext): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(ctx);    
 
-    const token = cookies['@lojavirtual.token'];
+    const token = cookies['@storevirtual.token'];
 
     if(!token){
       return{
@@ -23,7 +23,7 @@ export function canSSRAuth<P>(fn: GetServerSideProps<P>){
       return await fn(ctx);
     }catch(err){
       if(err instanceof AuthTokenError){
-        destroyCookie(ctx, '@lojavirtual.token');
+        destroyCookie(ctx, '@storevirtual.token');
 
         return{
           redirect:{

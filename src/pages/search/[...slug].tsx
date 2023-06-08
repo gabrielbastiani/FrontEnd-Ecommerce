@@ -133,7 +133,7 @@ export default function Search() {
         async function loadGroups() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosicao=lateral-esquerda&slugCategory=${slug}`);
+                const { data } = await apiClient.get(`/pocisaoListGroup?slugPosition=lateral-esquerda&slugCategory=${slug}`);
 
                 setCategoriesLateral(data?.group || []);
 
@@ -253,7 +253,7 @@ export default function Search() {
                                                     <AccordionItem
                                                         key={item?.id}
                                                         onClick={() => load(item?.id)}
-                                                        header={item?.itemName}
+                                                        header={item?.categoryName}
                                                         itemKey={item?.id}
                                                     >
                                                     </AccordionItem>
@@ -288,7 +288,7 @@ export default function Search() {
                                                         <AccordionItem
                                                             key={filt?.id}
                                                             onClick={() => load(filt?.id)}
-                                                            header={filt?.itemName}
+                                                            header={filt?.categoryName}
                                                             itemKey={filt?.id}
                                                         >
                                                             <InputCategory
@@ -320,7 +320,7 @@ export default function Search() {
                                                         <AccordionItem
                                                             key={atr?.id}
                                                             onClick={() => loadAtribute(atr?.id)}
-                                                            header={atr?.itemName}
+                                                            header={atr?.categoryName}
                                                             itemKey={atr?.id}
                                                         >
                                                             {valorFilterAtribute.map((valu) => {
@@ -379,24 +379,24 @@ export default function Search() {
                                         <Link href={'/produto/' + prod?.product?.slug}>
                                             <Images>
                                                 {prod?.photoProduct1 ? (
-                                                    <Image src={'http://localhost:3333/files/' + prod?.photoProduct1?.photo} width={450} height={300} alt={prod?.product?.nameProduct} />
+                                                    <Image src={'http://localhost:3333/files/' + prod?.photoProduct1?.image} width={450} height={300} alt={prod?.product?.name} />
                                                 ) :
-                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
+                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.name} />
                                                 }
                                             </Images>
                                             <ImagesHover>
                                                 {prod?.photoProduct ? (
-                                                    <Image src={'http://localhost:3333/files/' + prod?.photoProduct?.photo} width={450} height={300} alt={prod?.product?.nameProduct} />
+                                                    <Image src={'http://localhost:3333/files/' + prod?.photoProduct?.image} width={450} height={300} alt={prod?.product?.name} />
                                                 ) :
-                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.nameProduct} />
+                                                    <Image src={semimagem} width={450} height={400} alt={prod?.product?.name} />
                                                 }
                                             </ImagesHover>
                                         </Link>
                                         <Info>
                                             <Link href={'/produto/' + prod?.product?.slug}>
-                                                <Name>{prod?.product?.nameProduct}</Name>
-                                                <OldPrice>De {prod?.product?.promocao.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
-                                                <Price>Por {prod?.product?.preco.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                                <Name>{prod?.product?.name}</Name>
+                                                <OldPrice>De {prod?.product?.promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
+                                                <Price>Por {prod?.product?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
                                             </Link>
                                             <BoxBuy>
                                                 <Quantidade>

@@ -15,8 +15,8 @@ import Titulos from "../../../components/Titulos";
 
 export default function Meusprodutosdigitais() {
 
-    const { user } = useContext(AuthContext);
-    let user_id = user?.id;
+    const { customer } = useContext(AuthContext);
+    let customer_id = customer?.id;
 
 
     return (

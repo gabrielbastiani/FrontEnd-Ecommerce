@@ -20,8 +20,8 @@ export default function Pedido() {
     const router = useRouter();
     let pedido_id = router.query.pedido_id;
     
-    const { user } = useContext(AuthContext);
-    let user_id = user?.id;
+    const { customer } = useContext(AuthContext);
+    let customer_id = customer?.id;
 
 
     return (

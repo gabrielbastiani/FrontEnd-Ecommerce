@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { setupAPIClient } from '../../services/api';
-import pagamentsFooterAccount from '../../assets/formas-de-pagamento-footer-account.png';
-import selosSegurancaFooterAccount from '../../assets/selos-de-seguranca-footer-account.png';
 import Image from 'next/image';
 import {
     FooterContainer,
@@ -33,7 +31,7 @@ const FooterAccount = () => {
         async function loadImagesInstitucional() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listImagesLoja?slugPosicao=rodape-loja`);
+                const response = await apiClient.get(`/listImagesStore?slugPosition=rodape-loja`);
 
                 setImagesInstitucional(response.data || []);
 
@@ -48,14 +46,14 @@ const FooterAccount = () => {
         async function loadStore() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/loja`);
+                const response = await apiClient.get(`/store`);
 
-                setCnpjLoja(response.data.cnpjLoja || "");
-                setRuaLoja(response.data.ruaLoja || "");
-                setNumeroLoja(response.data.numeroLoja || "");
-                setBairroLoja(response.data.bairroLoja || "");
-                setCepLoja(response.data.cepLoja || "");
-                setCityLoja(response.data.cityLoja || "");
+                setCnpjLoja(response.data.cnpj || "");
+                setRuaLoja(response.data.address || "");
+                setNumeroLoja(response.data.number || "");
+                setBairroLoja(response.data.neighborhood || "");
+                setCepLoja(response.data.cep || "");
+                setCityLoja(response.data.city || "");
 
             } catch (error) {
                 console.log(error);
