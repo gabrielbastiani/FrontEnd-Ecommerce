@@ -80,7 +80,7 @@ export default function Categoria() {
     }, [slug]);
 
     useEffect(() => {
-        async function loadFiltrosAtributos() {
+        async function loadFilters() {
             const apiClient = setupAPIClient();
             try {
                 const response = await apiClient.get(`/listFilterGroup?slugCategory=${slug}`);
@@ -91,7 +91,7 @@ export default function Categoria() {
                 console.log(error.response.data);
             }
         }
-        loadFiltrosAtributos();
+        loadFilters();
     }, [slug]);
 
     useEffect(() => {
