@@ -28,7 +28,7 @@ import {
     BoxText,
     TextTitle,
     TextAtribute,
-    AtributoText,
+    FilterText,
     SectionAtributes,
     SectionBoxAtributes,
     SubsAtribut,
@@ -57,23 +57,11 @@ export default function Categoria() {
     const router = useRouter();
     let slug = router.query.slug;
 
-    const [categoriesLateral, setCategoriesLateral] = useState([]);
     const [nameItens, setNameItens] = useState("");
 
-    const [atributosLateral, setAtributosLateral] = useState([]);
+    const [filterInPage, setFilterInPage] = useState([]);
 
     const [products, setProducts] = useState([]);
-
-
-    /* console.log(products.map((item) => {
-        return(
-            item.product.valueatributes.map((atr) => {
-                return(
-                    atr.valor
-                )
-            })
-        )
-    })) */
 
 
     useEffect(() => {
@@ -97,7 +85,7 @@ export default function Categoria() {
             try {
                 const response = await apiClient.get(`/listFilterGroup?slugCategory=${slug}`);
 
-                setAtributosLateral(response?.data || []);
+                setFilterInPage(response?.data || []);
 
             } catch (error) {
                 console.log(error.response.data);
@@ -150,40 +138,18 @@ export default function Categoria() {
                             <TextFilter>Filtrar por:</TextFilter>
                         </Filtros>
 
-
-                       
-
-
-                        {/* {categoriesLateral.length >= 1 ? (
-                            <>
-                                <TextTitle>Categorias:</TextTitle>
-                                <SubCategsBlockExtra>
-                                    {categoriesLateral.map((item) => {
-                                        return (
-                                            <>
-
-                                            </>
-                                        )
-                                    })}
-                                </SubCategsBlockExtra>
-                            </>
-                        ) :
-                            null
-                        } */}
-
-                        {/* {atributosLateral.length < 1 ? (
+                        {filterInPage.length < 1 ? (
                             null
                         ) :
                             <>
-                                <TextAtribute>Atributos:</TextAtribute>
+                                <TextAtribute>Categorias:</TextAtribute>
                                 <SubCategsBlockExtra>
-                                    {atributosLateral.map((item) => {
+                                    {filterInPage.map((item) => {
                                         return (
                                             <>
-                                                <TypeAtribute>{item?.atributoName}</TypeAtribute>
-                                                {item.filteratributos.map((val: any) => {
+                                                {item.filtercategories.map((val: any) => {
                                                     return (
-                                                        <AtributoText>{val?.valor}</AtributoText>
+                                                        <FilterText>{val?.name}</FilterText>
                                                     )
                                                 })}
                                             </>
@@ -192,7 +158,30 @@ export default function Categoria() {
                                 </SubCategsBlockExtra>
                                 <br />
                             </>
-                        } */}
+                        }
+
+                        {filterInPage.length < 1 ? (
+                            null
+                        ) :
+                            <>
+                                <TextAtribute>Atributos:</TextAtribute>
+                                <SubCategsBlockExtra>
+                                    {filterInPage.map((item) => {
+                                        return (
+                                            <>
+                                                <TypeAtribute>{item?.type}</TypeAtribute>
+                                                {item.filterattributes.map((val: any) => {
+                                                    return (
+                                                        <FilterText>{val?.value}</FilterText>
+                                                    )
+                                                })}
+                                            </>
+                                        )
+                                    })}
+                                </SubCategsBlockExtra>
+                                <br />
+                            </>
+                        }
 
                         <TextTitle
                             style={{ fontWeight: 'bold' }}
@@ -254,9 +243,6 @@ export default function Categoria() {
                                 )
                             })}
                         </GridSectionProducts>
-
-
-
                     </ContentPage>
                 </ContainerContent>
             </PageSection>

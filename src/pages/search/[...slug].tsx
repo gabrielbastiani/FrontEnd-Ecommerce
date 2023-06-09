@@ -28,7 +28,7 @@ import {
     SubCategsBlockExtra,
     BoxText,
     TextTitle,
-    AtributoText,
+    FilterText,
     SectionAtributes,
     SectionBoxAtributes,
     SubsAtribut,
@@ -333,7 +333,7 @@ export default function Search() {
                                                                                 name="atribut"
                                                                                 onClick={() => filterAtrib(valu?.atributo?.slugValor)}
                                                                             />
-                                                                            <AtributoText>{valu?.atributo?.valor}</AtributoText>
+                                                                            <FilterText>{valu?.atributo?.valor}</FilterText>
                                                                         </SubsAtribut>
                                                                     </>
                                                                 )

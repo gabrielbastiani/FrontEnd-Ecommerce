@@ -52,7 +52,7 @@ export const BoxText = styled.div`
   margin-bottom: 10px;
 `
 
-export const AtributoText = styled.small``
+export const FilterText = styled.small``
 
 export const SectionBoxAtributes = styled.div`
   display: flex;
