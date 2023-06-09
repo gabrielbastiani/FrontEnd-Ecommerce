@@ -246,7 +246,6 @@ export default function Categoria() {
                     </ContentPage>
                 </ContainerContent>
             </PageSection>
-
             <FooterStore />
             <FooterAccount />
         </>
