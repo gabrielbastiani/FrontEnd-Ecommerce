@@ -139,8 +139,6 @@ export default function Categoria() {
         )
     });
 
-    console.log(dados)
-
     useEffect(() => {
         async function loadSlugDate() {
             const apiClient = setupAPIClient();
