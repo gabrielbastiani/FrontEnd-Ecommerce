@@ -64,9 +64,10 @@ export const BoxText = styled.div`
   margin-bottom: 10px;
 `
 
-export const FilterText = styled.small`
+export const FilterText = styled.li`
   font-size: 14px;
   margin-bottom: 8px;
+  list-style-type: none;
 `
 
 export const SectionBoxAtributes = styled.div`
