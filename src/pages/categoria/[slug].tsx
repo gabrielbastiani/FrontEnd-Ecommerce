@@ -76,7 +76,7 @@ export default function Categoria() {
     const getFirstLis = firstLevel.map(buildTree) // retorno novo array com li's
     getFirstLis.forEach(li => menu.append(li)) // adicionar li's ao menu
 
-    function buildTree(item) {
+    function buildTree(item: any) {
 
         // primeiro elemento
         const li = document.createElement('li')
@@ -107,7 +107,7 @@ export default function Categoria() {
         return li
     }
 
-
+    tree.append(menu)
 
     const dados: any = [];
 
@@ -292,6 +292,12 @@ export default function Categoria() {
 
                         <TextAtribute>Categorias:</TextAtribute>
                         <SubCategsBlockExtra>
+
+
+                            <nav id="#tree"></nav>
+
+
+
                             {dados.map((item: any) => {
                                 return (
                                     <>
