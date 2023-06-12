@@ -82,7 +82,6 @@ export default function Categoria() {
         const li = document.createElement('li')
         li.innerHTML = item.name
 
-
         const children = categs.filter(child => child.parentId === item.id)
 
         if (children.length > 0) {
@@ -107,7 +106,9 @@ export default function Categoria() {
         return li
     }
 
-    tree.append(menu)
+    tree.append(menu);
+
+    
 
     const dados: any = [];
 
