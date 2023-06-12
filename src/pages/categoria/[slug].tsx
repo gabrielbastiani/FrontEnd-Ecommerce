@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Children } from "react";
 import { useRouter } from "next/router";
 import { setupAPIClient } from "../../services/api";
 import Head from "next/head";
@@ -64,53 +64,77 @@ export default function Categoria() {
     const [filterInPage, setFilterInPage] = useState([]);
     const [products, setProducts] = useState([]);
 
-
-
-    // pega a tag principal que irá receber o menu
-    const tree = document.querySelector('nav#tree')
-
-    // recebe toda a arvore de elementos
-    const menu = document.createElement('ul')
-
-    const firstLevel = categs.filter(item => !item.parentId)
-    const getFirstLis = firstLevel.map(buildTree) // retorno novo array com li's
-    getFirstLis.forEach(li => menu.append(li)) // adicionar li's ao menu
-
-    function buildTree(item: any) {
-
-        // primeiro elemento
-        const li = document.createElement('li')
-        li.innerHTML = item.name
-
-        const children = categs.filter(child => child.parentId === item.id)
-
-        if (children.length > 0) {
-
-            //adiciona um click para os parents
-            /* li.addEventListener('click', event => {
-                event.stopPropagation()
-                event.target.classList.toggle('open')
-            }) */
-
-            // adiciona uma classe identificadora de que tem filhos
-            li.classList.add('has-children')
-
-            // constroi os filhos
-            const subMenu = document.createElement('ul')
-            children.map(buildTree)
-                .forEach(li => subMenu.append(li))
-            li.append(subMenu)
-        }
-
-        // adicionar os elements ao menu
-        return li
-    }
-
-    tree.append(menu);
-
     
 
-    const dados: any = [];
+    useEffect(() => {
+
+        {/* <style jsx>{`
+            nav#tree {
+                margin-top: 45px;
+                max-width: 300px;
+            }
+
+            nav#tree ul {
+                padding-left: 16px;
+            }
+
+            nav#tree li {
+                list-style: none;
+                margin-top: 2px;
+            }
+
+            nav#tree li.has-children {
+                cursor: pointer;
+                position: relative;
+            }
+
+            nav#tree li.has-children:before {
+                content: '\f107';
+                color: #F3F3F4;
+                position: absolute;
+                font-family: FontAwesome;
+                font-size: 26px;
+                right: 15px;
+            }
+
+            li > ul {
+                display: none;
+            }
+
+            li.open > ul {
+                display: block;
+            }
+        `}</style> */}
+
+        // pega a tag principal que irá receber o menu
+        const tree = document.querySelector('nav#tree')
+        
+        // recebe toda a arvore de elementos
+        const menu = document.createElement('ul')
+
+        const firstLevel = categs.filter(item => !item?.parentId)
+
+        firstLevel.forEach( item => {
+            const li = document.createElement('li')
+            li.innerHTML = item?.name
+
+            const children = categs.filter(child => child?.parentId === item?.id)
+            children.forEach( child => {
+                const li2 = document.createElement('li')
+                li2.innerHTML = child?.name
+
+                li.append(li2)
+
+            })
+
+            menu.append(li)
+
+        })
+
+    }, [categs]);
+
+
+    /* const dados: any = [];
 
     subCategs.forEach((item) => {
 
@@ -182,7 +206,7 @@ export default function Categoria() {
                 "slug10": subSlug10
             }
         )
-    });
+    }); */
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -204,9 +228,9 @@ export default function Categoria() {
         async function loadCategs() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listCategorysDisponivel`);
+                const { data } = await apiClient.get(`/listCategorysDisponivel`);
 
-                setCategs(response?.data || []);
+                setCategs(data || []);
 
             } catch (error) {
                 console.log(error.response.data);
@@ -219,9 +243,9 @@ export default function Categoria() {
         async function loadSubCategs() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/categoriesInPageCategory?parentId=${idCateg}`);
+                const { data } = await apiClient.get(`/categoriesInPageCategory?parentId=${idCateg}`);
 
-                setSubCategs(response?.data || []);
+                setSubCategs(data || []);
 
             } catch (error) {
                 console.log(error.response.data);
@@ -263,8 +287,44 @@ export default function Categoria() {
 
 
     return (
-
         <>
+            {/* <style jsx>{`
+            nav#tree {
+                margin-top: 45px;
+                max-width: 300px;
+            }
+
+            nav#tree ul {
+                padding-left: 16px;
+            }
+
+            nav#tree li {
+                list-style: none;
+                margin-top: 2px;
+            }
+
+            nav#tree li.has-children {
+                cursor: pointer;
+                position: relative;
+            }
+
+            nav#tree li.has-children:before {
+                content: '\f107';
+                color: #F3F3F4;
+                position: absolute;
+                font-family: FontAwesome;
+                font-size: 26px;
+                right: 15px;
+            }
+
+            li > ul {
+                display: none;
+            }
+
+            li.open > ul {
+                display: block;
+            }
+        `}</style> */}
 
             <Head>
                 <title>{nameItens}</title>
@@ -295,11 +355,11 @@ export default function Categoria() {
                         <SubCategsBlockExtra>
 
 
-                            <nav id="#tree"></nav>
+                            <nav id="tree"></nav>
 
 
 
-                            {dados.map((item: any) => {
+                            {/* {dados.map((item: any) => {
                                 return (
                                     <>
                                         <FilterText>{item.name}</FilterText>
@@ -314,7 +374,7 @@ export default function Categoria() {
                                         <FilterText>{item.name10}</FilterText>
                                     </>
                                 )
-                            })}
+                            })} */}
                         </SubCategsBlockExtra>
 
                         {filterInPage.length
