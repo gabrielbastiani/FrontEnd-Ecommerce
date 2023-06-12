@@ -65,52 +65,96 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
 
+
+    // pega a tag principal que irá receber o menu
+    const tree = document.querySelector('nav#tree')
+
+    // recebe toda a arvore de elementos
+    const menu = document.createElement('ul')
+
+    const firstLevel = categs.filter(item => !item.parentId)
+    const getFirstLis = firstLevel.map(buildTree) // retorno novo array com li's
+    getFirstLis.forEach(li => menu.append(li)) // adicionar li's ao menu
+
+    function buildTree(item) {
+
+        // primeiro elemento
+        const li = document.createElement('li')
+        li.innerHTML = item.name
+
+
+        const children = categs.filter(child => child.parentId === item.id)
+
+        if (children.length > 0) {
+
+            //adiciona um click para os parents
+            /* li.addEventListener('click', event => {
+                event.stopPropagation()
+                event.target.classList.toggle('open')
+            }) */
+
+            // adiciona uma classe identificadora de que tem filhos
+            li.classList.add('has-children')
+
+            // constroi os filhos
+            const subMenu = document.createElement('ul')
+            children.map(buildTree)
+                .forEach(li => subMenu.append(li))
+            li.append(subMenu)
+        }
+
+        // adicionar os elements ao menu
+        return li
+    }
+
+
+
     const dados: any = [];
 
     subCategs.forEach((item) => {
 
         const getChild = categs.filter(child => child.parentId === item.id);
-        const subName = getChild.map((sub) => {return(<FilterText>{sub.name}</FilterText>)});
+        const subName = getChild.map((sub) => { return (<FilterText>{sub.name}</FilterText>) });
         const subSlug = getChild.map(sub => sub.slug || "");
         const subId = getChild.map(sub => sub.id || "");
 
         const getChild3 = categs.filter(child3 => String(subId) === child3.parentId);
-        const subName3 = getChild3.map((sub3) => {return(<FilterText>{sub3.name}</FilterText>)});
+        const subName3 = getChild3.map((sub3) => { return (<FilterText>{sub3.name}</FilterText>) });
         const subSlug3 = getChild3.map(sub3 => sub3.slug || "");
         const subId2 = getChild3.map(sub3 => sub3.id || "");
 
         const getChild4 = categs.filter(child4 => String(subId2) === child4.parentId);
-        const subName4 = getChild4.map((sub4) => {return(<FilterText>{sub4.name}</FilterText>)});
+        const subName4 = getChild4.map((sub4) => { return (<FilterText>{sub4.name}</FilterText>) });
         const subSlug4 = getChild4.map(sub4 => sub4.slug || "");
         const subId3 = getChild4.map(sub4 => sub4.id || "");
 
         const getChild5 = categs.filter(child5 => String(subId3) === child5.parentId);
-        const subName5 = getChild5.map((sub5) => {return(<FilterText>{sub5.name}</FilterText>)});
+        const subName5 = getChild5.map((sub5) => { return (<FilterText>{sub5.name}</FilterText>) });
         const subSlug5 = getChild5.map(sub5 => sub5.slug || "");
         const subId4 = getChild5.map(sub5 => sub5.id || "");
 
         const getChild6 = categs.filter(child6 => String(subId4) === child6.parentId);
-        const subName6 = getChild6.map((sub6) => {return(<FilterText>{sub6.name}</FilterText>)});
+        const subName6 = getChild6.map((sub6) => { return (<FilterText>{sub6.name}</FilterText>) });
         const subSlug6 = getChild6.map(sub6 => sub6.slug || "");
         const subId5 = getChild6.map(sub6 => sub6.id || "");
 
         const getChild7 = categs.filter(child7 => String(subId5) === child7.parentId);
-        const subName7 = getChild7.map((sub7) => {return(<FilterText>{sub7.name}</FilterText>)});
+        const subName7 = getChild7.map((sub7) => { return (<FilterText>{sub7.name}</FilterText>) });
         const subSlug7 = getChild7.map(sub7 => sub7.slug || "");
         const subId6 = getChild7.map(sub7 => sub7.id || "");
 
         const getChild8 = categs.filter(child8 => String(subId6) === child8.parentId);
-        const subName8 = getChild8.map((sub8) => {return(<FilterText>{sub8.name}</FilterText>)});
+        const subName8 = getChild8.map((sub8) => { return (<FilterText>{sub8.name}</FilterText>) });
         const subSlug8 = getChild8.map(sub8 => sub8.slug || "");
         const subId7 = getChild8.map(sub8 => sub8.id || "");
 
         const getChild9 = categs.filter(child9 => String(subId7) === child9.parentId);
-        const subName9 = getChild9.map((sub9) => {return(<FilterText>{sub9.name}</FilterText>)});
+        const subName9 = getChild9.map((sub9) => { return (<FilterText>{sub9.name}</FilterText>) });
         const subSlug9 = getChild9.map(sub9 => sub9.slug || "");
         const subId8 = getChild9.map(sub9 => sub9.id || "");
 
         const getChild10 = categs.filter(child10 => String(subId8) === child10.parentId);
-        const subName10 = getChild10.map((sub10) => {return(<FilterText>{sub10.name}</FilterText>)});
+        const subName10 = getChild10.map((sub10) => { return (<FilterText>{sub10.name}</FilterText>) });
         const subSlug10 = getChild10.map(sub10 => sub10.slug || "");
 
         dados.push(
