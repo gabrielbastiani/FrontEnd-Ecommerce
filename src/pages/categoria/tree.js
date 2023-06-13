@@ -16,7 +16,6 @@ export default function(data) {
         const li = document.createElement('li')
         li.innerHTML = item.name
 
-
         const children = data.filter(child => child.parent === item.id)
 
         if(children.length > 0) {

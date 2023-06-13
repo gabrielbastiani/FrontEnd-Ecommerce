@@ -52,6 +52,7 @@ import semimagem from '../../assets/semfoto.png';
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
 
+
 export default function Categoria() {
 
     const router = useRouter();
@@ -63,94 +64,48 @@ export default function Categoria() {
     const [subCategs, setSubCategs] = useState([]);
     const [filterInPage, setFilterInPage] = useState([]);
     const [products, setProducts] = useState([]);
-    
+
 
     useEffect(() => {
 
-        {/* <style jsx>{`
-            nav#tree {
-                margin-top: 45px;
-                max-width: 300px;
-            }
+        const tree = document.querySelector('div#tree');
 
-            nav#tree ul {
-                padding-left: 16px;
-            }
+        const menu = document.createElement('div');
 
-            nav#tree li {
-                list-style: none;
-                margin-top: 2px;
-            }
-
-            nav#tree li.has-children {
-                cursor: pointer;
-                position: relative;
-            }
-
-            nav#tree li.has-children:before {
-                content: '\f107';
-                color: #F3F3F4;
-                position: absolute;
-                font-family: FontAwesome;
-                font-size: 26px;
-                right: 15px;
-            }
-
-            li > ul {
-                display: none;
-            }
-
-            li.open > ul {
-                display: block;
-            }
-        `}</style> */}
-
-        // pega a tag principal que irá receber o menu
-        const tree = document.querySelector('nav#tree')
-
-        // recebe toda a arvore de elementos
-        const menu = document.createElement('ul')
-
-        const firstLevel = categs.filter(item => !item.parent)
-        const getFirstLis = firstLevel.map(buildTree) // retorno novo array com li's
-        getFirstLis.forEach(li => menu.append(li)) // adicionar li's ao menu
-
+        const firstLevel = subCategs.filter(item => item);
+        const getFirstLis = firstLevel.map(buildTree);
+        getFirstLis.forEach(label => menu.append(label));
 
         function buildTree(item: any) {
 
-            // primeiro elemento
-            const li = document.createElement('li')
-            li.style.listStyle = 'none'
-            li.innerHTML = item.name
+            const label = document.createElement('label');
+            label.innerHTML = item?.name;
 
-            const children = categs.filter(child => child.parent === item.id)
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = item?.name;
+            checkbox.id = item?.id;
+            checkbox.value = item?.slug;
 
-            if (children.length > 0) {
+            checkbox.style.float = 'left';
+            checkbox.style.marginRight = '10px';
 
-                //adiciona um click para os parents
-                li.addEventListener('click', event => {
-                    event.stopPropagation()/* @ts-ignore */
-                    event.target.classList.toggle('open')
-                })
+            label.append(checkbox);
 
-                // adiciona uma classe identificadora de que tem filhos
-                li.classList.add('has-children')
+            const children = categs.filter(child => child?.parentId === item?.id);
 
-                // constroi os filhos
-                const subMenu = document.createElement('ul')
-                children.map(buildTree)
-                    .forEach(li => subMenu.append(li))
-                li.append(subMenu)
-            }
+            const subMenu = document.createElement('div');
 
-            // adicionar os elements ao menu
-            return li
+            children.map(buildTree)
+                .forEach(label => subMenu.append(label))
+            label.append(subMenu);
+
+            return label;
         }
 
-        // adiciona o menu no HTML
-        tree.append(menu)
+        tree.append(menu);
 
-    }, [categs]);
+    }, [subCategs, categs]);
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -232,44 +187,6 @@ export default function Categoria() {
 
     return (
         <>
-            <style jsx>{`
-            nav#tree {
-                margin-top: 45px;
-                max-width: 300px;
-            }
-
-            nav#tree ul {
-                padding-left: 16px;
-            }
-
-            nav#tree li {
-                list-style: none;
-                margin-top: 2px;
-            }
-
-            nav#tree li.has-children {
-                cursor: pointer;
-                position: relative;
-            }
-
-            /* nav#tree li.has-children:before {
-                content: '\f107';
-                color: #F3F3F4;
-                position: absolute;
-                font-family: FontAwesome;
-                font-size: 26px;
-                right: 15px;
-            } */
-
-            li > ul {
-                display: none;
-            }
-
-            li.open > ul {
-                display: block;
-            }
-        `}</style>
-
             <Head>
                 <title>{nameItens}</title>
             </Head>
@@ -298,7 +215,7 @@ export default function Categoria() {
                         <TextAtribute>Categorias:</TextAtribute>
                         <SubCategsBlockExtra>
 
-                            <nav id="tree"></nav>
+                            <div id="tree"></div>
 
                         </SubCategsBlockExtra>
 
