@@ -65,6 +65,9 @@ export default function Categoria() {
     const [filterInPage, setFilterInPage] = useState([]);
     const [products, setProducts] = useState([]);
 
+    const [filter, setFilter] = useState([]);
+
+    console.log(filter)
 
     useEffect(() => {
 
@@ -79,31 +82,48 @@ export default function Categoria() {
         function buildTree(item: any) {
 
             const label = document.createElement('label');
-            label.innerHTML = item?.name;
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.name = item?.name;
+            checkbox.name = "category";
             checkbox.id = item?.id;
             checkbox.value = item?.slug;
+            checkbox.checked;
+            checkbox.onclick=(getValue)
 
-            checkbox.style.float = 'left';
             checkbox.style.marginRight = '10px';
+            checkbox.style.marginBottom = '10px';
 
-            label.append(checkbox);
+            const textContent = document.createTextNode(`${item?.name}`);
+
+            label.appendChild(checkbox);
+            label.appendChild(textContent);
 
             const children = categs.filter(child => child?.parentId === item?.id);
 
             const subMenu = document.createElement('div');
 
             children.map(buildTree)
-                .forEach(label => subMenu.append(label))
-            label.append(subMenu);
+                .forEach(label => subMenu.appendChild(label))
+            label.appendChild(subMenu);
+
+            function getValue() {
+                var arr = [];
+                var inputElements = document.getElementsByName("category")
+                for(var i=0; inputElements[i]; ++i){
+                    /* @ts-ignore */
+                    if(inputElements[i].checked)
+                    /* @ts-ignore */
+                    arr.push(inputElements[i].value);
+                }
+                setFilter(arr)
+                return arr;
+            }
 
             return label;
         }
 
-        tree.append(menu);
+        tree.appendChild(menu);
 
     }, [subCategs, categs]);
 
