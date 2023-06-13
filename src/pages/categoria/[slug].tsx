@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, Children } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { setupAPIClient } from "../../services/api";
 import Head from "next/head";
@@ -63,7 +63,6 @@ export default function Categoria() {
     const [subCategs, setSubCategs] = useState([]);
     const [filterInPage, setFilterInPage] = useState([]);
     const [products, setProducts] = useState([]);
-
     
 
     useEffect(() => {
@@ -108,105 +107,50 @@ export default function Categoria() {
 
         // pega a tag principal que irá receber o menu
         const tree = document.querySelector('nav#tree')
-        
+
         // recebe toda a arvore de elementos
         const menu = document.createElement('ul')
 
-        const firstLevel = categs.filter(item => !item?.parentId)
+        const firstLevel = categs.filter(item => !item.parent)
+        const getFirstLis = firstLevel.map(buildTree) // retorno novo array com li's
+        getFirstLis.forEach(li => menu.append(li)) // adicionar li's ao menu
 
-        firstLevel.forEach( item => {
+
+        function buildTree(item: any) {
+
+            // primeiro elemento
             const li = document.createElement('li')
-            li.innerHTML = item?.name
+            li.style.listStyle = 'none'
+            li.innerHTML = item.name
 
-            const children = categs.filter(child => child?.parentId === item?.id)
-            children.forEach( child => {
-                const li2 = document.createElement('li')
-                li2.innerHTML = child?.name
+            const children = categs.filter(child => child.parent === item.id)
 
-                li.append(li2)
+            if (children.length > 0) {
 
-            })
+                //adiciona um click para os parents
+                li.addEventListener('click', event => {
+                    event.stopPropagation()/* @ts-ignore */
+                    event.target.classList.toggle('open')
+                })
 
-            menu.append(li)
+                // adiciona uma classe identificadora de que tem filhos
+                li.classList.add('has-children')
 
-        })
+                // constroi os filhos
+                const subMenu = document.createElement('ul')
+                children.map(buildTree)
+                    .forEach(li => subMenu.append(li))
+                li.append(subMenu)
+            }
+
+            // adicionar os elements ao menu
+            return li
+        }
+
+        // adiciona o menu no HTML
+        tree.append(menu)
 
     }, [categs]);
-
-
-    /* const dados: any = [];
-
-    subCategs.forEach((item) => {
-
-        const getChild = categs.filter(child => child.parentId === item.id);
-        const subName = getChild.map((sub) => { return (<FilterText>{sub.name}</FilterText>) });
-        const subSlug = getChild.map(sub => sub.slug || "");
-        const subId = getChild.map(sub => sub.id || "");
-
-        const getChild3 = categs.filter(child3 => String(subId) === child3.parentId);
-        const subName3 = getChild3.map((sub3) => { return (<FilterText>{sub3.name}</FilterText>) });
-        const subSlug3 = getChild3.map(sub3 => sub3.slug || "");
-        const subId2 = getChild3.map(sub3 => sub3.id || "");
-
-        const getChild4 = categs.filter(child4 => String(subId2) === child4.parentId);
-        const subName4 = getChild4.map((sub4) => { return (<FilterText>{sub4.name}</FilterText>) });
-        const subSlug4 = getChild4.map(sub4 => sub4.slug || "");
-        const subId3 = getChild4.map(sub4 => sub4.id || "");
-
-        const getChild5 = categs.filter(child5 => String(subId3) === child5.parentId);
-        const subName5 = getChild5.map((sub5) => { return (<FilterText>{sub5.name}</FilterText>) });
-        const subSlug5 = getChild5.map(sub5 => sub5.slug || "");
-        const subId4 = getChild5.map(sub5 => sub5.id || "");
-
-        const getChild6 = categs.filter(child6 => String(subId4) === child6.parentId);
-        const subName6 = getChild6.map((sub6) => { return (<FilterText>{sub6.name}</FilterText>) });
-        const subSlug6 = getChild6.map(sub6 => sub6.slug || "");
-        const subId5 = getChild6.map(sub6 => sub6.id || "");
-
-        const getChild7 = categs.filter(child7 => String(subId5) === child7.parentId);
-        const subName7 = getChild7.map((sub7) => { return (<FilterText>{sub7.name}</FilterText>) });
-        const subSlug7 = getChild7.map(sub7 => sub7.slug || "");
-        const subId6 = getChild7.map(sub7 => sub7.id || "");
-
-        const getChild8 = categs.filter(child8 => String(subId6) === child8.parentId);
-        const subName8 = getChild8.map((sub8) => { return (<FilterText>{sub8.name}</FilterText>) });
-        const subSlug8 = getChild8.map(sub8 => sub8.slug || "");
-        const subId7 = getChild8.map(sub8 => sub8.id || "");
-
-        const getChild9 = categs.filter(child9 => String(subId7) === child9.parentId);
-        const subName9 = getChild9.map((sub9) => { return (<FilterText>{sub9.name}</FilterText>) });
-        const subSlug9 = getChild9.map(sub9 => sub9.slug || "");
-        const subId8 = getChild9.map(sub9 => sub9.id || "");
-
-        const getChild10 = categs.filter(child10 => String(subId8) === child10.parentId);
-        const subName10 = getChild10.map((sub10) => { return (<FilterText>{sub10.name}</FilterText>) });
-        const subSlug10 = getChild10.map(sub10 => sub10.slug || "");
-
-        dados.push(
-            {
-                "name": item.name,
-                "slug": item.slug,
-                "name2": subName,
-                "slug2": subSlug,
-                "name3": subName3,
-                "slug3": subSlug3,
-                "name4": subName4,
-                "slug4": subSlug4,
-                "name5": subName5,
-                "slug5": subSlug5,
-                "name6": subName6,
-                "slug6": subSlug6,
-                "name7": subName7,
-                "slug7": subSlug7,
-                "name8": subName8,
-                "slug8": subSlug8,
-                "name9": subName9,
-                "slug9": subSlug9,
-                "name10": subName10,
-                "slug10": subSlug10
-            }
-        )
-    }); */
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -288,7 +232,7 @@ export default function Categoria() {
 
     return (
         <>
-            {/* <style jsx>{`
+            <style jsx>{`
             nav#tree {
                 margin-top: 45px;
                 max-width: 300px;
@@ -308,14 +252,14 @@ export default function Categoria() {
                 position: relative;
             }
 
-            nav#tree li.has-children:before {
+            /* nav#tree li.has-children:before {
                 content: '\f107';
                 color: #F3F3F4;
                 position: absolute;
                 font-family: FontAwesome;
                 font-size: 26px;
                 right: 15px;
-            }
+            } */
 
             li > ul {
                 display: none;
@@ -324,7 +268,7 @@ export default function Categoria() {
             li.open > ul {
                 display: block;
             }
-        `}</style> */}
+        `}</style>
 
             <Head>
                 <title>{nameItens}</title>
@@ -354,27 +298,8 @@ export default function Categoria() {
                         <TextAtribute>Categorias:</TextAtribute>
                         <SubCategsBlockExtra>
 
-
                             <nav id="tree"></nav>
 
-
-
-                            {/* {dados.map((item: any) => {
-                                return (
-                                    <>
-                                        <FilterText>{item.name}</FilterText>
-                                        <FilterText>{item.name2}</FilterText>
-                                        <FilterText>{item.name3}</FilterText>
-                                        <FilterText>{item.name4}</FilterText>
-                                        <FilterText>{item.name5}</FilterText>
-                                        <FilterText>{item.name6}</FilterText>
-                                        <FilterText>{item.name7}</FilterText>
-                                        <FilterText>{item.name8}</FilterText>
-                                        <FilterText>{item.name9}</FilterText>
-                                        <FilterText>{item.name10}</FilterText>
-                                    </>
-                                )
-                            })} */}
                         </SubCategsBlockExtra>
 
                         {filterInPage.length
