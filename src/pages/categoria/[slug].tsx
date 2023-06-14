@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import { setupAPIClient } from "../../services/api";
 import Head from "next/head";
 import {
@@ -69,6 +69,10 @@ export default function Categoria() {
 
     console.log(filter)
 
+    const search = new URLSearchParams();
+
+    console.log(search)
+
     useEffect(() => {
 
         const tree = document.querySelector('div#tree');
@@ -89,7 +93,7 @@ export default function Categoria() {
             checkbox.id = item?.id;
             checkbox.value = item?.slug;
             checkbox.checked;
-            checkbox.onclick=(getValue)
+            checkbox.onclick = (getValue)
 
             checkbox.style.marginRight = '10px';
             checkbox.style.marginBottom = '10px';
@@ -110,11 +114,11 @@ export default function Categoria() {
             function getValue() {
                 var arr = [];
                 var inputElements = document.getElementsByName("category")
-                for(var i=0; inputElements[i]; ++i){
+                for (var i = 0; inputElements[i]; ++i) {
                     /* @ts-ignore */
-                    if(inputElements[i].checked)
-                    /* @ts-ignore */
-                    arr.push(inputElements[i].value);
+                    if (inputElements[i].checked)
+                        /* @ts-ignore */
+                        arr.push(inputElements[i].value);
                 }
                 setFilter(arr)
                 return arr;
@@ -126,6 +130,7 @@ export default function Categoria() {
         tree.appendChild(menu);
 
     }, [subCategs, categs]);
+
 
     useEffect(() => {
         async function loadSlugDate() {
