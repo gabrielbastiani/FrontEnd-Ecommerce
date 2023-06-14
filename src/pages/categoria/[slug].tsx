@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
+import Router from 'next/router';
 import { setupAPIClient } from "../../services/api";
 import Head from "next/head";
 import {
@@ -52,7 +53,6 @@ import semimagem from '../../assets/semfoto.png';
 import { AiOutlineShoppingCart } from "react-icons/ai";
 
 
-
 export default function Categoria() {
 
     const router = useRouter();
@@ -67,11 +67,6 @@ export default function Categoria() {
 
     const [filter, setFilter] = useState([]);
 
-    console.log(filter)
-
-    const search = new URLSearchParams();
-
-    console.log(search)
 
     useEffect(() => {
 
