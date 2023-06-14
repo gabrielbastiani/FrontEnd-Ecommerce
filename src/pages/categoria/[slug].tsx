@@ -51,6 +51,7 @@ import {
 import Image from "next/image";
 import semimagem from '../../assets/semfoto.png';
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import FilterImput from "../../components/FilterImput/FilterImput";
 
 
 export default function Categoria() {
@@ -236,6 +237,10 @@ export default function Categoria() {
                         <SubCategsBlockExtra>
 
                             <div id="tree"></div>
+
+                            <FilterImput
+                                data={filter}
+                            />
 
                         </SubCategsBlockExtra>
 
