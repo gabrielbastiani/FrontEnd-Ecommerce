@@ -66,7 +66,6 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
     const [filter, setFilter] = useState([]);
-    const filters = new Array(filter);
 
     const filterCategory = () => {
         const WEB_URL = 'http://localhost:3001';
@@ -79,7 +78,6 @@ export default function Categoria() {
         let params = new URLSearchParams(url.search);
         Router.push(`/search?${params}`);
     }
-
 
     useEffect(() => {
 
