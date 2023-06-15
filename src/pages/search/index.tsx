@@ -36,15 +36,7 @@ export default function SearchPage() {
     }, [url.search]);
 
 
-    console.log(filtersProducts.map((item) => {
-        return(
-            item.product.productcategories.map((pro) => {
-                return (
-                    pro
-                )
-            })
-        )
-    }))
+    console.log(filtersProducts)
 
 
 

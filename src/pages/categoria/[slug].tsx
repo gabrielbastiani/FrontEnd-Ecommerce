@@ -54,7 +54,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 
 
 export default function Categoria() {
-    
+
     const router = useRouter();
     let slug = router.query.slug;
 
@@ -64,16 +64,16 @@ export default function Categoria() {
     const [subCategs, setSubCategs] = useState([]);
     const [filterInPage, setFilterInPage] = useState([]);
     const [products, setProducts] = useState([]);
-
     const [filter, setFilter] = useState([]);
+
 
     const filterCategory = () => {
         const WEB_URL = 'http://localhost:3001';
         let param = '';
         filter && filter.map((ele) => {
-            param = param + 'q='+ele+'&'
+            param = param + 'q=' + ele + '&'
         });
-        const NEW_URL = WEB_URL+'?'+param;
+        const NEW_URL = WEB_URL + '?' + param;
         let url = new URL(NEW_URL);
         let params = new URLSearchParams(url.search);
         Router.push(`/search?${params}`);
@@ -259,13 +259,11 @@ export default function Categoria() {
                         </SubCategsBlockExtra>
 
                         {filterInPage.length
-
                             < 1 ? (null) : <>
                             <TextAtribute>Atributos:</TextAtribute>
                             <SubCategsBlockExtra>
                                 {filterInPage.map((item) => {
                                     return (
-
                                         <>
                                             <TypeAtribute key={item?.id}>{item?.type}</TypeAtribute>
                                             {item.filterattributes.map((val: any) => {
