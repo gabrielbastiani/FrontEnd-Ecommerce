@@ -51,7 +51,6 @@ import {
 import Image from "next/image";
 import semimagem from '../../assets/semfoto.png';
 import { AiOutlineShoppingCart } from "react-icons/ai";
-import FilterImput from "../../components/FilterImput/FilterImput";
 
 
 export default function Categoria() {
@@ -67,6 +66,15 @@ export default function Categoria() {
     const [products, setProducts] = useState([]);
 
     const [filter, setFilter] = useState([]);
+    const filters = new Array(filter);
+
+    const onSearch = () => {
+        let url = new URL(`http://localhost:3001/search?q=${filters}`);
+        let params = new URLSearchParams(url.search);
+        Router.push(`/search?${params}`);
+    }
+
+    console.log(filters)
 
 
     useEffect(() => {
@@ -114,7 +122,9 @@ export default function Categoria() {
                     /* @ts-ignore */
                     if (inputElements[i].checked)
                         /* @ts-ignore */
-                        arr.push(inputElements[i].value);
+                        arr.push(/* @ts-ignore */
+                            inputElements[i].value
+                        );/* @ts-ignore */
                 }
                 setFilter(arr)
                 return arr;
@@ -238,9 +248,11 @@ export default function Categoria() {
 
                             <div id="tree"></div>
 
-                            <FilterImput
-                                data={filter}
-                            />
+                            <button
+                                onClick={onSearch}
+                            >
+                                Buscar
+                            </button>
 
                         </SubCategsBlockExtra>
 

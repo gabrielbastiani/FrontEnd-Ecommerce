@@ -4,13 +4,13 @@ import { useSearchParams } from "next/navigation";
 
 export default function SearchPage() {
 
-    const params = {};
+    const searchParams = useSearchParams();
 
-    const search = useSearchParams();
+    const params = [];
 
-    search.forEach((value, key) => {
-        params[key] = value;
-    });
+  for(let entry of searchParams.entries()) {
+    params.push(entry);
+  }
 
     console.log(params)
 
