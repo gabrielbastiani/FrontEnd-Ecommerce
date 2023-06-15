@@ -54,7 +54,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 
 
 export default function Categoria() {
-
+    
     const router = useRouter();
     let slug = router.query.slug;
 
@@ -68,13 +68,17 @@ export default function Categoria() {
     const [filter, setFilter] = useState([]);
     const filters = new Array(filter);
 
-    const onSearch = () => {
-        let url = new URL(`http://localhost:3001/search?q=${filters}`);
+    const filterCategory = () => {
+        const WEB_URL = 'http://localhost:3001';
+        let param = '';
+        filter && filter.map((ele) => {
+            param = param + 'q='+ele+'&'
+        });
+        const NEW_URL = WEB_URL+'?'+param;
+        let url = new URL(NEW_URL);
         let params = new URLSearchParams(url.search);
         Router.push(`/search?${params}`);
     }
-
-    console.log(filters)
 
 
     useEffect(() => {
@@ -249,7 +253,7 @@ export default function Categoria() {
                             <div id="tree"></div>
 
                             <button
-                                onClick={onSearch}
+                                onClick={filterCategory}
                             >
                                 Buscar
                             </button>
