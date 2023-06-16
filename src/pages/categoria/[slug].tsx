@@ -125,7 +125,7 @@ export default function Categoria() {
                     if (inputElements[i].checked)
                         /* @ts-ignore */
                         arr.push(/* @ts-ignore */
-                            inputElements[i].value
+                            inputElements[i].slug
                         );/* @ts-ignore */
                 }
                 setFilter(arr)
