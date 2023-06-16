@@ -62,10 +62,43 @@ export default function Categoria() {
     const [idCateg, setIdCatg] = useState("");
     const [categs, setCategs] = useState([]);
     const [subCategs, setSubCategs] = useState([]);
-    const [filterInPage, setFilterInPage] = useState([]);
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState([]);
+    const [allProductsAttributes, setAllProductsAttributes] = useState([]);
+        
+    
 
+    /* const fiterAttrType = allProductsAttributes.filter(att => att.type ? att.type : null);
+    const fiterAttrValue = allProductsAttributes.filter(att => att.value ? att.value : null);
+    
+    const attrsType = Object.keys(fiterAttrType.reduce((acc, atribute) => ({
+        ...acc,
+        [atribute.type]: true,
+    }), {}));
+
+    const attrsValue = Object.keys(fiterAttrValue.reduce((acc, atribute) => ({
+        ...acc,
+        [atribute.value]: true,
+    }), {}));
+
+    const newAttr = new Array();
+    newAttr.push({
+        "type": attrsType,
+        "value": attrsValue
+    });
+
+    console.log(newAttr.map((item) => {
+        return (
+            item.type
+        )
+    })) */
+
+    const arrayIdAttr = products.map((ids) => ids.product_id);
+    let paramAttr = '';
+    arrayIdAttr && arrayIdAttr.map((item) => {
+        paramAttr = paramAttr + 'product_id=' + item + '&'
+    });
+    const valueAttr = '?' + paramAttr;
 
     const filterCategory = () => {
         const WEB_URL = 'http://localhost:3001';
@@ -76,13 +109,15 @@ export default function Categoria() {
         const NEW_URL = WEB_URL + '?' + param;
         let url = new URL(NEW_URL);
         let params = new URLSearchParams(url.search);
+
+        console.log(url.search)
+
         Router.push(`/search?${params}`);
     }
 
     useEffect(() => {
 
         const tree = document.querySelector('div#tree');
-
         const menu = document.createElement('div');
 
         const firstLevel = subCategs.filter(item => item);
@@ -125,7 +160,7 @@ export default function Categoria() {
                     if (inputElements[i].checked)
                         /* @ts-ignore */
                         arr.push(/* @ts-ignore */
-                            inputElements[i].slug
+                            inputElements[i].value
                         );/* @ts-ignore */
                 }
                 setFilter(arr)
@@ -138,7 +173,6 @@ export default function Categoria() {
         tree.appendChild(menu);
 
     }, [subCategs, categs]);
-
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -187,19 +221,19 @@ export default function Categoria() {
     }, [idCateg]);
 
     useEffect(() => {
-        async function loadFilters() {
+        async function loadAttributesproducts() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/listFilterGroup?slugCategory=${slug}`);
+                const { data } = await apiClient.get(`/allProductsAndAttributes${valueAttr}`);
 
-                setFilterInPage(response?.data || []);
+                setAllProductsAttributes(data || []);
 
             } catch (error) {
                 console.log(error.response.data);
             }
         }
-        loadFilters();
-    }, [slug]);
+        loadAttributesproducts();
+    }, [valueAttr]);
 
     useEffect(() => {
         async function loadProducts() {
@@ -250,15 +284,17 @@ export default function Categoria() {
 
                             <div id="tree"></div>
 
-                            <button
-                                onClick={filterCategory}
-                            >
-                                Buscar
-                            </button>
+                        </SubCategsBlockExtra>
+
+                        <TextAtribute>Atributos:</TextAtribute>
+                        <SubCategsBlockExtra>
 
                         </SubCategsBlockExtra>
 
-                        {filterInPage.length
+
+
+
+                        {/* {filterInPage.length
                             < 1 ? (null) : <>
                             <TextAtribute>Atributos:</TextAtribute>
                             <SubCategsBlockExtra>
@@ -279,13 +315,19 @@ export default function Categoria() {
                             </SubCategsBlockExtra>
                             <br />
                         </>
-                        }
+                        } */}
 
                         <TextTitle style={{ fontWeight: 'bold' }}>
                             Preço por:
                         </TextTitle>
 
                         <input type="range" id="price" name="price" min="0" max="999999999999" />
+
+                        <button
+                            onClick={filterCategory}
+                        >
+                            Buscar
+                        </button>
 
                     </AsideConteiner>
 
