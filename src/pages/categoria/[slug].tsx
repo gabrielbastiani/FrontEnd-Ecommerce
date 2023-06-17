@@ -66,6 +66,18 @@ export default function Categoria() {
     const [filter, setFilter] = useState([]);
     const [allProductsAttributes, setAllProductsAttributes] = useState([]);
 
+    const arrAttr = allProductsAttributes.map(item => item.typeAttribute);
+
+    const filterObj = {};
+    const arrayOb = arrAttr.filter((typ) => {
+        return filterObj.hasOwnProperty(typ?.type) ? false : (filterObj[typ?.type] = true)
+    });
+
+    const fitertype = arrayOb.filter(att => att?.type ? att?.type : null);
+
+    console.log(fitertype)
+
+
     /* const fiterAttrType = allProductsAttributes.filter(att => att.type ? att.type : null);
     const fiterAttrValue = allProductsAttributes.filter(att => att.value ? att.value : null);
     
@@ -335,11 +347,15 @@ export default function Categoria() {
                         <TextAtribute>Atributos:</TextAtribute>
                         <SubCategsBlockExtra>
 
-                            {data.map((item) => {
+                            {fitertype.map((item) => {
                                 return(
                                     <>
                                         <span>{item?.type}</span>
-                                        <span>{item?.value}</span>
+                                        {item?.relationattributeproducts.map((val) => {
+                                            return (
+                                                <span>{val?.id}</span>
+                                            )
+                                        })}
                                     </>
                                 )
                             })}
