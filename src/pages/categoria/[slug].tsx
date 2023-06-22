@@ -18,7 +18,7 @@ import { IoIosHome } from 'react-icons/io';
 import { BsFillFilterSquareFill } from 'react-icons/bs';
 import Link from "next/link";
 import {
-    InputCategory,
+    InputAttribute,
     SectionCategories,
     SmallText,
     SubsCategs,
@@ -66,42 +66,10 @@ export default function Categoria() {
     const [filter, setFilter] = useState([]);
     const [allProductsAttributes, setAllProductsAttributes] = useState([]);
 
-    const arrAttr = allProductsAttributes.map(item => item.typeAttribute);
-
     const filterObj = {};
-    const arrayOb = arrAttr.filter((typ) => {
+    const arrayOb = allProductsAttributes.filter((typ) => {
         return filterObj.hasOwnProperty(typ?.type) ? false : (filterObj[typ?.type] = true)
     });
-
-    const fitertype = arrayOb.filter(att => att?.type ? att?.type : null);
-
-    console.log(fitertype)
-
-
-    /* const fiterAttrType = allProductsAttributes.filter(att => att.type ? att.type : null);
-    const fiterAttrValue = allProductsAttributes.filter(att => att.value ? att.value : null);
-    
-    const attrsType = Object.keys(fiterAttrType.reduce((acc, atribute) => ({
-        ...acc,
-        [atribute.type]: true,
-    }), {}));
-
-    const attrsValue = Object.keys(fiterAttrValue.reduce((acc, atribute) => ({
-        ...acc,
-        [atribute.value]: true,
-    }), {}));
-
-    const newAttr = new Array();
-    newAttr.push({
-        "type": attrsType,
-        "value": attrsValue
-    });
-
-    console.log(newAttr.map((item) => {
-        return (
-            item.type
-        )
-    })) */
 
     const arrayIdAttr = products.map((ids) => ids.product_id);
     let paramAttr = '';
@@ -122,57 +90,6 @@ export default function Categoria() {
 
         Router.push(`/search?${params}`);
     }
-
-    const objectFilter = {};
-    const arrayOrigin = allProductsAttributes.filter((valor) => {
-        return objectFilter.hasOwnProperty(valor?.type) ? false : (objectFilter[valor?.type] = true)
-    });
-
-    const fiterAttrType = arrayOrigin.filter(att => att?.type ? att?.type : null);
-
-    const objectFilterAll = {};
-    const arrayOriginAll = allProductsAttributes.filter((valor) => {
-        return objectFilterAll.hasOwnProperty(valor?.value) ? false : (objectFilterAll[valor?.value] = true)
-    });
-
-    const filterValue = arrayOriginAll.filter(att => att?.value ? att?.value : null);
-
-    const data = fiterAttrType.concat(filterValue);
-
-    /* useEffect(() => {
-
-        const treeAttr = document.querySelector('div#treeAttr');
-        const typeAttr = data?.filter(item => !item?.parentId);
-
-        typeAttr?.forEach(item => {
-            const ul = document.createElement('ul');
-            ul.style.marginBottom = '12px';
-            ul.style.fontWeight = 'bold';
-            ul.innerHTML = item?.type;
-
-            const children = data?.filter(child => child?.parentId === item?.id);
-            children?.forEach(child2 => {
-
-                const valueText = document.createElement('li');
-                valueText.style.listStyle = 'none';
-
-                const li = document.createElement('li');
-                li.style.marginBottom = '8px';
-                li.style.marginTop = '8px';
-                li.style.fontWeight = '100';
-                li.innerHTML = child2?.value;
-
-                valueText?.appendChild(li);
-                ul?.appendChild(valueText);
-            });
-
-            treeAttr?.appendChild(ul);
-
-            console.log(treeAttr)
-
-        });
-
-    }, [data]); */
 
     useEffect(() => {
 
@@ -346,22 +263,34 @@ export default function Categoria() {
                         <br />
                         <TextAtribute>Atributos:</TextAtribute>
                         <SubCategsBlockExtra>
-
-                            {fitertype.map((item) => {
-                                return(
+                            {arrayOb.map((item) => {
+                                return (
                                     <>
-                                        <span>{item?.type}</span>
-                                        {item?.relationattributeproducts.map((val) => {
+                                        <TypeAtribute>{item?.typeAttribute?.type}</TypeAtribute>
+                                        {item?.typeAttribute?.valueattribute.map((val: any) => {
                                             return (
-                                                <span>{val?.id}</span>
+                                                <>
+                                                    {val?.RelationAttributeProduct.map((rel: any) => {
+                                                        return (
+                                                            <>
+                                                                <SectionAtributes>
+                                                                    <InputAttribute
+                                                                        type='checkbox'
+                                                                        name="attribute"
+                                                                        id={rel?.valueAttribute?.id}
+                                                                        value={rel?.valueAttribute?.slug}
+                                                                    />
+                                                                    <FilterText>{rel?.valueAttribute?.value}</FilterText>
+                                                                </SectionAtributes>
+                                                            </>
+                                                        )
+                                                    })}
+                                                </>
                                             )
                                         })}
                                     </>
                                 )
                             })}
-
-                            <div id="treeAttr"></div>
-
                         </SubCategsBlockExtra>
                         <br />
 

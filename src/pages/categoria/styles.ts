@@ -33,10 +33,9 @@ export const SectionAtributes = styled.div`
   align-items: baseline;
 `
 
-export const InputCategory = styled.input`
-  margin-right: 10px;
-  margin-left: 10px;
+export const InputAttribute = styled.input`
   cursor: pointer;
+  margin-right: 10px;
 `
 
 export const SubsCategs = styled.div`
