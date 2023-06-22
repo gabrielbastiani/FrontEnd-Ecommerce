@@ -64,7 +64,9 @@ export default function Categoria() {
     const [subCategs, setSubCategs] = useState([]);
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState([]);
+    const [filterAttr, setFilterAttr] = useState(null);
     const [allProductsAttributes, setAllProductsAttributes] = useState([]);
+
 
     const filterObj = {};
     const arrayOb = allProductsAttributes.filter((typ) => {
@@ -78,10 +80,19 @@ export default function Categoria() {
     });
     const valueAttr = '?' + paramAttr;
 
-    const filterCategory = () => {
+    filter.push(filterAttr);
+    const allFilter = filter.filter(fill => fill ? fill : null);
+
+
+
+    console.log(allFilter)
+
+
+
+    const filterAll = () => {
         const WEB_URL = 'http://localhost:3001';
         let param = '';
-        filter && filter.map((ele) => {
+        allFilter && allFilter.map((ele) => {
             param = param + 'q=' + ele + '&'
         });
         const NEW_URL = WEB_URL + '?' + param;
@@ -136,9 +147,11 @@ export default function Categoria() {
                         /* @ts-ignore */
                         arr.push(/* @ts-ignore */
                             inputElements[i].value
-                        );/* @ts-ignore */
+                        );
                 }
-                setFilter(arr)
+                
+                setFilter(arr);
+
                 return arr;
             }
 
@@ -284,7 +297,7 @@ export default function Categoria() {
                                                                                 type='checkbox'
                                                                                 name="attribute"
                                                                                 id={rel?.valueAttribute?.id}
-                                                                                value={rel?.valueAttribute?.slug}
+                                                                                onChange={ () => setFilterAttr(rel?.valueAttribute?.slug) }
                                                                             />
                                                                             <FilterText>{rel?.valueAttribute?.value}</FilterText>
                                                                         </SectionAtributes>
@@ -331,7 +344,7 @@ export default function Categoria() {
                         <input type="range" id="price" name="price" min="0" max="999999999999" />
 
                         <button
-                            onClick={filterCategory}
+                            onClick={filterAll}
                         >
                             Buscar
                         </button>
