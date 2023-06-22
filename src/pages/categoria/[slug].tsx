@@ -261,41 +261,46 @@ export default function Categoria() {
 
                         </SubCategsBlockExtra>
                         <br />
-                        <TextAtribute>Atributos:</TextAtribute>
-                        <SubCategsBlockExtra>
-                            {arrayOb.map((item) => {
-                                return (
-                                    <>
-                                        <TypeAtribute>{item?.typeAttribute?.type}</TypeAtribute>
-                                        {item?.typeAttribute?.valueattribute.map((val: any) => {
-                                            return (
-                                                <>
-                                                    {val?.RelationAttributeProduct.map((rel: any) => {
-                                                        return (
-                                                            <>
-                                                                <SectionAtributes>
-                                                                    <InputAttribute
-                                                                        type='checkbox'
-                                                                        name="attribute"
-                                                                        id={rel?.valueAttribute?.id}
-                                                                        value={rel?.valueAttribute?.slug}
-                                                                    />
-                                                                    <FilterText>{rel?.valueAttribute?.value}</FilterText>
-                                                                </SectionAtributes>
-                                                            </>
-                                                        )
-                                                    })}
-                                                </>
-                                            )
-                                        })}
-                                    </>
-                                )
-                            })}
-                        </SubCategsBlockExtra>
+                        {arrayOb.length < 1 ? (
+                            <>
+                                null
+                            </>
+                        ) :
+                            <>
+                                <TextAtribute>Atributos:</TextAtribute>
+                                <SubCategsBlockExtra>
+                                    {arrayOb.map((item) => {
+                                        return (
+                                            <>
+                                                <TypeAtribute>{item?.typeAttribute?.type}</TypeAtribute>
+                                                {item?.typeAttribute?.valueattribute.map((val: any) => {
+                                                    return (
+                                                        <>
+                                                            {val?.RelationAttributeProduct.map((rel: any) => {
+                                                                return (
+                                                                    <>
+                                                                        <SectionAtributes>
+                                                                            <InputAttribute
+                                                                                type='checkbox'
+                                                                                name="attribute"
+                                                                                id={rel?.valueAttribute?.id}
+                                                                                value={rel?.valueAttribute?.slug}
+                                                                            />
+                                                                            <FilterText>{rel?.valueAttribute?.value}</FilterText>
+                                                                        </SectionAtributes>
+                                                                    </>
+                                                                )
+                                                            })}
+                                                        </>
+                                                    )
+                                                })}
+                                            </>
+                                        )
+                                    })}
+                                </SubCategsBlockExtra>
+                            </>
+                        }
                         <br />
-
-
-
                         {/* {filterInPage.length
                             < 1 ? (null) : <>
                             <TextAtribute>Atributos:</TextAtribute>
