@@ -48,7 +48,8 @@ import {
     Images,
     ImagesHover,
     ButtonFilter,
-    InputRange
+    InputRange,
+    EtiquetaPreco
 } from "./styles";
 import Image from "next/image";
 import semimagem from '../../assets/semfoto.png';
@@ -66,8 +67,8 @@ export default function Categoria() {
     const [subCategs, setSubCategs] = useState([]);
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState([]);
+    const [priceValue, setPriceValue] = useState(total);
     const [allProductsAttributes, setAllProductsAttributes] = useState([]);
-
 
     const filterObj = {};
     const arrayOb = allProductsAttributes.filter((typ) => {
@@ -141,12 +142,9 @@ export default function Categoria() {
                             inputElements[i].value
                         );
                 }
-
                 setFilter(arr);
-
                 return arr;
             }
-
             return label;
         }
 
@@ -165,11 +163,21 @@ export default function Categoria() {
                     inputElements[i].value
                 );
         }
-
         setFilter(arr);
-
         return arr;
     }
+
+    const maxPrice = products.map(item => item?.product?.price);
+    var total = 0;
+
+    for (var i = 0; i < maxPrice.length; i++) {
+        total += maxPrice[i];
+    }
+
+
+
+
+
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -333,9 +341,15 @@ export default function Categoria() {
                             Preço por:
                         </TextTitle>
                         <br />
-
-                        <InputRange type="range" id="price" name="price" min="0" max="999999999999" />
-
+                        <EtiquetaPreco>
+                            <InputRange
+                                type="range"/* @ts-ignore */
+                                onChange={(e) => setPriceValue(e.target.value)}
+                                min={0}
+                                max={total}
+                            />
+                            {String(priceValue)}
+                        </EtiquetaPreco>
                         <br />
                         <br />
                     </AsideConteiner>

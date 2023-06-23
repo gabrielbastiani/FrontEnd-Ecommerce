@@ -17,7 +17,6 @@ import { TextoDados } from "../../../components/TextoDados";
 import { InputUpdate } from "../../../components/ui/InputUpdate";
 import SelectUpdate from "../../../components/ui/SelectUpdate";
 import { InputCheck, TextNews } from "./styles";
-import moment from 'moment';
 import { IMaskInput } from "react-imask";
 import { toast } from "react-toastify";
 import Titulos from "../../../components/Titulos";
