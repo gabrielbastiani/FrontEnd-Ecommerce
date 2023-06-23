@@ -46,7 +46,9 @@ import {
     Max,
     Add,
     Images,
-    ImagesHover
+    ImagesHover,
+    ButtonFilter,
+    InputRange
 } from "./styles";
 import Image from "next/image";
 import semimagem from '../../assets/semfoto.png';
@@ -282,9 +284,7 @@ export default function Categoria() {
                         </SubCategsBlockExtra>
                         <br />
                         {arrayOb.length < 1 ? (
-                            <>
-                                null
-                            </>
+                            null
                         ) :
                             <>
                                 <TextAtribute>Atributos:</TextAtribute>
@@ -322,41 +322,22 @@ export default function Categoria() {
                             </>
                         }
                         <br />
-                        {/* {filterInPage.length
-                            < 1 ? (null) : <>
-                            <TextAtribute>Atributos:</TextAtribute>
-                            <SubCategsBlockExtra>
-                                {filterInPage.map((item) => {
-                                    return (
-                                        <>
-                                            <TypeAtribute key={item?.id}>{item?.type}</TypeAtribute>
-                                            {item.filterattributes.map((val: any) => {
-                                                return (
-                                                    <FilterText>
-                                                        {val?.value}
-                                                    </FilterText>
-                                                )
-                                            })}
-                                        </>
-                                    )
-                                })}
-                            </SubCategsBlockExtra>
-                            <br />
-                        </>
-                        } */}
-
-                        <TextTitle style={{ fontWeight: 'bold' }}>
-                            Preço por:
-                        </TextTitle>
-
-                        <input type="range" id="price" name="price" min="0" max="999999999999" />
-
-                        <button
+                        <ButtonFilter
                             onClick={filterAll}
                         >
                             Buscar
-                        </button>
+                        </ButtonFilter>
+                        <br />
+                        <br />
+                        <TextTitle style={{ fontWeight: 'bold' }}>
+                            Preço por:
+                        </TextTitle>
+                        <br />
 
+                        <InputRange type="range" id="price" name="price" min="0" max="999999999999" />
+
+                        <br />
+                        <br />
                     </AsideConteiner>
 
                     <ContentPage>

@@ -8,9 +8,7 @@ export const TextFilter = styled.span`
   font-size: 20px;
 `
 
-export const TextTitle = styled.span`
-  
-`
+export const TextTitle = styled.span``
 
 export const TextAtribute = styled.span`
   margin-bottom: -5px;
@@ -20,6 +18,7 @@ export const TextAtribute = styled.span`
 export const TypeAtribute = styled.span`
   font-weight: bold;
   margin-bottom: 10px;
+  margin-top: 12px;
   font-size: 17px;
 `
 
@@ -227,5 +226,46 @@ export const Add = styled.button`
 
   :hover {
     opacity: 0.7;
+  }
+`
+
+export const ButtonFilter = styled.button`
+  background-color: ${props => props?.theme?.colors?.black};
+  border: none;
+  color: ${props => props?.theme?.colors?.white};
+  width: 60%;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border-radius: 5px;
+`
+
+export const InputRange = styled.input.attrs({ type: 'range' })`
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  outline: 0;
+  height: 12px;
+  border-radius: 40px;
+  background: ${props => props?.theme?.colors?.gray};
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+  width: 330px;
+
+  ::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    background-image: radial-gradient(circle, #f7f7fc 40%, #ff9800 45%);
+    border-radius: 50%;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  ::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    -moz-appearance: none;
+    background-image: radial-gradient(circle, #f7f7fc 40%, #ff9800 45%);
+    border-radius: 50%;
+    box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.5);
   }
 `
