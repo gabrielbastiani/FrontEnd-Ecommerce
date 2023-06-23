@@ -64,7 +64,6 @@ export default function Categoria() {
     const [subCategs, setSubCategs] = useState([]);
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState([]);
-    const [filterAttr, setFilterAttr] = useState(null);
     const [allProductsAttributes, setAllProductsAttributes] = useState([]);
 
 
@@ -80,19 +79,10 @@ export default function Categoria() {
     });
     const valueAttr = '?' + paramAttr;
 
-    filter.push(filterAttr);
-    const allFilter = filter.filter(fill => fill ? fill : null);
-
-
-
-    console.log(allFilter)
-
-
-
     const filterAll = () => {
         const WEB_URL = 'http://localhost:3001';
         let param = '';
-        allFilter && allFilter.map((ele) => {
+        filter && filter.map((ele) => {
             param = param + 'q=' + ele + '&'
         });
         const NEW_URL = WEB_URL + '?' + param;
@@ -117,7 +107,7 @@ export default function Categoria() {
 
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.name = "category";
+            checkbox.name = "filter";
             checkbox.id = item?.id;
             checkbox.value = item?.slug;
             checkbox.checked;
@@ -140,7 +130,7 @@ export default function Categoria() {
 
             function getValue() {
                 var arr = [];
-                var inputElements = document.getElementsByName("category")
+                var inputElements = document.getElementsByName("filter");
                 for (var i = 0; inputElements[i]; ++i) {
                     /* @ts-ignore */
                     if (inputElements[i].checked)
@@ -149,7 +139,7 @@ export default function Categoria() {
                             inputElements[i].value
                         );
                 }
-                
+
                 setFilter(arr);
 
                 return arr;
@@ -161,6 +151,23 @@ export default function Categoria() {
         tree.appendChild(menu);
 
     }, [subCategs, categs]);
+
+    function getValueAttr() {
+        var arr = [];
+        var inputElements = document.getElementsByName("filter");
+        for (var i = 0; inputElements[i]; ++i) {
+            /* @ts-ignore */
+            if (inputElements[i].checked)
+                /* @ts-ignore */
+                arr.push(/* @ts-ignore */
+                    inputElements[i].value
+                );
+        }
+
+        setFilter(arr);
+
+        return arr;
+    }
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -295,9 +302,10 @@ export default function Categoria() {
                                                                         <SectionAtributes>
                                                                             <InputAttribute
                                                                                 type='checkbox'
-                                                                                name="attribute"
+                                                                                name="filter"
                                                                                 id={rel?.valueAttribute?.id}
-                                                                                onChange={ () => setFilterAttr(rel?.valueAttribute?.slug) }
+                                                                                value={rel?.valueAttribute?.slug}
+                                                                                onClick={getValueAttr}
                                                                             />
                                                                             <FilterText>{rel?.valueAttribute?.value}</FilterText>
                                                                         </SectionAtributes>
