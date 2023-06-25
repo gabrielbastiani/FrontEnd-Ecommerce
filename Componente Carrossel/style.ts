@@ -8,8 +8,13 @@ interface PropType2 {
   left: boolean
 }
 
+type PropTypeKey = {
+  key: string
+  active: boolean
+}
+
 export const Container = styled.section`
-  width: 100%;
+  width: 100vw;
   position: relative;
 
   img {
@@ -22,21 +27,21 @@ export const Container = styled.section`
       margin-top: 200px;
     }
 
-    @media (max-width: 608px) {
-      margin-top: 380px;
+    @media (max-width: 600px) {
+      margin-top: 331px;
     }
 
-    @media (max-width: 533px) {
-      margin-top: 455px;
+    @media (max-width: 544px) {
+      margin-top: 411px;
     }
 
-    @media (max-width: 459px) {
-      margin-top: 490px;
+    @media (max-width: 455px) {
+      margin-top: 448px;
     }
   }
 `
 
-export const SwiperButton = styled.button<PropType>`
+export const NavButton = styled.button<PropType>`
   width: 35px;
   height: 35px;
   outline: none;
@@ -51,7 +56,6 @@ export const SwiperButton = styled.button<PropType>`
   box-shadow: 0px 4px 60px 20px rgba(3, 3, 3, 0.9),
     inset 0 -- 3em 3em rgba(3, 3, 3, 0.5);
   transform: translate(0, -50%);
-  z-index: 2;
   ${props =>
     props.right === true
       ? css`
@@ -65,19 +69,16 @@ export const SwiperButton = styled.button<PropType>`
     top: 65%;
   }
 
-  @media (max-width: 608px) {
+  @media (max-width: 600px) {
     top: 78%;
   }
 
-  @media (max-width: 533px) {
+  @media (max-width: 455px) {
     top: 83%;
   }
-
-  @media (max-width: 459px) {
-    top: 87%;
-  }
 `
-export const SwiperButtonLeft = styled.button<PropType2>`
+
+export const NavButtonLeft = styled.button<PropType2>`
   width: 35px;
   height: 35px;
   outline: none;
@@ -92,7 +93,6 @@ export const SwiperButtonLeft = styled.button<PropType2>`
   box-shadow: 0px 4px 60px 20px rgba(3, 3, 3, 0.9),
     inset 0 -- 3em 3em rgba(3, 3, 3, 0.5);
   transform: translate(0, -50%);
-  z-index: 2;
   ${props =>
     props.left === true
       ? css`
@@ -106,15 +106,42 @@ export const SwiperButtonLeft = styled.button<PropType2>`
     top: 65%;
   }
 
-  @media (max-width: 608px) {
+  @media (max-width: 600px) {
     top: 78%;
   }
 
-  @media (max-width: 533px) {
+  @media (max-width: 455px) {
     top: 83%;
   }
+`
 
-  @media (max-width: 459px) {
-    top: 87%;
+export const DotContainer = styled.div`
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  a {
+    cursor: pointer;
   }
+`
+
+export const Dot = styled.div.attrs((props: PropTypeKey) => ({
+  key: props.key
+}))<PropTypeKey>`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  ${props =>
+    props.active === true
+      ? css`
+          background-color: white;
+        `
+      : css`
+          background-color: grey;
+        `};
 `

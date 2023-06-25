@@ -47,7 +47,9 @@ import {
     Add,
     Images,
     ImagesHover,
-    ButtonFilter
+    ButtonFilter,
+    EtiquetaPrice,
+    RangeInput
 } from "./styles";
 import Image from "next/image";
 import semimagem from '../../assets/semfoto.png';
@@ -369,11 +371,9 @@ export default function Categoria() {
                             Preço por:
                         </TextTitle>
                         <br />
-
-
-                        <label>
+                        <EtiquetaPrice>
                             Minimo:
-                            <input
+                            <RangeInput
                                 type='range'
                                 onChange={changePriceMin}
                                 min={minPrice}
@@ -383,11 +383,11 @@ export default function Categoria() {
                                 defaultValue={0}
                             />
                             {priceValueMin ? formatter.format(priceValueMin) : String(minPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }))}
-                        </label>
+                        </EtiquetaPrice>
                         <br />
-                        <label>
+                        <EtiquetaPrice>
                             Máximo:
-                            <input
+                            <RangeInput
                                 type='range'
                                 onChange={changePriceMax}
                                 min={minPrice}
@@ -397,13 +397,11 @@ export default function Categoria() {
                                 defaultValue={9999999999999999999999}
                             />
                             {priceValueMax ? formatter.format(priceValueMax) : String(maxPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }))}
-                        </label>
+                        </EtiquetaPrice>
                         <br />
                         <ButtonFilter onClick={filterPrices}>
                             Filtrar Preços
                         </ButtonFilter>
-
-
                         <br />
                         <br />
                     </AsideConteiner>
