@@ -47,9 +47,7 @@ import {
     Add,
     Images,
     ImagesHover,
-    ButtonFilter,
-    InputRange,
-    EtiquetaPreco
+    ButtonFilter
 } from "./styles";
 import Image from "next/image";
 import semimagem from '../../assets/semfoto.png';
@@ -67,8 +65,11 @@ export default function Categoria() {
     const [subCategs, setSubCategs] = useState([]);
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState([]);
-    const [priceValue, setPriceValue] = useState(total);
+    const [priceValueMin, setPriceValueMin] = useState(maxPrice);
+    const [priceValueMax, setPriceValueMax] = useState(maxPrice);
     const [allProductsAttributes, setAllProductsAttributes] = useState([]);
+
+
 
     const filterObj = {};
     const arrayOb = allProductsAttributes.filter((typ) => {
@@ -92,7 +93,7 @@ export default function Categoria() {
         let url = new URL(NEW_URL);
         let params = new URLSearchParams(url.search);
 
-        Router.push(`/search?${params}`);
+        Router.push(`/filter?${params}`);
     }
 
     useEffect(() => {
@@ -167,17 +168,40 @@ export default function Categoria() {
         return arr;
     }
 
-    const maxPrice = products.map(item => item?.product?.price);
-    var total = 0;
+    var arrPrice = [];
 
-    for (var i = 0; i < maxPrice.length; i++) {
-        total += maxPrice[i];
+    arrPrice.push({
+        "priceMin": priceValueMin,
+        "priceMax": priceValueMax
+    })
+
+    const filterPrices = () => {
+        const WEB_URL = 'http://localhost:3001';
+        let paramPrice = '';
+        arrPrice && arrPrice.map((ele) => {
+            paramPrice = paramPrice + 'priceMin=' + ele.priceMin + '&' + 'priceMax=' + ele.priceMax
+        });
+        const NEW_URL = WEB_URL + '?' + paramPrice;
+        let urlPrice = new URL(NEW_URL);
+        let params = new URLSearchParams(urlPrice.search);
+
+        Router.push(`/filter/filterPrice?${params}`);
     }
 
+    const maxPriceVAlu = products.map(item => item?.product?.price);
+    
+    var minPrice = Math.min(...maxPriceVAlu);
+    var maxPrice = Math.max(...maxPriceVAlu);
 
+    const changePriceMin = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPriceValueMin(parseInt(event.target.value));
+    };
 
+    const changePriceMax = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPriceValueMax(parseInt(event.target.value));
+    };
 
-
+    const formatter = new Intl.NumberFormat('pt-br',{style: 'currency', currency: 'BRL'})
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -226,21 +250,6 @@ export default function Categoria() {
     }, [idCateg]);
 
     useEffect(() => {
-        async function loadAttributesproducts() {
-            const apiClient = setupAPIClient();
-            try {
-                const { data } = await apiClient.get(`/allProductsAndAttributes${valueAttr}`);
-
-                setAllProductsAttributes(data || []);
-
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        }
-        loadAttributesproducts();
-    }, [valueAttr]);
-
-    useEffect(() => {
         async function loadProducts() {
             const apiClient = setupAPIClient();
             try {
@@ -255,10 +264,26 @@ export default function Categoria() {
         loadProducts();
     }, [slug]);
 
+    useEffect(() => {
+        async function loadAttributesproducts() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/allProductsAndAttributes${valueAttr}`);
+
+                setAllProductsAttributes(data || []);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadAttributesproducts();
+    }, [valueAttr]);
 
 
     return (
+
         <>
+
             <Head>
                 <title>{nameItens}</title>
             </Head>
@@ -299,22 +324,19 @@ export default function Categoria() {
                                 <SubCategsBlockExtra>
                                     {arrayOb.map((item) => {
                                         return (
+
                                             <>
                                                 <TypeAtribute>{item?.typeAttribute?.type}</TypeAtribute>
                                                 {item?.typeAttribute?.valueattribute.map((val: any) => {
                                                     return (
+
                                                         <>
                                                             {val?.RelationAttributeProduct.map((rel: any) => {
                                                                 return (
+
                                                                     <>
                                                                         <SectionAtributes>
-                                                                            <InputAttribute
-                                                                                type='checkbox'
-                                                                                name="filter"
-                                                                                id={rel?.valueAttribute?.id}
-                                                                                value={rel?.valueAttribute?.slug}
-                                                                                onClick={getValueAttr}
-                                                                            />
+                                                                            <InputAttribute type='checkbox' name="filter" id={rel?.valueAttribute?.id} value={rel?.valueAttribute?.slug} onClick={getValueAttr} />
                                                                             <FilterText>{rel?.valueAttribute?.value}</FilterText>
                                                                         </SectionAtributes>
                                                                     </>
@@ -330,9 +352,7 @@ export default function Categoria() {
                             </>
                         }
                         <br />
-                        <ButtonFilter
-                            onClick={filterAll}
-                        >
+                        <ButtonFilter onClick={filterAll}>
                             Buscar
                         </ButtonFilter>
                         <br />
@@ -341,15 +361,41 @@ export default function Categoria() {
                             Preço por:
                         </TextTitle>
                         <br />
-                        <EtiquetaPreco>
-                            <InputRange
-                                type="range"/* @ts-ignore */
-                                onChange={(e) => setPriceValue(e.target.value)}
-                                min={0}
-                                max={total}
+
+
+                        <label>
+                            Minimo:
+                            <input
+                                type='range'
+                                onChange={changePriceMin}
+                                min={minPrice}
+                                max={maxPrice}
+                                step={1}
+                                value={priceValueMin}
+                                defaultValue={0}
                             />
-                            {String(priceValue)}
-                        </EtiquetaPreco>
+                            {priceValueMin ? formatter.format(priceValueMin) : String(minPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }))}
+                        </label>
+                        <br />
+                        <label>
+                            Máximo:
+                            <input
+                                type='range'
+                                onChange={changePriceMax}
+                                min={minPrice}
+                                max={maxPrice}
+                                step={1}
+                                value={priceValueMax}
+                                defaultValue={9999999999999999999999}
+                            />
+                            {priceValueMax ? formatter.format(priceValueMax) : String(maxPrice.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }))}
+                        </label>
+                        <br />
+                        <ButtonFilter onClick={filterPrices}>
+                            Filtrar Preços
+                        </ButtonFilter>
+                        
+
                         <br />
                         <br />
                     </AsideConteiner>

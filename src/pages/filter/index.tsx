@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
 
-export default function SearchPage() {
+export default function FilterPage() {
 
     const searchParams = useSearchParams();
     const params = searchParams.getAll("q");
@@ -24,7 +24,7 @@ export default function SearchPage() {
         async function loadFilters() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/search${url.search}`);
+                const { data } = await apiClient.get(`/filter${url.search}`);
 
                 setFiltersProducts(data || []);
 
@@ -42,7 +42,7 @@ export default function SearchPage() {
 
     return (
         <>
-            <h1>Search Page</h1>
+            <h1>Filter Page</h1>
         </>
     )
 }
