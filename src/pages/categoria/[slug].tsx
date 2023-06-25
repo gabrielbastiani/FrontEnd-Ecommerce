@@ -52,6 +52,7 @@ import {
 import Image from "next/image";
 import semimagem from '../../assets/semfoto.png';
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 
 export default function Categoria() {
@@ -169,18 +170,25 @@ export default function Categoria() {
     }
 
     var arrPrice = [];
-
     arrPrice.push({
         "priceMin": priceValueMin,
         "priceMax": priceValueMax
-    })
+    });
 
     const filterPrices = () => {
         const WEB_URL = 'http://localhost:3001';
         let paramPrice = '';
-        arrPrice && arrPrice.map((ele) => {
-            paramPrice = paramPrice + 'priceMin=' + ele.priceMin + '&' + 'priceMax=' + ele.priceMax
-        });
+        const verifyArrMin: any = arrPrice.map(ver => ver?.priceMin);
+        const verifyArrMax: any = arrPrice.map(ver => ver?.priceMax);
+
+        if (Number(verifyArrMin) < Number(verifyArrMax)) {
+            arrPrice && arrPrice.map((ele) => {
+                paramPrice = paramPrice + 'priceMin=' + ele?.priceMin + '&' + 'priceMax=' + ele?.priceMax
+            });
+        } else {
+            return toast.error("O valor do preço minimo não pode ser maior que o valor do preço máximo!!!");
+        }
+
         const NEW_URL = WEB_URL + '?' + paramPrice;
         let urlPrice = new URL(NEW_URL);
         let params = new URLSearchParams(urlPrice.search);
@@ -189,7 +197,7 @@ export default function Categoria() {
     }
 
     const maxPriceVAlu = products.map(item => item?.product?.price);
-    
+
     var minPrice = Math.min(...maxPriceVAlu);
     var maxPrice = Math.max(...maxPriceVAlu);
 
@@ -201,7 +209,7 @@ export default function Categoria() {
         setPriceValueMax(parseInt(event.target.value));
     };
 
-    const formatter = new Intl.NumberFormat('pt-br',{style: 'currency', currency: 'BRL'})
+    const formatter = new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' });
 
     useEffect(() => {
         async function loadSlugDate() {
@@ -394,7 +402,7 @@ export default function Categoria() {
                         <ButtonFilter onClick={filterPrices}>
                             Filtrar Preços
                         </ButtonFilter>
-                        
+
 
                         <br />
                         <br />
