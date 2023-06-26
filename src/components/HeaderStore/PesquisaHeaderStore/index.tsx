@@ -10,7 +10,14 @@ interface SearchRequest {
 }
 
 const PesquisaHeaderStore = ({ valor, onChange, placeholder, onKeyUp, onKeyDown, onClick }: SearchRequest) => (
-    <InputSearch value={valor} onChange={onChange} placeholder={placeholder} onKeyUp={onKeyUp} onKeyDown={onKeyDown} onClick={onClick} />
+    <InputSearch
+        value={valor}
+        onChange={onChange}
+        placeholder={placeholder}
+        onKeyUp={onKeyUp}
+        onKeyDown={onKeyDown}
+        onClick={onClick}
+    />
 )
 
 export default PesquisaHeaderStore;

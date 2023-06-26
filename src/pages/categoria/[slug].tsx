@@ -111,14 +111,13 @@ export default function Categoria() {
         function buildTree(item: any) {
 
             const label = document.createElement('label');
-
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.name = "filter";
             checkbox.id = item?.id;
             checkbox.value = item?.slug;
             checkbox.checked;
-            checkbox.onclick = (getValue)
+            checkbox.onclick = (getValue);
 
             checkbox.style.marginRight = '10px';
             checkbox.style.marginBottom = '10px';

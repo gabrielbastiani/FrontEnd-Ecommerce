@@ -21,7 +21,8 @@ import {
     DataResult,
     ListItems,
     CategorysHeaderMobile,
-    Categ
+    Categ,
+    BoxProductSearch
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -278,9 +279,12 @@ export const HeaderStore = () => {
                                 <>
                                     {products.map((value) => {
                                         return (
-                                            <Link key={value.id} href={`/produto/${value?.slug}`} target="_blank">
-                                                <ListItems>{value?.name}</ListItems>
-                                            </Link>
+                                            <BoxProductSearch>
+                                                <Link key={value?.id} href={`/produto/${value?.slug}`} target="_blank">
+                                                    <Image src={"http://localhost:3333/files/" + value?.photoproducts[0].image} width={70} height={70} alt="foto produto" />
+                                                    <ListItems>{value?.name}</ListItems>
+                                                </Link>
+                                            </BoxProductSearch>
                                         )
                                     })}
                                 </>

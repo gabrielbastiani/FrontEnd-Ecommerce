@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const ContainerHeaderStore = styled.header`
   display: flex;
@@ -196,7 +196,7 @@ export const CategorysHeader = styled.div`
 export const DataResult = styled.div`
   z-index: 999;
   top: 70px;
-  width: 250px;
+  width: 350px;
   height: auto;
   background-color: ${props => props?.theme?.colors?.white};
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -245,4 +245,10 @@ export const Categ = styled.span`
   :hover {
     color: ${props => props?.theme?.colors?.info};
   }
+`
+
+export const BoxProductSearch = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 30px 0;
 `

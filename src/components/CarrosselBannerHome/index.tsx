@@ -17,6 +17,7 @@ import 'swiper/css/autoplay';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 register();
 
+
 const CarrosselBannerHome = () => {
 
     const [bannersHome, setBannersHome] = useState([]);
