@@ -19,20 +19,14 @@ import { BsFillFilterSquareFill } from 'react-icons/bs';
 import Link from "next/link";
 import {
     InputAttribute,
-    SectionCategories,
-    SmallText,
-    SubsCategs,
     TypeAtribute,
     Filtros,
     TextFilter,
     SubCategsBlockExtra,
-    BoxText,
     TextTitle,
     TextAtribute,
     FilterText,
     SectionAtributes,
-    SectionBoxAtributes,
-    SubsAtribut,
     GridSectionProducts,
     BoxProduct,
     Info,
@@ -62,10 +56,14 @@ export default function Categoria() {
     const router = useRouter();
     let slug = router.query.slug;
 
+    const [groupName, setGroupName] = useState("");
     const [nameItens, setNameItens] = useState("");
     const [idCateg, setIdCatg] = useState("");
+    const [idParent, setIdParent] = useState("");
     const [categs, setCategs] = useState([]);
     const [subCategs, setSubCategs] = useState([]);
+    const [allCategoriesMenu, setAllCategoriesMenu] = useState([]);
+    const [brandCrumb, setBrandCrumb] = useState([]);
     const [products, setProducts] = useState([]);
     const [filter, setFilter] = useState([]);
     const [priceValueMin, setPriceValueMin] = useState(maxPrice);
@@ -98,6 +96,24 @@ export default function Categoria() {
 
         Router.push(`/filter?${params}`);
     }
+
+
+    useEffect(() => {
+        /* console.log("Nome do Grupo: ", groupName);
+        console.log("brandCrumb: ", brandCrumb);
+        console.log("ID categoria atual: ", idCateg);
+        console.log("ID parent ID atual: ", idParent); */
+
+        const treeCrumb = document.querySelector('div#treeCrumb');
+
+        const crumbs = document.createElement('span');
+
+        const brand = brandCrumb.filter(item => item);
+        
+        
+        crumbs.append()
+
+    },[allCategoriesMenu, brandCrumb, idCateg, nameItens]);
 
     useEffect(() => {
 
@@ -216,10 +232,12 @@ export default function Categoria() {
         async function loadSlugDate() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/findDateSlugCategory?slug=${slug}`);
-
-                setNameItens(response?.data?.name);
-                setIdCatg(response?.data?.id);
+                const { data } = await apiClient.get(`/findDateSlugCategory?slug=${slug}`);
+                
+                setNameItens(data?.name);
+                setIdCatg(data?.id);
+                setIdParent(data?.parentId);
+                setGroupName(data?.menucategories[0]?.nameGroup);
 
             } catch (error) {
                 console.log(error.response.data);
@@ -227,6 +245,36 @@ export default function Categoria() {
         }
         loadSlugDate();
     }, [slug]);
+
+    useEffect(() => {
+        async function allCategoriesMenus() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/listMenuCategories`);
+
+                setAllCategoriesMenu(data || []);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        allCategoriesMenus();
+    }, []);
+
+    useEffect(() => {
+        async function loadBrandCrumb() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/categoriesParentIdBradCrumb?parentId=${idCateg}`);
+
+                setBrandCrumb(data || []);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadBrandCrumb();
+    }, [idCateg]);
 
     useEffect(() => {
         async function loadCategs() {
@@ -305,9 +353,12 @@ export default function Categoria() {
                         <Link href="http://localhost:3001">
                             <IoIosHome size={22} color="red" /> / &nbsp;
                         </Link>
-                        <Link href={"http://localhost:3001/categoria/" + slug}>
+                        {/* <Link href={"http://localhost:3001/categoria/" + slug}>
                             {nameItens}
-                        </Link>
+                        </Link> */}
+
+                        <div id="treeCrumb"></div>
+
                     </Boxbreadcrumbs>
                 </Bread>
                 <ContainerContent>

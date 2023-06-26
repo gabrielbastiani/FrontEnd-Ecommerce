@@ -22,11 +22,6 @@ export const TypeAtribute = styled.span`
   font-size: 17px;
 `
 
-export const SectionCategories = styled.div`
-  display: flex;
-  align-items: baseline;
-`
-
 export const SectionAtributes = styled.div`
   display: flex;
   align-items: baseline;
@@ -37,39 +32,16 @@ export const InputAttribute = styled.input`
   margin-right: 10px;
 `
 
-export const SubsCategs = styled.div`
-  display: flex;
-  align-items: baseline;
-`
-
-export const SubsAtribut = styled.div`
-  display: flex;
-  align-items: baseline;
-  margin-top: 5px;
-`
-
 export const SubCategsBlockExtra = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 15px;
 `
 
-export const SmallText = styled.span`
-  font-size: 15px;
-`
-
-export const BoxText = styled.div`
-  margin-bottom: 10px;
-`
-
 export const FilterText = styled.li`
   font-size: 14px;
   margin-bottom: 8px;
   list-style-type: none;
-`
-
-export const SectionBoxAtributes = styled.div`
-  display: flex;
 `
 
 export const GridSectionProducts = styled.div`
