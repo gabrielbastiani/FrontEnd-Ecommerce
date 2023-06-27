@@ -71,6 +71,38 @@ export default function Categoria() {
     const [allProductsAttributes, setAllProductsAttributes] = useState([]);
 
 
+    useEffect(() => {
+        const treeCrumb = document.querySelector('div#treeCrumb');
+        const crumbs = document.createElement('span');
+        const brand = brandCrumb.filter(item => item?.category?.id === idCateg);
+
+        if (brand.length === 0) {
+            crumbs.style.display = 'none';
+            const treeCrumb = document.querySelector('div#treeCrumbNone');
+            const crumbsNone = document.createElement('span');
+
+            crumbsNone.innerHTML = nameItens;
+            treeCrumb.appendChild(crumbsNone);
+
+            return;
+        }
+
+        brand.forEach(buildTreeCrumb);
+
+        function buildTreeCrumb(item: any) {
+            const span = document.createElement('span');
+            span.innerHTML = `<a href=http://localhost:3001/categoria/${item?.category?.slug}>${item?.category?.name} / </a>`;
+
+            const children = allCategoriesMenu.filter(child => child?.category?.id === item?.category?.parentId && child?.nameGroup === groupName);
+
+            children.forEach(buildTreeCrumb);
+            crumbs.appendChild(span);
+
+        }
+
+        treeCrumb.appendChild(crumbs);
+
+    }, [allCategoriesMenu, brandCrumb, idCateg]);
 
     const filterObj = {};
     const arrayOb = allProductsAttributes.filter((typ) => {
@@ -96,40 +128,6 @@ export default function Categoria() {
 
         Router.push(`/filter?${params}`);
     }
-
-    useEffect(() => {
-        /* console.log("Nome do Grupo: ", groupName);
-        console.log("Nome da categoria atual: ", nameItens);
-        console.log("brandCrumb: ", brandCrumb);
-        console.log("ID categoria atual: ", idCateg);
-        console.log("ID parent ID atual: ", idParent); */
-        const treeCrumb = document.querySelector('div#treeCrumb');
-        
-        const crumbs = document.createElement('span');
-
-        const brand = brandCrumb.filter(item => item?.category?.id === idCateg);
-
-        console.log("Primeiro: ", brand)
-
-        brand.forEach(buildTreeCrumb);
-
-        function buildTreeCrumb(item: any) {
-            const span = document.createElement('span');
-            span.innerHTML = item?.category?.name + " / ";
-
-            const children = allCategoriesMenu.filter(child => child?.category?.id === item?.category?.parentId && child?.nameGroup === groupName);
-
-            console.log("Segundo: ", children)
-
-            children.forEach(buildTreeCrumb);
-
-            crumbs.appendChild(span);
-
-        }
-
-        treeCrumb.appendChild(crumbs);
-
-    }, [allCategoriesMenu, brandCrumb, idCateg, nameItens]);
 
     useEffect(() => {
 
@@ -244,6 +242,10 @@ export default function Categoria() {
 
     const formatter = new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' });
 
+
+
+
+
     useEffect(() => {
         async function loadSlugDate() {
             const apiClient = setupAPIClient();
@@ -354,9 +356,7 @@ export default function Categoria() {
 
 
     return (
-
         <>
-
             <Head>
                 <title>{nameItens}</title>
             </Head>
@@ -369,11 +369,9 @@ export default function Categoria() {
                         <Link href="http://localhost:3001">
                             <IoIosHome size={22} color="red" /> / &nbsp;
                         </Link>
-                        {/* <Link href={"http://localhost:3001/categoria/" + slug}>
-                            {nameItens}
-                        </Link> */}
-
+                        
                         <div id="treeCrumb"></div>
+                        <div id="treeCrumbNone"></div>
 
                     </Boxbreadcrumbs>
                 </Bread>
