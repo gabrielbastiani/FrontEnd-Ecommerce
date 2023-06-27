@@ -76,17 +76,6 @@ export default function Categoria() {
         const crumbs = document.createElement('span');
         const brand = brandCrumb.filter(item => item?.category?.id === idCateg);
 
-        if (brand.length === 0) {
-            crumbs.style.display = 'none';
-            const treeCrumb = document.querySelector('div#treeCrumbNone');
-            const crumbsNone = document.createElement('span');
-
-            crumbsNone.innerHTML = nameItens;
-            treeCrumb.appendChild(crumbsNone);
-
-            return;
-        }
-
         brand.forEach(buildTreeCrumb);
 
         function buildTreeCrumb(item: any) {
@@ -97,12 +86,11 @@ export default function Categoria() {
 
             children.forEach(buildTreeCrumb);
             crumbs.appendChild(span);
-
         }
 
         treeCrumb.appendChild(crumbs);
 
-    }, [allCategoriesMenu, brandCrumb, idCateg]);
+    }, [allCategoriesMenu, brandCrumb]);
 
     const filterObj = {};
     const arrayOb = allProductsAttributes.filter((typ) => {
@@ -371,7 +359,6 @@ export default function Categoria() {
                         </Link>
 
                         <div id="treeCrumb"></div>
-                        <div id="treeCrumbNone"></div>
 
                     </Boxbreadcrumbs>
                 </Bread>
