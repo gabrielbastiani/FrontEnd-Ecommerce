@@ -369,7 +369,7 @@ export default function Categoria() {
                         <Link href="http://localhost:3001">
                             <IoIosHome size={22} color="red" /> / &nbsp;
                         </Link>
-                        
+
                         <div id="treeCrumb"></div>
                         <div id="treeCrumbNone"></div>
 
