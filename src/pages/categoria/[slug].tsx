@@ -97,23 +97,39 @@ export default function Categoria() {
         Router.push(`/filter?${params}`);
     }
 
-
     useEffect(() => {
         /* console.log("Nome do Grupo: ", groupName);
+        console.log("Nome da categoria atual: ", nameItens);
         console.log("brandCrumb: ", brandCrumb);
         console.log("ID categoria atual: ", idCateg);
         console.log("ID parent ID atual: ", idParent); */
-
         const treeCrumb = document.querySelector('div#treeCrumb');
-
+        
         const crumbs = document.createElement('span');
 
-        const brand = brandCrumb.filter(item => item);
-        
-        
-        crumbs.append()
+        const brand = brandCrumb.filter(item => item?.category?.id === idCateg);
 
-    },[allCategoriesMenu, brandCrumb, idCateg, nameItens]);
+        console.log("Primeiro: ", brand)
+
+        brand.forEach(buildTreeCrumb);
+
+        function buildTreeCrumb(item: any) {
+            const span = document.createElement('span');
+            span.innerHTML = item?.category?.name + " / ";
+
+            const children = allCategoriesMenu.filter(child => child?.category?.id === item?.category?.parentId && child?.nameGroup === groupName);
+
+            console.log("Segundo: ", children)
+
+            children.forEach(buildTreeCrumb);
+
+            crumbs.appendChild(span);
+
+        }
+
+        treeCrumb.appendChild(crumbs);
+
+    }, [allCategoriesMenu, brandCrumb, idCateg, nameItens]);
 
     useEffect(() => {
 
@@ -233,7 +249,7 @@ export default function Categoria() {
             const apiClient = setupAPIClient();
             try {
                 const { data } = await apiClient.get(`/findDateSlugCategory?slug=${slug}`);
-                
+
                 setNameItens(data?.name);
                 setIdCatg(data?.id);
                 setIdParent(data?.parentId);
@@ -265,7 +281,7 @@ export default function Categoria() {
         async function loadBrandCrumb() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/categoriesParentIdBradCrumb?parentId=${idCateg}`);
+                const { data } = await apiClient.get(`/categoriesParentIdBradCrumb?parentId=${idParent}`);
 
                 setBrandCrumb(data || []);
 
@@ -274,7 +290,7 @@ export default function Categoria() {
             }
         }
         loadBrandCrumb();
-    }, [idCateg]);
+    }, [idParent]);
 
     useEffect(() => {
         async function loadCategs() {
