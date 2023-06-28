@@ -21,7 +21,7 @@ export const Bread = styled.section`
 export const Boxbreadcrumbs = styled.div`
   width: 1400px;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
 `
 
 export const ContainerContent = styled.section`

@@ -1,12 +1,14 @@
 import styled from 'styled-components'
 
-export const TextAtribute = styled.span`
-  margin-bottom: -5px;
-  font-size: 19px;
+export const BoxBread = styled.div`
+  display: flex;
+  align-items: flex-end;
 `
 
-export const SubCategsBlockExtra = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-top: 15px;
+export const ActualBread = styled.div`
+  margin-bottom: 10px;
+`
+
+export const BreadAtual = styled.span`
+
 `

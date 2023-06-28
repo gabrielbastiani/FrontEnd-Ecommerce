@@ -3,6 +3,7 @@ import { setupAPIClient } from "../../services/api";
 import { Boxbreadcrumbs, Bread } from "../dateStoreUx/styles";
 import Link from "next/link";
 import { IoIosHome } from "react-icons/io";
+import { ActualBread, BoxBread, BreadAtual } from "./styles";
 
 
 interface BreadcrumbsRequest {
@@ -53,11 +54,6 @@ const Breadcrumbs = ({ idParent, idCateg, groupName, nameItens }: BreadcrumbsReq
         const crumbs = document.createElement('span');
         const brand = brandCrumb.filter(item => item?.category?.id === idCateg);
 
-        if (brand?.length < 1) {
-            const tagSpan = document.querySelector('span#nameBread');
-            tagSpan.textContent = nameItens;
-        }
-
         brand.forEach(buildTreeCrumb);
 
         function buildTreeCrumb(item: any) {
@@ -79,13 +75,17 @@ const Breadcrumbs = ({ idParent, idCateg, groupName, nameItens }: BreadcrumbsReq
         <>
             <Bread>
                 <Boxbreadcrumbs>
-                    <Link href="http://localhost:3001">
-                        <IoIosHome size={22} color="red" /> / &nbsp;
-                    </Link>
+                    <ActualBread>
+                        <BreadAtual><strong>Atual:</strong> {nameItens}</BreadAtual>
+                    </ActualBread>
+                    
+                    <BoxBread>
+                        <Link href="http://localhost:3001">
+                            <IoIosHome size={22} color="red" /> / &nbsp;
+                        </Link>
 
-                    <span id="nameBread"></span>
-                    <div id="treeCrumb"></div>
-
+                        <div id="treeCrumb"></div>
+                    </BoxBread>
                 </Boxbreadcrumbs>
             </Bread>
         </>

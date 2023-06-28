@@ -252,3 +252,7 @@ export const BoxProductSearch = styled.div`
   align-items: center;
   margin: 30px 0;
 `
+
+export const LinkRoute = styled.a`
+
+`

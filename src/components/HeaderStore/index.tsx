@@ -22,7 +22,8 @@ import {
     ListItems,
     CategorysHeaderMobile,
     Categ,
-    BoxProductSearch
+    BoxProductSearch,
+    LinkRoute
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -408,19 +409,19 @@ export const HeaderStore = () => {
                             return (
                                 <>
                                     <DropDownLi>
-                                        <Link key={item.id} href={'/categoria/' + `${item?.category?.slug}`}>
+                                        <LinkRoute key={item.id} href={`http://localhost:3001/categoria/${item?.category?.slug}`}>
                                             <StyledA onMouseOver={() => load(item.id)} >
                                                 {item?.categoryName}
                                             </StyledA>
-                                        </Link>
+                                        </LinkRoute>
 
                                         {categories.length >= 1 && (
                                             <DropDownContent>
                                                 {categories.map((categ) => {
                                                     return (
-                                                        <Link key={categ.id} href={'/categoria/' + `${categ?.category?.slug}`}>
+                                                        <LinkRoute key={categ.id} href={`http://localhost:3001/categoria/${categ?.category?.slug}`}>
                                                             <Categ>{categ?.categoryName}</Categ>
-                                                        </Link>
+                                                        </LinkRoute>
                                                     )
                                                 })}
                                             </DropDownContent>
