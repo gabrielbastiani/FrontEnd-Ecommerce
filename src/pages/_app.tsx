@@ -5,7 +5,21 @@ import theme from '../../styles/theme';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { AuthProvider } from '../contexts/AuthContext';
+import { Router } from 'next/dist/client/router';
+import NProgress, { trickle } from "nprogress";
+import 'nprogress/nprogress.css';
 
+
+NProgress.configure({ easing: 'ease', speed: 500 });
+
+Router.events.on("routeChangeStart", (url) => {
+  console.log(`Loading: ${url}`);
+  NProgress.start();
+});
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -21,4 +35,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   )
 }
 
-export default MyApp
+export default MyApp;

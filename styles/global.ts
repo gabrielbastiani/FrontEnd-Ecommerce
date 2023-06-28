@@ -22,4 +22,14 @@ export default createGlobalStyle`
   button {
     cursor: pointer;
   }
+
+  #nprogress {
+    position: relative;
+    z-index: 9999999;
+  }
+
+  #nprogress .bar {
+    background: #f44336 !important;
+    height: 3px;
+  }
 `

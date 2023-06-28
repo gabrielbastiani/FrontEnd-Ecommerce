@@ -130,6 +130,7 @@ export default function Categoria() {
                     idParent={idParent}
                     idCateg={idCateg}
                     groupName={groupName}
+                    nameItens={nameItens}
                 />
 
                 <ContainerContent>

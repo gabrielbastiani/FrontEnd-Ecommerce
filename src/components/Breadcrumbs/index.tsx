@@ -9,9 +9,10 @@ interface BreadcrumbsRequest {
     idParent: string;
     idCateg: string;
     groupName: string;
+    nameItens: string;
 }
 
-const Breadcrumbs = ({ idParent, idCateg, groupName }: BreadcrumbsRequest) => {
+const Breadcrumbs = ({ idParent, idCateg, groupName, nameItens }: BreadcrumbsRequest) => {
 
     const [allCategoriesMenu, setAllCategoriesMenu] = useState([]);
     const [brandCrumb, setBrandCrumb] = useState([]);
@@ -52,6 +53,11 @@ const Breadcrumbs = ({ idParent, idCateg, groupName }: BreadcrumbsRequest) => {
         const crumbs = document.createElement('span');
         const brand = brandCrumb.filter(item => item?.category?.id === idCateg);
 
+        if (brand?.length < 1) {
+            const tagSpan = document.querySelector('span#nameBread');
+            tagSpan.textContent = nameItens;
+        }
+
         brand.forEach(buildTreeCrumb);
 
         function buildTreeCrumb(item: any) {
@@ -77,6 +83,7 @@ const Breadcrumbs = ({ idParent, idCateg, groupName }: BreadcrumbsRequest) => {
                         <IoIosHome size={22} color="red" /> / &nbsp;
                     </Link>
 
+                    <span id="nameBread"></span>
                     <div id="treeCrumb"></div>
 
                 </Boxbreadcrumbs>
