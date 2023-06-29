@@ -22,6 +22,10 @@ export const Boxbreadcrumbs = styled.div`
   width: 1400px;
   display: flex;
   flex-direction: column;
+
+  @media (max-width: 1078px) {
+    padding: 0 55px;
+  }
 `
 
 export const ContainerContent = styled.section`
@@ -44,4 +48,8 @@ export const AsideConteiner = styled.aside`
 
 export const ContentPage = styled.article`
   width: 1000px;
+
+  @media (max-width: 984px) {
+    width: 760px;
+  }
 `

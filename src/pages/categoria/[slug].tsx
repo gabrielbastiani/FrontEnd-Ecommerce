@@ -23,12 +23,13 @@ import AtributosFilter from "../../components/AtributosFilter";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import FiltroPreco from "../../components/FiltroPreco";
 import ProdutosNaCategoria from "../../components/ProdutosNaCategoria";
+import BannersCategoria from "../../components/BannersCategoria";
 
 
 export default function Categoria() {
 
     const router = useRouter();
-    let slug = router.query.slug;
+    let slug = router.query.slug as string;
 
     const [groupName, setGroupName] = useState("");
     const [nameItens, setNameItens] = useState("");
@@ -163,6 +164,10 @@ export default function Categoria() {
                     </AsideConteiner>
 
                     <ContentPage>
+
+                        <BannersCategoria
+                            slug={slug}
+                        />
 
                         <ProdutosNaCategoria
                             products={products}
