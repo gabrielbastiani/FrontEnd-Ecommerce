@@ -41,7 +41,7 @@ export function signOut() {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [customer, setUser] = useState<UserProps>();
+  const [customer, setCustomer] = useState<UserProps>();
   const isAuthenticated = !!customer;
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       api.get('/customer/me').then(response => {
         const { id, name, email, store_id } = response.data;
 
-        setUser({
+        setCustomer({
           id,
           name,
           email,
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         path: "/" // Quais caminhos terao acesso ao cookie
       });
 
-      setUser({
+      setCustomer({
         id,
         name,
         email,
@@ -95,7 +95,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       //Redirecionar o customer para /myAccount
       Router.push('/myAccount/meusdados');
-
 
     } catch (err) {
       toast.error("Erro ao acessar, confirmou seu cadastro em seu email?");

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Router from 'next/router';
 import { setupAPIClient } from "../../services/api";
@@ -25,6 +25,8 @@ import FiltroPreco from "../../components/FiltroPreco";
 import ProdutosNaCategoria from "../../components/ProdutosNaCategoria";
 import BannersCategoria from "../../components/BannersCategoria";
 import OrdenarProdutos from "../../components/OrdenarProdutos";
+import { AuthContextProducts } from "../../contexts/AuthContextProducts";
+
 
 
 export default function Categoria() {
@@ -116,6 +118,12 @@ export default function Categoria() {
         loadProducts();
     }, [slug]);
 
+    /* @ts-ignore */
+    const { setProductsData } = useContext(AuthContextProducts);
+    
+    let data = products;
+
+    setProductsData(data);
 
 
     return (
@@ -152,7 +160,9 @@ export default function Categoria() {
                             onClick={getValueAttr}
                         />
                         <br />
-                        <ButtonFilter onClick={filterAll}>
+                        <ButtonFilter
+                            onClick={filterAll}
+                        >
                             Buscar
                         </ButtonFilter>
                         <br />

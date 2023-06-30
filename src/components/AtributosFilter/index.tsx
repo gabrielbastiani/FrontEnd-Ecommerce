@@ -18,9 +18,9 @@ const AtributosFilter = ({ products, onClick }: FilterAtributesRequest) => {
         return filterObj.hasOwnProperty(typ?.type) ? false : (filterObj[typ?.type] = true)
     });
 
-    const arrayIdAttr = products.map((ids) => ids.product_id);
+    const arrayIdAttr = products.map((ids: any) => ids.product_id);
     let paramAttr = '';
-    arrayIdAttr && arrayIdAttr.map((item) => {
+    arrayIdAttr && arrayIdAttr.map((item: any) => {
         paramAttr = paramAttr + 'product_id=' + item + '&'
     });
     const valueAttr = '?' + paramAttr;

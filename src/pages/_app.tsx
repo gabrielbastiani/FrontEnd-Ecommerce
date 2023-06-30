@@ -5,6 +5,7 @@ import theme from '../../styles/theme';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { AuthProvider } from '../contexts/AuthContext';
+import AuthProviderProducts from '../contexts/AuthContextProducts';
 import { Router } from 'next/dist/client/router';
 import NProgress, { trickle } from "nprogress";
 import 'nprogress/nprogress.css';
@@ -25,8 +26,10 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <ThemeProvider theme={theme}>
         <AuthProvider>
-          <Component {...pageProps} />
-          <ToastContainer autoClose={4000} />
+          <AuthProviderProducts>
+            <Component {...pageProps} />
+            <ToastContainer autoClose={4000} />
+          </AuthProviderProducts>
         </AuthProvider>
         <GlobalStyle />
       </ThemeProvider >
