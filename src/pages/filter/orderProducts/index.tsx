@@ -26,7 +26,7 @@ export default function OrderProducts() {
         async function loadordersProducts() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/orderProducts?product_id=${productsOrders}&sortBy=${params}`);
+                const { data } = await apiClient.get(`/orderProducts?${productsOrders}&sortBy=${params}`);
                 setOrderProducts(data || []);
                 
             } catch (error) {
