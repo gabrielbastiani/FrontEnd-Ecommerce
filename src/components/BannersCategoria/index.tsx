@@ -22,9 +22,14 @@ const BannersCategoria = ({ slug }: BannerPageRequest) => {
 
     const [bannerPages, setBannerPages] = useState([]);
     const [bannerAllCategories, setBannerAllCategories] = useState([]);
+    const [position, setPosition] = useState("");
 
-    const position = bannerPages.map(item => item?.slugPosition);
-    const stringposition = String(position);
+
+    useEffect(() => {
+        const position = bannerPages.map(item => item?.slugPosition);
+        const stringposition = String(position);
+        setPosition(stringposition);
+    }, [bannerPages]);
 
     useEffect(() => {
         async function loadBannerSlug() {
@@ -38,7 +43,7 @@ const BannersCategoria = ({ slug }: BannerPageRequest) => {
             }
         }
         loadBannerSlug();
-    }, [slug, stringposition]);
+    }, [slug, position]);
 
     useEffect(() => {
         async function loadBannerPages() {
@@ -57,21 +62,16 @@ const BannersCategoria = ({ slug }: BannerPageRequest) => {
 
     return (
         <>
-            {stringposition === slug ? (
+            {position === slug ? (
                 <BannersContainer>
                     <Container>
                         <Swiper
                             modules={[EffectFade, Autoplay]}
                             autoplay={{
-                                delay: 3300,
-                                disableOnInteraction: false,
+                                delay: 3300
                             }}
                             effect='fade'
                             slidesPerView={1}
-                            updateOnWindowResize
-                            observer
-                            observeParents
-                            loop
                             style={{
                                 width: "95%"
                             } as CSSProperties}
@@ -97,46 +97,39 @@ const BannersCategoria = ({ slug }: BannerPageRequest) => {
                     </Container>
                 </BannersContainer>
             ) :
-                <>
-                    <BannersContainer>
-                        <Container>
-                            <Swiper
-                                modules={[EffectFade, Autoplay]}
-                                autoplay={{
-                                    delay: 3300,
-                                    disableOnInteraction: false,
-                                }}
-                                effect='fade'
-                                slidesPerView={1}
-                                updateOnWindowResize
-                                observer
-                                observeParents
-                                loop
-                                style={{
-                                    width: "95%"
-                                } as CSSProperties}
-                            >
-                                {bannerAllCategories.map((item) => (
-                                    <SwiperSlide
-                                        key={item?.id}
-                                        style={{
-                                            width: "100%"
-                                        } as CSSProperties}
-                                    >
-                                        <Link href={item?.url} target="_blank">
-                                            <Image
-                                                src={'http://localhost:3333/files/' + item?.banner}
-                                                width={905}
-                                                height={318}
-                                                alt="Banners Loja Builder Seu Negocio Online"
-                                            />
-                                        </Link>
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
-                        </Container>
-                    </BannersContainer>
-                </>
+                <BannersContainer>
+                    <Container>
+                        <Swiper
+                            modules={[EffectFade, Autoplay]}
+                            autoplay={{
+                                delay: 3300
+                            }}
+                            effect='fade'
+                            slidesPerView={1}
+                            style={{
+                                width: "95%"
+                            } as CSSProperties}
+                        >
+                            {bannerAllCategories.map((item) => (
+                                <SwiperSlide
+                                    key={item?.id}
+                                    style={{
+                                        width: "100%"
+                                    } as CSSProperties}
+                                >
+                                    <Link href={item?.url} target="_blank">
+                                        <Image
+                                            src={'http://localhost:3333/files/' + item?.banner}
+                                            width={905}
+                                            height={318}
+                                            alt="Banners Loja Builder Seu Negocio Online"
+                                        />
+                                    </Link>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </Container>
+                </BannersContainer>
             }
         </>
     )

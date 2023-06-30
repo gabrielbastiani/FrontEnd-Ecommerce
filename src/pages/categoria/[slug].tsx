@@ -24,6 +24,7 @@ import Breadcrumbs from "../../components/Breadcrumbs";
 import FiltroPreco from "../../components/FiltroPreco";
 import ProdutosNaCategoria from "../../components/ProdutosNaCategoria";
 import BannersCategoria from "../../components/BannersCategoria";
+import OrdenarProdutos from "../../components/OrdenarProdutos";
 
 
 export default function Categoria() {
@@ -168,6 +169,8 @@ export default function Categoria() {
                         <BannersCategoria
                             slug={slug}
                         />
+
+                        <OrdenarProdutos />
 
                         <ProdutosNaCategoria
                             products={products}
