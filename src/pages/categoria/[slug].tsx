@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Modal from 'react-modal';
 import Router from 'next/router';
 import { setupAPIClient } from "../../services/api";
 import Head from "next/head";
@@ -12,11 +13,12 @@ import {
 import { HeaderStore } from "../../components/HeaderStore";
 import { FooterStore } from "../../components/FooterStore";
 import FooterAccount from "../../components/FooterAccount";
-import { BsFillFilterSquareFill } from 'react-icons/bs';
+import { BsFillFilterSquareFill, BsFilterSquare } from 'react-icons/bs';
 import {
     Filtros,
     TextFilter,
-    ButtonFilter
+    ButtonFilter,
+    ButtonFilterMobile
 } from "./styles";
 import CategoriasFilter from "../../components/CategoriasFilter";
 import AtributosFilter from "../../components/AtributosFilter";
@@ -26,7 +28,12 @@ import ProdutosNaCategoria from "../../components/ProdutosNaCategoria";
 import BannersCategoria from "../../components/BannersCategoria";
 import OrdenarProdutos from "../../components/OrdenarProdutos";
 import { AuthContextProducts } from "../../contexts/AuthContextProducts";
+import { ModalFilter } from "../../components/popups/ModalFilter";
 
+
+export type FiltersItens = {
+    slug: string;
+}
 
 export default function Categoria() {
 
@@ -46,8 +53,10 @@ export default function Categoria() {
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const filterAll = () => {
+
+    function filterAll() {
         const WEB_URL = 'http://localhost:3001';
         let param = '';
         filter && filter.map((ele) => {
@@ -151,6 +160,16 @@ export default function Categoria() {
     let data = allProductsCategory;
     setProductsData(data);
 
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete() {
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('#__next');
+
 
 
     return (
@@ -218,11 +237,27 @@ export default function Categoria() {
                             pages={pages}
                         />
 
+
                     </ContentPage>
                 </ContainerContent>
             </PageSection>
             <FooterStore />
             <FooterAccount />
+            {modalVisible ? (
+                <ModalFilter
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    /* @ts-ignore */
+                    filters={slug}
+                />
+            ) :
+                <ButtonFilterMobile
+                    onClick={handleOpenModalDelete}
+                >
+                    <BsFilterSquare size={25} />&nbsp;&nbsp;
+                    <TextFilter>FILTRAR</TextFilter>
+                </ButtonFilterMobile>
+            }
         </>
     )
 }

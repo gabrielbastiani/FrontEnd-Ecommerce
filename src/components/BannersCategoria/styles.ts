@@ -22,6 +22,7 @@ export const BannersContainer = styled.div`
 export const Container = styled.div`
   width: 100%;
   position: relative;
+  z-index: -1;
 
   img {
     width: 100%;

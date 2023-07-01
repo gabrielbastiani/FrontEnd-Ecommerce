@@ -8,7 +8,7 @@ interface FilterCategoryRequest {
     onClick(): void;
 }
 
-const CategoriasFilter = ({ idCateg, onClick }: FilterCategoryRequest) => {
+const CategoriasFilterModile = ({ idCateg, onClick }: FilterCategoryRequest) => {
 
     const [categs, setCategs] = useState<any[]>([]);
     const [subCategs, setSubCategs] = useState<any[]>([]);
@@ -46,7 +46,7 @@ const CategoriasFilter = ({ idCateg, onClick }: FilterCategoryRequest) => {
 
     useEffect(() => {
 
-        const tree = document.querySelector('div#tree');
+        const treemobile = document.querySelector('div#treemobile');
         const menu = document.createElement('div');
 
         const firstLevel = subCategs.filter(item => item);
@@ -82,7 +82,7 @@ const CategoriasFilter = ({ idCateg, onClick }: FilterCategoryRequest) => {
             return label;
         }
 
-        tree.appendChild(menu);
+        treemobile.appendChild(menu);
 
     }, [subCategs, categs]);
 
@@ -92,11 +92,11 @@ const CategoriasFilter = ({ idCateg, onClick }: FilterCategoryRequest) => {
             <TextAtribute>Categorias:</TextAtribute>
             <SubCategsBlockExtra>
 
-                <div id="tree"></div>
+                <div id="treemobile"></div>
 
             </SubCategsBlockExtra>
         </>
     );
 };
 
-export default CategoriasFilter;
+export default CategoriasFilterModile;
