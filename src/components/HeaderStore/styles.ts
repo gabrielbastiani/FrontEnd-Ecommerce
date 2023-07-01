@@ -9,6 +9,10 @@ export const ContainerHeaderStore = styled.header`
   flex-direction: column;
   z-index: 99;
   position: fixed;
+
+  @media (max-width: 1076px) {
+    z-index: 0;
+  }
 `
 
 export const ContentHeaderStore = styled.div`

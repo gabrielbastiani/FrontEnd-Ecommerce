@@ -237,7 +237,6 @@ export default function Categoria() {
                             pages={pages}
                         />
 
-
                     </ContentPage>
                 </ContainerContent>
             </PageSection>

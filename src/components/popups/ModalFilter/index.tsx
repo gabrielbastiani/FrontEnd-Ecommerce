@@ -27,7 +27,7 @@ export function ModalFilter({ isOpen, onRequestClose, filters }: FiltersProps) {
             left: '50%',
             right: 'auto',
             padding: '20px',
-            transform: 'translate(-50%, -50%)',
+            transform: 'translate(-50%, -55%)',
             backgroundColor: 'white',
         }
     };

@@ -11,6 +11,7 @@ interface PropType2 {
 export const Container = styled.section`
   width: 100%;
   position: relative;
+  z-index: -1;
 
   img {
     width: 100vw;

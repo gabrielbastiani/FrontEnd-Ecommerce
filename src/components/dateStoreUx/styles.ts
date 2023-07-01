@@ -41,7 +41,7 @@ export const AsideConteiner = styled.aside`
   height: 100%;
   top: 160px;
 
-  @media (max-width: 1078px) {
+  @media (max-width: 1158px) {
     display: none;
   }
 `

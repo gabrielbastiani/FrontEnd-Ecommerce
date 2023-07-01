@@ -37,7 +37,7 @@ export const ButtonFilterMobile = styled.button`
     background: ${props => props?.theme?.colors?.black};
   }
 
-  @media (max-width: 1076px) {
+  @media (max-width: 1158px) {
     display: block;
   }
 `

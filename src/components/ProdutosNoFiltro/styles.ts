@@ -1,41 +1,22 @@
 import styled from 'styled-components'
 
-export const SectionDestaqueProducts = styled.section`
-  width: 100%;
-  margin-bottom: 100px;
-  display: flex;
+export const GridSectionProducts = styled.div`
+  display: grid;
   justify-content: center;
-  align-items: center;
-`
+  grid-template-columns: 320px 320px 320px;
+  padding: 10px;
+  grid-gap: 25px;
 
-export const BoxTitle = styled.div`
-  display: flex;
-  width: 100%;
-  margin-top: 100px;
-  margin-bottom: 40px;
-`
+  @media (max-width: 1000px) {
+    grid-template-columns: 320px 320px;
+  }
 
-export const Container = styled.div`
-  max-width: 75vw;
-`
-
-export const Title = styled.h1`
-  color: ${props => props?.theme?.colors?.black};
-  padding-left: 0;
-  margin-left: 10vw;
-`
-
-export const Carousel = styled.div`
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-
-  ::-webkit-scrollbar {
-    display: none;
+  @media (max-width: 700px) {
+    grid-template-columns: 320px;
   }
 `
 
-export const Item = styled.div`
+export const BoxProduct = styled.div`
   background-color: ${props => props?.theme?.colors?.white};
   margin: 10px;
   padding: 10px;
@@ -53,26 +34,12 @@ export const Images = styled.div`
   height: 300px;
   margin-bottom: 10px;
   opacity: 1;
-  z-index:1;
+  z-index: 1;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-`
-
-export const ImagesHover = styled.div`
-  margin-top: -300px;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  :hover {
-    opacity:0;
   }
 `
 
@@ -96,32 +63,6 @@ export const Name = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   width: 95%;
-`
-
-export const OldPrice = styled.span`
-  font-size: 0.8rem;
-  text-decoration: line-through;
-  color: ${props => props?.theme?.colors?.gray};
-`
-
-export const Price = styled.span`
-  padding-top: 2px;
-  font-size: 1.3rem;
-  font-weight: bold;
-`
-
-export const Buttons = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  bottom: 250px;
-`
-
-export const Button = styled.button`
-  border: none;
-  cursor: pointer;
-  z-index: 0;
 `
 
 export const BoxBuy = styled.div`
@@ -188,4 +129,60 @@ export const Add = styled.button`
   :hover {
     opacity: 0.7;
   }
+`
+
+export const ImagesHover = styled.div`
+  margin-top: -300px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  :hover {
+    opacity: 0;
+  }
+`
+
+export const ContainerPagination = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+`
+
+export const ContainerPage = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const Previus = styled.div`
+  margin: 0 20px;
+`
+
+export const BoxPages = styled.div`
+  margin: 0 10px;
+`
+
+export const ButtonPage = styled.button`
+  padding: 7px;
+  padding: 7px;
+  background-color: ${props => props?.theme?.colors?.info};
+  border: solid 2px ${props => props?.theme?.colors?.black};
+  border-radius: 10px;
+  font-weight: 800;
+`
+
+export const TextPage = styled.button`
+  padding: 5px;
+  background-color: ${props => props?.theme?.colors?.gray};
+  border: solid 2px ${props => props?.theme?.colors?.black};
+  border-radius: 20%;
+  font-weight: 800;
+`
+
+export const Next = styled.div`
+  margin: 0 20px;
 `
