@@ -7,13 +7,13 @@ import { AuthContextProducts } from "../../../contexts/AuthContextProducts";
 
 
 export default function OrderProducts() {
-    /* @ts-ignore */
+
     const { productsData } = useContext(AuthContextProducts);
 
     const searchParams = useSearchParams();
     const params = searchParams.get("sortBy");
 
-    const [orderProducts, setOrderProducts] = useState([]);
+    const [orderProducts, setOrderProducts] = useState<any[]>([]);
 
     const arrOrder = productsData.map((ids: any) => ids.product_id);
     let paramOrderProducts = '';
@@ -22,13 +22,14 @@ export default function OrderProducts() {
     });
     const productsOrders = '?' + paramOrderProducts;
 
+
     useEffect(() => {
         async function loadordersProducts() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/orderProducts?${productsOrders}&sortBy=${params}`);
+                const { data } = await apiClient.get(`/orderProducts${productsOrders}sortBy=${params}`);
                 setOrderProducts(data || []);
-                
+
             } catch (error) {
                 console.log(error);
             }

@@ -28,7 +28,6 @@ import OrdenarProdutos from "../../components/OrdenarProdutos";
 import { AuthContextProducts } from "../../contexts/AuthContextProducts";
 
 
-
 export default function Categoria() {
 
     const router = useRouter();
@@ -38,8 +37,14 @@ export default function Categoria() {
     const [nameItens, setNameItens] = useState("");
     const [idCateg, setIdCatg] = useState("");
     const [idParent, setIdParent] = useState("");
-    const [products, setProducts] = useState([]);
-    const [filter, setFilter] = useState([]);
+    const [allProductsCategory, setAllProductsCategory] = useState<any[]>([]);
+    const [products, setProducts] = useState<any[]>([]);
+    const [filter, setFilter] = useState<any[]>([]);
+
+    const [total, setTotal] = useState(0);
+    const [limit] = useState(2);
+    const [pages, setPages] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
 
 
     const filterAll = () => {
@@ -104,26 +109,48 @@ export default function Categoria() {
     }, [slug]);
 
     useEffect(() => {
+        async function loadAllProductsCategory() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/getAllProductsCategory?slug=${slug}`);
+
+                setAllProductsCategory(data || []);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadAllProductsCategory();
+    }, [slug]);
+
+    useEffect(() => {
         async function loadProducts() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/productsPageCategories?slug=${slug}`);
+                const { data } = await apiClient.get(`/productsPageCategories?page=${currentPage}&limit=${limit}&slug=${slug}`);
 
-                setProducts(response.data || []);
+                setTotal(data?.total);
+                const totalPages = Math.ceil(total / limit);
+
+                const arrayPages = [];
+                for (let i = 1; i <= totalPages; i++) {
+                    arrayPages.push(i);
+                }
+
+                setPages(arrayPages || []);
+                setProducts(data?.productsCategories || []);
 
             } catch (error) {
                 console.log(error.response.data);
             }
         }
         loadProducts();
-    }, [slug]);
+    }, [currentPage, limit, total, slug]);
 
-    /* @ts-ignore */
     const { setProductsData } = useContext(AuthContextProducts);
-    
-    let data = products;
-
+    let data = allProductsCategory;
     setProductsData(data);
+
 
 
     return (
@@ -156,7 +183,7 @@ export default function Categoria() {
                         />
                         <br />
                         <AtributosFilter
-                            products={products}
+                            products={allProductsCategory}
                             onClick={getValueAttr}
                         />
                         <br />
@@ -168,7 +195,7 @@ export default function Categoria() {
                         <br />
                         <br />
                         <FiltroPreco
-                            products={products}
+                            products={allProductsCategory}
                         />
                         <br />
                         <br />
@@ -180,10 +207,15 @@ export default function Categoria() {
                             slug={slug}
                         />
 
-                        <OrdenarProdutos />
+                        <OrdenarProdutos
+                            total={total}
+                        />
 
                         <ProdutosNaCategoria
                             products={products}
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            pages={pages}
                         />
 
                     </ContentPage>

@@ -2,7 +2,11 @@ import Link from "next/link";
 import {
     Add,
     BoxBuy,
+    BoxPages,
     BoxProduct,
+    ButtonPage,
+    ContainerPage,
+    ContainerPagination,
     GridSectionProducts,
     Images,
     ImagesHover,
@@ -10,7 +14,10 @@ import {
     Max,
     Min,
     Name,
+    Next,
+    Previus,
     Quantidade,
+    TextPage,
     ValueQuant
 } from "./styles";
 import { OldPrice, Price } from "../DestaqueProducts/styles";
@@ -21,9 +28,12 @@ import semimagem from '../../assets/semfoto.png';
 
 interface ProductsRequest {
     products: any;
+    currentPage: any;
+    setCurrentPage: any;
+    pages: any;
 }
 
-const ProdutosNaCategoria = ({ products }: ProductsRequest) => {
+const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: ProductsRequest) => {
     return (
         <>
             <GridSectionProducts>
@@ -68,6 +78,38 @@ const ProdutosNaCategoria = ({ products }: ProductsRequest) => {
                     )
                 })}
             </GridSectionProducts>
+
+            <ContainerPagination>
+                <ContainerPage>
+                    {currentPage > 1 && (
+                        <Previus>
+                            <ButtonPage onClick={() => setCurrentPage(currentPage - 1)}>
+                                Voltar
+                            </ButtonPage>
+                        </Previus>
+                    )}
+
+                    {pages.map((page: any) => (
+                        <BoxPages
+                            key={page}
+                        >
+                            <TextPage
+                                onClick={() => setCurrentPage(page)}
+                            >
+                                {page}
+                            </TextPage>
+                        </BoxPages>
+                    ))}
+
+                    {currentPage < products?.length && (
+                        <Next>
+                            <ButtonPage onClick={() => setCurrentPage(currentPage + 1)}>
+                                Avançar
+                            </ButtonPage>
+                        </Next>
+                    )}
+                </ContainerPage>
+            </ContainerPagination>
         </>
     );
 };

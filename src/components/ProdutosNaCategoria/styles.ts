@@ -144,3 +144,45 @@ export const ImagesHover = styled.div`
     opacity: 0;
   }
 `
+
+export const ContainerPagination = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+`
+
+export const ContainerPage = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const Previus = styled.div`
+  margin: 0 20px;
+`
+
+export const BoxPages = styled.div`
+  margin: 0 10px;
+`
+
+export const ButtonPage = styled.button`
+  padding: 7px;
+  padding: 7px;
+  background-color: ${props => props?.theme?.colors?.info};
+  border: solid 2px ${props => props?.theme?.colors?.black};
+  border-radius: 10px;
+  font-weight: 800;
+`
+
+export const TextPage = styled.button`
+  padding: 5px;
+  background-color: ${props => props?.theme?.colors?.gray};
+  border: solid 2px ${props => props?.theme?.colors?.black};
+  border-radius: 20%;
+  font-weight: 800;
+`
+
+export const Next = styled.div`
+  margin: 0 20px;
+`

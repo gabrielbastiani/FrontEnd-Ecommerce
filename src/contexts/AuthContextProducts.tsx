@@ -1,12 +1,22 @@
-import { createContext, useState } from 'react';
+import { ReactNode, createContext, useState } from 'react';
+import { ProductDataContextType } from '../../@types/dataproducts';
 
-export const AuthContextProducts = createContext({});
+type MyContextProps = {
+  productsData: Array<ProductDataContextType>;
+  setProductsData: (productsData: Array<ProductDataContextType>) => void;
+};
 
-function AuthProviderProducts({children}) {
-  
-  const [productsData, setProductsData] = useState([]);
+type Props = {
+  children: ReactNode;
+};
 
-  return (/* @ts-ignore */
+export const AuthContextProducts = createContext({} as MyContextProps);
+
+function AuthProviderProducts({ children }: Props) {
+
+  const [productsData, setProductsData] = useState<any[]>([]);
+
+  return (
     <AuthContextProducts.Provider value={{ productsData, setProductsData }}>
       {children}
     </AuthContextProducts.Provider>
