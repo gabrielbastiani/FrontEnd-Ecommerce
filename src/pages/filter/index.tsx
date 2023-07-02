@@ -13,7 +13,7 @@ import { AsideConteiner, ContainerContent, ContentPage, PageSection } from "../.
 import OrdenarProdutos from "../../components/OrdenarProdutos";
 import BannersCategoria from "../../components/BannersCategoria";
 import ProdutosNoFiltro from "../../components/ProdutosNoFiltro";
-import FiltroPagePreco from "../../components/FiltroPagePreco";
+import FiltroPagePreco from "../../components/FiltroPreco/FiltroPagePreco";
 import AtributosFilterFilter from "../../components/AtributosFilter/AtributosFilterFilter";
 import CategoriasFilterFilter from "../../components/CategoriasFilter/CategoriasFilterFilter";
 import { HeaderStore } from "../../components/HeaderStore";
@@ -43,8 +43,6 @@ export default function FilterPage() {
     let url = new URL(NEW_URL);
 
     const [filtersProducts, setFiltersProducts] = useState<any[]>([]);
-
-    console.log(url?.search)
 
     useEffect(() => {
         async function loadFilters() {
@@ -126,7 +124,6 @@ export default function FilterPage() {
     }
 
     Modal.setAppElement('#__next');
-
 
 
     return (
