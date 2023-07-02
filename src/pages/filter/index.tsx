@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
 import Modal from 'react-modal';
+import { ModalFilterFilter } from "../../components/popups/ModalFilter/ModalFilterFilter";
 import { ButtonFilter, ButtonFilterMobile, Filtros, TextFilter } from "../categoria/styles";
 import { BsFillFilterSquareFill, BsFilterSquare } from "react-icons/bs";
 import FooterAccount from "../../components/FooterAccount";
@@ -13,11 +14,10 @@ import OrdenarProdutos from "../../components/OrdenarProdutos";
 import BannersCategoria from "../../components/BannersCategoria";
 import ProdutosNoFiltro from "../../components/ProdutosNoFiltro";
 import FiltroPagePreco from "../../components/FiltroPagePreco";
-import AtributosFilterFilter from "../../components/AtributosFilterFilter";
-import CategoriasFilter from "../../components/CategoriasFilter";
+import AtributosFilterFilter from "../../components/AtributosFilter/AtributosFilterFilter";
+import CategoriasFilterFilter from "../../components/CategoriasFilter/CategoriasFilterFilter";
 import { HeaderStore } from "../../components/HeaderStore";
 import Router from "next/router";
-import { ModalFilter } from "../../components/popups/ModalFilter";
 import { AuthContextProducts } from "../../contexts/AuthContextProducts";
 
 
@@ -69,10 +69,6 @@ export default function FilterPage() {
         }
         loadFilters();
     }, [url?.search, currentPage, limit]);
-
-
-    console.log(filtersProducts)
-    
 
     function filterAll() {
         const WEB_URL = 'http://localhost:3001';
@@ -145,10 +141,9 @@ export default function FilterPage() {
                             <TextFilter>Filtrar por:</TextFilter>
                         </Filtros>
 
-                        {/* <CategoriasFilter
-                            idCateg={idCateg}
+                        <CategoriasFilterFilter
                             onClick={getValueCateg}
-                        /> */}
+                        />
                         <br />
                         <AtributosFilterFilter
                             products={filtersProducts}
@@ -192,11 +187,9 @@ export default function FilterPage() {
             <FooterStore />
             <FooterAccount />
             {modalVisible ? (
-                <ModalFilter
+                <ModalFilterFilter
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
-                    /* @ts-ignore */
-                    filters={slug}
                 />
             ) :
                 <ButtonFilterMobile

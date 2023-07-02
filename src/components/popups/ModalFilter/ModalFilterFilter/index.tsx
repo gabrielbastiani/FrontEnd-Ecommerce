@@ -1,24 +1,22 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import CategoriasFilterModile from '../../CategoriasFilter/CategoriasFilterMobile';
+import CategoriasFilterModile from '../../../CategoriasFilter/CategoriasFilterMobile';
 import { ButtonClose, ContainerContent } from './styles';
-import { ButtonFilter, Filtros, TextFilter } from '../../../pages/categoria/styles';
+import { ButtonFilter, Filtros, TextFilter } from '../../../../pages/categoria/styles';
 import { BsFillFilterSquareFill } from 'react-icons/bs';
-import AtributosFilter from '../../AtributosFilter';
-import FiltroPrecoMobile from '../../FiltroPrecoMobile';
-import { FiltersItens } from '../../../pages/categoria/[slug]';
+import AtributosFilter from '../../../AtributosFilter';
+import FiltroPrecoMobile from '../../../FiltroPrecoMobile';
 import { useEffect, useState } from 'react';
-import { setupAPIClient } from '../../../services/api';
+import { setupAPIClient } from '../../../../services/api';
 import Router from 'next/router';
 
 
 interface FiltersProps {
     isOpen: boolean;
     onRequestClose: () => void;
-    filters: FiltersItens;
 }
 
-export function ModalFilter({ isOpen, onRequestClose, filters }: FiltersProps) {
+export function ModalFilterFilter({ isOpen, onRequestClose }: FiltersProps) {
 
     const customStyles = {
         content: {
@@ -80,7 +78,7 @@ export function ModalFilter({ isOpen, onRequestClose, filters }: FiltersProps) {
         return arr;
     }
 
-    useEffect(() => {
+    /* useEffect(() => {
         async function loadSlugDate() {
             const apiClient = setupAPIClient();
             try {
@@ -108,7 +106,7 @@ export function ModalFilter({ isOpen, onRequestClose, filters }: FiltersProps) {
             }
         }
         loadAllProductsCategory();
-    }, [filters]);
+    }, [filters]); */
 
 
     return (

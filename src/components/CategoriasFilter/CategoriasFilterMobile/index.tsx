@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { setupAPIClient } from "../../services/api";
+import { setupAPIClient } from "../../../services/api";
 import { SubCategsBlockExtra, TextAtribute } from "./styles";
 
 
@@ -8,7 +8,7 @@ interface FilterCategoryRequest {
     onClick(): void;
 }
 
-const CategoriasFilterModile = ({ idCateg, onClick }: FilterCategoryRequest) => {
+const CategoriasFilterMobile = ({ idCateg, onClick }: FilterCategoryRequest) => {
 
     const [categs, setCategs] = useState<any[]>([]);
     const [subCategs, setSubCategs] = useState<any[]>([]);
@@ -99,4 +99,4 @@ const CategoriasFilterModile = ({ idCateg, onClick }: FilterCategoryRequest) => 
     );
 };
 
-export default CategoriasFilterModile;
+export default CategoriasFilterMobile;

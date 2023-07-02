@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
-import { setupAPIClient } from "../../services/api";
+import { setupAPIClient } from "../../../services/api";
 import { SubCategsBlockExtra, TextAtribute } from "./styles";
 
 
 interface FilterCategoryRequest {
-    idCateg: string;
     onClick(): void;
 }
 
-const CategoriasFilter = ({ idCateg, onClick }: FilterCategoryRequest) => {
+const CategoriasFilterFilter = ({ onClick }: FilterCategoryRequest) => {
 
     const [categs, setCategs] = useState<any[]>([]);
-    const [subCategs, setSubCategs] = useState<any[]>([]);
-
 
     useEffect(() => {
         async function loadCategs() {
@@ -30,26 +27,11 @@ const CategoriasFilter = ({ idCateg, onClick }: FilterCategoryRequest) => {
     }, []);
 
     useEffect(() => {
-        async function loadSubCategs() {
-            const apiClient = setupAPIClient();
-            try {
-                const { data } = await apiClient.get(`/categoriesInPageCategory?parentId=${idCateg}`);
 
-                setSubCategs(data || []);
-
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        }
-        loadSubCategs();
-    }, [idCateg]);
-
-    useEffect(() => {
-
-        const tree = document.querySelector('div#tree');
+        const treefilter = document.querySelector('div#treefilter');
         const menu = document.createElement('div');
 
-        const firstLevel = subCategs.filter(item => item);
+        const firstLevel = categs.filter(item => !item?.parentId);
         const getFirstLis = firstLevel.map(buildTree);
         getFirstLis.forEach(label => menu.append(label));
 
@@ -82,9 +64,9 @@ const CategoriasFilter = ({ idCateg, onClick }: FilterCategoryRequest) => {
             return label;
         }
 
-        tree.appendChild(menu);
+        treefilter.appendChild(menu);
 
-    }, [subCategs, categs]);
+    }, [categs]);
 
 
     return (
@@ -92,11 +74,11 @@ const CategoriasFilter = ({ idCateg, onClick }: FilterCategoryRequest) => {
             <TextAtribute>Categorias:</TextAtribute>
             <SubCategsBlockExtra>
 
-                <div id="tree"></div>
+                <div id="treefilter"></div>
 
             </SubCategsBlockExtra>
         </>
     );
 };
 
-export default CategoriasFilter;
+export default CategoriasFilterFilter;

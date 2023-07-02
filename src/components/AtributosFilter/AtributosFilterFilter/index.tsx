@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { setupAPIClient } from "../../services/api";
+import { setupAPIClient } from "../../../services/api";
 import { InputAttribute, SectionAtributes, SubCategsBlockExtra, TextAtribute, TypeAtribute } from "./styles";
 import { FilterText } from "./styles";
 
