@@ -49,7 +49,7 @@ export default function Categoria() {
     const [filter, setFilter] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
-    const [limit] = useState(2);
+    const [limit] = useState(20);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 

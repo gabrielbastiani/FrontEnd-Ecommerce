@@ -11,14 +11,14 @@ import { FooterStore } from "../../components/FooterStore";
 import { AsideConteiner, ContainerContent, ContentPage, PageSection } from "../../components/dateStoreUx/styles";
 import OrdenarProdutos from "../../components/OrdenarProdutos";
 import BannersCategoria from "../../components/BannersCategoria";
-import AtributosFilter from "../../components/AtributosFilter";
+import ProdutosNoFiltro from "../../components/ProdutosNoFiltro";
+import FiltroPagePreco from "../../components/FiltroPagePreco";
+import AtributosFilterFilter from "../../components/AtributosFilterFilter";
 import CategoriasFilter from "../../components/CategoriasFilter";
 import { HeaderStore } from "../../components/HeaderStore";
 import Router from "next/router";
 import { ModalFilter } from "../../components/popups/ModalFilter";
 import { AuthContextProducts } from "../../contexts/AuthContextProducts";
-import ProdutosNoFiltro from "../../components/ProdutosNoFiltro";
-import FiltroPagePreco from "../../components/FiltroPagePreco";
 
 
 export default function FilterPage() {
@@ -27,7 +27,7 @@ export default function FilterPage() {
     const params = searchParams.getAll("q");
 
     const [total, setTotal] = useState(0);
-    const [limit] = useState(2);
+    const [limit] = useState(20);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -44,12 +44,13 @@ export default function FilterPage() {
 
     const [filtersProducts, setFiltersProducts] = useState<any[]>([]);
 
+    console.log(url?.search)
 
     useEffect(() => {
         async function loadFilters() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/filter${url.search}page=${currentPage}&limit=${limit}`);
+                const { data } = await apiClient.get(`/filter${url?.search}limit=${limit}&page=${currentPage}`);
 
                 setTotal(data?.total);
                 const totalPages = Math.ceil(total / limit);
@@ -67,9 +68,11 @@ export default function FilterPage() {
             }
         }
         loadFilters();
-    }, [url.search]);
+    }, [url?.search, currentPage, limit]);
+
 
     console.log(filtersProducts)
+    
 
     function filterAll() {
         const WEB_URL = 'http://localhost:3001';
@@ -147,7 +150,7 @@ export default function FilterPage() {
                             onClick={getValueCateg}
                         /> */}
                         <br />
-                        <AtributosFilter
+                        <AtributosFilterFilter
                             products={filtersProducts}
                             onClick={getValueAttr}
                         />

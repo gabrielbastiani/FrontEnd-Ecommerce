@@ -10,6 +10,8 @@ interface FilterCategoryRequest {
 
 const CategoriasFilter = ({ idCateg, onClick }: FilterCategoryRequest) => {
 
+    console.log(idCateg)
+
     const [categs, setCategs] = useState<any[]>([]);
     const [subCategs, setSubCategs] = useState<any[]>([]);
 

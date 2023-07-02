@@ -9,7 +9,7 @@ interface FilterAtributesRequest {
     onClick(): void;
 }
 
-const AtributosFilter = ({ products, onClick }: FilterAtributesRequest) => {
+const AtributosFilterFilter = ({ products, onClick }: FilterAtributesRequest) => {
 
     const [allProductsAttributes, setAllProductsAttributes] = useState([]);
 
@@ -18,7 +18,7 @@ const AtributosFilter = ({ products, onClick }: FilterAtributesRequest) => {
         return filterObj.hasOwnProperty(typ?.type) ? false : (filterObj[typ?.type] = true)
     });
 
-    const arrayIdAttr = products.map((ids: any) => ids?.product_id);
+    const arrayIdAttr = products.map((ids: any) => ids?.id);
     let paramAttr = '';
     arrayIdAttr && arrayIdAttr.map((item: any) => {
         paramAttr = paramAttr + 'product_id=' + item + '&'
@@ -86,4 +86,4 @@ const AtributosFilter = ({ products, onClick }: FilterAtributesRequest) => {
     );
 };
 
-export default AtributosFilter;
+export default AtributosFilterFilter;
