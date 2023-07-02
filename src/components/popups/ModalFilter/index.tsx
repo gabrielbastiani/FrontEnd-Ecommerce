@@ -5,7 +5,7 @@ import { ButtonClose, ContainerContent } from './styles';
 import { ButtonFilter, Filtros, TextFilter } from '../../../pages/categoria/styles';
 import { BsFillFilterSquareFill } from 'react-icons/bs';
 import AtributosFilter from '../../AtributosFilter';
-import FiltroPrecoMobile from '../../FiltroPrecoMobile';
+import FiltroPrecoMobile from '../../FiltroPreco/FiltroPrecoMobile';
 import { FiltersItens } from '../../../pages/categoria/[slug]';
 import { useEffect, useState } from 'react';
 import { setupAPIClient } from '../../../services/api';

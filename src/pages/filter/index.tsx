@@ -190,6 +190,7 @@ export default function FilterPage() {
                 <ModalFilterFilter
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModalDelete}
+                    productsFilter={filtersProducts}
                 />
             ) :
                 <ButtonFilterMobile

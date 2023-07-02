@@ -1,22 +1,22 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import CategoriasFilterModile from '../../../CategoriasFilter/CategoriasFilterMobile';
 import { ButtonClose, ContainerContent } from './styles';
 import { ButtonFilter, Filtros, TextFilter } from '../../../../pages/categoria/styles';
 import { BsFillFilterSquareFill } from 'react-icons/bs';
-import AtributosFilter from '../../../AtributosFilter';
-import FiltroPrecoMobile from '../../../FiltroPrecoMobile';
-import { useEffect, useState } from 'react';
-import { setupAPIClient } from '../../../../services/api';
+import { useState } from 'react';
 import Router from 'next/router';
+import CategoriasFilterFilterMobile from '../../../CategoriasFilter/CategoriasFilterFilter/CategoriasFilterFilterMobile';
+import AtributosFilterFilter from '../../../AtributosFilter/AtributosFilterFilter';
+import FiltroPrecoFilterMobile from '../../../FiltroPreco/FiltroPrecoMobile/FiltroPrecoFilterMobile';
 
 
 interface FiltersProps {
     isOpen: boolean;
     onRequestClose: () => void;
+    productsFilter: any
 }
 
-export function ModalFilterFilter({ isOpen, onRequestClose }: FiltersProps) {
+export function ModalFilterFilter({ isOpen, onRequestClose, productsFilter }: FiltersProps) {
 
     const customStyles = {
         content: {
@@ -30,8 +30,6 @@ export function ModalFilterFilter({ isOpen, onRequestClose }: FiltersProps) {
         }
     };
 
-    const [idCateg, setIdCatg] = useState("");
-    const [allProductsCategory, setAllProductsCategory] = useState<any[]>([]);
     const [filter, setFilter] = useState<any[]>([]);
 
 
@@ -78,36 +76,6 @@ export function ModalFilterFilter({ isOpen, onRequestClose }: FiltersProps) {
         return arr;
     }
 
-    /* useEffect(() => {
-        async function loadSlugDate() {
-            const apiClient = setupAPIClient();
-            try {
-                const { data } = await apiClient.get(`/findDateSlugCategory?slug=${filters}`);
-
-                setIdCatg(data?.id);
-
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        }
-        loadSlugDate();
-    }, [filters]);
-
-    useEffect(() => {
-        async function loadAllProductsCategory() {
-            const apiClient = setupAPIClient();
-            try {
-                const { data } = await apiClient.get(`/getAllProductsCategory?slug=${filters}`);
-
-                setAllProductsCategory(data || []);
-
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        }
-        loadAllProductsCategory();
-    }, [filters]); */
-
 
     return (
         <Modal
@@ -131,13 +99,12 @@ export function ModalFilterFilter({ isOpen, onRequestClose }: FiltersProps) {
                     <TextFilter>Filtrar por:</TextFilter>
                 </Filtros>
 
-                <CategoriasFilterModile
-                    idCateg={idCateg}
+                <CategoriasFilterFilterMobile
                     onClick={getValueCateg}
                 />
                 <br />
-                <AtributosFilter
-                    products={allProductsCategory}
+                <AtributosFilterFilter
+                    products={productsFilter}
                     onClick={getValueAttr}
                 />
                 <br />
@@ -148,8 +115,8 @@ export function ModalFilterFilter({ isOpen, onRequestClose }: FiltersProps) {
                 </ButtonFilter>
                 <br />
                 <br />
-                <FiltroPrecoMobile
-                    products={allProductsCategory}
+                <FiltroPrecoFilterMobile
+                    products={productsFilter}
                 />
                 <br />
                 <br />
