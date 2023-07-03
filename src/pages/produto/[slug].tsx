@@ -1,6 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
+import Head from "next/head";
+import { HeaderStore } from "../../components/HeaderStore";
+import { FooterStore } from "../../components/FooterStore";
+import FooterAccount from "../../components/FooterAccount";
+import { ContainerContent, PageSection } from "../../components/dateStoreUx/styles";
+import { ImagesProductContainer, ProductContainer } from "./styles";
 
 
 export default function Produto() {
@@ -10,7 +16,29 @@ export default function Produto() {
 
     const [name, setName] = useState('');
     const [photoProduct, setPhotoProduct] = useState('');
+    const [allPhotoProduct, setAllPhotoProduct] = useState<any[]>([]);
+    const [price, setPrice] = useState(Number);
+    const [promotion, setPromotion] = useState(Number);
+    const [sku, setSku] = useState('');
+    const [stock, setStock] = useState(Number);
+    const [weight, setWeight] = useState('');
+    const [width, setWidth] = useState('');
+    const [height, setHeight] = useState('');
+    const [depth, setDepth] = useState('');
+    const [brand, setBrand] = useState('');
+    const [urlVideo, setUrlVideo] = useState('');
+    const [gtin, setGtin] = useState('');
+    const [freeShipping, setFreeShipping] = useState<any[]>([]);
+    const [buyTogether, setBuyTogether] = useState<any[]>([]);
+    const [descriptionproducts, setDescriptionproducts] = useState<any[]>([]);
+    const [tags, setTags] = useState<any[]>([]);
+    const [relationattributeproducts, setRelationattributeproducts] = useState<any[]>([]);
+    const [variations, setVariations] = useState<any[]>([]);
+    const [productsvariations, setProductsvariations] = useState<any[]>([]);
+    const [avalietions, setAvalietions] = useState<any[]>([]);
+    const [productcategories, setProductcategories] = useState<any[]>([]);
 
+    
 
     useEffect(() => {
         async function loadProduct() {
@@ -18,11 +46,32 @@ export default function Produto() {
             try {
                 const { data } = await apiClient.get(`/exactProductPage?slug=${slug}`);
 
-                setName(data?.name);
-                setPhotoProduct(data?.photoproducts[0]?.image)
+                setName(data?.name || "");
+                setPhotoProduct(data?.photoproducts[0]?.image || "");
+                setAllPhotoProduct(data?.photoproducts || []);
+                setPrice(data?.price);
+                setPromotion(data?.promotion);
+                setSku(data?.sku || "");
+                setStock(data?.stock);
+                setWeight(data?.weight || "");
+                setWidth(data?.width || "");
+                setHeight(data?.height || "");
+                setDepth(data?.depth || "");
+                setBrand(data?.brand || "");
+                setUrlVideo(data?.urlVideo || "");
+                setGtin(data?.gtin || "");
+                setFreeShipping(data?.freeShipping);
+                setBuyTogether(data?.buytogethers || []);
+                setDescriptionproducts(data?.descriptionproducts || []);
+                setTags(data?.tags || []);
+                setRelationattributeproducts(data?.relationattributeproducts || []);
+                setVariations(data?.variations || []);
+                setProductsvariations(data?.productsvariations || []);
+                setAvalietions(data?.avalietions || []);
+                setProductcategories(data?.productcategories || []);
 
             } catch (error) {
-                console.log(error);
+                console.log(error.data.response);
             }
         }
         loadProduct();
@@ -43,9 +92,31 @@ export default function Produto() {
          addItem();
     },[slug, photoProduct, name]);
 
+
     return (
         <>
-            <h1>Produto {slug}</h1>
+            <Head>
+                <title>{name}</title>
+            </Head>
+
+            <HeaderStore />
+
+            <PageSection>
+
+            <ContainerContent>
+                <ImagesProductContainer>
+                    ddddddddddddddd
+                </ImagesProductContainer>
+
+                <ProductContainer>
+                    jjjjjjjjjjjjjjjjjj
+                </ProductContainer>
+            </ContainerContent>
+            
+            </PageSection>
+            
+            <FooterStore />
+            <FooterAccount />
         </>
     )
 }

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const PageSection = styled.main`
   padding-top: 170px;
