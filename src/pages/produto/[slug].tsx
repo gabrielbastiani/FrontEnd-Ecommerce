@@ -7,6 +7,7 @@ import { FooterStore } from "../../components/FooterStore";
 import FooterAccount from "../../components/FooterAccount";
 import { ContainerContent, PageSection } from "../../components/dateStoreUx/styles";
 import { ImagesProductContainer, ProductContainer } from "./styles";
+import CarrosselImagesPageProduct from "../../components/CarrosselImagesPageProduct";
 
 
 export default function Produto() {
@@ -14,6 +15,7 @@ export default function Produto() {
     const router = useRouter();
     let slug = router.query.slug;
 
+    const [product_id, setProduct_id] = useState('');
     const [name, setName] = useState('');
     const [photoProduct, setPhotoProduct] = useState('');
     const [allPhotoProduct, setAllPhotoProduct] = useState<any[]>([]);
@@ -46,6 +48,7 @@ export default function Produto() {
             try {
                 const { data } = await apiClient.get(`/exactProductPage?slug=${slug}`);
 
+                setProduct_id(data?.id);
                 setName(data?.name || "");
                 setPhotoProduct(data?.photoproducts[0]?.image || "");
                 setAllPhotoProduct(data?.photoproducts || []);
@@ -105,7 +108,9 @@ export default function Produto() {
 
             <ContainerContent>
                 <ImagesProductContainer>
-                    ddddddddddddddd
+                    <CarrosselImagesPageProduct
+                        product_id={product_id}
+                    />
                 </ImagesProductContainer>
 
                 <ProductContainer>
