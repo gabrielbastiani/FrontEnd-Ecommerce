@@ -74,13 +74,15 @@ export const SwiperButtonLeft = styled.button<PropType2>`
         `};
 `
 
-export const BoxName = styled.div`
+export const ContainerNameProduct = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`
+
+export const BoxName = styled.div`
   background-color: ${props => props?.theme?.colors?.black};
   padding: 10px;
-  border-radius: 10%;
   width: 500px;
 `
 

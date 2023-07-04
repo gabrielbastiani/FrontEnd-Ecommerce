@@ -3,7 +3,7 @@ import { setupAPIClient } from '../../services/api';
 import Modal from 'react-modal';
 import Image from 'next/image';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
-import { BoxPhotoProduct, Button, Buttons, Carousel, Container, Images, Item } from './styles';
+import { BoxPhotoProduct, Button, Buttons, Carousel, Container, Images, Item, Magnify } from './styles';
 import { ModalImageProduct } from '../popups/ModalImageProduct';
 
 
@@ -21,6 +21,33 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
     const productName = nameProduct.map(item => item?.product?.name);
 
     const [modalVisible, setModalVisible] = useState(false);
+
+    const MAGNIFY_SIZE = 200;
+    const MAGNIFY_SIZE_HALF = MAGNIFY_SIZE / 2;
+
+    const [magnifyStyle, setMagnifyStyle] = useState({ backgroundImage: `url(http://localhost:3333/files/${firstImage})` });
+
+    console.log(magnifyStyle)
+
+    const handleMouseMove = (e: any) => {
+        const { offsetX, offsetY, target } = e.nativeEvent;
+        const { offsetWidth, offsetHeight } = target;
+
+        const xPercentage = (offsetX / offsetWidth) * 100;
+        const yPercentage = (offsetY / offsetHeight) * 100;
+
+        setMagnifyStyle((prev) => ({
+            ...prev,
+            display: 'block',
+            top: `${offsetY - MAGNIFY_SIZE_HALF}px`,
+            left: `${offsetX - MAGNIFY_SIZE_HALF}px`,
+            backgroundPosition: `${xPercentage}% ${yPercentage}%`,
+        }));
+    };
+
+    const handleMouseLeave = (e: any) => {
+        setMagnifyStyle((prev) => ({ ...prev, display: 'none' }));
+    };
 
     useEffect(() => {
         async function loadPhotosProduct() {
@@ -97,8 +124,12 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
                                 width={500}
                                 height={500}
                                 alt="Imagem do produto"
-                                onClick={() => handleOpenModalDelete() }
+                                draggable={false}
+                                onClick={() => handleOpenModalDelete()}
+                                onMouseLeave={handleMouseLeave}
+                                onMouseMove={handleMouseMove}
                             />
+                            <Magnify style={magnifyStyle}></Magnify>
                         </BoxPhotoProduct>
                     </>
                 ) :
@@ -109,8 +140,12 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
                                 width={500}
                                 height={500}
                                 alt="Imagem do produto"
+                                draggable={false}
                                 onClick={() => handleOpenModalDelete()}
+                                onMouseLeave={handleMouseLeave}
+                                onMouseMove={handleMouseMove}
                             />
+                            <Magnify style={magnifyStyle}></Magnify>
                         </BoxPhotoProduct>
                     </>
                 }

@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { BoxName, ButtonClose, ContainerContent, ProductName, SwiperButton, SwiperButtonLeft } from './styles';
+import { BoxName, ButtonClose, ContainerContent, ContainerNameProduct, ProductName, SwiperButton, SwiperButtonLeft } from './styles';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { register } from 'swiper/element/bundle';
@@ -47,7 +47,7 @@ export function ModalImageProduct({ isOpen, onRequestClose, nameProduct, allImag
         }
     }, [swiper]);
 
-   
+
 
     return (
         <Modal
@@ -70,7 +70,6 @@ export function ModalImageProduct({ isOpen, onRequestClose, nameProduct, allImag
                     modules={[EffectFade]}
                     effect='fade'
                     slidesPerView={1}
-                    pagination={{ clickable: true }}
                     navigation={{
                         prevEl: prevRef?.current,
                         nextEl: nextRef?.current
@@ -89,9 +88,11 @@ export function ModalImageProduct({ isOpen, onRequestClose, nameProduct, allImag
                                 height={610}
                                 alt="Imagem Produto Loja Builder Seu Negocio Online"
                             />
-                            <BoxName>
-                                <ProductName>{nameProduct}</ProductName>
-                            </BoxName>
+                            <ContainerNameProduct>
+                                <BoxName>
+                                    <ProductName>{nameProduct}</ProductName>
+                                </BoxName>
+                            </ContainerNameProduct>
                         </SwiperSlide>
                     ))}
                 </Swiper>
