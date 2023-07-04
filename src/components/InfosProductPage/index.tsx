@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+    Attribute,
     BoxAddCart,
     BoxCart,
     BoxContentproduct,
@@ -95,33 +96,37 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
         loadDataProduct();
     }, [slug]);
 
-    const priceDivisor = promotion * 12
+    const priceDivisor = promotion * 12;
 
 
     return (
         <>
             <ContatinerInfosProduct>
 
-                <BoxContentproduct>
-                    <TextSku>SKU {sku}</TextSku>
-                    <TextNameProduct>{name}</TextNameProduct>
-                    <ButtonAvalieProduct>
-                        <AiFillStar color="gold" size={20} />
-                        <AiFillStar color="gold" size={20} />
-                        <AiFillStar color="gold" size={20} />
-                        <AiFillStar color="gold" size={20} />
-                        <TextAvalie>Avalie</TextAvalie>
-                    </ButtonAvalieProduct>
-                </BoxContentproduct>
+                <TextSku>SKU {sku}</TextSku>
+                <TextNameProduct>{name}</TextNameProduct>
+                <ButtonAvalieProduct>
+                    <AiFillStar color="gold" size={20} />
+                    <AiFillStar color="gold" size={20} />
+                    <AiFillStar color="gold" size={20} />
+                    <AiFillStar color="gold" size={20} />
+                    <TextAvalie>Avalie</TextAvalie>
+                </ButtonAvalieProduct>
 
                 <ContainerAttributes>
-                    Atributos Map Array aqui
+                    {relationattributeproducts.map((item) => {
+                        return (
+                            <Attribute key={item?.id}>
+                                {item?.valueAttribute?.value}
+                            </Attribute>
+                        )
+                    })}
                 </ContainerAttributes>
 
                 <BoxContentproduct>
-                    <TextPrice>{price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPrice>
-                    <TextPromotion>{promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPromotion>
-                    <TextCredit>12x de {priceDivisor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })} com juros de Cartão de Crédito</TextCredit>
+                    <TextPrice>{price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPrice>
+                    <TextPromotion>{promotion?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPromotion>
+                    <TextCredit>12x de {priceDivisor?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })} com juros de Cartão de Crédito</TextCredit>
                     <ButtonContraProposta>
                         <RiAuctionFill color="black" size={20} />
                         FAZER CONTRAPROPOSTA
