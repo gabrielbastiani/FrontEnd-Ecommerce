@@ -11,15 +11,28 @@ interface PropType2 {
 export const ButtonClose = styled.button``
 
 export const ContainerContent = styled.section`
-  width: 40vw;
+  width: 50vw;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
 
+  @media (max-width: 970px) {
+    width: 60vw;
+  }
+
+  @media (max-width: 740px) {
+    width: 80vw;
+  }
+
+  @media (max-width: 518px) {
+    width: 100vw;
+  }
+
   img {
     object-fit: cover;
+    width: 100%;
   }
 `
 

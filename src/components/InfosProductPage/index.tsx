@@ -1,20 +1,17 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { ContatinerInfosProduct } from "./styles";
 import { setupAPIClient } from "../../services/api";
-import Head from "next/head";
-import { HeaderStore } from "../../components/HeaderStore";
-import { FooterStore } from "../../components/FooterStore";
-import FooterAccount from "../../components/FooterAccount";
-import { ContainerContent, PageSection } from "../../components/dateStoreUx/styles";
-import { ImagesProductContainer, ProductContainer } from "./styles";
-import CarrosselImagesPageProduct from "../../components/CarrosselImagesPageProduct";
-import InfosProductPage from "../../components/InfosProductPage";
+import { AiFillStar, AiOutlineArrowRight } from "react-icons/ai";
+import { RiAuctionFill } from "react-icons/ri";
+import Link from "next/link";
 
 
-export default function Produto() {
 
-    const router = useRouter();
-    let slug = router.query.slug;
+interface InfosRequest {
+    slug: any;
+}
+
+const InfosProductPage = ({ slug }: InfosRequest) => {
 
     const [product_id, setProduct_id] = useState('');
     const [name, setName] = useState('');
@@ -41,10 +38,8 @@ export default function Produto() {
     const [avalietions, setAvalietions] = useState<any[]>([]);
     const [productcategories, setProductcategories] = useState<any[]>([]);
 
-    
-
     useEffect(() => {
-        async function loadProduct() {
+        async function loadDataProduct() {
             const apiClient = setupAPIClient();
             try {
                 const { data } = await apiClient.get(`/exactProductPage?slug=${slug}`);
@@ -78,53 +73,66 @@ export default function Produto() {
                 console.log(error.data.response);
             }
         }
-        loadProduct();
+        loadDataProduct();
     }, [slug]);
-    
-    useEffect(() => {
-        function addItem(){
-            let dados = new Array();
 
-            if(localStorage.hasOwnProperty("@moreViewed")){
-                dados = JSON.parse(localStorage.getItem("@moreViewed"));
-            };
-        
-            dados.push({name, slug, photoProduct});
-        
-            localStorage.setItem("@moreViewed", JSON.stringify(dados));
-         }
-         addItem();
-    },[slug, photoProduct, name]);
+    const priceDivisor = promotion * 12
 
 
     return (
         <>
-            <Head>
-                <title>{name}</title>
-            </Head>
+            <ContatinerInfosProduct>
 
-            <HeaderStore />
+                <div>
+                    <span>SKU {sku}</span>
+                    <span>{name}</span>
+                    <button>
+                        <AiFillStar color="gold" size={20} />
+                        <AiFillStar color="gold" size={20} />
+                        <AiFillStar color="gold" size={20} />
+                        <AiFillStar color="gold" size={20} />
+                        <span>Avalie</span>
+                    </button>
+                </div>
 
-            <PageSection>
+                <div>
+                    Atributos Map Array aqui
+                </div>
 
-            <ContainerContent>
-                <ImagesProductContainer>
-                    <CarrosselImagesPageProduct
-                        product_id={product_id}
+                <div>
+                    <span>{price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</span>
+                    <span>{promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</span>
+                    <span>12x de {priceDivisor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })} com juros de Cartão de Crédito</span>
+                    <button>
+                        <RiAuctionFill color="black" size={20} />
+                        FAZER CONTRAPROPOSTA
+                    </button>
+                </div>
+
+                <div>
+                    <div>
+                        <span>-</span>
+                        <span>1</span>
+                        <span>+</span>
+                    </div>
+                    <button>
+                        ADICIONAR AO CARRINHO
+                    </button>
+                </div>
+
+                <div>
+                    <span>Calcule o frete e o prazo: </span>
+                    <input
+                        placeholder="Digite seu CEP"
                     />
-                </ImagesProductContainer>
+                    <AiOutlineArrowRight />
+                </div>
 
-                <ProductContainer>
-                    <InfosProductPage
-                        slug={slug}
-                    />
-                </ProductContainer>
-            </ContainerContent>
-            
-            </PageSection>
-            
-            <FooterStore />
-            <FooterAccount />
+                <Link href={'https://buscacepinter.correios.com.br/app/endereco/index.php'} target="_blank">NÃO SABE O CEP?</Link>
+
+            </ContatinerInfosProduct>
         </>
     )
-}
+};
+
+export default InfosProductPage;

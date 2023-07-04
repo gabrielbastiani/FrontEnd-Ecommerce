@@ -31,6 +31,7 @@ export function ModalImageProduct({ isOpen, onRequestClose, nameProduct, allImag
             right: 'auto',
             transform: 'translate(-50%, -50%)',
             backgroundColor: 'white',
+            padding: '20px'
         }
     };
 
