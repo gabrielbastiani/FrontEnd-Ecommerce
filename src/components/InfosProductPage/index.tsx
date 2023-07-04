@@ -1,10 +1,29 @@
 import { useEffect, useState } from "react";
-import { ContatinerInfosProduct } from "./styles";
+import {
+    BoxAddCart,
+    BoxCart,
+    BoxContentproduct,
+    ButtonAddCArtProduct,
+    ButtonAvalieProduct,
+    ButtonContraProposta,
+    ContainerAttributes,
+    ContatinerInfosProduct,
+    InputCalculoFrete,
+    TextAvalie,
+    TextCredit,
+    TextFrete,
+    TextMax,
+    TextMin,
+    TextNameProduct,
+    TextPrice,
+    TextPromotion,
+    TextQuantidade,
+    TextSku
+} from "./styles";
 import { setupAPIClient } from "../../services/api";
 import { AiFillStar, AiOutlineArrowRight } from "react-icons/ai";
 import { RiAuctionFill } from "react-icons/ri";
 import Link from "next/link";
-
 
 
 interface InfosRequest {
@@ -83,50 +102,50 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
         <>
             <ContatinerInfosProduct>
 
-                <div>
-                    <span>SKU {sku}</span>
-                    <span>{name}</span>
-                    <button>
+                <BoxContentproduct>
+                    <TextSku>SKU {sku}</TextSku>
+                    <TextNameProduct>{name}</TextNameProduct>
+                    <ButtonAvalieProduct>
                         <AiFillStar color="gold" size={20} />
                         <AiFillStar color="gold" size={20} />
                         <AiFillStar color="gold" size={20} />
                         <AiFillStar color="gold" size={20} />
-                        <span>Avalie</span>
-                    </button>
-                </div>
+                        <TextAvalie>Avalie</TextAvalie>
+                    </ButtonAvalieProduct>
+                </BoxContentproduct>
 
-                <div>
+                <ContainerAttributes>
                     Atributos Map Array aqui
-                </div>
+                </ContainerAttributes>
 
-                <div>
-                    <span>{price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</span>
-                    <span>{promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</span>
-                    <span>12x de {priceDivisor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })} com juros de Cartão de Crédito</span>
-                    <button>
+                <BoxContentproduct>
+                    <TextPrice>{price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPrice>
+                    <TextPromotion>{promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPromotion>
+                    <TextCredit>12x de {priceDivisor.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })} com juros de Cartão de Crédito</TextCredit>
+                    <ButtonContraProposta>
                         <RiAuctionFill color="black" size={20} />
                         FAZER CONTRAPROPOSTA
-                    </button>
-                </div>
+                    </ButtonContraProposta>
+                </BoxContentproduct>
 
-                <div>
-                    <div>
-                        <span>-</span>
-                        <span>1</span>
-                        <span>+</span>
-                    </div>
-                    <button>
+                <BoxAddCart>
+                    <BoxCart>
+                        <TextMin>-</TextMin>
+                        <TextQuantidade>1</TextQuantidade>
+                        <TextMax>+</TextMax>
+                    </BoxCart>
+                    <ButtonAddCArtProduct>
                         ADICIONAR AO CARRINHO
-                    </button>
-                </div>
+                    </ButtonAddCArtProduct>
+                </BoxAddCart>
 
-                <div>
-                    <span>Calcule o frete e o prazo: </span>
-                    <input
+                <BoxContentproduct>
+                    <TextFrete>Calcule o frete e o prazo: </TextFrete>
+                    <InputCalculoFrete
                         placeholder="Digite seu CEP"
                     />
                     <AiOutlineArrowRight />
-                </div>
+                </BoxContentproduct>
 
                 <Link href={'https://buscacepinter.correios.com.br/app/endereco/index.php'} target="_blank">NÃO SABE O CEP?</Link>
 
