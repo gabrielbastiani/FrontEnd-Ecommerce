@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  max-height: 28vw;
+  max-height: 510px;
   display: flex;
 `
 

@@ -5,8 +5,8 @@ import Head from "next/head";
 import { HeaderStore } from "../../components/HeaderStore";
 import { FooterStore } from "../../components/FooterStore";
 import FooterAccount from "../../components/FooterAccount";
-import { ContainerContent, PageSection } from "../../components/dateStoreUx/styles";
-import { ImagesProductContainer, ProductContainer } from "./styles";
+import { PageSection } from "../../components/dateStoreUx/styles";
+import { ContainerContentProduct, ImagesProductContainer, ProductContainer } from "./styles";
 import CarrosselImagesPageProduct from "../../components/CarrosselImagesPageProduct";
 import InfosProductPage from "../../components/InfosProductPage";
 
@@ -107,7 +107,7 @@ export default function Produto() {
 
             <PageSection>
 
-            <ContainerContent>
+            <ContainerContentProduct>
                 <ImagesProductContainer>
                     <CarrosselImagesPageProduct
                         product_id={product_id}
@@ -119,7 +119,7 @@ export default function Produto() {
                         slug={slug}
                     />
                 </ProductContainer>
-            </ContainerContent>
+            </ContainerContentProduct>
             
             </PageSection>
             

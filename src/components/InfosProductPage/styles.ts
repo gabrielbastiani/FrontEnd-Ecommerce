@@ -5,6 +5,11 @@ export const ContatinerInfosProduct = styled.div`
   margin: 4px;
   padding: 45px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  a {
+    color: ${props => props?.theme?.colors?.black};
+    font-size: 13px;
+  }
 `
 
 export const BoxContentproduct = styled.div`
@@ -60,25 +65,113 @@ export const TextPromotion = styled.span`
   font-size: 22px;
   font-size: 1.375rem;
   line-height: 30px;
-  font-weight: 500;
+  font-weight: bold;
 `
 
-export const TextCredit = styled.span``
+export const TextCredit = styled.span`
+  font-size: 12px;
+`
 
-export const ButtonContraProposta = styled.button``
+export const ButtonContraProposta = styled.button`
+  border: none;
+  background-color: ${props => props?.theme?.colors?.black};
+  color: ${props => props?.theme?.colors?.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  width: 350px;
+  margin: 13px 0;
 
-export const BoxAddCart = styled.div``
+  svg {
+    margin-right: 10px;
+  }
+`
 
-export const BoxCart = styled.div``
+export const BoxAddCart = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  height: 40px;
+  margin-top: 10px;
+`
 
-export const TextMin = styled.span``
+export const BoxCart = styled.div`
+  display: flex;
+  border: 1px solid;
+  margin-right: 10px;
+  width: calc(40% - 10px);
+`
 
-export const TextQuantidade = styled.span``
+export const TextMin = styled.span`
+  display: block;
+  width: 33.33%;
+  line-height: 40px;
+  text-align: center;
+  color: #838282;
+  cursor: pointer;
+`
 
-export const TextMax = styled.span``
+export const TextQuantidade = styled.span`
+  display: block;
+  width: 33.33%;
+  line-height: 40px;
+  text-align: center;
+  color: #838282;
+`
 
-export const ButtonAddCArtProduct = styled.button``
+export const TextMax = styled.span`
+  display: block;
+  width: 33.33%;
+  line-height: 40px;
+  text-align: center;
+  color: #838282;
+  cursor: pointer;
+`
+
+export const ButtonAddCArtProduct = styled.button`
+  letter-spacing: 1px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  text-align: center;
+  background-color: ${props => props?.theme?.colors?.warning};
+  color: ${props => props?.theme?.colors?.white};
+  line-height: 40px;
+  font-size: 15px;
+  cursor: pointer;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  -moz-transition: opacity 0.5s ease-in-out;
+  -ms-transition: opacity 0.5s ease-in-out;
+  -o-transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+
+  :hover {
+    opacity: 0.7;
+  }
+
+  @media (max-width: 1133px) {
+    font-size: 10px;
+  }
+`
+
+export const BoxContentFrete = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  width: 100%;
+
+  svg {
+    cursor: pointer;
+  }
+`
 
 export const TextFrete = styled.span``
 
-export const InputCalculoFrete = styled.input``
+export const InputCalculoFrete = styled.input`
+  padding: 10px;
+  margin-left: 10px;
+`

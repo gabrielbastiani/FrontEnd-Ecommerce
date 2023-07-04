@@ -3,6 +3,7 @@ import {
     Attribute,
     BoxAddCart,
     BoxCart,
+    BoxContentFrete,
     BoxContentproduct,
     ButtonAddCArtProduct,
     ButtonAvalieProduct,
@@ -96,6 +97,18 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
         loadDataProduct();
     }, [slug]);
 
+    const handleZipCode = (event) => {
+        let input = event.target
+        input.value = zipCodeMask(input.value)
+      }
+      
+      const zipCodeMask = (value) => {
+        if (!value) return ""
+        value = value.replace(/\D/g,'')
+        value = value.replace(/(\d{5})(\d)/,'$1-$2')
+        return value
+      }
+
     const priceDivisor = promotion * 12;
 
 
@@ -128,7 +141,7 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                     <TextPromotion>{promotion?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPromotion>
                     <TextCredit>12x de {priceDivisor?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })} com juros de Cartão de Crédito</TextCredit>
                     <ButtonContraProposta>
-                        <RiAuctionFill color="black" size={20} />
+                        <RiAuctionFill color="white" size={20} />
                         FAZER CONTRAPROPOSTA
                     </ButtonContraProposta>
                 </BoxContentproduct>
@@ -144,13 +157,19 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                     </ButtonAddCArtProduct>
                 </BoxAddCart>
 
-                <BoxContentproduct>
+                <BoxContentFrete>
                     <TextFrete>Calcule o frete e o prazo: </TextFrete>
                     <InputCalculoFrete
                         placeholder="Digite seu CEP"
+                        type="text"
+                        maxLength={9}
+                        onKeyUp={(event) => handleZipCode(event)}
                     />
-                    <AiOutlineArrowRight />
-                </BoxContentproduct>
+                    <AiOutlineArrowRight
+                        size={23}
+                        onClick={ () => alert('clicou') }
+                    />
+                </BoxContentFrete>
 
                 <Link href={'https://buscacepinter.correios.com.br/app/endereco/index.php'} target="_blank">NÃO SABE O CEP?</Link>
 
