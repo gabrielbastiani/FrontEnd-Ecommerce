@@ -3,7 +3,7 @@ import { setupAPIClient } from '../../services/api';
 import Modal from 'react-modal';
 import Image from 'next/image';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
-import { BoxPhotoProduct, Button, Buttons, Carousel, Container, Images, Item, Magnify } from './styles';
+import { BoxImages, BoxPhotoProduct, Button, Buttons, Carousel, Container, ImageZoomBox, Images, Item } from './styles';
 import { ModalImageProduct } from '../popups/ModalImageProduct';
 
 
@@ -22,32 +22,81 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
-    const MAGNIFY_SIZE = 200;
-    const MAGNIFY_SIZE_HALF = MAGNIFY_SIZE / 2;
+    function ImageMagnifier({
+        src,
+        width,
+        height,
+        magnifierHeight = 200,
+        magnifieWidth = 200,
+        zoomLevel = 2.0
+    }: {
+        src: string;
+        width?: string;
+        height?: string;
+        magnifierHeight?: number;
+        magnifieWidth?: number;
+        zoomLevel?: number;
+    }) {
+        const [[x, y], setXY] = useState([0, 0]);
+        const [[imgWidth, imgHeight], setSize] = useState([0, 0]);
+        const [showMagnifier, setShowMagnifier] = useState(false);
+        return (
+            <ImageZoomBox
+                style={{
+                    position: "relative",
+                    height: height,
+                    width: width,
+                    cursor: 'none'
+                }}
+            >
+                <Image
+                    onClick={() => handleOpenModalImage()}
+                    width={500}
+                    height={500}
+                    alt="Imagem do produto"
+                    src={src}
+                    style={{ height: height, width: width }}
+                    onMouseEnter={(e) => {
+                        const elem = e.currentTarget;
+                        const { width, height } = elem.getBoundingClientRect();
+                        setSize([width, height]);
+                        setShowMagnifier(true);
+                    }}
+                    onMouseMove={(e) => {
+                        const elem = e.currentTarget;
+                        const { top, left } = elem.getBoundingClientRect();
+                        const x = e.pageX - left - window.pageXOffset;
+                        const y = e.pageY - top - window.pageYOffset;
+                        setXY([x, y]);
+                    }}
+                    onMouseLeave={() => {
+                        setShowMagnifier(false);
+                    }}
+                />
 
-    const [magnifyStyle, setMagnifyStyle] = useState({ backgroundImage: `url(http://localhost:3333/files/${firstImage})` });
-
-    console.log(magnifyStyle)
-
-    const handleMouseMove = (e: any) => {
-        const { offsetX, offsetY, target } = e.nativeEvent;
-        const { offsetWidth, offsetHeight } = target;
-
-        const xPercentage = (offsetX / offsetWidth) * 100;
-        const yPercentage = (offsetY / offsetHeight) * 100;
-
-        setMagnifyStyle((prev) => ({
-            ...prev,
-            display: 'block',
-            top: `${offsetY - MAGNIFY_SIZE_HALF}px`,
-            left: `${offsetX - MAGNIFY_SIZE_HALF}px`,
-            backgroundPosition: `${xPercentage}% ${yPercentage}%`,
-        }));
-    };
-
-    const handleMouseLeave = (e: any) => {
-        setMagnifyStyle((prev) => ({ ...prev, display: 'none' }));
-    };
+                <BoxImages
+                    style={{
+                        borderRadius: '100%',
+                        display: showMagnifier ? "" : "none",
+                        position: "absolute",
+                        pointerEvents: "none",
+                        height: `${magnifierHeight}px`,
+                        width: `${magnifieWidth}px`,
+                        top: `${y - magnifierHeight / 2}px`,
+                        left: `${x - magnifieWidth / 2}px`,
+                        opacity: "1",
+                        border: "1px solid lightgray",
+                        backgroundColor: "white",
+                        backgroundImage: `url('${src}')`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: `${imgWidth * zoomLevel}px ${imgHeight * zoomLevel}px`,
+                        backgroundPositionX: `${-x * zoomLevel + magnifieWidth / 2}px`,
+                        backgroundPositionY: `${-y * zoomLevel + magnifierHeight / 2}px`
+                    }}
+                ></BoxImages>
+            </ImageZoomBox>
+        );
+    }
 
     useEffect(() => {
         async function loadPhotosProduct() {
@@ -82,12 +131,11 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
         setModalVisible(false);
     }
 
-    async function handleOpenModalDelete() {
+    async function handleOpenModalImage() {
         setModalVisible(true);
     }
 
     Modal.setAppElement('#__next');
-
 
 
     return (
@@ -119,33 +167,17 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
                 {photo ? (
                     <>
                         <BoxPhotoProduct>
-                            <Image
+                            <ImageMagnifier
                                 src={'http://localhost:3333/files/' + photo}
-                                width={500}
-                                height={500}
-                                alt="Imagem do produto"
-                                draggable={false}
-                                onClick={() => handleOpenModalDelete()}
-                                onMouseLeave={handleMouseLeave}
-                                onMouseMove={handleMouseMove}
                             />
-                            <Magnify style={magnifyStyle}></Magnify>
                         </BoxPhotoProduct>
                     </>
                 ) :
                     <>
                         <BoxPhotoProduct>
-                            <Image
+                            <ImageMagnifier
                                 src={'http://localhost:3333/files/' + firstImage}
-                                width={500}
-                                height={500}
-                                alt="Imagem do produto"
-                                draggable={false}
-                                onClick={() => handleOpenModalDelete()}
-                                onMouseLeave={handleMouseLeave}
-                                onMouseMove={handleMouseMove}
                             />
-                            <Magnify style={magnifyStyle}></Magnify>
                         </BoxPhotoProduct>
                     </>
                 }
