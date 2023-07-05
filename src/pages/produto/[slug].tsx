@@ -9,6 +9,7 @@ import { PageSection } from "../../components/dateStoreUx/styles";
 import { ContainerContentProduct, ImagesProductContainer, ProductContainer } from "./styles";
 import CarrosselImagesPageProduct from "../../components/CarrosselImagesPageProduct";
 import InfosProductPage from "../../components/InfosProductPage";
+import Breadcrumbs from "../../components/Breadcrumbs";
 
 
 export default function Produto() {
@@ -41,7 +42,7 @@ export default function Produto() {
     const [avalietions, setAvalietions] = useState<any[]>([]);
     const [productcategories, setProductcategories] = useState<any[]>([]);
 
-    
+
 
     useEffect(() => {
         async function loadProduct() {
@@ -80,21 +81,21 @@ export default function Produto() {
         }
         loadProduct();
     }, [slug]);
-    
+
     useEffect(() => {
-        function addItem(){
+        function addItem() {
             let dados = new Array();
 
-            if(localStorage.hasOwnProperty("@moreViewed")){
+            if (localStorage.hasOwnProperty("@moreViewed")) {
                 dados = JSON.parse(localStorage.getItem("@moreViewed"));
             };
-        
-            dados.push({name, slug, photoProduct});
-        
+
+            dados.push({ name, slug, photoProduct });
+
             localStorage.setItem("@moreViewed", JSON.stringify(dados));
-         }
-         addItem();
-    },[slug, photoProduct, name]);
+        }
+        addItem();
+    }, [slug, photoProduct, name]);
 
 
     return (
@@ -107,22 +108,29 @@ export default function Produto() {
 
             <PageSection>
 
-            <ContainerContentProduct>
-                <ImagesProductContainer>
-                    <CarrosselImagesPageProduct
-                        product_id={product_id}
-                    />
-                </ImagesProductContainer>
+                <Breadcrumbs
+                    idParent={""}
+                    idCateg={""}
+                    groupName={""}
+                    nameItens={""}
+                />
 
-                <ProductContainer>
-                    <InfosProductPage
-                        slug={slug}
-                    />
-                </ProductContainer>
-            </ContainerContentProduct>
-            
+                <ContainerContentProduct>
+                    <ImagesProductContainer>
+                        <CarrosselImagesPageProduct
+                            product_id={product_id}
+                        />
+                    </ImagesProductContainer>
+
+                    <ProductContainer>
+                        <InfosProductPage
+                            slug={slug}
+                        />
+                    </ProductContainer>
+                </ContainerContentProduct>
+
             </PageSection>
-            
+
             <FooterStore />
             <FooterAccount />
         </>
