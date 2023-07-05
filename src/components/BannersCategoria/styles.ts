@@ -7,16 +7,10 @@ export const BannersContainer = styled.div`
   }
 
   @media (max-width: 606px) {
-    margin-top: 200px;
+    margin-top: 20px;
   }
 
-  @media (max-width: 539px) {
-    margin-top: 280px;
-  }
-
-  @media (max-width: 454px) {
-    margin-top: 320px;
-  }
+  
 `
 
 export const Container = styled.div`

@@ -2,8 +2,27 @@ import { useEffect, useRef, useState } from 'react';
 import { setupAPIClient } from '../../services/api';
 import Modal from 'react-modal';
 import Image from 'next/image';
-import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
-import { BoxImages, BoxPhotoProduct, Button, Buttons, Carousel, Container, ImageZoomBox, Images, Item } from './styles';
+import { FaArrowDown, FaArrowLeft, FaArrowRight, FaArrowUp } from 'react-icons/fa';
+import {
+    BoxImages,
+    BoxImagesMobile,
+    BoxPhotoProduct,
+    BoxPhotoProductMobile,
+    Button,
+    Buttons,
+    ButtonsMobileLeft,
+    ButtonsMobileRight,
+    Carousel,
+    CarouselMobile,
+    Container,
+    ContainerMobile,
+    ImageZoomBox,
+    ImageZoomBoxMobile,
+    Images,
+    ImagesMobile,
+    Item,
+    ItemMobile
+} from './styles';
 import { ModalImageProduct } from '../popups/ModalImageProduct';
 
 
@@ -98,6 +117,83 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
         );
     }
 
+
+    function ImageMagnifierMobile({
+        src,
+        width,
+        height,
+        magnifierHeight = 200,
+        magnifieWidth = 200,
+        zoomLevel = 2.0
+    }: {
+        src: string;
+        width?: string;
+        height?: string;
+        magnifierHeight?: number;
+        magnifieWidth?: number;
+        zoomLevel?: number;
+    }) {
+        const [[x, y], setXY] = useState([0, 0]);
+        const [[imgWidth, imgHeight], setSize] = useState([0, 0]);
+        const [showMagnifier, setShowMagnifier] = useState(false);
+        return (
+            <ImageZoomBoxMobile
+                style={{
+                    position: "relative",
+                    height: height,
+                    width: width,
+                    cursor: 'none'
+                }}
+            >
+                <Image
+                    onClick={() => handleOpenModalImage()}
+                    width={500}
+                    height={500}
+                    alt="Imagem do produto"
+                    src={src}
+                    style={{ height: height, width: width }}
+                    onMouseEnter={(e) => {
+                        const elem = e.currentTarget;
+                        const { width, height } = elem.getBoundingClientRect();
+                        setSize([width, height]);
+                        setShowMagnifier(true);
+                    }}
+                    onMouseMove={(e) => {
+                        const elem = e.currentTarget;
+                        const { top, left } = elem.getBoundingClientRect();
+                        const x = e.pageX - left - window.pageXOffset;
+                        const y = e.pageY - top - window.pageYOffset;
+                        setXY([x, y]);
+                    }}
+                    onMouseLeave={() => {
+                        setShowMagnifier(false);
+                    }}
+                />
+
+                <BoxImagesMobile
+                    style={{
+                        borderRadius: '100%',
+                        display: showMagnifier ? "" : "none",
+                        position: "absolute",
+                        pointerEvents: "none",
+                        height: `${magnifierHeight}px`,
+                        width: `${magnifieWidth}px`,
+                        top: `${y - magnifierHeight / 2}px`,
+                        left: `${x - magnifieWidth / 2}px`,
+                        opacity: "1",
+                        border: "1px solid lightgray",
+                        backgroundColor: "white",
+                        backgroundImage: `url('${src}')`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: `${imgWidth * zoomLevel}px ${imgHeight * zoomLevel}px`,
+                        backgroundPositionX: `${-x * zoomLevel + magnifieWidth / 2}px`,
+                        backgroundPositionY: `${-y * zoomLevel + magnifierHeight / 2}px`
+                    }}
+                ></BoxImagesMobile>
+            </ImageZoomBoxMobile>
+        );
+    }
+
     useEffect(() => {
         async function loadPhotosProduct() {
             const apiClient = setupAPIClient();
@@ -114,18 +210,33 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
     }, [product_id]);
 
     const carousel = useRef(null);
+    const carouselMobile = useRef(null);
 
     function handleLeftClick(e: any) {
         e.preventDefault();
         carousel.current.scrollTop -= carousel.current.offsetHeight;
     };
 
+    function handleLeftClickMobile(e: any) {
+        e.preventDefault();
+        carouselMobile.current.scrollLeft -= carouselMobile.current.offsetWidth;
+    };
+
+
     function handleRightClick(e: any) {
         e.preventDefault();
         carousel.current.scrollTop += carousel.current.offsetHeight;
     };
 
+    function handleRightClickMobile(e: any) {
+        e.preventDefault();
+        carouselMobile.current.scrollLeft += carouselMobile.current.offsetWidth;
+    };
+
+
     if (!photosProduct || !photosProduct.length) return null;
+
+
 
     function handleCloseModalDelete() {
         setModalVisible(false);
@@ -188,6 +299,58 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
                     <FaArrowDown size={33} color='white' />
                 </Button>
             </Buttons>
+
+
+
+
+
+            <ContainerMobile>
+                <CarouselMobile ref={carouselMobile}>
+                    {photosProduct.map((item) => {
+                        return (
+                            <ItemMobile key={item.id}>
+                                <ImagesMobile>
+                                    <Image
+                                        src={'http://localhost:3333/files/' + item?.image}
+                                        width={75}
+                                        height={75}
+                                        alt="Imagem do produto"
+                                        onClick={() => setPhoto(item?.image)}
+                                    />
+                                </ImagesMobile>
+                            </ItemMobile>
+                        );
+                    })}
+                </CarouselMobile>
+
+                <ButtonsMobileLeft left onClick={handleLeftClickMobile}>
+                    <FaArrowLeft size={33} color='white' />
+                </ButtonsMobileLeft>
+
+                <ButtonsMobileRight right onClick={handleRightClickMobile}>
+                    <FaArrowRight size={33} color='white' />
+                </ButtonsMobileRight>
+
+                {photo ? (
+                    <>
+                        <BoxPhotoProductMobile>
+                            <ImageMagnifierMobile
+                                src={'http://localhost:3333/files/' + photo}
+                            />
+                        </BoxPhotoProductMobile>
+                    </>
+                ) :
+                    <>
+                        <BoxPhotoProductMobile>
+                            <ImageMagnifierMobile
+                                src={'http://localhost:3333/files/' + firstImage}
+                            />
+                        </BoxPhotoProductMobile>
+                    </>
+                }
+
+            </ContainerMobile>
+
             {modalVisible && (
                 <ModalImageProduct
                     isOpen={modalVisible}

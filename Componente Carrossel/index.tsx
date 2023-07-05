@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { setupAPIClient } from '../../services/api';
+import { setupAPIClient } from '../src/services/api';
 import Image from 'next/image';
 import bannerHomePadrao from '../../assets/sembannerhome.png';
 import {
@@ -8,7 +8,7 @@ import {
     DotContainer,
     Dot,
     NavButtonLeft,
-} from './styles';
+} from './style';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Link from 'next/link';
 

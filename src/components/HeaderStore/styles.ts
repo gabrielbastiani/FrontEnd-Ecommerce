@@ -17,6 +17,10 @@ export const ContainerHeaderStore = styled.header`
   @media (max-width: 580px) {
     z-index: 0;
   }
+
+  @media (max-width: 900px) {
+    position: unset;
+  }
 `
 
 export const ContentHeaderStore = styled.div`

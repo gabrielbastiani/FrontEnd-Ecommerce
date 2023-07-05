@@ -25,4 +25,9 @@ export const ProductContainer = styled.div`
   @media (max-width: 1118px) {
     margin-left: 50px;
   }
+
+  @media (max-width: 281px) {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 `

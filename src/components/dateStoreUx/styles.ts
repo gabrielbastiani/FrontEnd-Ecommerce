@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
 export const PageSection = styled.main`
-  padding-top: 170px;
+  padding-top: 150px;
 
   @media (max-width: 900px) {
-    padding-top: 220px;
+    padding-top: 50px;
   }
+
+  
 `
 
 export const Bread = styled.section`

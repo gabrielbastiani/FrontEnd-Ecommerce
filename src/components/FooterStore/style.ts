@@ -82,6 +82,10 @@ export const BoxTitle = styled.div`
 
 export const BlockRedesContent = styled.div`
   display: flex;
+
+  @media (max-width: 281px) {
+    flex-direction: column;
+  }
 `
 
 export const SubTitulo = styled.h3`
@@ -120,6 +124,10 @@ export const BlockRedes = styled.div`
 
 export const Block4 = styled.div`
   background-color: ${props => props?.theme?.colors?.black};
+
+  @media (max-width: 281px) {
+    width: 100px;
+  }
 `
 
 export const BlockMunus = styled.ul``
@@ -135,10 +143,18 @@ export const ItemMenu = styled.li`
 
 export const Block5 = styled.div`
   background-color: ${props => props?.theme?.colors?.black};
+
+  @media (max-width: 281px) {
+    width: 100px;
+  }
 `
 
 export const Block6 = styled.div`
   background-color: ${props => props?.theme?.colors?.black};
+
+  @media (max-width: 281px) {
+    width: 100px;
+  }
 `
 
 export const InfosStore = styled.span`

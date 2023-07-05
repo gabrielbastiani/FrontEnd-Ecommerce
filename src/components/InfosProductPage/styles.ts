@@ -86,6 +86,14 @@ export const ButtonContraProposta = styled.button`
   svg {
     margin-right: 10px;
   }
+
+  @media (max-width: 470px) {
+    width: 238px;
+  }
+
+  @media (max-width: 394px) {
+    width: 200px;
+  }
 `
 
 export const BoxAddCart = styled.div`
@@ -156,6 +164,10 @@ export const ButtonAddCArtProduct = styled.button`
   @media (max-width: 1133px) {
     font-size: 10px;
   }
+
+  @media (max-width: 419px) {
+    line-height: 12px;
+  }
 `
 
 export const BoxContentFrete = styled.div`
@@ -166,6 +178,14 @@ export const BoxContentFrete = styled.div`
 
   svg {
     cursor: pointer;
+
+    @media (max-width: 460px) {
+      margin-top: 17px;
+    }
+  }
+
+  @media (max-width: 460px) {
+    flex-direction: column;
   }
 `
 
