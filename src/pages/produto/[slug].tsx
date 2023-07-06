@@ -9,7 +9,7 @@ import { PageSection } from "../../components/dateStoreUx/styles";
 import { ContainerContentProduct, ImagesProductContainer, ProductContainer } from "./styles";
 import CarrosselImagesPageProduct from "../../components/CarrosselImagesPageProduct";
 import InfosProductPage from "../../components/InfosProductPage";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import BreadcrumbsProduct from "../../components/BreadcrumbsProduct";
 
 
 export default function Produto() {
@@ -42,6 +42,7 @@ export default function Produto() {
     const [avalietions, setAvalietions] = useState<any[]>([]);
     const [productcategories, setProductcategories] = useState<any[]>([]);
 
+    const [dataMainCAtegory, setDataMainCAtegory] = useState();
 
 
     useEffect(() => {
@@ -97,6 +98,21 @@ export default function Produto() {
         addItem();
     }, [slug, photoProduct, name]);
 
+    useEffect(() => {
+        async function loadCategoryMainProduct() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/findMainCategoryProduct?product_id=${product_id}`);
+
+                setDataMainCAtegory(data);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadCategoryMainProduct();
+    }, [product_id]);
+
 
     return (
         <>
@@ -108,11 +124,8 @@ export default function Produto() {
 
             <PageSection>
 
-                <Breadcrumbs
-                    idParent={""}
-                    idCateg={""}
-                    groupName={""}
-                    nameItens={""}
+                <BreadcrumbsProduct
+                    dataMainCAtegory={dataMainCAtegory}
                 />
 
                 <ContainerContentProduct>
