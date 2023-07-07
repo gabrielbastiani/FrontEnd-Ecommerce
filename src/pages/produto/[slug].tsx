@@ -42,8 +42,6 @@ export default function Produto() {
     const [avalietions, setAvalietions] = useState<any[]>([]);
     const [productcategories, setProductcategories] = useState<any[]>([]);
 
-    const [dataMainCAtegory, setDataMainCAtegory] = useState();
-
 
     useEffect(() => {
         async function loadProduct() {
@@ -98,21 +96,6 @@ export default function Produto() {
         addItem();
     }, [slug, photoProduct, name]);
 
-    useEffect(() => {
-        async function loadCategoryMainProduct() {
-            const apiClient = setupAPIClient();
-            try {
-                const { data } = await apiClient.get(`/findMainCategoryProduct?product_id=${product_id}`);
-
-                setDataMainCAtegory(data);
-
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        }
-        loadCategoryMainProduct();
-    }, [product_id]);
-
 
     return (
         <>
@@ -125,7 +108,7 @@ export default function Produto() {
             <PageSection>
 
                 <BreadcrumbsProduct
-                    dataMainCAtegory={dataMainCAtegory}
+                    product_id={product_id}
                 />
 
                 <ContainerContentProduct>

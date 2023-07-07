@@ -7,17 +7,29 @@ import { ActualBread, BoxBread, BreadAtual } from "./styles";
 
 
 interface BreadcrumbsRequest {
-    dataMainCAtegory: any;
+    product_id: string;
 }
 
-const BreadcrumbsProduct = ({ dataMainCAtegory }: BreadcrumbsRequest) => {
+const BreadcrumbsProduct = ({ product_id }: BreadcrumbsRequest) => {
 
     const [allCategoriesMenu, setAllCategoriesMenu] = useState([]);
     const [brandCrumb, setBrandCrumb] = useState([]);
-    
+    const [dataMainCAtegory, setDataMainCAtegory] = useState<any>([]);
 
-    console.log(dataMainCAtegory)
+    useEffect(() => {
+        async function loadCategoryMainProduct() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/findMainCategoryProduct?product_id=${product_id}`);
 
+                setDataMainCAtegory(data);
+
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        }
+        loadCategoryMainProduct();
+    }, [product_id]);
 
     useEffect(() => {
         async function allCategoriesMenus() {
@@ -34,36 +46,37 @@ const BreadcrumbsProduct = ({ dataMainCAtegory }: BreadcrumbsRequest) => {
         allCategoriesMenus();
     }, []);
 
-    
-
-    /* useEffect(() => {
-        const treeCrumb = document.querySelector('div#treeCrumb');
+    useEffect(() => {
+        const treeProductCrumb = document.querySelector('div#treeProductCrumb');
         const crumbs = document.createElement('span');
-        const brand = brandCrumb.filter(item => item?.category?.id === idCateg);
+        const main = dataMainCAtegory.filter(item => item?.mainCategory === "Sim");
+        const categoryMain = main.map(catg => catg?.category?.id);
+        const idCateg = String(categoryMain);
+        const brand = dataMainCAtegory.filter(item => item?.category?.id === idCateg);
 
-        brand.forEach(buildTreeCrumb);
+        brand.forEach(buildTreeCrumbProduct);
 
-        function buildTreeCrumb(item: any) {
+        function buildTreeCrumbProduct(item: any) {
             const span = document.createElement('span');
             span.innerHTML = `<a href=http://localhost:3001/categoria/${item?.category?.slug}>${item?.category?.name} / </a>`;
 
-            const children = allCategoriesMenu.filter(child => child?.category?.id === item?.category?.parentId && child?.nameGroup === groupName);
+            const children = allCategoriesMenu.filter(child => child?.category?.id === item?.category?.parentId/*  && child?.nameGroup === groupName */);
 
-            children.forEach(buildTreeCrumb);
+            children.forEach(buildTreeCrumbProduct);
             crumbs.appendChild(span);
         }
 
-        treeCrumb.appendChild(crumbs);
+        treeProductCrumb.appendChild(crumbs);
 
-    }, [allCategoriesMenu, brandCrumb]); */
+    }, [allCategoriesMenu, dataMainCAtegory]);
 
 
     return (
         <>
-            {/* <Bread>
+            <Bread>
                 <Boxbreadcrumbs>
                     <ActualBread>
-                        <BreadAtual><strong>Atual:</strong> {nameItens}</BreadAtual>
+                        <BreadAtual><strong>Atual:</strong> {/* {nameItens} */}</BreadAtual>
                     </ActualBread>
                     
                     <BoxBread>
@@ -71,10 +84,10 @@ const BreadcrumbsProduct = ({ dataMainCAtegory }: BreadcrumbsRequest) => {
                             <IoIosHome size={22} color="red" /> / &nbsp;
                         </Link>
 
-                        <div id="treeCrumb"></div>
+                        <div id="treeProductCrumb"></div>
                     </BoxBread>
                 </Boxbreadcrumbs>
-            </Bread> */}
+            </Bread>
         </>
     );
 };
