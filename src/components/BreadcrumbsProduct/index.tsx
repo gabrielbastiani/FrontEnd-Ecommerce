@@ -12,8 +12,7 @@ interface BreadcrumbsRequest {
 
 const BreadcrumbsProduct = ({ product_id }: BreadcrumbsRequest) => {
 
-    const [allCategoriesMenu, setAllCategoriesMenu] = useState([]);
-    const [brandCrumb, setBrandCrumb] = useState([]);
+    const [allCategoriesMenu, setAllCategoriesMenu] = useState<any>([]);
     const [dataMainCAtegory, setDataMainCAtegory] = useState<any>([]);
 
     useEffect(() => {
@@ -60,7 +59,9 @@ const BreadcrumbsProduct = ({ product_id }: BreadcrumbsRequest) => {
             const span = document.createElement('span');
             span.innerHTML = `<a href=http://localhost:3001/categoria/${item?.category?.slug}>${item?.category?.name} / </a>`;
 
-            const children = allCategoriesMenu.filter(child => child?.category?.id === item?.category?.parentId/*  && child?.nameGroup === groupName */);
+            const children = allCategoriesMenu.filter(child => child?.category?.id === item?.category?.parentId);
+
+            console.log(children)
 
             children.forEach(buildTreeCrumbProduct);
             crumbs.appendChild(span);
