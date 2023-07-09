@@ -12,6 +12,22 @@ export const ContatinerInfosProduct = styled.div`
   }
 `
 
+export const BlockProductNames = styled.div`
+ width: 550px;
+
+ @media (max-width: 636px) {
+    width: 350px;
+  }
+
+  @media (max-width: 490px) {
+    width: 250px;
+  }
+
+  @media (max-width: 410px) {
+    width: 150px;
+  }
+`
+
 export const BoxContentproduct = styled.div`
   display: flex;
   flex-direction: column;
@@ -187,6 +203,10 @@ export const BoxContentFrete = styled.div`
   @media (max-width: 460px) {
     flex-direction: column;
   }
+`
+
+export const TextStock = styled.span`
+  color: ${props => props?.theme?.colors?.warning};
 `
 
 export const TextFrete = styled.span``

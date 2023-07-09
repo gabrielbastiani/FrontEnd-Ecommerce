@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
     Attribute,
+    BlockProductNames,
     BoxAddCart,
     BoxCart,
     BoxContentFrete,
@@ -20,7 +21,8 @@ import {
     TextPrice,
     TextPromotion,
     TextQuantidade,
-    TextSku
+    TextSku,
+    TextStock
 } from "./styles";
 import { setupAPIClient } from "../../services/api";
 import { AiFillStar, AiOutlineArrowRight } from "react-icons/ai";
@@ -100,14 +102,14 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
     const handleZipCode = (event) => {
         let input = event.target
         input.value = zipCodeMask(input.value)
-      }
-      
-      const zipCodeMask = (value) => {
+    }
+
+    const zipCodeMask = (value) => {
         if (!value) return ""
-        value = value.replace(/\D/g,'')
-        value = value.replace(/(\d{5})(\d)/,'$1-$2')
+        value = value.replace(/\D/g, '')
+        value = value.replace(/(\d{5})(\d)/, '$1-$2')
         return value
-      }
+    }
 
     const priceDivisor = promotion * 12;
 
@@ -116,15 +118,17 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
         <>
             <ContatinerInfosProduct>
 
-                <TextSku>SKU {sku}</TextSku>
-                <TextNameProduct>{name}</TextNameProduct>
-                <ButtonAvalieProduct>
-                    <AiFillStar color="gold" size={20} />
-                    <AiFillStar color="gold" size={20} />
-                    <AiFillStar color="gold" size={20} />
-                    <AiFillStar color="gold" size={20} />
-                    <TextAvalie>Avalie</TextAvalie>
-                </ButtonAvalieProduct>
+                <BlockProductNames>
+                    <TextSku>SKU {sku}</TextSku>
+                    <TextNameProduct>{name}</TextNameProduct>
+                    <ButtonAvalieProduct>
+                        <AiFillStar color="gold" size={20} />
+                        <AiFillStar color="gold" size={20} />
+                        <AiFillStar color="gold" size={20} />
+                        <AiFillStar color="gold" size={20} />
+                        <TextAvalie>Avalie</TextAvalie>
+                    </ButtonAvalieProduct>
+                </BlockProductNames>
 
                 <ContainerAttributes>
                     {relationattributeproducts.map((item) => {
@@ -136,6 +140,9 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                     })}
                 </ContainerAttributes>
 
+                <TextFrete>Aproveite, ainda temos <TextStock>{stock}</TextStock> no estoque.</TextFrete>
+                <br />
+                <br />
                 <BoxContentproduct>
                     <TextPrice>{price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPrice>
                     <TextPromotion>{promotion?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPromotion>
@@ -167,7 +174,7 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                     />
                     <AiOutlineArrowRight
                         size={23}
-                        onClick={ () => alert('clicou') }
+                        onClick={() => alert('clicou')}
                     />
                 </BoxContentFrete>
 

@@ -58,7 +58,7 @@ const Breadcrumbs = ({ idParent, idCateg, groupName, nameItens }: BreadcrumbsReq
 
         function buildTreeCrumb(item: any) {
             const span = document.createElement('span');
-            span.innerHTML = `<a href=http://localhost:3001/categoria/${item?.category?.slug}>${item?.category?.name} / </a>`;
+            span.innerHTML = `<a href=http://localhost:3001/categoria/${item?.category?.slug}>${item?.category?.name}</a>` + " / ";
 
             const children = allCategoriesMenu.filter(child => child?.category?.id === item?.category?.parentId && child?.nameGroup === groupName);
 

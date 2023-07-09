@@ -48,20 +48,22 @@ const BreadcrumbsProduct = ({ product_id }: BreadcrumbsRequest) => {
     useEffect(() => {
         const treeProductCrumb = document.querySelector('div#treeProductCrumb');
         const crumbs = document.createElement('span');
-        const main = dataMainCAtegory.filter(item => item?.mainCategory === "Sim");
-        const categoryMain = main.map(catg => catg?.category?.id);
+        const main = dataMainCAtegory.filter((item: { mainCategory: string; }) => item?.mainCategory === "Sim");
+        const categoryMain = main.map((catg: { category: { id: any; }; }) => catg?.category?.id);
         const idCateg = String(categoryMain);
-        const brand = dataMainCAtegory.filter(item => item?.category?.id === idCateg);
+        const brand = dataMainCAtegory.filter((item: { category: { id: string; }; }) => item?.category?.id === idCateg);
 
         brand.forEach(buildTreeCrumbProduct);
 
         function buildTreeCrumbProduct(item: any) {
             const span = document.createElement('span');
-            span.innerHTML = `<a href=http://localhost:3001/categoria/${item?.category?.slug}>${item?.category?.name} / </a>`;
+            span.innerHTML = `<a href=http://localhost:3001/categoria/${item?.category?.slug}>${item?.category?.name}</a>` + " / ";
 
-            const children = allCategoriesMenu.filter(child => child?.category?.id === item?.category?.parentId);
+            const groupName = allCategoriesMenu.slice(0, 1).map((item: { nameGroup: any; }) => item?.nameGroup);
 
-            console.log(children)
+            const nameGroup = String(groupName);
+
+            const children = allCategoriesMenu.filter((child: { category: { id: any; }; nameGroup: string; }) => child?.category?.id === item?.category?.parentId && child?.nameGroup === nameGroup);
 
             children.forEach(buildTreeCrumbProduct);
             crumbs.appendChild(span);
@@ -76,16 +78,13 @@ const BreadcrumbsProduct = ({ product_id }: BreadcrumbsRequest) => {
         <>
             <Bread>
                 <Boxbreadcrumbs>
-                    <ActualBread>
-                        <BreadAtual><strong>Atual:</strong> {/* {nameItens} */}</BreadAtual>
-                    </ActualBread>
-                    
                     <BoxBread>
                         <Link href="http://localhost:3001">
                             <IoIosHome size={22} color="red" /> / &nbsp;
                         </Link>
 
                         <div id="treeProductCrumb"></div>
+                        
                     </BoxBread>
                 </Boxbreadcrumbs>
             </Bread>
