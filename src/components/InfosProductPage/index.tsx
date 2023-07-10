@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Modal from 'react-modal';
 import {
     Attribute,
     BlockProductNames,
@@ -28,6 +29,7 @@ import { setupAPIClient } from "../../services/api";
 import { AiFillStar, AiOutlineArrowRight } from "react-icons/ai";
 import { RiAuctionFill } from "react-icons/ri";
 import Link from "next/link";
+import { ModalLoginAvalie } from "../popups/ModalLoginAvalie";
 
 
 interface InfosRequest {
@@ -60,6 +62,8 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
     const [productsvariations, setProductsvariations] = useState<any[]>([]);
     const [avalietions, setAvalietions] = useState<any[]>([]);
     const [productcategories, setProductcategories] = useState<any[]>([]);
+
+    const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() => {
         async function loadDataProduct() {
@@ -113,6 +117,16 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
 
     const priceDivisor = promotion * 12;
 
+    function handleCloseModalLoginAvalie() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalLoginAvalie() {
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('#__next');
+
 
     return (
         <>
@@ -121,7 +135,9 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                 <BlockProductNames>
                     <TextSku>SKU {sku}</TextSku>
                     <TextNameProduct>{name}</TextNameProduct>
-                    <ButtonAvalieProduct>
+                    <ButtonAvalieProduct
+                        onClick={handleOpenModalLoginAvalie}
+                    >
                         <AiFillStar color="gold" size={20} />
                         <AiFillStar color="gold" size={20} />
                         <AiFillStar color="gold" size={20} />
@@ -181,6 +197,14 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                 <Link href={'https://buscacepinter.correios.com.br/app/endereco/index.php'} target="_blank">NÃO SABE O CEP?</Link>
 
             </ContatinerInfosProduct>
+            {modalVisible && (
+                <ModalLoginAvalie
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalLoginAvalie}
+                    productId={product_id}
+                    productName={name}
+                />
+            )}
         </>
     )
 };
