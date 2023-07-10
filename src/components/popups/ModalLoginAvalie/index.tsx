@@ -12,6 +12,7 @@ import { Button } from '../../ui/Button';
 import Link from 'next/link';
 import { BlockInputs, EtiquetaInput } from '../../../pages/createAccount/styles';
 import { setupAPIClient } from '../../../services/api';
+import Router from 'next/router';
 
 
 interface LoginRequest {
@@ -107,6 +108,10 @@ export function ModalLoginAvalie({ isOpen, onRequestClose, productId, productNam
             toast.success('Sua avaliação foi cadastrada com sucesso para esse nosso produto.');
 
             onRequestClose();
+
+            setTimeout(() => {
+                Router.reload();
+            }, 3000);
 
         } catch (error) {/* @ts-ignore */
             console.error(error.response.data);

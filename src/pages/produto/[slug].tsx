@@ -10,6 +10,7 @@ import { ContainerContentProduct, ImagesProductContainer, ProductContainer } fro
 import CarrosselImagesPageProduct from "../../components/CarrosselImagesPageProduct";
 import InfosProductPage from "../../components/InfosProductPage";
 import BreadcrumbsProduct from "../../components/BreadcrumbsProduct";
+import AvaliacoesBox from "../../components/AvaliacoesBox";
 
 
 export default function Produto() {
@@ -124,6 +125,10 @@ export default function Produto() {
                         />
                     </ProductContainer>
                 </ContainerContentProduct>
+
+                <AvaliacoesBox
+                    product_id={product_id}
+                />
 
             </PageSection>
 
