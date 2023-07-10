@@ -1,15 +1,19 @@
 import styled from 'styled-components'
 
 export const ContainerAvaliacoes = styled.section`
-  width: 1400px;
+  width: 80%;
   margin: 0 200px;
 `
 
 export const BoxContainerAvalietion = styled.div`
   display: grid;
-  grid-template-columns: 650px 650px;
+  grid-template-columns: 50% 50%;
   gap: 20px;
   padding: 10px;
+
+  @media (max-width: 1175px) {
+    grid-template-columns: 40% 40%;
+  }
 `
 
 export const BoxAvaliacoes = styled.div`
@@ -68,7 +72,7 @@ export const DateAvaliacao = styled.span`
 `
 
 export const ContainerPagination = styled.div`
-  width: 1200px;
+  width: 380px;
   display: flex;
   justify-content: space-between;
   align-items: center;
