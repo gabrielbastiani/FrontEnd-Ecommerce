@@ -38,6 +38,7 @@ export function ModalLoginAvalie({ isOpen, onRequestClose, productId, productNam
 
     const { signInAvalie, isAuthenticated, customer } = useContext(AuthContext);
 
+    const [storeID] = useState(customer?.store_id);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -102,7 +103,7 @@ export function ModalLoginAvalie({ isOpen, onRequestClose, productId, productNam
                 description: description,
                 point: String(avaliacaoSelected),
                 status: "Pendente",
-                store_id: customer?.store_id
+                store_id: storeID
             });
 
             toast.success('Sua avaliação foi cadastrada com sucesso para esse nosso produto.');

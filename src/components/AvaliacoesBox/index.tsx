@@ -62,10 +62,11 @@ const AvaliacoesBox = ({ product_id }: AvalietionRequest) => {
         }
         loadAvalietionProduct();
     }, [currentPage, limit, product_id, total]);
+    
 
     return (
         <>
-            {avaliations.length < 1 ? (
+            {avaliations?.length < 1 ? (
                 <>
                     <br />
                     <br />
