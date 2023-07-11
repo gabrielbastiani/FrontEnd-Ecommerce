@@ -1,18 +1,32 @@
 import styled from 'styled-components'
 
 export const ContainerAvaliacoes = styled.section`
-  width: 80%;
+  
   margin: 0 200px;
 `
 
 export const BoxContainerAvalietion = styled.div`
+  align-items: center;
+  justify-content: center;
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 650px 650px;
   gap: 20px;
   padding: 10px;
 
-  @media (max-width: 1175px) {
-    grid-template-columns: 40% 40%;
+  @media (max-width: 1355px) {
+    grid-template-columns: 500px 500px;
+  }
+
+  @media (max-width: 1083px) {
+    grid-template-columns: 350px 350px;
+  }
+
+  @media (max-width: 765px) {
+    grid-template-columns: 250px 250px;
+  }
+
+  @media (max-width: 580px) {
+    grid-template-columns: 300px;
   }
 `
 
@@ -22,6 +36,7 @@ export const BoxAvaliacoes = styled.div`
   padding: 13px;
   display: flex;
   flex-direction: column;
+  height: 100%;
 `
 
 export const NameClient = styled.span`
@@ -72,7 +87,6 @@ export const DateAvaliacao = styled.span`
 `
 
 export const ContainerPagination = styled.div`
-  width: 380px;
   display: flex;
   justify-content: space-between;
   align-items: center;

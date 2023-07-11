@@ -30,6 +30,7 @@ import { AiFillStar, AiOutlineArrowRight } from "react-icons/ai";
 import { RiAuctionFill } from "react-icons/ri";
 import Link from "next/link";
 import { ModalLoginAvalie } from "../popups/ModalLoginAvalie";
+import { ModalLoginProposta } from "../popups/ModalLoginProposta";
 
 
 interface InfosRequest {
@@ -64,6 +65,7 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
     const [productcategories, setProductcategories] = useState<any[]>([]);
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleProposta, setModalVisibleProposta] = useState(false);
 
     useEffect(() => {
         async function loadDataProduct() {
@@ -125,6 +127,14 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
         setModalVisible(true);
     }
 
+    function handleCloseModalLoginProposta() {
+        setModalVisibleProposta(false);
+    }
+
+    async function handleOpenModalLoginProposta() {
+        setModalVisibleProposta(true);
+    }
+
     Modal.setAppElement('#__next');
 
 
@@ -147,11 +157,25 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                 </BlockProductNames>
 
                 <ContainerAttributes>
-                    {relationattributeproducts.map((item) => {
+                    {variations.map((item) => {
                         return (
-                            <Attribute key={item?.id}>
-                                {item?.valueAttribute?.value}
-                            </Attribute>
+                            item?.productsvariations.map((pro: any) => {
+                                return (
+                                    <>
+                                        <Link href={`/produto/${pro?.product?.slug}`}>
+                                            {item?.productsvariations.map((val: any) => {
+                                                return (
+                                                    val?.product?.relationattributeproducts.map((valu: any) => {
+                                                        return (
+                                                            <Attribute>{valu?.valueAttribute?.value}</Attribute>
+                                                        )
+                                                    })
+                                                )
+                                            })}
+                                        </Link>
+                                    </>
+                                )
+                            })
                         )
                     })}
                 </ContainerAttributes>
@@ -163,7 +187,9 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                     <TextPrice>{price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPrice>
                     <TextPromotion>{promotion?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPromotion>
                     <TextCredit>12x de {priceDivisor?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })} com juros de Cartão de Crédito</TextCredit>
-                    <ButtonContraProposta>
+                    <ButtonContraProposta
+                        onClick={handleOpenModalLoginProposta}
+                    >
                         <RiAuctionFill color="white" size={20} />
                         FAZER CONTRAPROPOSTA
                     </ButtonContraProposta>
@@ -203,6 +229,12 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                     onRequestClose={handleCloseModalLoginAvalie}
                     productId={product_id}
                     productName={name}
+                />
+            )}
+            {modalVisibleProposta && (
+                <ModalLoginProposta
+                    isOpen={modalVisibleProposta}
+                    onRequestClose={handleCloseModalLoginProposta}
                 />
             )}
         </>
