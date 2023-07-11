@@ -30,7 +30,7 @@ import { AiFillStar, AiOutlineArrowRight } from "react-icons/ai";
 import { RiAuctionFill } from "react-icons/ri";
 import Link from "next/link";
 import { ModalLoginAvalie } from "../popups/ModalLoginAvalie";
-import { ModalLoginProposta } from "../popups/ModalLoginProposta";
+import { ModalProposta } from "../popups/ModalProposta";
 
 
 interface InfosRequest {
@@ -232,9 +232,12 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                 />
             )}
             {modalVisibleProposta && (
-                <ModalLoginProposta
+                <ModalProposta
                     isOpen={modalVisibleProposta}
                     onRequestClose={handleCloseModalLoginProposta}
+                    priceProduct={price}
+                    nameProduct={name}
+                    skuProduct={sku}
                 />
             )}
         </>
