@@ -68,6 +68,7 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleProposta, setModalVisibleProposta] = useState(false);
 
+
     useEffect(() => {
         async function loadDataProduct() {
             const apiClient = setupAPIClient();
@@ -118,8 +119,6 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
         return value
     }
 
-    const priceDivisor = promotion * 12;
-
     function handleCloseModalLoginAvalie() {
         setModalVisible(false);
     }
@@ -137,6 +136,8 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
     }
 
     Modal.setAppElement('#__next');
+
+    const priceDivisor = promotion / 12;
 
 
     return (
@@ -199,9 +200,9 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                 <br />
                 <br />
                 <BoxContentproduct>
-                    <TextPrice>{price?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPrice>
-                    <TextPromotion>{promotion?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</TextPromotion>
-                    <TextCredit>12x de {priceDivisor?.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })} com juros de Cartão de Crédito</TextCredit>
+                    <TextPrice>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(price)}</TextPrice>
+                    <TextPromotion>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(promotion)}</TextPromotion>
+                    <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(priceDivisor)} com juros de Cartão de Crédito</TextCredit>
                     <ButtonContraProposta
                         onClick={handleOpenModalLoginProposta}
                     >

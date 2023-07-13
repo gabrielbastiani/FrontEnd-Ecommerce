@@ -95,8 +95,8 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
                                     <Info>
                                         <Link href={'/produto/' + item?.slug}>
                                             <Name>{item?.name}</Name>
-                                            <OldPrice>De {item?.promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
-                                            <Price>Por {item?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                            <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.promotion)}</OldPrice>
+                                            <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</Price>
                                         </Link>
                                         <BoxBuy>
                                             <Quantidade>

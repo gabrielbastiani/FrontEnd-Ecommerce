@@ -1,18 +1,13 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
 import { ButtonClose, ContainerContent, ContatinerProposal, TextAreaAvaliacao } from './styles';
-import { FormEvent, useContext, useEffect, useRef, useState } from 'react';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { ButtonCreateAccount, ContLogin, Formulario, LinkCreateAccount, Recaptcha, TextInfo, TextLink } from '../../../pages/loginClient/styles';
 import Titulos from '../../Titulos';
 import { Input } from '../../ui/Input';
-import ReCAPTCHA from 'react-google-recaptcha';
 import { Button } from '../../ui/Button';
-import Link from 'next/link';
 import { BlockInputs, EtiquetaInput } from '../../../pages/createAccount/styles';
 import { setupAPIClient } from '../../../services/api';
-import Router from 'next/router';
 import { IMaskInput } from "react-imask";
 import { SectionDate } from '../../dateClientUx/SectionDates/styles';
 import GridDate from '../../dateClientUx/GridDates';
@@ -125,7 +120,7 @@ export function ModalProposta({ isOpen, onRequestClose, priceProduct, nameProduc
                             <BlockInputs>
                                 <EtiquetaInput>Preço atual do produto:</EtiquetaInput>
                                 <Input
-                                    value={priceProduct.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}
+                                    value={new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(priceProduct)}
                                 />
                             </BlockInputs>
 
