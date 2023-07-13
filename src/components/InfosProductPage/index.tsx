@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Modal from 'react-modal';
 import {
     Attribute,
+    AttributeNoProduct,
     BlockProductNames,
     BoxAddCart,
     BoxCart,
@@ -157,27 +158,41 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                 </BlockProductNames>
 
                 <ContainerAttributes>
-                    {variations.map((item) => {
-                        return (
-                            item?.productsvariations.map((pro: any) => {
+                    {variations.length < 1 ? (
+                        <>
+                            {relationattributeproducts.map((proVal) => {
                                 return (
-                                    <>
-                                        <Link href={`/produto/${pro?.product?.slug}`}>
-                                            {item?.productsvariations.map((val: any) => {
-                                                return (
-                                                    val?.product?.relationattributeproducts.map((valu: any) => {
-                                                        return (
-                                                            <Attribute>{valu?.valueAttribute?.value}</Attribute>
-                                                        )
-                                                    })
-                                                )
-                                            })}
-                                        </Link>
-                                    </>
+                                    <AttributeNoProduct>
+                                        {proVal?.valueAttribute?.value}
+                                    </AttributeNoProduct>
                                 )
-                            })
-                        )
-                    })}
+                            })}
+                        </>
+                    ) :
+                        <>
+                            {variations.map((item) => {
+                                return (
+                                    item?.productsvariations.map((pro: any) => {
+                                        return (
+                                            <>
+                                                <Link href={`/produto/${pro?.product?.slug}`}>
+                                                    {item?.productsvariations.map((val: any) => {
+                                                        return (
+                                                            val?.product?.relationattributeproducts.map((valu: any) => {
+                                                                return (
+                                                                    <Attribute>{valu?.valueAttribute?.value}</Attribute>
+                                                                )
+                                                            })
+                                                        )
+                                                    })}
+                                                </Link>
+                                            </>
+                                        )
+                                    })
+                                )
+                            })}
+                        </>
+                    }
                 </ContainerAttributes>
 
                 <TextFrete>Aproveite, ainda temos <TextStock>{stock}</TextStock> no estoque.</TextFrete>

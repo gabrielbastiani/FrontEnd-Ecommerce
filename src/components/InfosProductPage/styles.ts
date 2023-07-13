@@ -68,6 +68,14 @@ export const Attribute = styled.button`
   margin-right: 16px;
 `
 
+export const AttributeNoProduct = styled.span`
+  border: none;
+  background-color: ${props => props?.theme?.colors?.black};
+  color: ${props => props?.theme?.colors?.white};
+  padding: 3px;
+  margin-right: 16px;
+`
+
 export const TextPrice = styled.span`
   text-decoration: line-through;
   font-size: 13px;
