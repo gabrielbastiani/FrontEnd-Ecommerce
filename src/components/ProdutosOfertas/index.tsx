@@ -20,7 +20,8 @@ import {
     Max,
     Add,
     BoxTitle,
-    ImagesHover
+    ImagesHover,
+    TextCredit
 } from './styles';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -97,6 +98,7 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
                                             <Name>{item?.name}</Name>
                                             <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.promotion)}</OldPrice>
                                             <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</Price>
+                                            <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price / 12)} com juros de Cartão de Crédito</TextCredit>
                                         </Link>
                                         <BoxBuy>
                                             <Quantidade>

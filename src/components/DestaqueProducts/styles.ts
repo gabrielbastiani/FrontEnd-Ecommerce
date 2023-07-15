@@ -188,3 +188,7 @@ export const Add = styled.button`
     opacity: 0.7;
   }
 `
+
+export const TextCredit = styled.span`
+  font-size: 13px;
+`
