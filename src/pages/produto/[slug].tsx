@@ -6,11 +6,13 @@ import { HeaderStore } from "../../components/HeaderStore";
 import { FooterStore } from "../../components/FooterStore";
 import FooterAccount from "../../components/FooterAccount";
 import { PageSection } from "../../components/dateStoreUx/styles";
-import { ContainerContentProduct, ImagesProductContainer, ProductContainer } from "./styles";
+import { ContainerContentProduct, ContainerContentProductExtra, ImagesProductContainer, ProductContainer, TitleProduct } from "./styles";
 import CarrosselImagesPageProduct from "../../components/CarrosselImagesPageProduct";
 import InfosProductPage from "../../components/InfosProductPage";
 import BreadcrumbsProduct from "../../components/BreadcrumbsProduct";
 import AvaliacoesBox from "../../components/AvaliacoesBox";
+import VideoProduct from "../../components/VideoProduct";
+import CompreJunto from "../../components/CompreJunto";
 
 
 export default function Produto() {
@@ -34,7 +36,7 @@ export default function Produto() {
     const [urlVideo, setUrlVideo] = useState('');
     const [gtin, setGtin] = useState('');
     const [freeShipping, setFreeShipping] = useState<any[]>([]);
-    const [buyTogether, setBuyTogether] = useState<any[]>([]);
+    const [buyTogether, setBuyTogether] = useState('');
     const [descriptionproducts, setDescriptionproducts] = useState<any[]>([]);
     const [tags, setTags] = useState<any[]>([]);
     const [relationattributeproducts, setRelationattributeproducts] = useState<any[]>([]);
@@ -66,7 +68,7 @@ export default function Produto() {
                 setUrlVideo(data?.urlVideo || "");
                 setGtin(data?.gtin || "");
                 setFreeShipping(data?.freeShipping);
-                setBuyTogether(data?.buytogethers || []);
+                setBuyTogether(data?.buyTogether_id || "");
                 setDescriptionproducts(data?.descriptionproducts || []);
                 setTags(data?.tags || []);
                 setRelationattributeproducts(data?.relationattributeproducts || []);
@@ -101,7 +103,7 @@ export default function Produto() {
     return (
         <>
             <Head>
-                <title>{name}</title>
+                <TitleProduct>{name}</TitleProduct>
             </Head>
 
             <HeaderStore />
@@ -125,6 +127,24 @@ export default function Produto() {
                         />
                     </ProductContainer>
                 </ContainerContentProduct>
+
+                <ContainerContentProductExtra>
+                    {urlVideo ? (
+                        <VideoProduct
+                            video={urlVideo}
+                        />
+                    ) :
+                        null
+                    }
+
+                    {buyTogether ? (
+                        <CompreJunto
+                            buyTogether={buyTogether}
+                        />
+                    ) :
+                        null
+                    }
+                </ContainerContentProductExtra>
 
                 <AvaliacoesBox
                     product_id={product_id}

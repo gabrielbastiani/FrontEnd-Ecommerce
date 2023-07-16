@@ -107,12 +107,12 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
         loadDataProduct();
     }, [slug]);
 
-    const handleZipCode = (event) => {
+    const handleZipCode = (event: any) => {
         let input = event.target
         input.value = zipCodeMask(input.value)
     }
 
-    const zipCodeMask = (value) => {
+    const zipCodeMask = (value: any) => {
         if (!value) return ""
         value = value.replace(/\D/g, '')
         value = value.replace(/(\d{5})(\d)/, '$1-$2')
@@ -188,10 +188,10 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                                                     })}
                                                 </Link>
                                             </>
-                                        )
+                                        );
                                     })
-                                )
-                            })}
+                                );
+                            })};
                         </>
                     }
                 </ContainerAttributes>

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
 export const ContainerAvaliacoes = styled.section`
-  
   margin: 0 200px;
 `
 

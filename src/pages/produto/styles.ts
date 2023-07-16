@@ -1,4 +1,8 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
+
+export const TitleProduct = styled.title`
+  
+`
 
 export const ContainerContentProduct = styled.section`
   display: flex;
@@ -7,6 +11,13 @@ export const ContainerContentProduct = styled.section`
   @media (max-width: 1118px) {
     flex-direction: column;
   }
+`
+
+export const ContainerContentProductExtra = styled.section`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 `
 
 export const ImagesProductContainer = styled.div`
