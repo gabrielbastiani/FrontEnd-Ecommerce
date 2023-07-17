@@ -31,6 +31,10 @@ const DescricoesProduct = ({ descriptions }: DescricaoRequest) => {
         setToogle(state => !state);
     };
 
+    function createMarkup(c: any) {
+        return { __html: c };
+    }
+
 
     return (
         <Container>
@@ -60,7 +64,7 @@ const DescricoesProduct = ({ descriptions }: DescricaoRequest) => {
                         {activeTab === desc?.id ? (
                             <BoxDescription
                                 key={desc?.id}
-                                dangerouslySetInnerHTML={{ __html: desc?.description }}
+                                dangerouslySetInnerHTML={createMarkup(desc?.description)}
                             ></BoxDescription>
                         ) :
                             null

@@ -34,7 +34,7 @@ export const Item = styled.button`
   margin: 10px;
   padding: 35px;
   text-align: center;
-  font-weight: 600;
+  font-weight: 800;
   flex: none;
   border: solid 1px ${props => props?.theme?.colors?.gray};
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -45,4 +45,5 @@ export const BoxDescription = styled.div`
   background-color: ${props => props?.theme?.colors?.white};
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   padding: 50px;
+  width: auto;
 `
