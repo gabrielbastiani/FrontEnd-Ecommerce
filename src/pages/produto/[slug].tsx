@@ -6,13 +6,14 @@ import { HeaderStore } from "../../components/HeaderStore";
 import { FooterStore } from "../../components/FooterStore";
 import FooterAccount from "../../components/FooterAccount";
 import { PageSection } from "../../components/dateStoreUx/styles";
-import { ContainerContentProduct, ContainerContentProductExtra, ImagesProductContainer, ProductContainer, TitleProduct } from "./styles";
+import { ContainerContentProduct, ContainerContentProductExtra, ImagesProductContainer, ProductContainer } from "./styles";
 import CarrosselImagesPageProduct from "../../components/CarrosselImagesPageProduct";
 import InfosProductPage from "../../components/InfosProductPage";
 import BreadcrumbsProduct from "../../components/BreadcrumbsProduct";
 import AvaliacoesBox from "../../components/AvaliacoesBox";
 import VideoProduct from "../../components/VideoProduct";
 import CompreJunto from "../../components/CompreJunto";
+import DescricoesProduct from "../../components/DescricoesProduct";
 
 
 export default function Produto() {
@@ -103,7 +104,7 @@ export default function Produto() {
     return (
         <>
             <Head>
-                <TitleProduct>{name}</TitleProduct>
+                <title>{name}</title>
             </Head>
 
             <HeaderStore />
@@ -143,6 +144,14 @@ export default function Produto() {
                         />
                     ) :
                         null
+                    }
+
+                    {descriptionproducts?.length < 1 ? (
+                        null
+                    ) :
+                        <DescricoesProduct
+                            descriptions={descriptionproducts}
+                        />
                     }
                 </ContainerContentProductExtra>
 

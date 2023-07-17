@@ -36,7 +36,7 @@ const CompreJunto = ({ buyTogether }: CompreJuntoRequest) => {
         async function findLoadIDMenu() {
             try {
                 const apiClient = setupAPIClient();
-                const response = await apiClient.get(`/findItensGroupBuyTogether?parentId=${buyTogether}`);
+                const response = await apiClient.get(`/buyTogetherProductStore?parentId=${buyTogether}`);
 
                 setLoadTogheter(response.data || []);
 

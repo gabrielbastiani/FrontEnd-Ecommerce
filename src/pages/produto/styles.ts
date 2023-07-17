@@ -1,9 +1,5 @@
 import styled from 'styled-components';
 
-export const TitleProduct = styled.title`
-  
-`
-
 export const ContainerContentProduct = styled.section`
   display: flex;
   justify-content: center;
