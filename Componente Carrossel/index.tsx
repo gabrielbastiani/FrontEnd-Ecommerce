@@ -15,7 +15,7 @@ import Link from 'next/link';
 
 const CarrosselBannerHome = () => {
 
-    const [bannersHome, setBannersHome] = useState([]);
+    const [bannersHome, setBannersHome] = useState([])
 
     useEffect(() => {
         async function loadBannersHome() {
