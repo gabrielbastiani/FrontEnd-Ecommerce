@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from 'react-modal';
 import {
     Attribute,
@@ -27,7 +27,6 @@ import {
     TextSku,
     TextStock
 } from "./styles";
-import { setupAPIClient } from "../../services/api";
 import { AiFillHeart, AiFillStar, AiOutlineArrowRight, AiOutlineHeart } from "react-icons/ai";
 import { RiAuctionFill } from "react-icons/ri";
 import Link from "next/link";
@@ -36,77 +35,20 @@ import { ModalProposta } from "../popups/ModalProposta";
 
 
 interface InfosRequest {
-    slug: any;
+    product_id: string;
+    name: string;
+    price: number;
+    promotion: number;
+    sku: string;
+    stock: number;
+    relationattributeproducts: any;
+    variations: any;
 }
 
-const InfosProductPage = ({ slug }: InfosRequest) => {
-
-    const [product_id, setProduct_id] = useState('');
-    const [name, setName] = useState('');
-    const [photoProduct, setPhotoProduct] = useState('');
-    const [allPhotoProduct, setAllPhotoProduct] = useState<any[]>([]);
-    const [price, setPrice] = useState(Number);
-    const [promotion, setPromotion] = useState(Number);
-    const [sku, setSku] = useState('');
-    const [stock, setStock] = useState(Number);
-    const [weight, setWeight] = useState('');
-    const [width, setWidth] = useState('');
-    const [height, setHeight] = useState('');
-    const [depth, setDepth] = useState('');
-    const [brand, setBrand] = useState('');
-    const [urlVideo, setUrlVideo] = useState('');
-    const [gtin, setGtin] = useState('');
-    const [freeShipping, setFreeShipping] = useState<any[]>([]);
-    const [buyTogether, setBuyTogether] = useState<any[]>([]);
-    const [descriptionproducts, setDescriptionproducts] = useState<any[]>([]);
-    const [tags, setTags] = useState<any[]>([]);
-    const [relationattributeproducts, setRelationattributeproducts] = useState<any[]>([]);
-    const [variations, setVariations] = useState<any[]>([]);
-    const [productsvariations, setProductsvariations] = useState<any[]>([]);
-    const [avalietions, setAvalietions] = useState<any[]>([]);
-    const [productcategories, setProductcategories] = useState<any[]>([]);
+const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, relationattributeproducts, variations }: InfosRequest) => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleProposta, setModalVisibleProposta] = useState(false);
-
-
-    useEffect(() => {
-        async function loadDataProduct() {
-            const apiClient = setupAPIClient();
-            try {
-                const { data } = await apiClient.get(`/exactProductPage?slug=${slug}`);
-
-                setProduct_id(data?.id);
-                setName(data?.name || "");
-                setPhotoProduct(data?.photoproducts[0]?.image || "");
-                setAllPhotoProduct(data?.photoproducts || []);
-                setPrice(data?.price);
-                setPromotion(data?.promotion);
-                setSku(data?.sku || "");
-                setStock(data?.stock);
-                setWeight(data?.weight || "");
-                setWidth(data?.width || "");
-                setHeight(data?.height || "");
-                setDepth(data?.depth || "");
-                setBrand(data?.brand || "");
-                setUrlVideo(data?.urlVideo || "");
-                setGtin(data?.gtin || "");
-                setFreeShipping(data?.freeShipping);
-                setBuyTogether(data?.buytogethers || []);
-                setDescriptionproducts(data?.descriptionproducts || []);
-                setTags(data?.tags || []);
-                setRelationattributeproducts(data?.relationattributeproducts || []);
-                setVariations(data?.variations || []);
-                setProductsvariations(data?.productsvariations || []);
-                setAvalietions(data?.avalietions || []);
-                setProductcategories(data?.productcategories || []);
-
-            } catch (error) {
-                console.log(error.data.response);
-            }
-        }
-        loadDataProduct();
-    }, [slug]);
 
     const handleZipCode = (event: any) => {
         let input = event.target
@@ -166,7 +108,7 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                 <ContainerAttributes>
                     {variations.length < 1 ? (
                         <>
-                            {relationattributeproducts.map((proVal) => {
+                            {relationattributeproducts.map((proVal: any) => {
                                 return (
                                     <AttributeNoProduct>
                                         {proVal?.valueAttribute?.value}
@@ -176,7 +118,7 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
                         </>
                     ) :
                         <>
-                            {variations.map((item) => {
+                            {variations.map((item: any) => {
                                 return (
                                     item?.productsvariations.map((pro: any) => {
                                         return (

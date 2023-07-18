@@ -130,7 +130,14 @@ export default function Produto() {
 
                     <ProductContainer>
                         <InfosProductPage
-                            slug={slug}
+                            product_id={product_id}
+                            name={name}
+                            price={price}
+                            promotion={promotion}
+                            sku={sku}
+                            stock={stock}
+                            relationattributeproducts={relationattributeproducts}
+                            variations={variations}
                         />
                     </ProductContainer>
                 </ContainerContentProduct>
