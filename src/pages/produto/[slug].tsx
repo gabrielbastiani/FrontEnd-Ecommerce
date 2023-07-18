@@ -14,6 +14,7 @@ import AvaliacoesBox from "../../components/AvaliacoesBox";
 import VideoProduct from "../../components/VideoProduct";
 import CompreJunto from "../../components/CompreJunto";
 import DescricoesProduct from "../../components/DescricoesProduct";
+import DestaqueProducts from "../../components/DestaqueProducts";
 
 
 export default function Produto() {
@@ -157,6 +158,10 @@ export default function Produto() {
 
                 <AvaliacoesBox
                     product_id={product_id}
+                />
+
+                <DestaqueProducts
+                    title="Destaques"
                 />
 
             </PageSection>
