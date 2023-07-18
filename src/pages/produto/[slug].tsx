@@ -6,7 +6,12 @@ import { HeaderStore } from "../../components/HeaderStore";
 import { FooterStore } from "../../components/FooterStore";
 import FooterAccount from "../../components/FooterAccount";
 import { PageSection } from "../../components/dateStoreUx/styles";
-import { ContainerContentProduct, ContainerContentProductExtra, ImagesProductContainer, ProductContainer } from "./styles";
+import {
+    ContainerContentProduct,
+    ContainerContentProductExtra,
+    ImagesProductContainer,
+    ProductContainer
+} from "./styles";
 import CarrosselImagesPageProduct from "../../components/CarrosselImagesPageProduct";
 import InfosProductPage from "../../components/InfosProductPage";
 import BreadcrumbsProduct from "../../components/BreadcrumbsProduct";

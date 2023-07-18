@@ -33,6 +33,10 @@ export const BoxContentproduct = styled.div`
   flex-direction: column;
 `
 
+export const BoxHeartFavorite = styled.div`
+  
+`
+
 export const TextSku = styled.span`
   color: ${props => props?.theme?.colors?.gray};
   font-size: 13px;

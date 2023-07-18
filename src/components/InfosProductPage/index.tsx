@@ -8,6 +8,7 @@ import {
     BoxCart,
     BoxContentFrete,
     BoxContentproduct,
+    BoxHeartFavorite,
     ButtonAddCArtProduct,
     ButtonAvalieProduct,
     ButtonContraProposta,
@@ -27,7 +28,7 @@ import {
     TextStock
 } from "./styles";
 import { setupAPIClient } from "../../services/api";
-import { AiFillStar, AiOutlineArrowRight } from "react-icons/ai";
+import { AiFillHeart, AiFillStar, AiOutlineArrowRight, AiOutlineHeart } from "react-icons/ai";
 import { RiAuctionFill } from "react-icons/ri";
 import Link from "next/link";
 import { ModalLoginAvalie } from "../popups/ModalLoginAvalie";
@@ -145,6 +146,10 @@ const InfosProductPage = ({ slug }: InfosRequest) => {
             <ContatinerInfosProduct>
 
                 <BlockProductNames>
+                    <BoxHeartFavorite>
+                        <AiOutlineHeart size={30} />
+                        <AiFillHeart size={30} color="red" />
+                    </BoxHeartFavorite>
                     <TextSku>SKU {sku}</TextSku>
                     <TextNameProduct>{name}</TextNameProduct>
                     <ButtonAvalieProduct
