@@ -59,8 +59,8 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                             <Info>
                                 <Link href={'/produto/' + prod?.product?.slug}>
                                     <Name>{prod?.product?.name}</Name>
-                                    <OldPrice>De {prod?.product?.promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
-                                    <Price>Por {prod?.product?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                    <OldPrice>De {prod?.product?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
+                                    <Price>Por {prod?.product?.promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
                                 </Link>
                                 <BoxBuy>
                                     <Quantidade>

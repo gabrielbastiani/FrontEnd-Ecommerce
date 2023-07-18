@@ -96,8 +96,8 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
                                     <Info>
                                         <Link href={'/produto/' + item?.slug}>
                                             <Name>{item?.name}</Name>
-                                            <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</Price>
-                                            <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.promotion)}</OldPrice>
+                                            <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</OldPrice>
+                                            <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.promotion)}</Price>
                                             <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price / 12)} com juros de Cartão de Crédito</TextCredit>
                                         </Link>
                                         <BoxBuy>
