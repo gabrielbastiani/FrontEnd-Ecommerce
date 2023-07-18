@@ -161,7 +161,7 @@ export default function Produto() {
                 />
 
                 <DestaqueProducts
-                    title="Destaques"
+                    title="Sugestões de compra"
                 />
 
             </PageSection>
