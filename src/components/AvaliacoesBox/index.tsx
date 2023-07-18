@@ -148,9 +148,6 @@ const AvaliacoesBox = ({ product_id }: AvalietionRequest) => {
                             })}
                         </BoxContainerAvalietion>
                     </ContainerAvaliacoes>
-                    <br />
-                    <br />
-                    <br />
                 </>
             }
         </>
