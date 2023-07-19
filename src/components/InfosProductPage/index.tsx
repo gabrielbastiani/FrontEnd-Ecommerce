@@ -40,6 +40,8 @@ import router from "next/router";
 import { BlockInputs } from "../../pages/createAccount/styles";
 import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
+import { toast } from "react-toastify";
+import { setupAPIClient } from "../../services/api";
 
 
 interface InfosRequest {
@@ -140,6 +142,29 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails);
     };
 
+    async function sendEmailStockProduct() {
+        try {
+            if (emails === "") {
+                toast.error('Insira seu e-mail por favor!');
+                return;
+            }
+            if (!isEmail(emails)) {
+                toast.error('Por favor digite um email valido!');
+                return;
+            }
+            const apiClient = setupAPIClient();
+            await apiClient.post('/createStockProductZero', {
+                email: emails,
+                product_id: product_id
+            });
+
+            toast.success('Fique atendo a sua caixa de email ou seu span de email, a qualquer momento o estoque poderá ser restabelecido e avisaremos por lá!');
+
+        } catch (error) {/* @ts-ignore */
+            console.error(error.response.data);
+        }
+    }
+
 
     return (
         <>
@@ -232,7 +257,7 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
                             onChange={(e) => setEmails(e.target.value)}
                         />
                         <ButtonEmailStock
-                            onClick={() => alert('clicou')}
+                            onClick={sendEmailStockProduct}
                         >
                             AVISAR POR E-MAIL
                         </ButtonEmailStock>
