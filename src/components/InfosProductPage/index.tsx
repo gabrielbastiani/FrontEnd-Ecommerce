@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from 'react-modal';
 import {
     Attribute,
@@ -32,6 +32,7 @@ import { RiAuctionFill } from "react-icons/ri";
 import Link from "next/link";
 import { ModalLoginAvalie } from "../popups/ModalLoginAvalie";
 import { ModalProposta } from "../popups/ModalProposta";
+import router from "next/router";
 
 
 interface InfosRequest {
@@ -46,6 +47,32 @@ interface InfosRequest {
 }
 
 const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, relationattributeproducts, variations }: InfosRequest) => {
+
+    function addFavoriteProduct() {
+        let dados = new Array();
+
+        if (localStorage.hasOwnProperty("@favoriteproduct")) {
+            dados = JSON.parse(localStorage.getItem("@favoriteproduct"));
+        };
+
+        dados.push(product_id);
+
+        localStorage.setItem("@favoriteproduct", JSON.stringify(dados));
+
+        setTimeout(() => {
+            router.reload();
+        }, 2000);
+    }
+
+    const [productsFavorites, setProductsFavorites] = useState<any[]>([]);
+
+    useEffect(() => {
+        let dadosFavorites = localStorage.getItem("@favoriteproduct");
+
+        let arrayFavorites = JSON.parse(dadosFavorites);
+
+        setProductsFavorites(arrayFavorites);
+    }, []);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleProposta, setModalVisibleProposta] = useState(false);
@@ -82,15 +109,41 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
 
     const priceDivisor = promotion / 12;
 
+    const [favoriteFilter, setFavoriteFilter] = useState([]);
+
+    useEffect(() => {
+        const favorite = productsFavorites.filter(item => item === product_id);
+        setFavoriteFilter(favorite || []);
+    },[productsFavorites, product_id]);
+
+    function removeFavorite() {
+        localStorage.removeItem("@favoriteproduct");
+
+        setTimeout(() => {
+            router.reload();
+        }, 2000);
+    }
+
 
     return (
         <>
             <ContatinerInfosProduct>
-
                 <BlockProductNames>
                     <BoxHeartFavorite>
-                        <AiOutlineHeart size={30} />
-                        <AiFillHeart size={30} color="red" />
+                        {favoriteFilter?.length < 1 ? (
+                            <AiOutlineHeart
+                                cursor='pointer'
+                                size={30}
+                                onClick={addFavoriteProduct}
+                            />
+                        ) :
+                            <AiFillHeart
+                                cursor='pointer'
+                                size={30}
+                                color="red"
+                                onClick={removeFavorite}
+                            />
+                        }
                     </BoxHeartFavorite>
                     <TextSku>SKU {sku}</TextSku>
                     <TextNameProduct>{name}</TextNameProduct>

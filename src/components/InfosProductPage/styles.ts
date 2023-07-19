@@ -13,9 +13,9 @@ export const ContatinerInfosProduct = styled.div`
 `
 
 export const BlockProductNames = styled.div`
- width: 550px;
+  width: 550px;
 
- @media (max-width: 636px) {
+  @media (max-width: 636px) {
     width: 350px;
   }
 
@@ -34,7 +34,8 @@ export const BoxContentproduct = styled.div`
 `
 
 export const BoxHeartFavorite = styled.div`
-  
+  display: flex;
+  justify-content: flex-end;
 `
 
 export const TextSku = styled.span`
