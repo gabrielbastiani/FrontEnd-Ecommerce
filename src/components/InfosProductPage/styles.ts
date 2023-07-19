@@ -228,3 +228,34 @@ export const InputCalculoFrete = styled.input`
   padding: 10px;
   margin-left: 10px;
 `
+
+export const TextIndisponivel = styled.span`
+  color: ${props => props?.theme?.colors?.gray};
+`
+
+export const BoxNotFoundStock = styled.div`
+  padding: 12px 0;
+`
+
+export const InputStockEmail = styled.input`
+  padding: 10px;
+  border: 2px solid gray;
+  margin-right: 15px;
+  width: 50%;
+
+  @media (max-width: 540px) {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+`
+
+export const ButtonEmailStock = styled.button`
+  padding: 12px;
+  background-color: ${props => props?.theme?.colors?.warning};
+  border: none;
+  color: ${props => props?.theme?.colors?.white};
+
+  @media (max-width: 540px) {
+    width: 100%;
+  }
+`

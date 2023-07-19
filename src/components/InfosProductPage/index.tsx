@@ -9,15 +9,19 @@ import {
     BoxContentFrete,
     BoxContentproduct,
     BoxHeartFavorite,
+    BoxNotFoundStock,
     ButtonAddCArtProduct,
     ButtonAvalieProduct,
     ButtonContraProposta,
+    ButtonEmailStock,
     ContainerAttributes,
     ContatinerInfosProduct,
     InputCalculoFrete,
+    InputStockEmail,
     TextAvalie,
     TextCredit,
     TextFrete,
+    TextIndisponivel,
     TextMax,
     TextMin,
     TextNameProduct,
@@ -33,6 +37,9 @@ import Link from "next/link";
 import { ModalLoginAvalie } from "../popups/ModalLoginAvalie";
 import { ModalProposta } from "../popups/ModalProposta";
 import router from "next/router";
+import { BlockInputs } from "../../pages/createAccount/styles";
+import { Input } from "../ui/Input";
+import { Button } from "../ui/Button";
 
 
 interface InfosRequest {
@@ -117,7 +124,7 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
         }
         const favorite = productsFavorites.filter(item => item === product_id);
         setFavoriteFilter(favorite || []);
-    },[productsFavorites, product_id]);
+    }, [productsFavorites, product_id]);
 
     function removeFavorite() {
         localStorage.removeItem("@favoriteproduct");
@@ -127,121 +134,223 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
         }, 2000);
     }
 
+    const [emails, setEmails] = useState('');
+
+    function isEmail(emails: string) {
+        return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails);
+    };
+
 
     return (
         <>
-            <ContatinerInfosProduct>
-                <BlockProductNames>
-                    <BoxHeartFavorite>
-                        {favoriteFilter?.length < 1 ? (
-                            <AiOutlineHeart
-                                cursor='pointer'
-                                size={30}
-                                onClick={addFavoriteProduct}
-                            />
+            {stock < 1 ? (
+                <ContatinerInfosProduct>
+                    <BlockProductNames>
+                        <BoxHeartFavorite>
+                            {favoriteFilter?.length < 1 ? (
+                                <AiOutlineHeart
+                                    cursor='pointer'
+                                    size={30}
+                                    onClick={addFavoriteProduct}
+                                />
+                            ) :
+                                <AiFillHeart
+                                    cursor='pointer'
+                                    size={30}
+                                    color="red"
+                                    onClick={removeFavorite}
+                                />
+                            }
+                        </BoxHeartFavorite>
+                        <TextSku>SKU {sku}</TextSku>
+                        <TextNameProduct>{name}</TextNameProduct>
+                        <ButtonAvalieProduct
+                            onClick={handleOpenModalLoginAvalie}
+                        >
+                            <AiFillStar color="gold" size={20} />
+                            <AiFillStar color="gold" size={20} />
+                            <AiFillStar color="gold" size={20} />
+                            <AiFillStar color="gold" size={20} />
+                            <TextAvalie>Avalie</TextAvalie>
+                        </ButtonAvalieProduct>
+                    </BlockProductNames>
+
+                    <ContainerAttributes>
+                        {variations.length < 1 ? (
+                            <>
+                                {relationattributeproducts.map((proVal: any) => {
+                                    return (
+                                        <AttributeNoProduct>
+                                            {proVal?.valueAttribute?.value}
+                                        </AttributeNoProduct>
+                                    )
+                                })}
+                            </>
                         ) :
-                            <AiFillHeart
-                                cursor='pointer'
-                                size={30}
-                                color="red"
-                                onClick={removeFavorite}
-                            />
+                            <>
+                                {variations.map((item: any) => {
+                                    return (
+                                        item?.productsvariations.map((pro: any) => {
+                                            return (
+                                                <>
+                                                    <Link href={`/produto/${pro?.product?.slug}`}>
+                                                        {item?.productsvariations.map((val: any) => {
+                                                            return (
+                                                                val?.product?.relationattributeproducts.map((valu: any) => {
+                                                                    return (
+                                                                        <Attribute>{valu?.valueAttribute?.value}</Attribute>
+                                                                    )
+                                                                })
+                                                            )
+                                                        })}
+                                                    </Link>
+                                                </>
+                                            )
+                                        })
+                                    )
+                                })}
+                            </>
                         }
-                    </BoxHeartFavorite>
-                    <TextSku>SKU {sku}</TextSku>
-                    <TextNameProduct>{name}</TextNameProduct>
-                    <ButtonAvalieProduct
-                        onClick={handleOpenModalLoginAvalie}
-                    >
-                        <AiFillStar color="gold" size={20} />
-                        <AiFillStar color="gold" size={20} />
-                        <AiFillStar color="gold" size={20} />
-                        <AiFillStar color="gold" size={20} />
-                        <TextAvalie>Avalie</TextAvalie>
-                    </ButtonAvalieProduct>
-                </BlockProductNames>
+                    </ContainerAttributes>
+                    <BoxContentproduct>
+                        <TextPrice>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(price)}</TextPrice>
+                        <TextPromotion>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(promotion)}</TextPromotion>
+                        <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(priceDivisor)} com juros de Cartão de Crédito</TextCredit>
+                        <br />
+                        <TextPromotion
+                            style={{ color: 'red' }}
+                        >
+                            Produto Indisponivel
+                        </TextPromotion>
+                    </BoxContentproduct>
+                    <TextIndisponivel>Avise-me quando chegar, insira seu e-mail abaixo que recebera<br />uma notificação em seu e-mail qunado o produto estiver em estoque.</TextIndisponivel>
+                    <BoxNotFoundStock>
+                        <InputStockEmail
+                            name='email'
+                            placeholder="Seu e-mail aqui..."
+                            value={emails}
+                            onChange={(e) => setEmails(e.target.value)}
+                        />
+                        <ButtonEmailStock
+                            onClick={() => alert('clicou')}
+                        >
+                            AVISAR POR E-MAIL
+                        </ButtonEmailStock>
+                    </BoxNotFoundStock>
+                </ContatinerInfosProduct>
+            ) :
+                <ContatinerInfosProduct>
+                    <BlockProductNames>
+                        <BoxHeartFavorite>
+                            {favoriteFilter?.length < 1 ? (
+                                <AiOutlineHeart
+                                    cursor='pointer'
+                                    size={30}
+                                    onClick={addFavoriteProduct}
+                                />
+                            ) :
+                                <AiFillHeart
+                                    cursor='pointer'
+                                    size={30}
+                                    color="red"
+                                    onClick={removeFavorite}
+                                />
+                            }
+                        </BoxHeartFavorite>
+                        <TextSku>SKU {sku}</TextSku>
+                        <TextNameProduct>{name}</TextNameProduct>
+                        <ButtonAvalieProduct
+                            onClick={handleOpenModalLoginAvalie}
+                        >
+                            <AiFillStar color="gold" size={20} />
+                            <AiFillStar color="gold" size={20} />
+                            <AiFillStar color="gold" size={20} />
+                            <AiFillStar color="gold" size={20} />
+                            <TextAvalie>Avalie</TextAvalie>
+                        </ButtonAvalieProduct>
+                    </BlockProductNames>
 
-                <ContainerAttributes>
-                    {variations.length < 1 ? (
-                        <>
-                            {relationattributeproducts.map((proVal: any) => {
-                                return (
-                                    <AttributeNoProduct>
-                                        {proVal?.valueAttribute?.value}
-                                    </AttributeNoProduct>
-                                )
-                            })}
-                        </>
-                    ) :
-                        <>
-                            {variations.map((item: any) => {
-                                return (
-                                    item?.productsvariations.map((pro: any) => {
-                                        return (
-                                            <>
-                                                <Link href={`/produto/${pro?.product?.slug}`}>
-                                                    {item?.productsvariations.map((val: any) => {
-                                                        return (
-                                                            val?.product?.relationattributeproducts.map((valu: any) => {
-                                                                return (
-                                                                    <Attribute>{valu?.valueAttribute?.value}</Attribute>
-                                                                )
-                                                            })
-                                                        )
-                                                    })}
-                                                </Link>
-                                            </>
-                                        )
-                                    })
-                                )
-                            })}
-                        </>
-                    }
-                </ContainerAttributes>
+                    <ContainerAttributes>
+                        {variations.length < 1 ? (
+                            <>
+                                {relationattributeproducts.map((proVal: any) => {
+                                    return (
+                                        <AttributeNoProduct>
+                                            {proVal?.valueAttribute?.value}
+                                        </AttributeNoProduct>
+                                    )
+                                })}
+                            </>
+                        ) :
+                            <>
+                                {variations.map((item: any) => {
+                                    return (
+                                        item?.productsvariations.map((pro: any) => {
+                                            return (
+                                                <>
+                                                    <Link href={`/produto/${pro?.product?.slug}`}>
+                                                        {item?.productsvariations.map((val: any) => {
+                                                            return (
+                                                                val?.product?.relationattributeproducts.map((valu: any) => {
+                                                                    return (
+                                                                        <Attribute>{valu?.valueAttribute?.value}</Attribute>
+                                                                    )
+                                                                })
+                                                            )
+                                                        })}
+                                                    </Link>
+                                                </>
+                                            )
+                                        })
+                                    )
+                                })}
+                            </>
+                        }
+                    </ContainerAttributes>
 
-                <TextFrete>Aproveite, ainda temos <TextStock>{stock}</TextStock> no estoque.</TextFrete>
-                <br />
-                <br />
-                <BoxContentproduct>
-                    <TextPrice>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(price)}</TextPrice>
-                    <TextPromotion>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(promotion)}</TextPromotion>
-                    <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(priceDivisor)} com juros de Cartão de Crédito</TextCredit>
-                    <ButtonContraProposta
-                        onClick={handleOpenModalLoginProposta}
-                    >
-                        <RiAuctionFill color="white" size={20} />
-                        FAZER CONTRAPROPOSTA
-                    </ButtonContraProposta>
-                </BoxContentproduct>
+                    <TextFrete>Aproveite, ainda temos <TextStock>{stock}</TextStock> no estoque.</TextFrete>
+                    <br />
+                    <br />
+                    <BoxContentproduct>
+                        <TextPrice>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(price)}</TextPrice>
+                        <TextPromotion>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(promotion)}</TextPromotion>
+                        <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(priceDivisor)} com juros de Cartão de Crédito</TextCredit>
+                        <ButtonContraProposta
+                            onClick={handleOpenModalLoginProposta}
+                        >
+                            <RiAuctionFill color="white" size={20} />
+                            FAZER CONTRAPROPOSTA
+                        </ButtonContraProposta>
+                    </BoxContentproduct>
+                    <BoxAddCart>
+                        <BoxCart>
+                            <TextMin>-</TextMin>
+                            <TextQuantidade>1</TextQuantidade>
+                            <TextMax>+</TextMax>
+                        </BoxCart>
+                        <ButtonAddCArtProduct>
+                            ADICIONAR AO CARRINHO
+                        </ButtonAddCArtProduct>
+                    </BoxAddCart>
 
-                <BoxAddCart>
-                    <BoxCart>
-                        <TextMin>-</TextMin>
-                        <TextQuantidade>1</TextQuantidade>
-                        <TextMax>+</TextMax>
-                    </BoxCart>
-                    <ButtonAddCArtProduct>
-                        ADICIONAR AO CARRINHO
-                    </ButtonAddCArtProduct>
-                </BoxAddCart>
+                    <BoxContentFrete>
+                        <TextFrete>Calcule o frete e o prazo: </TextFrete>
+                        <InputCalculoFrete
+                            placeholder="Digite seu CEP"
+                            type="text"
+                            maxLength={9}
+                            onKeyUp={(event) => handleZipCode(event)}
+                        />
+                        <AiOutlineArrowRight
+                            size={23}
+                            onClick={() => alert('clicou')}
+                        />
+                    </BoxContentFrete>
 
-                <BoxContentFrete>
-                    <TextFrete>Calcule o frete e o prazo: </TextFrete>
-                    <InputCalculoFrete
-                        placeholder="Digite seu CEP"
-                        type="text"
-                        maxLength={9}
-                        onKeyUp={(event) => handleZipCode(event)}
-                    />
-                    <AiOutlineArrowRight
-                        size={23}
-                        onClick={() => alert('clicou')}
-                    />
-                </BoxContentFrete>
+                    <Link href={'https://buscacepinter.correios.com.br/app/endereco/index.php'} target="_blank">NÃO SABE O CEP?</Link>
 
-                <Link href={'https://buscacepinter.correios.com.br/app/endereco/index.php'} target="_blank">NÃO SABE O CEP?</Link>
-
-            </ContatinerInfosProduct>
+                </ContatinerInfosProduct>
+            }
             {modalVisible && (
                 <ModalLoginAvalie
                     isOpen={modalVisible}
