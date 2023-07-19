@@ -112,6 +112,9 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
     const [favoriteFilter, setFavoriteFilter] = useState([]);
 
     useEffect(() => {
+        if (productsFavorites === null) {
+            return;
+        }
         const favorite = productsFavorites.filter(item => item === product_id);
         setFavoriteFilter(favorite || []);
     },[productsFavorites, product_id]);
@@ -188,10 +191,10 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
                                                     })}
                                                 </Link>
                                             </>
-                                        );
+                                        )
                                     })
-                                );
-                            })};
+                                )
+                            })}
                         </>
                     }
                 </ContainerAttributes>
