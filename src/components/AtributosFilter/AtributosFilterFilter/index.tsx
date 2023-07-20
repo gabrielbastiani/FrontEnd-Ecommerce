@@ -55,7 +55,6 @@ const AtributosFilterFilter = ({ products, onClick }: FilterAtributesRequest) =>
                                     <TypeAtribute>{item?.typeAttribute?.type}</TypeAtribute>
                                     {item?.typeAttribute?.valueattribute.map((val: any) => {
                                         return (
-
                                             <>
                                                 {val?.RelationAttributeProduct.map((rel: any) => {
                                                     return (

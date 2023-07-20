@@ -20,10 +20,11 @@ import {
     TextPage,
     ValueQuant
 } from "./styles";
-import { OldPrice, Price } from "../DestaqueProducts/styles";
+import { OldPrice, Price, TextCredit } from "../DestaqueProducts/styles";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import Image from "next/image";
 import semimagem from '../../assets/semfoto.png';
+import { TextPromotion } from "../InfosProductPage/styles";
 
 
 interface ProductsRequest {
@@ -56,24 +57,41 @@ const ProdutosNoFiltro = ({ products, currentPage, setCurrentPage, pages }: Prod
                                     }
                                 </ImagesHover>
                             </Link>
-                            <Info>
-                                <Link href={'/produto/' + prod?.slug}>
-                                    <Name>{prod?.name}</Name>
-                                    <OldPrice>De {prod?.promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
-                                    <Price>Por {prod?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
-                                </Link>
-                                <BoxBuy>
-                                    <Quantidade>
-                                        <Min>-</Min>
-                                        <ValueQuant>1</ValueQuant>
-                                        <Max>+</Max>
-                                    </Quantidade>
-                                    <Add>
-                                        <AiOutlineShoppingCart color='white' size={25} />
-                                        &emsp;Adicionar
-                                    </Add>
-                                </BoxBuy>
-                            </Info>
+                            {prod?.stock === 0 ? (
+                                <Info>
+                                    <Link href={'/produto/' + prod?.slug}>
+                                        <Name>{prod?.name}</Name>
+                                        <OldPrice>De {prod?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
+                                        <Price>Por {prod?.promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                        <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price / 12)} com juros de Cartão de Crédito</TextCredit>
+                                    </Link>
+                                    <TextPromotion
+                                        style={{ color: 'red', fontSize: '17px', marginTop: '5px' }}
+                                    >
+                                        Produto indisponivel no momento!
+                                    </TextPromotion>
+                                </Info>
+                            ) :
+                                <Info>
+                                    <Link href={'/produto/' + prod?.slug}>
+                                        <Name>{prod?.name}</Name>
+                                        <OldPrice>De {prod?.price.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</OldPrice>
+                                        <Price>Por {prod?.promotion.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })}</Price>
+                                        <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price / 12)} com juros de Cartão de Crédito</TextCredit>
+                                    </Link>
+                                    <BoxBuy>
+                                        <Quantidade>
+                                            <Min>-</Min>
+                                            <ValueQuant>1</ValueQuant>
+                                            <Max>+</Max>
+                                        </Quantidade>
+                                        <Add>
+                                            <AiOutlineShoppingCart color='white' size={25} />
+                                            &emsp;Adicionar
+                                        </Add>
+                                    </BoxBuy>
+                                </Info>
+                            }
                         </BoxProduct>
                     )
                 })}

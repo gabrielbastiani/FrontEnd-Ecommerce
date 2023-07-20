@@ -28,6 +28,7 @@ import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { setupAPIClient } from '../../services/api';
 import Link from 'next/link';
+import { TextPromotion } from '../InfosProductPage/styles';
 
 
 interface DestaqueRequest {
@@ -93,25 +94,41 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
                                             }
                                         </ImagesHover>
                                     </Link>
-                                    <Info>
-                                        <Link href={'/produto/' + item?.slug}>
-                                            <Name>{item?.name}</Name>
-                                            <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</OldPrice>
-                                            <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.promotion)}</Price>
-                                            <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price / 12)} com juros de Cartão de Crédito</TextCredit>
-                                        </Link>
-                                        <BoxBuy>
-                                            <Quantidade>
-                                                <Min>-</Min>
-                                                <ValueQuant>1</ValueQuant>
-                                                <Max>+</Max>
-                                            </Quantidade>
-                                            <Add>
-                                                <AiOutlineShoppingCart color='white' size={25} />
-                                                &emsp;Adicionar
-                                            </Add>
-                                        </BoxBuy>
-                                    </Info>
+                                    {item?.stock === 0 ? (
+                                        <Info>
+                                            <Link href={'/produto/' + item?.slug}>
+                                                <Name>{item?.name}</Name>
+                                                <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</OldPrice>
+                                                <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.promotion)}</Price>
+                                                <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price / 12)} com juros de Cartão de Crédito</TextCredit>
+                                            </Link>
+                                            <TextPromotion
+                                                style={{ color: 'red', fontSize: '17px', marginTop: '5px' }}
+                                            >
+                                                Produto indisponivel no momento!
+                                            </TextPromotion>
+                                        </Info>
+                                    ) :
+                                        <Info>
+                                            <Link href={'/produto/' + item?.slug}>
+                                                <Name>{item?.name}</Name>
+                                                <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</OldPrice>
+                                                <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.promotion)}</Price>
+                                                <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price / 12)} com juros de Cartão de Crédito</TextCredit>
+                                            </Link>
+                                            <BoxBuy>
+                                                <Quantidade>
+                                                    <Min>-</Min>
+                                                    <ValueQuant>1</ValueQuant>
+                                                    <Max>+</Max>
+                                                </Quantidade>
+                                                <Add>
+                                                    <AiOutlineShoppingCart color='white' size={25} />
+                                                    &emsp;Adicionar
+                                                </Add>
+                                            </BoxBuy>
+                                        </Info>
+                                    }
                                 </Item>
                             );
                         })}
