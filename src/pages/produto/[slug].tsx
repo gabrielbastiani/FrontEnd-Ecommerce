@@ -20,6 +20,7 @@ import VideoProduct from "../../components/VideoProduct";
 import CompreJunto from "../../components/CompreJunto";
 import DescricoesProduct from "../../components/DescricoesProduct";
 import DestaqueProducts from "../../components/DestaqueProducts";
+import TagsProduct from "../../components/TagsProduct";
 
 
 export default function Produto() {
@@ -99,6 +100,8 @@ export default function Produto() {
                 dados = JSON.parse(localStorage.getItem("@moreViewed"));
             };
 
+            dados = JSON.parse(localStorage.getItem("@moreViewed")).filter(item => item.name != name && item.slug != slug && item.photoProduct != photoProduct);
+
             dados.push({ name, slug, photoProduct });
 
             localStorage.setItem("@moreViewed", JSON.stringify(dados));
@@ -169,6 +172,10 @@ export default function Produto() {
                 </ContainerContentProductExtra>
 
                 <AvaliacoesBox
+                    product_id={product_id}
+                />
+
+                <TagsProduct
                     product_id={product_id}
                 />
 

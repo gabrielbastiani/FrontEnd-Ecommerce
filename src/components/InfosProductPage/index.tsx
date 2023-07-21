@@ -129,8 +129,8 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
     }, [productsFavorites, product_id]);
 
     function removeFavorite() {
-        localStorage.removeItem("@favoriteproduct");
-
+        const data = JSON.parse(localStorage.getItem("@favoriteproduct")).filter((item: string) => item != product_id);
+        localStorage.setItem("@favoriteproduct", JSON.stringify(data));
         setTimeout(() => {
             router.reload();
         }, 2000);
