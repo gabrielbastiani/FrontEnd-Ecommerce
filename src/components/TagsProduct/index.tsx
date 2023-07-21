@@ -8,7 +8,7 @@ interface TagRequest {
 
 export const TagsProduct = ({ product_id }: TagRequest) => {
 
-    const [tags, setTags] = useState<any []>([]);
+    const [tags, setTags] = useState<any[]>([]);
 
     useEffect(() => {
         async function loadTagsProduct() {
@@ -29,7 +29,7 @@ export const TagsProduct = ({ product_id }: TagRequest) => {
             {tags.map((item) => {
                 return (
                     <TagsName key={item?.id}>#{item?.tagName}</TagsName>
-                )   
+                )
             })}
         </Container>
     )

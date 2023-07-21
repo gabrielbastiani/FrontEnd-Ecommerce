@@ -27,7 +27,7 @@ export const Container = styled.div`
 `
 
 export const TagsName = styled.span`
-  margin: 0 5px;
+  margin: 0 3px;
   padding: 8px;
   font-size: 18px;
   font-weight: bold;

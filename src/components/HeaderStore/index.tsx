@@ -28,7 +28,7 @@ import {
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { RiCustomerService2Fill } from 'react-icons/ri';
-import { AiOutlineHeart, AiOutlineShoppingCart } from 'react-icons/ai';
+import { AiFillHeart, AiOutlineHeart, AiOutlineShoppingCart } from 'react-icons/ai';
 import { BiUser } from 'react-icons/bi';
 import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
@@ -136,6 +136,14 @@ export const HeaderStore = () => {
         setElement(!element);
     }
 
+    const [productsFavorites, setProductsFavorites] = useState([]);
+
+    useEffect(() => {
+        let dadosFavorites = localStorage.getItem("@favoriteproduct");
+        let arrayFavorites = JSON.parse(dadosFavorites);
+        setProductsFavorites(arrayFavorites);
+    }, []);
+
     useEffect(() => {
         async function loadStore() {
             const apiClient = setupAPIClient();
@@ -225,7 +233,6 @@ export const HeaderStore = () => {
     }
 
     const search = () => {
-
         const arraySearch = [0];
         for (let i = 1; i <= click.length; i++) {
             arraySearch.push(i);
@@ -374,12 +381,21 @@ export const HeaderStore = () => {
                             </StyledLi>
                             <StyledLi>
                                 <StyledA>
-                                    <Link
-                                        href='/favoritos'
-                                    >
-                                        <AiOutlineHeart color='white' size={20} />
-                                        Favoritos
-                                    </Link>
+                                    {productsFavorites.length < 1 ? (
+                                        <Link
+                                            href='/favoritos'
+                                        >
+                                            <AiOutlineHeart color='white' size={20} />
+                                            Favoritos
+                                        </Link>
+                                    ) :
+                                        <Link
+                                            href='/favoritos'
+                                        >
+                                            <AiFillHeart color='red' size={20} />
+                                            Favoritos
+                                        </Link>
+                                    }
                                 </StyledA>
                             </StyledLi>
                             <DropDownLi>
@@ -462,7 +478,6 @@ export const HeaderStore = () => {
                     ) :
                         null
                     }
-
                 </CategorysHeaderMobile>
             </ContainerHeaderStore>
         </>

@@ -37,9 +37,6 @@ import Link from "next/link";
 import { ModalLoginAvalie } from "../popups/ModalLoginAvalie";
 import { ModalProposta } from "../popups/ModalProposta";
 import router from "next/router";
-import { BlockInputs } from "../../pages/createAccount/styles";
-import { Input } from "../ui/Input";
-import { Button } from "../ui/Button";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../services/api";
 
@@ -131,6 +128,7 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
     function removeFavorite() {
         const data = JSON.parse(localStorage.getItem("@favoriteproduct")).filter((item: string) => item != product_id);
         localStorage.setItem("@favoriteproduct", JSON.stringify(data));
+        toast.success('Produto favorito excluido da sua lista.');
         setTimeout(() => {
             router.reload();
         }, 2000);
