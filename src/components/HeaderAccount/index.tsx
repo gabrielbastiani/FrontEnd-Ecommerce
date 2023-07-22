@@ -11,7 +11,7 @@ export const HeaderAccount = () => (
         <ContainerHeader>
             <ContentHeader>
                 <BlockBack>
-                    <Link href="/loginClient">
+                    <Link href="/">
                         <BsArrowLeft color='white' size={25} />
                         <TextVoltar>VOLTAR</TextVoltar>
                     </Link>

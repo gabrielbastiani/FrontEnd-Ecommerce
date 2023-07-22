@@ -21,6 +21,8 @@ import { IMaskInput } from "react-imask";
 import { toast } from "react-toastify";
 import Titulos from "../../../components/Titulos";
 import { Button } from "../../../components/ui/Button";
+import { ButtonSelect } from "../../../components/ui/ButtonSelect";
+import Router from "next/router";
 
 
 export default function Meusdados() {
@@ -42,22 +44,11 @@ export default function Meusdados() {
     const [estados, setEstados] = useState([]);
     const [estadoSelected, setEstadoSelected] = useState();
     const [ceps, setCeps] = useState('');
+    const [newslatters, setNewslatters] = useState("");
 
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
-
-    const [newslatters, setNewslatters] = useState("");
-    const [check, setCheck] = useState(Boolean);
-
-    const handleChecked = () => {
-        setCheck(!check);
-        if (check === false) {
-            setNewslatters("Nao");
-        } else {
-            setNewslatters("Sim");
-        }
-    };
-
+    
     function isEmail(emails: string) {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
     };
@@ -65,23 +56,23 @@ export default function Meusdados() {
     async function refreshUser() {
         const apiClient = setupAPIClient();
 
-        const response = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
+        const { data } = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
 
-        setNameCompletes(response?.data?.name);
-        setCpfs(response?.data?.cpf);
-        setCnpjs(response?.data?.cnpj)
-        setStateRegistration(response?.data?.stateRegistration);
-        setPhones(response?.data?.phone);
-        setEmails(response?.data?.email);
-        setDataNascimentos(response?.data?.dateOfBirth);
-        setLocals(response?.data?.address);
-        setNumeros(response?.data?.number);
-        setBairros(response?.data?.neighborhood);
-        setCidades(response?.data?.city);
-        setEstados(response?.data?.state);
-        setCeps(response?.data?.cep);
-        setGeneros(response?.data?.gender);
-        setNewslatters(response?.data?.newslatter);
+        setNameCompletes(data?.name || "");
+        setCpfs(data?.cpf || "");
+        setCnpjs(data?.cnpj || "")
+        setStateRegistration(data?.stateRegistration || "");
+        setPhones(data?.phone || "");
+        setEmails(data?.email || "");
+        setDataNascimentos(data?.dateOfBirth || "");
+        setLocals(data?.address || "");
+        setNumeros(data?.number || "");
+        setBairros(data?.neighborhood || "");
+        setCidades(data?.city || "");
+        setEstados(data?.state || "");
+        setCeps(data?.cep || "");
+        setGeneros(data?.gender || "");
+        setNewslatters(data?.newslatter || "");
 
     }
 
@@ -89,47 +80,30 @@ export default function Meusdados() {
         async function loadUser() {
             const apiClient = setupAPIClient();
             try {
-                const response = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
-                const {
-                    name,
-                    email,
-                    cpf,
-                    cnpj,
-                    stateRegistration,
-                    phone,
-                    dateOfBirth,
-                    gender,
-                    newslatter,
-                    address,
-                    number,
-                    neighborhood,
-                    cep,
-                    city,
-                    state
-                } = response.data;
+                const { data } = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
 
-                setNameCompletes(name);
-                setCnpjs(cnpj);
-                setCpfs(cpf);
-                setStateRegistration(stateRegistration);
-                setPhones(phone);
-                setEmails(email);
-                setDataNascimentos(dateOfBirth);
-                setLocals(address);
-                setNumeros(number);
-                setBairros(neighborhood);
-                setCidades(city);
-                setEstados(state);
-                setCeps(cep);
-                setGeneros(gender);
-                setNewslatters(newslatter);
+                setNameCompletes(data?.name || "");
+                setCnpjs(data?.cnpj || "");
+                setCpfs(data?.cpf || "");
+                setStateRegistration(data?.stateRegistration || "");
+                setPhones(data?.phone || "");
+                setEmails(data?.email || "");
+                setDataNascimentos(data?.dateOfBirth || "");
+                setLocals(data?.address || "");
+                setNumeros(data?.number || "");
+                setBairros(data?.neighborhood || "");
+                setCidades(data?.city || "");
+                setEstados(data?.state || "");
+                setCeps(data?.cep || "");
+                setGeneros(data?.gender || "");
+                setNewslatters(data?.newslatter || "");
 
             } catch (error) {
                 console.log(error);
             }
         }
         loadUser();
-    }, []);
+    }, [customer_id]);
 
     async function updateName() {
         try {
@@ -211,9 +185,11 @@ export default function Meusdados() {
     async function updateNews() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, { newslatter: newslatters });
+            await apiClient.put(`/customer/updateNewslatter?customer_id=${customer_id}`);
 
-            refreshUser();
+            setTimeout(() => {
+                Router.reload()
+            }, 3000);
 
         } catch (error) {
             console.log(error);
@@ -390,36 +366,12 @@ export default function Meusdados() {
                                 }
 
                                 <BlockDados>
-                                    <TextoDados
-                                        chave={"Newslatters?"}
-                                        dados={
-                                            <InputCheck
-                                                type="checkbox"
-                                                value={newslatters}
-                                                onClick={handleChecked}
-                                                checked={check}
-                                            />
-                                        }
-                                    />
-                                    &ensp;<TextNews>{newslatters}</TextNews>
-                                    &ensp;&ensp;
-                                    {newslatters === "Sim" ? (
-                                        <Button
-                                            style={{ padding: '5px', backgroundColor: 'green' }}
-                                            onClick={updateNews}
-                                        >
-                                            Salvar essa<br />prefêrencia para (SIM)
-                                        </Button>
-                                    ) :
-                                        <Button
-                                            style={{ padding: '5px' }}
-                                            onClick={updateNews}
-                                        >
-                                            Salvar essa<br />prefêrencia para (NÃO)
-                                        </Button>
-                                    }
-
-                                </BlockDados>
+                                    <TextNews>Preferencia para newslatters: <strong>{newslatters}</strong></TextNews>
+                                        <ButtonSelect
+                                            dado={newslatters}
+                                            handleSubmit={updateNews}
+                                        />
+                                    </BlockDados>
                             </SectionDate>
 
                             <SectionDate>
