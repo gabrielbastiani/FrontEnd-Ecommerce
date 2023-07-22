@@ -3,7 +3,7 @@ import { setupAPIClient } from "../../services/api";
 import { Boxbreadcrumbs, Bread } from "../dateStoreUx/styles";
 import Link from "next/link";
 import { IoIosHome } from "react-icons/io";
-import { ActualBread, BoxBread, BreadAtual } from "./styles";
+import { BoxBread } from "./styles";
 
 
 interface BreadcrumbsRequest {
@@ -76,7 +76,9 @@ const BreadcrumbsProduct = ({ product_id }: BreadcrumbsRequest) => {
 
     return (
         <>
-            <Bread>
+            <Bread
+                style={{ marginBottom: '50px', marginTop: '28px' }}
+            >
                 <Boxbreadcrumbs>
                     <BoxBread>
                         <Link href="http://localhost:3001">
