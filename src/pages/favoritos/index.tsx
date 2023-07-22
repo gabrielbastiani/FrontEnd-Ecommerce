@@ -6,7 +6,7 @@ import { FooterStore } from "../../components/FooterStore";
 import FooterAccount from "../../components/FooterAccount";
 import { ButtonPage, ContainerPagination, Next, Previus, TextPage } from "../../components/PagesUx/styles";
 import { Add, BoxBuy, BoxPages, BoxProduct, ContainerPage, GridSectionProducts, Info, Max, Min, Quantidade, ValueQuant } from "../../components/ProdutosNoFiltro/styles";
-import { AiFillHeart, AiOutlineShoppingCart } from "react-icons/ai";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import Link from "next/link";
 import { Images, ImagesHover, Name, OldPrice, Price, TextCredit } from "../../components/DestaqueProducts/styles";
 import { TextPromotion } from "../../components/InfosProductPage/styles";

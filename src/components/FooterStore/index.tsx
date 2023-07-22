@@ -108,9 +108,9 @@ export const FooterStore = () => {
                         <BoxLogo>
                             <Link href='http://localhost:3001'>
                                 {logo ? (
-                                    <Image src={'http://localhost:3333/files/' + logo} width={180} height={50} alt={nameLoja} />
+                                    <Image src={'http://localhost:3333/files/' + logo} width={180} height={70} alt={nameLoja} />
                                 ) :
-                                    <Image src={noImage} width={180} height={50} alt={nameLoja} />
+                                    <Image src={noImage} width={180} height={70} alt={nameLoja} />
                                 }
                             </Link>
                         </BoxLogo>
