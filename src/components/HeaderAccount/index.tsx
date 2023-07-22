@@ -4,17 +4,18 @@ import { ContainerHeader, ContentHeader, BlockBack, TextVoltar, BlockSecurity, T
 import { BsArrowLeft } from 'react-icons/bs';
 import { TbLock } from 'react-icons/tb';
 import Link from 'next/link';
+import Router from 'next/router';
 
 
 export const HeaderAccount = () => (
     <>
         <ContainerHeader>
             <ContentHeader>
-                <BlockBack>
-                    <Link href="/">
-                        <BsArrowLeft color='white' size={25} />
-                        <TextVoltar>VOLTAR</TextVoltar>
-                    </Link>
+                <BlockBack
+                    onClick={() => Router.back()}
+                >
+                    <BsArrowLeft color='white' size={25} />
+                    <TextVoltar>VOLTAR</TextVoltar>
                 </BlockBack>
                 <Image src={logoLoginWhite} width={180} height={50} alt="Logo Builder Seu Negocio Online" />
                 <BlockSecurity>

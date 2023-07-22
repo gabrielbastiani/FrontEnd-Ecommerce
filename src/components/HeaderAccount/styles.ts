@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const ContainerHeader = styled.header`
   display: flex;
@@ -25,10 +25,9 @@ export const ContentHeader = styled.div`
 `
 
 export const BlockBack = styled.div`
-  a {
-    display: flex;
-    align-items: center;
-  }
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 `
 
 export const TextVoltar = styled.span`
