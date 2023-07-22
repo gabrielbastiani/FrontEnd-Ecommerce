@@ -91,7 +91,7 @@ const BreadcrumbsProduct = ({ product_id }: BreadcrumbsRequest) => {
                 </Boxbreadcrumbs>
             </Bread>
         </>
-    );
-};
+    )
+}
 
 export default BreadcrumbsProduct;
