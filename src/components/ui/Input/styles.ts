@@ -5,8 +5,8 @@ export const InputText = styled.input`
    height: 40px;
    border: 0;
    border-radius: 0.5rem;
-   background-color: ${props => props.theme.colors.black};
-   color: ${props => props.theme.colors.white};
+   background-color: ${props => props?.theme?.colors?.black};
+   color: ${props => props?.theme?.colors?.white};
    padding: 1rem;
    border: 1px solid #ff6700;
 `;
