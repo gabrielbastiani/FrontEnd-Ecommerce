@@ -25,7 +25,7 @@ import { Avisos } from "../../components/Avisos";
 
 export default function Favoritos() {
 
-    const [productsFavorites, setProductsFavorites] = useState([]);
+    const [productsFavorites, setProductsFavorites] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
 
     const [total, setTotal] = useState(0);
@@ -36,7 +36,7 @@ export default function Favoritos() {
     useEffect(() => {
         let dadosFavorites = localStorage.getItem("@favoriteproduct");
         let arrayFavorites = JSON.parse(dadosFavorites);
-        setProductsFavorites(arrayFavorites);
+        setProductsFavorites(arrayFavorites || []);
     }, []);
 
     const WEB_URL = 'http://localhost:3001';

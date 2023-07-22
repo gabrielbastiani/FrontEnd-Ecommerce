@@ -94,11 +94,15 @@ export default function Produto() {
 
     useEffect(() => {
         function addItem() {
-            let dados = new Array();
+            let dados: any = new Array();
 
             if (localStorage.hasOwnProperty("@moreViewed")) {
                 dados = JSON.parse(localStorage.getItem("@moreViewed"));
-            };
+            }
+            
+            dados.push({ name, slug, photoProduct });
+
+            localStorage.setItem("@moreViewed", JSON.stringify(dados));
 
             dados = JSON.parse(localStorage.getItem("@moreViewed")).filter(item => item.name != name && item.slug != slug && item.photoProduct != photoProduct);
 

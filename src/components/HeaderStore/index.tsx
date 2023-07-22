@@ -136,12 +136,12 @@ export const HeaderStore = () => {
         setElement(!element);
     }
 
-    const [productsFavorites, setProductsFavorites] = useState([]);
+    const [productsFavorites, setProductsFavorites] = useState<any[]>([]);
 
     useEffect(() => {
         let dadosFavorites = localStorage.getItem("@favoriteproduct");
         let arrayFavorites = JSON.parse(dadosFavorites);
-        setProductsFavorites(arrayFavorites);
+        setProductsFavorites(arrayFavorites || []);
     }, []);
 
     useEffect(() => {
@@ -381,7 +381,7 @@ export const HeaderStore = () => {
                             </StyledLi>
                             <StyledLi>
                                 <StyledA>
-                                    {productsFavorites.length < 1 ? (
+                                    {productsFavorites?.length < 1 ? (
                                         <Link
                                             href='/favoritos'
                                         >
