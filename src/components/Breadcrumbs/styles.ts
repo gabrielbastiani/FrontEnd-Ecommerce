@@ -7,6 +7,7 @@ export const BoxBread = styled.div`
 
 export const ActualBread = styled.div`
   margin-bottom: 10px;
+  margin-top: 30px;
 `
 
 export const BreadAtual = styled.span`

@@ -9,14 +9,15 @@ export const BannersContainer = styled.div`
   @media (max-width: 606px) {
     margin-top: 20px;
   }
-
-  
 `
 
 export const Container = styled.div`
   width: 100%;
   position: relative;
-  z-index: -1;
+
+  @media (max-width: 750px) {
+    display: grid;
+  }
 
   img {
     width: 100%;

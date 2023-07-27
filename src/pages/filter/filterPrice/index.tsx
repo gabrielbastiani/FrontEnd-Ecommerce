@@ -143,7 +143,8 @@ export default function FilterPricePage() {
             </Head>
             
             <HeaderStore />
-
+            <br />
+            <br />
             <PageSection>
                 <ContainerContent>
                     <AsideConteiner>

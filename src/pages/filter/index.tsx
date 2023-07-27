@@ -134,7 +134,8 @@ export default function FilterPage() {
             </Head>
             
             <HeaderStore />
-
+            <br />
+            <br />
             <PageSection>
                 <ContainerContent>
                     <AsideConteiner>
