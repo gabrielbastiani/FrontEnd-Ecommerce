@@ -261,7 +261,6 @@ export const HeaderStore = () => {
             .replace(',', "")
     }
 
-
     return (
         <>
             <ContainerHeaderStore>
@@ -356,7 +355,6 @@ export const HeaderStore = () => {
                                             ></SmallText>
                                         )
                                     })}
-
                                     <br />
                                     <br />
                                     <BlockContact>
@@ -370,14 +368,25 @@ export const HeaderStore = () => {
                                 </DropDownContent>
                             </DropDownLi>
                             <StyledLi>
-                                <StyledA>
-                                    <Link
-                                        href='/loginClient'
-                                    >
-                                        <BiUser color='white' size={20} />
-                                        Login | Cadastre-se
-                                    </Link>
-                                </StyledA>
+                                {customer ? (
+                                    <StyledA>
+                                        <Link
+                                            href='/myAccount/meusdados'
+                                        >
+                                            <BiUser color='white' size={20} />
+                                            {customer?.name}
+                                        </Link>
+                                    </StyledA>
+                                ) :
+                                    <StyledA>
+                                        <Link
+                                            href='/loginClient'
+                                        >
+                                            <BiUser color='white' size={20} />
+                                            Login | Cadastre-se
+                                        </Link>
+                                    </StyledA>
+                                }
                             </StyledLi>
                             <StyledLi>
                                 <StyledA>
