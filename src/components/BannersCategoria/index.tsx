@@ -83,14 +83,23 @@ const BannersCategoria = ({ slug }: BannerPageRequest) => {
                                         width: "100%"
                                     } as CSSProperties}
                                 >
-                                    <Link href={item?.url} target="_blank">
+                                    {item?.url ? (
+                                        <Link href={item?.url} target="_blank">
+                                            <Image
+                                                src={'http://localhost:3333/files/' + item?.banner}
+                                                width={905}
+                                                height={318}
+                                                alt="Banners Loja Builder Seu Negocio Online"
+                                            />
+                                        </Link>
+                                    ) :
                                         <Image
                                             src={'http://localhost:3333/files/' + item?.banner}
                                             width={905}
                                             height={318}
                                             alt="Banners Loja Builder Seu Negocio Online"
                                         />
-                                    </Link>
+                                    }
                                 </SwiperSlide>
                             ))}
                         </Swiper>
@@ -117,14 +126,23 @@ const BannersCategoria = ({ slug }: BannerPageRequest) => {
                                         width: "100%"
                                     } as CSSProperties}
                                 >
-                                    <Link href={item?.url} target="_blank">
+                                    {item?.url ? (
+                                        <Link href={item?.url} target="_blank">
+                                            <Image
+                                                src={'http://localhost:3333/files/' + item?.banner}
+                                                width={905}
+                                                height={318}
+                                                alt="Banners Loja Builder Seu Negocio Online"
+                                            />
+                                        </Link>
+                                    ) :
                                         <Image
                                             src={'http://localhost:3333/files/' + item?.banner}
                                             width={905}
                                             height={318}
                                             alt="Banners Loja Builder Seu Negocio Online"
                                         />
-                                    </Link>
+                                    }
                                 </SwiperSlide>
                             ))}
                         </Swiper>
