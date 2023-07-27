@@ -60,11 +60,11 @@ export const TextAvalie = styled.span`
   margin: 0 5px;
 `
 
-export const ContainerAttributes = styled.div`
+export const ContainerVariations = styled.div`
   margin-bottom: 40px;
 `
 
-export const Attribute = styled.button`
+export const Variation = styled.button`
   cursor: pointer;
   border: none;
   background-color: ${props => props?.theme?.colors?.black};

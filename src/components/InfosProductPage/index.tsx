@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Modal from 'react-modal';
 import {
-    Attribute,
+    Variation,
     AttributeNoProduct,
     BlockProductNames,
     BoxAddCart,
@@ -14,7 +14,7 @@ import {
     ButtonAvalieProduct,
     ButtonContraProposta,
     ButtonEmailStock,
-    ContainerAttributes,
+    ContainerVariations,
     ContatinerInfosProduct,
     InputCalculoFrete,
     InputStockEmail,
@@ -163,6 +163,25 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
         }
     }
 
+    console.log(variations.map((item) => {
+        return (
+            item?.productsvariations.map((pro) => {
+                return (
+                    pro?.product?.slug
+                )
+            })
+        )
+    }))
+
+    console.log(variations.map((item) => {
+        return (
+            item?.productsvariations.map((pro) => {
+                return (
+                    pro?.product
+                )
+            })
+        )
+    }))
 
     return (
         <>
@@ -198,43 +217,25 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
                         </ButtonAvalieProduct>
                     </BlockProductNames>
 
-                    <ContainerAttributes>
-                        {variations.length < 1 ? (
-                            <>
-                                {relationattributeproducts.map((proVal: any) => {
+                    <ContainerVariations>
+                        {/* {variations.map((item: any) => {
+                            return (
+                                item?.productsvariations.map((pro: any) => {
                                     return (
-                                        <AttributeNoProduct>
-                                            {proVal?.valueAttribute?.value}
-                                        </AttributeNoProduct>
+                                        <>
+                                            <Link href={`/produto/${pro?.product?.slug}`}>
+                                                {variations.map((val: any) => {
+                                                    return (
+                                                        <Variation>{val?.name}</Variation>
+                                                    )
+                                                })}
+                                            </Link>
+                                        </>
                                     )
-                                })}
-                            </>
-                        ) :
-                            <>
-                                {variations.map((item: any) => {
-                                    return (
-                                        item?.productsvariations.map((pro: any) => {
-                                            return (
-                                                <>
-                                                    <Link href={`/produto/${pro?.product?.slug}`}>
-                                                        {item?.productsvariations.map((val: any) => {
-                                                            return (
-                                                                val?.product?.relationattributeproducts.map((valu: any) => {
-                                                                    return (
-                                                                        <Attribute>{valu?.valueAttribute?.value}</Attribute>
-                                                                    )
-                                                                })
-                                                            )
-                                                        })}
-                                                    </Link>
-                                                </>
-                                            )
-                                        })
-                                    )
-                                })}
-                            </>
-                        }
-                    </ContainerAttributes>
+                                })
+                            )
+                        })} */}
+                    </ContainerVariations>
                     <BoxContentproduct>
                         <TextPrice>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(price)}</TextPrice>
                         <TextPromotion>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(promotion)}</TextPromotion>
@@ -293,43 +294,23 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
                         </ButtonAvalieProduct>
                     </BlockProductNames>
 
-                    <ContainerAttributes>
-                        {variations.length < 1 ? (
-                            <>
-                                {relationattributeproducts.map((proVal: any) => {
+                    <ContainerVariations>
+                        {variations.map((item: any) => {
+                            return (
+                                item?.productsvariations.map((slu) => {
                                     return (
-                                        <AttributeNoProduct>
-                                            {proVal?.valueAttribute?.value}
-                                        </AttributeNoProduct>
+                                        <Link href={`/produto/${slu?.product?.slug}`}>
+                                            {slu?.product?.variations.map((val) => {
+                                                return (
+                                                    <Variation>{val?.name}</Variation>
+                                                )
+                                            })}
+                                        </Link>
                                     )
-                                })}
-                            </>
-                        ) :
-                            <>
-                                {variations.map((item: any) => {
-                                    return (
-                                        item?.productsvariations.map((pro: any) => {
-                                            return (
-                                                <>
-                                                    <Link href={`/produto/${pro?.product?.slug}`}>
-                                                        {item?.productsvariations.map((val: any) => {
-                                                            return (
-                                                                val?.product?.relationattributeproducts.map((valu: any) => {
-                                                                    return (
-                                                                        <Attribute>{valu?.valueAttribute?.value}</Attribute>
-                                                                    )
-                                                                })
-                                                            )
-                                                        })}
-                                                    </Link>
-                                                </>
-                                            )
-                                        })
-                                    )
-                                })}
-                            </>
-                        }
-                    </ContainerAttributes>
+                                })
+                            )
+                        })}
+                    </ContainerVariations>
 
                     <TextFrete>Aproveite, ainda temos <TextStock>{stock}</TextStock> no estoque.</TextFrete>
                     <br />
