@@ -10,10 +10,6 @@ export const ContainerHeaderStore = styled.header`
   z-index: 99;
   position: fixed;
 
-  @media (max-width: 1076px) {
-    z-index: 1;
-  }
-
   @media (max-width: 580px) {
     z-index: 0;
   }

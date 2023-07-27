@@ -11,28 +11,19 @@ interface PropType2 {
 export const Container = styled.section`
   width: 100%;
   position: relative;
+  display: flex;
+  top: 120px;
+  margin-bottom: 200px;
+
+  @media (max-width: 900px) {
+    top: unset;
+    margin-bottom: unset;
+  }
 
   img {
     width: 100vw;
     height: 100%;
-    object-fit: contain;
-    margin-top: 120px;
-
-    @media (max-width: 900px) {
-      margin-top: 200px;
-    }
-
-    @media (max-width: 608px) {
-      margin-top: 380px;
-    }
-
-    @media (max-width: 533px) {
-      margin-top: 455px;
-    }
-
-    @media (max-width: 459px) {
-      margin-top: 490px;
-    }
+    object-fit: contain; 
   }
 `
 
@@ -74,7 +65,7 @@ export const SwiperButton = styled.button<PropType>`
   }
 
   @media (max-width: 459px) {
-    top: 87%;
+    top: 57%;
   }
 `
 export const SwiperButtonLeft = styled.button<PropType2>`
@@ -115,6 +106,6 @@ export const SwiperButtonLeft = styled.button<PropType2>`
   }
 
   @media (max-width: 459px) {
-    top: 87%;
+    top: 57%;
   }
 `
