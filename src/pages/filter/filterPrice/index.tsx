@@ -19,6 +19,7 @@ import FiltroPagePreco from "../../../components/FiltroPreco/FiltroPagePreco";
 import AtributosFilterFilter from "../../../components/AtributosFilter/AtributosFilterFilter";
 import CategoriasFilterFilter from "../../../components/CategoriasFilter/CategoriasFilterFilter";
 import { HeaderStore } from "../../../components/HeaderStore";
+import Head from "next/head";
 
 
 export default function FilterPricePage() {
@@ -137,6 +138,10 @@ export default function FilterPricePage() {
 
     return (
         <>
+            <Head>
+                <title>Filtro por preço</title>
+            </Head>
+            
             <HeaderStore />
 
             <PageSection>

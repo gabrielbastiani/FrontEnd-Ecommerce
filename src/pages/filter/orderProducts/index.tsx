@@ -19,6 +19,7 @@ import FooterAccount from "../../../components/FooterAccount";
 import { ModalFilterFilter } from "../../../components/popups/ModalFilter/ModalFilterFilter";
 import FiltroPreco from "../../../components/FiltroPreco";
 import AtributosFilter from "../../../components/AtributosFilter";
+import Head from "next/head";
 
 
 export default function OrderProducts() {
@@ -125,6 +126,10 @@ export default function OrderProducts() {
 
     return (
         <>
+            <Head>
+                <title>Produtos ordenados = {params}</title>
+            </Head>
+            
             <HeaderStore />
             <br />
             <br />

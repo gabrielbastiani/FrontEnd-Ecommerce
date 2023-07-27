@@ -19,6 +19,7 @@ import CategoriasFilterFilter from "../../components/CategoriasFilter/Categorias
 import { HeaderStore } from "../../components/HeaderStore";
 import Router from "next/router";
 import { AuthContextProducts } from "../../contexts/AuthContextProducts";
+import Head from "next/head";
 
 
 export default function FilterPage() {
@@ -128,6 +129,10 @@ export default function FilterPage() {
 
     return (
         <>
+            <Head>
+                <title>Filtro</title>
+            </Head>
+            
             <HeaderStore />
 
             <PageSection>
