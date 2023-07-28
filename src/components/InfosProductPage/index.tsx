@@ -163,25 +163,15 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
         }
     }
 
-    console.log(variations.map((item) => {
-        return (
-            item?.productsvariations.map((pro) => {
-                return (
-                    pro?.product?.slug
-                )
-            })
-        )
-    }))
+    function slugProduct(s: any) {
+        return s.normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/ +/g, "-")
+            .replace(/-{2,}/g, "-")
+            .replace(/[/]/g, "-");
+    }
 
-    console.log(variations.map((item) => {
-        return (
-            item?.productsvariations.map((pro) => {
-                return (
-                    pro?.product
-                )
-            })
-        )
-    }))
 
     return (
         <>
@@ -220,19 +210,9 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
                     <ContainerVariations>
                         {/* {variations.map((item: any) => {
                             return (
-                                item?.productsvariations.map((pro: any) => {
-                                    return (
-                                        <>
-                                            <Link href={`/produto/${pro?.product?.slug}`}>
-                                                {variations.map((val: any) => {
-                                                    return (
-                                                        <Variation>{val?.name}</Variation>
-                                                    )
-                                                })}
-                                            </Link>
-                                        </>
-                                    )
-                                })
+                                <Link href={`/produto/${slugProduct(item?.variationProduct)}`}>
+                                    <Variation>{item?.variationName}</Variation>
+                                </Link>
                             )
                         })} */}
                     </ContainerVariations>
@@ -297,17 +277,9 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
                     <ContainerVariations>
                         {variations.map((item: any) => {
                             return (
-                                item?.productsvariations.map((slu) => {
-                                    return (
-                                        <Link href={`/produto/${slu?.product?.slug}`}>
-                                            {slu?.product?.variations.map((val) => {
-                                                return (
-                                                    <Variation>{val?.name}</Variation>
-                                                )
-                                            })}
-                                        </Link>
-                                    )
-                                })
+                                <Link href={`/produto/${slugProduct(item?.variationProduct)}`}>
+                                    <Variation>{item?.variationName}</Variation>
+                                </Link>
                             )
                         })}
                     </ContainerVariations>

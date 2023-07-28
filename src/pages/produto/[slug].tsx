@@ -48,7 +48,6 @@ export default function Produto() {
     const [descriptionproducts, setDescriptionproducts] = useState<any[]>([]);
     const [tags, setTags] = useState<any[]>([]);
     const [relationattributeproducts, setRelationattributeproducts] = useState<any[]>([]);
-    const [variations, setVariations] = useState<any[]>([]);
     const [productsvariations, setProductsvariations] = useState<any[]>([]);
     const [avalietions, setAvalietions] = useState<any[]>([]);
     const [productcategories, setProductcategories] = useState<any[]>([]);
@@ -80,7 +79,6 @@ export default function Produto() {
                 setDescriptionproducts(data?.descriptionproducts || []);
                 setTags(data?.tags || []);
                 setRelationattributeproducts(data?.relationattributeproducts || []);
-                setVariations(data?.variations || []);
                 setProductsvariations(data?.productsvariations || []);
                 setAvalietions(data?.avalietions || []);
                 setProductcategories(data?.productcategories || []);
@@ -144,7 +142,7 @@ export default function Produto() {
                             sku={sku}
                             stock={stock}
                             relationattributeproducts={relationattributeproducts}
-                            variations={variations}
+                            variations={productsvariations}
                         />
                     </ProductContainer>
                 </ContainerContentProduct>
