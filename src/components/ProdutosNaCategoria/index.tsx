@@ -25,6 +25,8 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import Image from "next/image";
 import semimagem from '../../assets/semfoto.png';
 import { TextPromotion } from "../InfosProductPage/styles";
+import { useContext, useState } from "react";
+import { CartContext } from "../../contexts/CartContext";
 
 
 interface ProductsRequest {
@@ -35,6 +37,26 @@ interface ProductsRequest {
 }
 
 const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: ProductsRequest) => {
+
+    const { cart, addItemCart } = useContext(CartContext);
+
+    const [count, setCount] = useState(1);
+
+    function handleIncrement() {
+        setCount(count + 1);
+    }
+
+    function handleDescrement() {
+        if(count === 1) {
+            return;
+        }
+        setCount(count - 1);
+    }
+
+    function handleAddCart(product: { newItem: any; }) {
+        addItemCart(product)
+    }
+
     return (
         <>
             <GridSectionProducts>
@@ -81,12 +103,16 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                                     </Link>
                                     <BoxBuy>
                                         <Quantidade>
-                                            <Min>-</Min>
-                                            <ValueQuant>1</ValueQuant>
-                                            <Max>+</Max>
+                                            <Min onClick={handleDescrement}>-</Min>
+                                            <ValueQuant>{count}</ValueQuant>
+                                            <Max onClick={handleIncrement}>+</Max>
                                         </Quantidade>
                                         <Add>
-                                            <AiOutlineShoppingCart color='white' size={25} />
+                                            <AiOutlineShoppingCart
+                                                onClick={() => handleAddCart(prod?.product)}
+                                                color='white'
+                                                size={25}
+                                            />
                                             &emsp;Adicionar
                                         </Add>
                                     </BoxBuy>

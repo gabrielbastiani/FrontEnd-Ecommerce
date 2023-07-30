@@ -21,6 +21,7 @@ import CompreJunto from "../../components/CompreJunto";
 import DescricoesProduct from "../../components/DescricoesProduct";
 import DestaqueProducts from "../../components/DestaqueProducts";
 import TagsProduct from "../../components/TagsProduct";
+import AtributesProduct from "../../components/AtributesProduct";
 
 
 export default function Produto() {
@@ -97,7 +98,7 @@ export default function Produto() {
             if (localStorage.hasOwnProperty("@moreViewed")) {
                 dados = JSON.parse(localStorage.getItem("@moreViewed"));
             }
-            
+
             dados.push({ name, slug, photoProduct });
 
             localStorage.setItem("@moreViewed", JSON.stringify(dados));
@@ -141,13 +142,17 @@ export default function Produto() {
                             promotion={promotion}
                             sku={sku}
                             stock={stock}
-                            relationattributeproducts={relationattributeproducts}
                             variations={productsvariations}
                         />
                     </ProductContainer>
                 </ContainerContentProduct>
 
                 <ContainerContentProductExtra>
+
+                    <AtributesProduct
+                        atributes={relationattributeproducts}
+                    />
+
                     {urlVideo ? (
                         <VideoProduct
                             video={urlVideo}

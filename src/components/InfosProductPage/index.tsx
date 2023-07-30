@@ -48,11 +48,10 @@ interface InfosRequest {
     promotion: number;
     sku: string;
     stock: number;
-    relationattributeproducts: any;
     variations: any;
 }
 
-const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, relationattributeproducts, variations }: InfosRequest) => {
+const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, variations }: InfosRequest) => {
 
     function addFavoriteProduct() {
         let dados = new Array();
@@ -207,15 +206,6 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, rela
                         </ButtonAvalieProduct>
                     </BlockProductNames>
 
-                    <ContainerVariations>
-                        {/* {variations.map((item: any) => {
-                            return (
-                                <Link href={`/produto/${slugProduct(item?.variationProduct)}`}>
-                                    <Variation>{item?.variationName}</Variation>
-                                </Link>
-                            )
-                        })} */}
-                    </ContainerVariations>
                     <BoxContentproduct>
                         <TextPrice>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(price)}</TextPrice>
                         <TextPromotion>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(promotion)}</TextPromotion>

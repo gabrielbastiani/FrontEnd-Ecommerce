@@ -93,6 +93,33 @@ export const BlockContact = styled.div`
   }
 `
 
+export const AmountItens = styled.div`
+  align-items: center;
+  justify-content: center;
+  background-color: red;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: absolute;
+  z-index: 99;
+  margin-top: 10px;
+  margin-left: -8px;
+`
+
+export const BoxCart = styled.div``
+
+export const CartButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+`
+
+export const Amaunt = styled.span`
+  color: ${props => props?.theme?.colors?.white};
+  font-size: 12px;
+`
+
 export const FontStrong = styled.strong``
 
 export const ButtonAtentimento = styled.button`
@@ -261,6 +288,4 @@ export const BoxProductSearch = styled.div`
   margin: 30px 0;
 `
 
-export const LinkRoute = styled.a`
-
-`
+export const LinkRoute = styled.a``

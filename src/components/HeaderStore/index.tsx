@@ -23,7 +23,11 @@ import {
     CategorysHeaderMobile,
     Categ,
     BoxProductSearch,
-    LinkRoute
+    LinkRoute,
+    AmountItens,
+    Amaunt,
+    CartButton,
+    BoxCart
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -37,6 +41,7 @@ import { setupAPIClient } from '../../services/api';
 import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
 import styled from "styled-components";
 import chevronDown from "../../assets/chevron-down.svg";
+import { CartContext } from '../../contexts/CartContext';
 
 
 const ItemWithChevron = ({ header, ...rest }) => (
@@ -111,6 +116,7 @@ const AccordionItem: React.ExoticComponent<import('@szhsin/react-accordion').Acc
 export const HeaderStore = () => {
 
     const { customer } = useContext(AuthContext);
+    const { cart } = useContext(CartContext);
 
     const [logo, setLogo] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -408,9 +414,17 @@ export const HeaderStore = () => {
                                 </StyledA>
                             </StyledLi>
                             <DropDownLi>
-                                <StyledA>
-                                    <Link href='/carrinho'><AiOutlineShoppingCart size={20} /></Link>
-                                </StyledA>
+                                <BoxCart>
+                                    <AmountItens>
+                                        <Amaunt>{cart?.length}</Amaunt>
+                                    </AmountItens>
+                                    <CartButton>
+                                        <Link href='/carrinho'>
+
+                                            <AiOutlineShoppingCart size={25} />
+                                        </Link>
+                                    </CartButton>
+                                </BoxCart>
                                 <DropDownContent>
                                     <BlockContact>
                                         <FontStrong>TOTAL</FontStrong>
