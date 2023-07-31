@@ -109,7 +109,7 @@ export default function Carrinho() {
                             <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(total)}</Total>
                         </BoxPricesFinal>
 
-                        <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(total * cart?.length / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                        <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(total / 12)} com juros de Cartão de Crédito</ConditionPrices>
 
                         <BoxFinalCart>
                             <Button>
