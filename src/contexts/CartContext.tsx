@@ -21,10 +21,8 @@ export const CartContext = createContext({} as MyContextProps);
 
 export function CartProviderProducts({ children }: Props) {
 
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
-
-  console.log(cart)
 
   function addItemCart(newItem: any){
     const indexItem = cart.findIndex(item => item.id === newItem.id) 

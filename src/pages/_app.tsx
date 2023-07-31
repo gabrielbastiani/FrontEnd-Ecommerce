@@ -26,15 +26,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <CartProviderProducts>
-          <AuthProvider>
+        <AuthProvider>
+          <CartProviderProducts>
             <AuthProviderProducts>
               <Component {...pageProps} />
               <ToastContainer autoClose={4000} />
             </AuthProviderProducts>
-          </AuthProvider>
-          <GlobalStyle />
-        </CartProviderProducts>
+          </CartProviderProducts>
+        </AuthProvider>
+        <GlobalStyle />
       </ThemeProvider >
     </>
   )
