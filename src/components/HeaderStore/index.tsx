@@ -116,7 +116,8 @@ const AccordionItem: React.ExoticComponent<import('@szhsin/react-accordion').Acc
 export const HeaderStore = () => {
 
     const { customer } = useContext(AuthContext);
-    const { cart, setCart } = useContext(CartContext);
+    /* @ts-ignore */
+    const { cart, total } = useContext(CartContext);
 
     const [logo, setLogo] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -416,11 +417,17 @@ export const HeaderStore = () => {
                             <DropDownLi>
                                 <BoxCart>
                                     <AmountItens>
-                                        <Amaunt>{/* {cart?.length} */}</Amaunt>
+                                        <Amaunt>{cart?.length}</Amaunt>
                                     </AmountItens>
                                     <CartButton>
                                         <Link href='/carrinho'>
                                             <AiOutlineShoppingCart size={25} />
+                                            &emsp;
+                                            {Number(total) === 0 ? (
+                                                <span>R$0,00</span>
+                                            ) :
+                                                <span>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(total)}</span>
+                                            }
                                         </Link>
                                     </CartButton>
                                 </BoxCart>
@@ -428,7 +435,7 @@ export const HeaderStore = () => {
                                     <BlockContact>
                                         <FontStrong>TOTAL</FontStrong>
                                         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                                        {'R$0,00'}
+                                        {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(total)}
                                         <br />
                                         <br />
                                         <Link href='/carrinho' target="_blank">

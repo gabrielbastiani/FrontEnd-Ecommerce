@@ -37,7 +37,7 @@ interface ProductsRequest {
 }
 
 const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: ProductsRequest) => {
-
+    /* @ts-ignore */
     const { addItemCart } = useContext(CartContext);
 
     const [count, setCount] = useState(1);
@@ -51,10 +51,6 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
             return;
         }
         setCount(count - 1);
-    }
-
-    function handleAddCart(id: any) {
-        addItemCart(id)
     }
 
     return (
@@ -107,9 +103,10 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                                             <ValueQuant>{count}</ValueQuant>
                                             <Max onClick={handleIncrement}>+</Max>
                                         </Quantidade>
-                                        <Add>
+                                        <Add
+                                            onClick={() => addItemCart(prod?.product)}
+                                        >
                                             <AiOutlineShoppingCart
-                                                onClick={() => handleAddCart(prod?.product?.id)}
                                                 color='white'
                                                 size={25}
                                             />
