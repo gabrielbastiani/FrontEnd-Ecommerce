@@ -38,15 +38,18 @@ interface ProductsRequest {
 
 const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: ProductsRequest) => {
     /* @ts-ignore */
-    const { addItemCart } = useContext(CartContext);
+    const { addItemCart, removeItemCart } = useContext(CartContext);
 
     const [count, setCount] = useState(1);
 
-    function handleIncrement() {
+    function handleIncrement(product: any) {
+        addItemCart(product)
         setCount(count + 1);
     }
 
-    function handleDescrement() {
+    function handleDescrement(product: any) {
+        removeItemCart(product)
+
         if(count === 1) {
             return;
         }
@@ -99,9 +102,9 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                                     </Link>
                                     <BoxBuy>
                                         <Quantidade>
-                                            <Min onClick={handleDescrement}>-</Min>
+                                            <Min onClick={() => handleDescrement(prod?.product)}>-</Min>
                                             <ValueQuant>{count}</ValueQuant>
-                                            <Max onClick={handleIncrement}>+</Max>
+                                            <Max onClick={() => handleIncrement(prod?.product)}>+</Max>
                                         </Quantidade>
                                         <Add
                                             onClick={() => addItemCart(prod?.product)}
