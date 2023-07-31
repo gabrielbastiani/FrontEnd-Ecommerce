@@ -116,7 +116,7 @@ const AccordionItem: React.ExoticComponent<import('@szhsin/react-accordion').Acc
 export const HeaderStore = () => {
 
     const { customer } = useContext(AuthContext);
-    const { cart } = useContext(CartContext);
+    const { cart, setCart } = useContext(CartContext);
 
     const [logo, setLogo] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -416,11 +416,10 @@ export const HeaderStore = () => {
                             <DropDownLi>
                                 <BoxCart>
                                     <AmountItens>
-                                        <Amaunt>{cart?.length}</Amaunt>
+                                        <Amaunt>{/* {cart?.length} */}</Amaunt>
                                     </AmountItens>
                                     <CartButton>
                                         <Link href='/carrinho'>
-
                                             <AiOutlineShoppingCart size={25} />
                                         </Link>
                                     </CartButton>

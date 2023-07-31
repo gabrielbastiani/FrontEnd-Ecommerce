@@ -9,7 +9,7 @@ import AuthProviderProducts from '../contexts/AuthContextProducts';
 import { Router } from 'next/dist/client/router';
 import NProgress, { trickle } from "nprogress";
 import 'nprogress/nprogress.css';
-import CartProvider from '../contexts/CartContext';
+import { CartProviderProducts } from '../contexts/CartContext';
 
 NProgress.configure({ easing: 'ease', speed: 500 });
 
@@ -26,7 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <CartProvider>
+        <CartProviderProducts>
           <AuthProvider>
             <AuthProviderProducts>
               <Component {...pageProps} />
@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </AuthProviderProducts>
           </AuthProvider>
           <GlobalStyle />
-        </CartProvider>
+        </CartProviderProducts>
       </ThemeProvider >
     </>
   )

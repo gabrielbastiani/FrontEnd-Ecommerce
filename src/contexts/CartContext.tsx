@@ -17,11 +17,11 @@ type Props = {
 
 export const CartContext = createContext({} as MyContextProps);
 
-function CartProviderProducts({ children }: Props) {
+export function CartProviderProducts({ children }: Props) {
 
   const [cart, setCart] = useState<any[]>([]);
 
-    function addItemCart({ newItem }: AddItemsProps) {
+    /* function addItemCart({ newItem }: AddItemsProps) {
         const indexItem = cart.findIndex(item => item?.id === newItem?.id);
 
         if (indexItem !== -1) {
@@ -37,13 +37,11 @@ function CartProviderProducts({ children }: Props) {
         setCart(products => [...products, data]);
         console.log([...cart, data]);
 
-    }
+    } */
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ cart, addItemCart }}>
+    <CartContext.Provider value={{ cart, setCart }}>
       {children}
     </CartContext.Provider>
   )
 }
-
-export default CartProviderProducts;
