@@ -41,17 +41,27 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
     const { addItemCart } = useContext(CartContext);
 
     const [count, setCount] = useState(1);
+    const [activeTab, setActiveTab] = useState("");
 
-    function handleIncrement() {
+    const handleIncrement = (id: string) => {
+        setActiveTab(id);
         setCount(count + 1);
-    }
+    };
 
-    function handleDescrement() {
+    const handleDescrement = (id: string) => {
+        setActiveTab(id);
         if (count === 1) {
             return;
         }
         setCount(count - 1);
+    };
+
+    function handleAddItemCart(product: any, count: any) {
+        /* @ts-ignore */
+        addItemCart(product, count)
+        setCount(1);
     }
+
 
     return (
         <>
@@ -99,13 +109,17 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                                     </Link>
                                     <BoxBuy>
                                         <Quantidade>
-                                            <Min onClick={handleDescrement}>-</Min>
-                                            <ValueQuant>{count}</ValueQuant>
-                                            <Max onClick={handleIncrement}>+</Max>
+                                            <Min onClick={() => handleDescrement(prod?.product?.id)}>-</Min>
+                                            {activeTab === prod?.product?.id ?
+                                                <ValueQuant>{count}</ValueQuant>
+                                                :
+                                                <ValueQuant>{prod?.product?.amount}</ValueQuant>
+                                            }
+                                            <Max onClick={() => handleIncrement(prod?.product?.id)}>+</Max>
                                         </Quantidade>
                                         <Add
                                             /* @ts-ignore */
-                                            onClick={() => addItemCart(prod?.product, count)}
+                                            onClick={() => handleAddItemCart(prod?.product, count)}
                                         >
                                             <AiOutlineShoppingCart
                                                 color='white'
