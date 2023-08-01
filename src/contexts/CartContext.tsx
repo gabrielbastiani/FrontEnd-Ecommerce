@@ -6,6 +6,7 @@ type MyContextProps = {
   setCart: (cart: Array<CartDataContextType>) => void;
   addItemCart: (id: AddItemsProps) => Promise<void>;
   removeItemCart: (id: AddItemsProps) => Promise<void>;
+  removeProductCart: (id: AddItemsProps) => Promise<void>;
   totalResultCart: () => void;
 };
 
@@ -74,6 +75,24 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
+  function removeProductCart(product: any) {
+    const indexItem = cart.findIndex(item => item.id === product.id)
+
+    let cartList = cart;
+
+    cartList[indexItem].amount = cartList[indexItem].amount - product?.amount;
+
+    cartList[indexItem].total = cartList[indexItem].total - cartList[indexItem].promotion;
+
+    setCart(cartList);
+    totalResultCart(cartList)
+
+    const removeItem = cart.filter(item => item.id !== product.id)
+    setCart(removeItem);
+    totalResultCart(removeItem)
+
+  }
+
   function totalResultCart(items: any) {
     let myCart = items;
     let result = myCart.reduce((acc: any, obj: any) => { return acc + obj.total }, 0)
@@ -83,7 +102,7 @@ export function CartProviderProducts({ children }: Props) {
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ cart, addItemCart, removeItemCart, totalResultCart, total }}>
+    <CartContext.Provider value={{ cart, addItemCart, removeItemCart, removeProductCart, totalResultCart, total }}>
       {children}
     </CartContext.Provider>
   )

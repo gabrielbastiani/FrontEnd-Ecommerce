@@ -14,7 +14,7 @@ import { Avisos } from "../../components/Avisos";
 export default function Carrinho() {
 
     /* @ts-ignore */
-    const { addItemCart, removeItemCart, cart, total } = useContext(CartContext);
+    const { addItemCart, removeItemCart, removeProductCart, cart, total } = useContext(CartContext);
 
 
 
@@ -54,7 +54,12 @@ export default function Carrinho() {
                                             </BoxDataProduct>
 
                                             <BoxDelete>
-                                                <BsFillTrashFill color="red" size={25} />
+                                                <BsFillTrashFill
+                                                    cursor="pointer"
+                                                    color="red"
+                                                    size={25}
+                                                    onClick={() => removeProductCart(item)}
+                                                />
                                             </BoxDelete>
 
                                             <BoxQuantidadeCart>
