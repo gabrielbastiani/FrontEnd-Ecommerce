@@ -42,15 +42,12 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
 
     const [count, setCount] = useState(1);
 
-    function handleIncrement(product: any) {
-        addItemCart(product)
+    function handleIncrement() {
         setCount(count + 1);
     }
 
-    function handleDescrement(product: any) {
-        removeItemCart(product)
-
-        if(count === 1) {
+    function handleDescrement() {
+        if (count === 1) {
             return;
         }
         setCount(count - 1);
@@ -102,12 +99,13 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                                     </Link>
                                     <BoxBuy>
                                         <Quantidade>
-                                            <Min onClick={() => handleDescrement(prod?.product)}>-</Min>
+                                            <Min onClick={handleDescrement}>-</Min>
                                             <ValueQuant>{count}</ValueQuant>
-                                            <Max onClick={() => handleIncrement(prod?.product)}>+</Max>
+                                            <Max onClick={handleIncrement}>+</Max>
                                         </Quantidade>
                                         <Add
-                                            onClick={() => addItemCart(prod?.product)}
+                                            /* @ts-ignore */
+                                            onClick={() => addItemCart(prod?.product, count)}
                                         >
                                             <AiOutlineShoppingCart
                                                 color='white'

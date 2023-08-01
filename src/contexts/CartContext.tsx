@@ -25,7 +25,7 @@ export function CartProviderProducts({ children }: Props) {
   const [cart, setCart] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
 
-  function addItemCart(newItem: any) {
+  function addItemCart(newItem: any, count: number) {
     const indexItem = cart.findIndex(item => item.id === newItem.id)
 
     if (indexItem !== -1) {
@@ -44,8 +44,8 @@ export function CartProviderProducts({ children }: Props) {
 
     let data = {
       ...newItem,
-      amount: 1,
-      total: newItem.promotion
+      amount: count,
+      total: newItem.promotion * count
     }
 
     setCart(products => [...products, data])

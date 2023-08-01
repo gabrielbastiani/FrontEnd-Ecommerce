@@ -12,11 +12,8 @@ import Router from "next/router";
 import { Avisos } from "../../components/Avisos";
 
 export default function Carrinho() {
-
     /* @ts-ignore */
     const { addItemCart, removeItemCart, removeProductCart, cart, total } = useContext(CartContext);
-
-
 
     return (
         <>
