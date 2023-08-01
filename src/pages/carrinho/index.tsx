@@ -26,7 +26,9 @@ export default function Carrinho() {
 
             <HeaderAccount />
 
-            <PageSection>
+            <PageSection
+                style={{ paddingTop: '90px' }}
+            >
                 <SectionCart>
                     <ContainerProduct>
                         {cart?.length < 1 ? (
@@ -119,7 +121,9 @@ export default function Carrinho() {
                         <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(total / 12)} com juros de Cartão de Crédito</ConditionPrices>
 
                         <BoxFinalCart>
-                            <Button>
+                            <Button
+                                style={{ margin: '30px 0' }}
+                            >
                                 FINALIZAR COMPRA
                             </Button>
 
