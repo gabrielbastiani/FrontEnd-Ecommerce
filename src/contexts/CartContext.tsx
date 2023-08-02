@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from 'react';
+import { ReactNode, createContext, useEffect, useState } from 'react';
 import { CartDataContextType } from '../../@types/cart';
 
 type MyContextProps = {
@@ -26,7 +26,7 @@ export function CartProviderProducts({ children }: Props) {
   const [total, setTotal] = useState(0);
 
   function addItemCart(newItem: any, count: number) {
-    const indexItem = cart.findIndex(item => item.id === newItem.id)
+    const indexItem = cart.findIndex(item => item.id === newItem.id);
 
     if (indexItem !== -1) {
 
@@ -36,7 +36,7 @@ export function CartProviderProducts({ children }: Props) {
 
       cartList[indexItem].total = cartList[indexItem].amount * cartList[indexItem].promotion;
 
-      setCart(cartList)
+      setCart(cartList);
       totalResultCart(cartList);
 
       return;
@@ -48,13 +48,13 @@ export function CartProviderProducts({ children }: Props) {
       total: newItem.promotion * count
     }
 
-    setCart(products => [...products, data])
-    totalResultCart([...cart, data])
+    setCart(products => [...products, data]);
+    totalResultCart([...cart, data]);
 
   }
 
   function removeItemCart(product: any) {
-    const indexItem = cart.findIndex(item => item.id === product.id)
+    const indexItem = cart.findIndex(item => item.id === product.id);
 
     if (cart[indexItem]?.amount > 1) {
       let cartList = cart;
@@ -64,19 +64,19 @@ export function CartProviderProducts({ children }: Props) {
       cartList[indexItem].total = cartList[indexItem].total - cartList[indexItem].promotion;
 
       setCart(cartList);
-      totalResultCart(cartList)
+      totalResultCart(cartList);
 
       return;
     }
 
-    const removeItem = cart.filter(item => item.id !== product.id)
+    const removeItem = cart.filter(item => item.id !== product.id);
     setCart(removeItem);
-    totalResultCart(removeItem)
+    totalResultCart(removeItem);
 
   }
 
   function removeProductCart(product: any) {
-    const indexItem = cart.findIndex(item => item.id === product.id)
+    const indexItem = cart.findIndex(item => item.id === product.id);
 
     let cartList = cart;
 
@@ -87,15 +87,15 @@ export function CartProviderProducts({ children }: Props) {
     setCart(cartList);
     totalResultCart(cartList)
 
-    const removeItem = cart.filter(item => item.id !== product.id)
+    const removeItem = cart.filter(item => item.id !== product.id);
     setCart(removeItem);
-    totalResultCart(removeItem)
+    totalResultCart(removeItem);
 
   }
 
   function totalResultCart(items: any) {
     let myCart = items;
-    let result = myCart.reduce((acc: any, obj: any) => { return acc + obj.total }, 0)
+    let result = myCart.reduce((acc: any, obj: any) => { return acc + obj.total }, 0);
 
     setTotal(result.toFixed(2));
 

@@ -15,19 +15,19 @@ export default function Carrinho() {
     /* @ts-ignore */
     const { addItemCart, removeItemCart, removeProductCart, cart, total } = useContext(CartContext);
 
+    const [productsCart, setProductsCart] = useState<any[]>([]);
+
+    console.log(productsCart)
+
+    useEffect(() => {
+        let dataCart = localStorage.getItem("@cartProducts");
+        let cartItems = JSON.parse(dataCart);
+        setProductsCart(cartItems || []);
+    }, []);
+
     useEffect(() => {
         function addItemCartCookie() {
-            let dados: any = new Array();
-
-            if (localStorage.hasOwnProperty("@cartProducts")) {
-                dados = JSON.parse(localStorage.getItem("@cartProducts"));
-            }
-
-            dados.push(cart);
-
-            localStorage.setItem("@cartProducts", JSON.stringify(dados));
-
-            console.log(dados)
+            localStorage.setItem("@cartProducts", JSON.stringify(cart));
         }
         addItemCartCookie();
     }, [cart]);
