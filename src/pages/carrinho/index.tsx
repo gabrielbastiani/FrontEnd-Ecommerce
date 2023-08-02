@@ -2,7 +2,7 @@ import Head from "next/head";
 import { PageSection } from "../../components/dateStoreUx/styles";
 import FooterAccount from "../../components/FooterAccount";
 import { HeaderAccount } from "../../components/HeaderAccount";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import Image from "next/image";
 import { BsFillTrashFill } from "react-icons/bs";
@@ -14,6 +14,23 @@ import { Avisos } from "../../components/Avisos";
 export default function Carrinho() {
     /* @ts-ignore */
     const { addItemCart, removeItemCart, removeProductCart, cart, total } = useContext(CartContext);
+
+    useEffect(() => {
+        function addItemCartCookie() {
+            let dados: any = new Array();
+
+            if (localStorage.hasOwnProperty("@cartProducts")) {
+                dados = JSON.parse(localStorage.getItem("@cartProducts"));
+            }
+
+            dados.push(cart);
+
+            localStorage.setItem("@cartProducts", JSON.stringify(dados));
+
+            console.log(dados)
+        }
+        addItemCartCookie();
+    }, [cart]);
 
     return (
         <>
