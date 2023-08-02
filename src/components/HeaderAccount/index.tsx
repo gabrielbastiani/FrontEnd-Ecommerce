@@ -1,14 +1,31 @@
 import Image from 'next/image';
-import logoLoginWhite from '../../assets/LogoBuilderWhite.png';
 import { ContainerHeader, ContentHeader, BlockBack, TextVoltar, BlockSecurity, TextSecurity } from './styles';
 import { BsArrowLeft } from 'react-icons/bs';
 import { TbLock } from 'react-icons/tb';
 import Link from 'next/link';
 import Router from 'next/router';
+import { useEffect, useState } from 'react';
+import { setupAPIClient } from '../../services/api';
 
 
-export const HeaderAccount = () => (
-    <>
+export const HeaderAccount = () => {
+
+    const [logo, setLogo] = useState("");
+
+    useEffect(() => {
+        async function loadStore() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/store`);
+                setLogo(data.logo || "");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadStore();
+    }, []);
+
+    return (
         <ContainerHeader>
             <ContentHeader>
                 <BlockBack
@@ -18,7 +35,7 @@ export const HeaderAccount = () => (
                     <TextVoltar>VOLTAR</TextVoltar>
                 </BlockBack>
                 <Link href={'/'}>
-                    <Image src={logoLoginWhite} width={180} height={50} alt="Logo Builder Seu Negocio Online" />
+                    <Image src={'http://localhost:3333/files/' + logo} width={180} height={70} alt="Logo loja virtual" />
                 </Link>
                 <BlockSecurity>
                     <TbLock color='white' size={25} />
@@ -26,5 +43,5 @@ export const HeaderAccount = () => (
                 </BlockSecurity>
             </ContentHeader>
         </ContainerHeader>
-    </>
-)
+    )
+}
