@@ -40,9 +40,10 @@ export function CartProviderProducts({ children }: Props) {
       totalResultCart(cartList);
 
       return;
+
     }
 
-    let data = {
+    let data: any = {
       ...newItem,
       amount: count,
       total: newItem.promotion * count
@@ -50,8 +51,6 @@ export function CartProviderProducts({ children }: Props) {
 
     setCart(products => [...products, data]);
     totalResultCart([...cart, data]);
-
-    localStorage.setItem("@cartProduct", JSON.stringify(data));
 
   }
 
@@ -75,8 +74,6 @@ export function CartProviderProducts({ children }: Props) {
     setCart(removeItem);
     totalResultCart(removeItem);
 
-    localStorage.setItem("@cartProduct", JSON.stringify(removeItem));
-
   }
 
   function removeProductCart(product: any) {
@@ -94,6 +91,8 @@ export function CartProviderProducts({ children }: Props) {
     const removeItem = cart.filter(item => item.id !== product.id);
     setCart(removeItem);
     totalResultCart(removeItem);
+
+    localStorage.setItem("@cartProduct", JSON.stringify(removeItem));
 
   }
 

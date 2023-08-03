@@ -15,8 +15,6 @@ export default function Carrinho() {
     /* @ts-ignore */
     const { addItemCart, removeItemCart, removeProductCart, cart, total } = useContext(CartContext);
 
-    
-
     return (
         <>
             <Head>
