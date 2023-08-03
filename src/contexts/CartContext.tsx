@@ -51,6 +51,8 @@ export function CartProviderProducts({ children }: Props) {
     setCart(products => [...products, data]);
     totalResultCart([...cart, data]);
 
+    localStorage.setItem("@cartProduct", JSON.stringify(data));
+
   }
 
   function removeItemCart(product: any) {
@@ -72,6 +74,8 @@ export function CartProviderProducts({ children }: Props) {
     const removeItem = cart.filter(item => item.id !== product.id);
     setCart(removeItem);
     totalResultCart(removeItem);
+
+    localStorage.setItem("@cartProduct", JSON.stringify(removeItem));
 
   }
 
