@@ -15,22 +15,7 @@ export default function Carrinho() {
     /* @ts-ignore */
     const { addItemCart, removeItemCart, removeProductCart, cart, total } = useContext(CartContext);
 
-    const [productsCart, setProductsCart] = useState<any[]>([]);
-
-    console.log(productsCart)
-
-    useEffect(() => {
-        let dataCart = localStorage.getItem("@cartProducts");
-        let cartItems = JSON.parse(dataCart);
-        setProductsCart(cartItems || []);
-    }, []);
-
-    useEffect(() => {
-        function addItemCartCookie() {
-            localStorage.setItem("@cartProducts", JSON.stringify(cart));
-        }
-        addItemCartCookie();
-    }, [cart]);
+    
 
     return (
         <>
