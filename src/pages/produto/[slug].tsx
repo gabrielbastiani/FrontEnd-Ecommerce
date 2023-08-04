@@ -52,6 +52,7 @@ export default function Produto() {
     const [productsvariations, setProductsvariations] = useState<any[]>([]);
     const [avalietions, setAvalietions] = useState<any[]>([]);
     const [productcategories, setProductcategories] = useState<any[]>([]);
+    const [amount, setAmount] = useState(Number);
 
 
     useEffect(() => {
@@ -83,6 +84,7 @@ export default function Produto() {
                 setProductsvariations(data?.productsvariations || []);
                 setAvalietions(data?.avalietions || []);
                 setProductcategories(data?.productcategories || []);
+                setAmount(data?.amount);
 
             } catch (error) {
                 console.log(error.data.response);
@@ -143,6 +145,9 @@ export default function Produto() {
                             sku={sku}
                             stock={stock}
                             variations={productsvariations}
+                            atribute={relationattributeproducts}
+                            images={photoProduct}
+                            amount={amount}
                         />
                     </ProductContainer>
                 </ContainerContentProduct>

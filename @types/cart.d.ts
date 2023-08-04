@@ -1,13 +1,13 @@
 // @types.cart.ts
 
 export type CartDataContextType = {
-    promotion: number;
+    price: number;
     amount: number;
     id: string;
-    promotion: ReactNode;
+    price: ReactNode;
     amount: ReactNode;
     relationattributeproducts: any;
-    photoproducts: any;
+    image: any;
     name: ReactNode;
     globalDataModel: Cart[];
 };

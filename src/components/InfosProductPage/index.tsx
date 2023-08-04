@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Modal from 'react-modal';
 import {
     Variation,
@@ -39,6 +39,7 @@ import { ModalProposta } from "../popups/ModalProposta";
 import router from "next/router";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../services/api";
+import { CartContext } from "../../contexts/CartContext";
 
 
 interface InfosRequest {
@@ -49,9 +50,36 @@ interface InfosRequest {
     sku: string;
     stock: number;
     variations: any;
+    atribute: any;
+    images: any;
+    amount: number;
 }
 
-const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, variations }: InfosRequest) => {
+const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, variations, atribute, images, amount }: InfosRequest) => {
+
+    const { saveProductCart } = useContext(CartContext);
+
+    const [count, setCount] = useState(1);
+    const [activeTab, setActiveTab] = useState("");
+
+    const handleIncrement = (id: string) => {
+        setActiveTab(id);
+        setCount(count + 1);
+    };
+
+    const handleDescrement = (id: string) => {
+        setActiveTab(id);
+        if (count === 1) {
+            return;
+        }
+        setCount(count - 1);
+    };
+
+    function handleAddItemCart(count: any, id: any, name: any, image: any, promotion: any, relationattributeproducts: any) {
+        /* @ts-ignore */
+        saveProductCart(count, id, name, image, promotion, relationattributeproducts)
+        setCount(1);
+    }
 
     function addFavoriteProduct() {
         let dados = new Array();
@@ -172,6 +200,7 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, vari
     }
 
 
+
     return (
         <>
             {stock < 1 ? (
@@ -290,11 +319,25 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, vari
                     </BoxContentproduct>
                     <BoxAddCart>
                         <BoxCart>
-                            <TextMin>-</TextMin>
-                            <TextQuantidade>1</TextQuantidade>
-                            <TextMax>+</TextMax>
+                            <TextMin onClick={() => handleDescrement(product_id)}>-</TextMin>
+                            {activeTab === product_id ?
+                                <TextQuantidade>{count}</TextQuantidade>
+                                :
+                                <TextQuantidade>{amount}</TextQuantidade>
+                            }
+                            <TextMax onClick={() => handleIncrement(product_id)}>+</TextMax>
                         </BoxCart>
-                        <ButtonAddCArtProduct>
+                        <ButtonAddCArtProduct
+                            /* @ts-ignore */
+                            onClick={() => handleAddItemCart(
+                                product_id,
+                                images,
+                                name,
+                                count,
+                                promotion,
+                                atribute
+                            )}
+                        >
                             ADICIONAR AO CARRINHO
                         </ButtonAddCArtProduct>
                     </BoxAddCart>

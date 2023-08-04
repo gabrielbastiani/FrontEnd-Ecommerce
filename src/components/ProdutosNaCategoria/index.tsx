@@ -37,8 +37,8 @@ interface ProductsRequest {
 }
 
 const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: ProductsRequest) => {
-    /* @ts-ignore */
-    const { addItemCart } = useContext(CartContext);
+    
+    const { saveProductCart } = useContext(CartContext);
 
     const [count, setCount] = useState(1);
     const [activeTab, setActiveTab] = useState("");
@@ -56,9 +56,9 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
         setCount(count - 1);
     };
 
-    function handleAddItemCart(product: any, count: any) {
+    function handleAddItemCart(count: any, id: any, name: any, image: any, promotion: any, relationattributeproducts: any) {
         /* @ts-ignore */
-        addItemCart(product, count);
+        saveProductCart(count, id, name, image, promotion, relationattributeproducts)
         setCount(1);
     }
 
@@ -119,7 +119,14 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                                         </Quantidade>
                                         <Add
                                             /* @ts-ignore */
-                                            onClick={() => handleAddItemCart(prod?.product, count)}
+                                            onClick={() => handleAddItemCart(
+                                                prod?.product?.id,
+                                                prod?.product?.photoproducts[0]?.image,
+                                                prod?.product?.name,
+                                                count,
+                                                prod?.product?.promotion,
+                                                prod?.product?.relationattributeproducts
+                                            )}
                                         >
                                             <AiOutlineShoppingCart
                                                 color='white'

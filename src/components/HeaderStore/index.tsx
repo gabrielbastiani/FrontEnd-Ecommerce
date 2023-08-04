@@ -117,7 +117,7 @@ export const HeaderStore = () => {
 
     const { customer } = useContext(AuthContext);
     /* @ts-ignore */
-    const { cart, total } = useContext(CartContext);
+    const { totalCart, cartProducts } = useContext(CartContext);
 
     const [logo, setLogo] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -417,16 +417,16 @@ export const HeaderStore = () => {
                             <DropDownLi>
                                 <BoxCart>
                                     <AmountItens>
-                                        <Amaunt>{cart?.length}</Amaunt>
+                                        <Amaunt>{cartProducts?.length}</Amaunt>
                                     </AmountItens>
                                     <CartButton>
                                         <Link href='/carrinho'>
                                             <AiOutlineShoppingCart size={25} />
                                             &emsp;
-                                            {Number(total) === 0 ? (
+                                            {Number(totalCart) === 0 ? (
                                                 <span>R$0,00</span>
                                             ) :
-                                                <span>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(total)}</span>
+                                                <span>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</span>
                                             }
                                         </Link>
                                     </CartButton>
@@ -435,7 +435,7 @@ export const HeaderStore = () => {
                                     <BlockContact>
                                         <FontStrong>TOTAL</FontStrong>
                                         &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                                        {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(total)}
+                                        {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
                                         <br />
                                         <br />
                                         <Link href='/carrinho' target="_blank">

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { HeaderStore } from "../../components/HeaderStore";
 import { ContentPage, PageSection } from "../../components/dateStoreUx/styles";
 import { FooterStore } from "../../components/FooterStore";
@@ -21,9 +21,34 @@ import { Button } from "../../components/ui/Button";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import { Avisos } from "../../components/Avisos";
+import { CartContext } from "../../contexts/CartContext";
 
 
 export default function Favoritos() {
+
+    const { saveProductCart } = useContext(CartContext);
+
+    const [count, setCount] = useState(1);
+    const [activeTab, setActiveTab] = useState("");
+
+    const handleIncrement = (id: string) => {
+        setActiveTab(id);
+        setCount(count + 1);
+    };
+
+    const handleDescrement = (id: string) => {
+        setActiveTab(id);
+        if (count === 1) {
+            return;
+        }
+        setCount(count - 1);
+    };
+
+    function handleAddItemCart(count: any, id: any, name: any, image: any, promotion: any, relationattributeproducts: any) {
+        /* @ts-ignore */
+        saveProductCart(count, id, name, image, promotion, relationattributeproducts)
+        setCount(1);
+    }
 
     const [productsFavorites, setProductsFavorites] = useState<any[]>([]);
     const [products, setProducts] = useState<any[]>([]);
@@ -167,12 +192,29 @@ export default function Favoritos() {
                                                     </Link>
                                                     <BoxBuy>
                                                         <Quantidade>
-                                                            <Min>-</Min>
-                                                            <ValueQuant>1</ValueQuant>
-                                                            <Max>+</Max>
+                                                            <Min onClick={() => handleDescrement(prod?.id)}>-</Min>
+                                                            {activeTab === prod?.id ?
+                                                                <ValueQuant>{count}</ValueQuant>
+                                                                :
+                                                                <ValueQuant>{prod?.amount}</ValueQuant>
+                                                            }
+                                                            <Max onClick={() => handleIncrement(prod?.id)}>+</Max>
                                                         </Quantidade>
-                                                        <Add>
-                                                            <AiOutlineShoppingCart color='white' size={25} />
+                                                        <Add
+                                                            /* @ts-ignore */
+                                                            onClick={() => handleAddItemCart(
+                                                                prod?.id,
+                                                                prod?.photoproducts[0]?.image,
+                                                                prod?.name,
+                                                                count,
+                                                                prod?.promotion,
+                                                                prod?.relationattributeproducts
+                                                            )}
+                                                        >
+                                                            <AiOutlineShoppingCart
+                                                                color='white'
+                                                                size={25}
+                                                            />
                                                             &emsp;Adicionar
                                                         </Add>
                                                     </BoxBuy>

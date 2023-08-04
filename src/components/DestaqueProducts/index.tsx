@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import semimagem from '../../assets/semfoto.png';
 import {
     SectionDestaqueProducts,
@@ -29,6 +29,7 @@ import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { setupAPIClient } from '../../services/api';
 import Link from 'next/link';
 import { TextPromotion } from '../InfosProductPage/styles';
+import { CartContext } from '../../contexts/CartContext';
 
 
 interface DestaqueRequest {
@@ -37,7 +38,30 @@ interface DestaqueRequest {
 
 const DestaqueProducts = ({ title }: DestaqueRequest) => {
 
+    const { saveProductCart } = useContext(CartContext);
     const [productsDestaque, setProductsDestaque] = useState([]);
+
+    const [count, setCount] = useState(1);
+    const [activeTab, setActiveTab] = useState("");
+
+    const handleIncrement = (id: string) => {
+        setActiveTab(id);
+        setCount(count + 1);
+    };
+
+    const handleDescrement = (id: string) => {
+        setActiveTab(id);
+        if (count === 1) {
+            return;
+        }
+        setCount(count - 1);
+    };
+
+    function handleAddItemCart(count: any, id: any, name: any, image: any, promotion: any, relationattributeproducts: any) {
+        /* @ts-ignore */
+        saveProductCart(count, id, name, image, promotion, relationattributeproducts)
+        setCount(1);
+    }
 
     useEffect(() => {
         async function loadDestaques() {
@@ -118,12 +142,29 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
                                             </Link>
                                             <BoxBuy>
                                                 <Quantidade>
-                                                    <Min>-</Min>
-                                                    <ValueQuant>1</ValueQuant>
-                                                    <Max>+</Max>
+                                                    <Min onClick={() => handleDescrement(item?.id)}>-</Min>
+                                                    {activeTab === item?.id ?
+                                                        <ValueQuant>{count}</ValueQuant>
+                                                        :
+                                                        <ValueQuant>{item?.amount}</ValueQuant>
+                                                    }
+                                                    <Max onClick={() => handleIncrement(item?.id)}>+</Max>
                                                 </Quantidade>
-                                                <Add>
-                                                    <AiOutlineShoppingCart color='white' size={25} />
+                                                <Add
+                                                    /* @ts-ignore */
+                                                    onClick={() => handleAddItemCart(
+                                                        item?.id,
+                                                        item?.photoproducts[0]?.image,
+                                                        item?.name,
+                                                        count,
+                                                        item?.promotion,
+                                                        item?.relationattributeproducts
+                                                    )}
+                                                >
+                                                    <AiOutlineShoppingCart
+                                                        color='white'
+                                                        size={25}
+                                                    />
                                                     &emsp;Adicionar
                                                 </Add>
                                             </BoxBuy>

@@ -1,17 +1,27 @@
 import { ReactNode, createContext, useEffect, useState } from 'react';
 import { CartDataContextType } from '../../@types/cart';
+import router from 'next/router';
 
 type MyContextProps = {
-  cart: Array<CartDataContextType>;
-  setCart: (cart: Array<CartDataContextType>) => void;
-  addItemCart: (id: AddItemsProps) => Promise<void>;
+  cartProducts: Array<CartDataContextType>;
+  saveProductCart: (id: AddLocalItemStorage) => Promise<void>;
+  addMoreItemCart: (id: AddItemsProps) => Promise<void>;
   removeItemCart: (id: AddItemsProps) => Promise<void>;
   removeProductCart: (id: AddItemsProps) => Promise<void>;
-  totalResultCart: () => void;
+  totalCart: number;
 };
 
 type AddItemsProps = {
+  id: string;
+}
+
+type AddLocalItemStorage = {
   id: any;
+  image: any;
+  name: any;
+  count: any;
+  promotion: any;
+  relationattributeproducts: any;
 }
 
 type Props = {
@@ -22,77 +32,128 @@ export const CartContext = createContext({} as MyContextProps);
 
 export function CartProviderProducts({ children }: Props) {
 
-  const [cart, setCart] = useState<any[]>([]);
-  const [total, setTotal] = useState(0);
+  const [cartProducts, setCartProducts] = useState<any[]>([]);
+  const [totalCart, setTotalCart] = useState(Number);
 
-  function addItemCart(newItem: any, count: number) {
-    const indexItem = cart.findIndex(item => item.id === newItem.id);
+  useEffect(() => {
+    let dadosCart = localStorage.getItem("@cartProducts");
+    let arrayCart = JSON.parse(dadosCart);
+    setCartProducts(arrayCart || []);
+    let priceTotal = localStorage.getItem("@totalCart");
+    setTotalCart(Number(priceTotal));
+  }, []);
+
+  function saveProductCart(id: any, image: any, name: any, count: any, promotion: any, relationattributeproducts: any) {
+
+    const indexItem = cartProducts.findIndex(item => item.id === id);
 
     if (indexItem !== -1) {
 
-      let cartList = cart;
+      let cartListCookie = cartProducts;
 
-      cartList[indexItem].amount = cartList[indexItem].amount + 1;
+      cartListCookie[indexItem].amount = cartListCookie[indexItem].amount + count;
 
-      cartList[indexItem].total = cartList[indexItem].amount * cartList[indexItem].promotion;
+      cartListCookie[indexItem].total = cartListCookie[indexItem].amount * cartListCookie[indexItem].price;
 
-      setCart(cartList);
-      totalResultCart(cartList);
+      localStorage.setItem('@cartProducts', JSON.stringify(cartListCookie));
+      totalResultCart(cartListCookie);
 
       return;
-
     }
 
-    let data: any = {
-      ...newItem,
+    const cartItems = localStorage['@cartProducts'] ? JSON.parse(localStorage['@cartProducts']) : [];
+
+    cartItems.push({
+      id: id,
+      image: image,
+      name: name,
       amount: count,
-      total: newItem.promotion * count
-    }
+      price: promotion,
+      relationattributeproducts: relationattributeproducts,
+      total: promotion * count
+    });
 
-    setCart(products => [...products, data]);
-    totalResultCart([...cart, data]);
+    localStorage.setItem('@cartProducts', JSON.stringify(cartItems));
+    totalResultCart(cartItems);
+
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
 
   }
 
-  function removeItemCart(product: any) {
-    const indexItem = cart.findIndex(item => item.id === product.id);
+  function addMoreItemCart(id: string) {
+    const indexItem = cartProducts.findIndex(item => item.id === id);
 
-    if (cart[indexItem]?.amount > 1) {
-      let cartList = cart;
+    if (indexItem !== -1) {
 
-      cartList[indexItem].amount = cartList[indexItem].amount - 1;
+      let cartListCookieMore = cartProducts;
 
-      cartList[indexItem].total = cartList[indexItem].total - cartList[indexItem].promotion;
+      cartListCookieMore[indexItem].amount = cartListCookieMore[indexItem].amount + 1;
 
-      setCart(cartList);
-      totalResultCart(cartList);
+      cartListCookieMore[indexItem].total = cartListCookieMore[indexItem].amount * cartListCookieMore[indexItem].price;
+
+      localStorage.setItem('@cartProducts', JSON.stringify(cartListCookieMore));
+      totalResultCart(cartListCookieMore);
+
+      setTimeout(() => {
+        router.reload();
+      }, 1500);
 
       return;
     }
 
-    const removeItem = cart.filter(item => item.id !== product.id);
-    setCart(removeItem);
+  }
+
+  function removeItemCart(id: string) {
+    const indexItem = cartProducts.findIndex(item => item.id === id);
+
+    if (cartProducts[indexItem]?.amount > 1) {
+      let cartListDelete = cartProducts;
+
+      cartListDelete[indexItem].amount = cartListDelete[indexItem].amount - 1;
+
+      cartListDelete[indexItem].total = cartListDelete[indexItem].total - cartListDelete[indexItem].price;
+
+      localStorage.setItem('@cartProducts', JSON.stringify(cartListDelete));
+      totalResultCart(cartListDelete);
+
+      setTimeout(() => {
+        router.reload();
+      }, 1500);
+
+      return;
+    }
+
+    const removeItem = cartProducts.filter(item => item.id !== id);
+    localStorage.setItem('@cartProducts', JSON.stringify(removeItem));
     totalResultCart(removeItem);
+
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
 
   }
 
   function removeProductCart(product: any) {
-    const indexItem = cart.findIndex(item => item.id === product.id);
+    const indexItem = cartProducts.findIndex(item => item.id === product.id);
 
-    let cartList = cart;
+    let deleteProductCart = cartProducts;
 
-    cartList[indexItem].amount = cartList[indexItem].amount - product?.amount;
+    deleteProductCart[indexItem].amount = deleteProductCart[indexItem].amount - product?.amount;
 
-    cartList[indexItem].total = cartList[indexItem].total - cartList[indexItem].promotion;
+    deleteProductCart[indexItem].total = deleteProductCart[indexItem].total - deleteProductCart[indexItem].price;
 
-    setCart(cartList);
-    totalResultCart(cartList)
+    localStorage.setItem('@cartProducts', JSON.stringify(deleteProductCart));
+    totalResultCart(deleteProductCart);
 
-    const removeItem = cart.filter(item => item.id !== product.id);
-    setCart(removeItem);
+    const removeItem = cartProducts.filter(item => item.id !== product.id);
+    localStorage.setItem('@cartProducts', JSON.stringify(removeItem));
     totalResultCart(removeItem);
 
-    localStorage.setItem("@cartProduct", JSON.stringify(removeItem));
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
 
   }
 
@@ -100,12 +161,11 @@ export function CartProviderProducts({ children }: Props) {
     let myCart = items;
     let result = myCart.reduce((acc: any, obj: any) => { return acc + obj.total }, 0);
 
-    setTotal(result.toFixed(2));
-
+    localStorage.setItem("@totalCart", result.toFixed(2));
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ cart, addItemCart, removeItemCart, removeProductCart, totalResultCart, total }}>
+    <CartContext.Provider value={{ cartProducts, totalCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart }}>
       {children}
     </CartContext.Provider>
   )
