@@ -28,7 +28,7 @@ export const HeaderCart = () => {
     return (
         <ContainerHeader>
             <ContentHeader>
-                <Link href='/'>
+                <Link href='http://localhost:3001'>
                     <BlockBack>
                         <BsArrowLeft color='white' size={25} />
                         <TextVoltar>VOLTAR</TextVoltar>

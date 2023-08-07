@@ -11,12 +11,15 @@ import Router from "next/router";
 import { Avisos } from "../../components/Avisos";
 import { HeaderCart } from "../../components/HeaderCart";
 import { setupAPIClient } from "../../services/api";
+import { toast } from "react-toastify";
 
 export default function Carrinho() {
     /* @ts-ignore */
     const { addMoreItemCart, removeItemCart, removeProductCart, cartProducts, totalCart } = useContext(CartContext);
 
     const [totalPercentual, setTotalPercentual] = useState(Number);
+
+    console.log(cartProducts)
 
     /* valor do pedido - (valor do pedido * porcentagem de desconto / 100) */
     
@@ -27,21 +30,29 @@ export default function Carrinho() {
         try {
             const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
 
-            setCodePromotion(data?.coupomsconditionals || "");
-            descontoPercentual();
+            if (data === null) {
+                toast.error("Não ha cupom promocional ativo, ou com esse nome.");
+                return;
+            }
+
+            if(data?.coupomsconditionals[0]?.conditional === "porcento") {
+                /* @ts-ignore */
+                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
+                setTotalPercentual(percent);
+                return;
+            }
+
+            if(data?.coupomsconditionals[0]?.conditional === "valor") {
+                /* @ts-ignore */
+                const percent = totalCart - data?.coupomsconditionals[0]?.value;
+                setTotalPercentual(percent);
+                return;
+            }
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
         }
     }
-
-    function descontoPercentual() {
-        /* @ts-ignore */
-        const percent = totalCart - (totalCart * codePromotion[0]?.value / 100);
-        return setTotalPercentual(percent);
-    }
-
-    console.log(totalPercentual)
 
 
     return (
