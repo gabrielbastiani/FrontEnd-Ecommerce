@@ -18,13 +18,13 @@ export default function Carrinho() {
     const { addMoreItemCart, removeItemCart, removeProductCart, cartProducts, totalCart } = useContext(CartContext);
 
     const cartArray = cartProducts.map(item => item.id);
-    const [totalPercentual, setTotalPercentual] = useState(Number);
+    const [totalDesconto, setTotalDesconto] = useState(Number);
     const [codePromotion, setCodePromotion] = useState("");
     const [productCupom, setProductCupom] = useState<any[]>([]);
-    
 
-    console.log(productCupom)
-    
+
+    console.log(totalDesconto)
+
 
     async function loadCupomCode() {
         const apiClient = setupAPIClient();
@@ -33,6 +33,58 @@ export default function Carrinho() {
 
             if (data === null) {
                 toast.error("Não ha cupom promocional ativo, ou com esse nome.");
+                return;
+            }
+
+            console.log(data)
+
+            if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
+                /* @ts-ignore */
+                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
+                setTotalDesconto(percent);
+                return;
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
+                /* @ts-ignore */
+                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
+                setTotalDesconto(percent);
+                return;
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "percent") {
+                /* @ts-ignore */
+                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
+                setTotalDesconto(percent);
+                return;
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "percentAll") {
+                /* @ts-ignore */
+                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
+                setTotalDesconto(percent);
+                return;
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
+
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
+
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
+                /* @ts-ignore */
+                const percent = totalCart - data?.coupomsconditionals[0]?.value;
+                setTotalDesconto(percent);
+                return;
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "valueProduct") {
+                /* @ts-ignore */
+                const percent = totalCart - data?.coupomsconditionals[0]?.value;
+                setTotalDesconto(percent);
                 return;
             }
 
@@ -45,20 +97,6 @@ export default function Carrinho() {
                 if (productId.indexOf(cartArray[i]) > -1) {
                     cupomOk.push(cartArray[i]);
                 }
-            }
-
-            if (data?.coupomsconditionals[0]?.conditional === "porcento") {
-                /* @ts-ignore */
-                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
-                setTotalPercentual(percent);
-                return;
-            }
-
-            if (data?.coupomsconditionals[0]?.conditional === "valor") {
-                /* @ts-ignore */
-                const percent = totalCart - data?.coupomsconditionals[0]?.value;
-                setTotalPercentual(percent);
-                return;
             }
 
         } catch (error) {/* @ts-ignore */
@@ -174,12 +212,26 @@ export default function Carrinho() {
                             <SubTotal>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</SubTotal>
                         </BoxPricesFinal>
                         <hr />
-                        <BoxPricesFinal>
-                            <Total>TOTAL</Total>
-                            <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
-                        </BoxPricesFinal>
 
-                        <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                        {totalDesconto === 0 ? (
+                            <>
+                                <BoxPricesFinal>
+                                    <Total>TOTAL</Total>
+                                    <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
+                                </BoxPricesFinal>
+
+                                <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                            </>
+                        ) :
+                            <>
+                                <BoxPricesFinal>
+                                    <Total>TOTAL</Total>
+                                    <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalDesconto)}</Total>
+                                </BoxPricesFinal>
+
+                                <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalDesconto / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                            </>
+                        }
 
                         <BoxFinalCart>
                             <Button
@@ -195,8 +247,8 @@ export default function Carrinho() {
                             </ButtonFinal>
                         </BoxFinalCart>
                     </ContainerData>
-                </SectionCart>
-            </PageSection>
+                </SectionCart >
+            </PageSection >
             <br />
             <br />
             <FooterAccount />
