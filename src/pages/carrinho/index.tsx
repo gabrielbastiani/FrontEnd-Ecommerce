@@ -19,7 +19,7 @@ export default function Carrinho() {
 
     const [totalPercentual, setTotalPercentual] = useState(Number);
 
-    console.log(cartProducts)
+    const cartArray = cartProducts.map(item => item.id)
 
     /* valor do pedido - (valor do pedido * porcentagem de desconto / 100) */
     
@@ -34,6 +34,17 @@ export default function Carrinho() {
                 toast.error("Não ha cupom promocional ativo, ou com esse nome.");
                 return;
             }
+
+            const productId = data?.cupomsproducts.map((item) => {
+                return(
+                    item?.product_id
+                )
+            })
+
+            console.log("CART ", cartArray)
+            console.log("QUE VEIO DA BUSCA CUPOM  ", productId)
+
+            console.log("IDS iguais? ", productId.every(b => b.includes(cartArray)))
 
             if(data?.coupomsconditionals[0]?.conditional === "porcento") {
                 /* @ts-ignore */
