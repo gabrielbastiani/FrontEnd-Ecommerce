@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { PageSection } from "../../components/dateStoreUx/styles";
 import FooterAccount from "../../components/FooterAccount";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import Image from "next/image";
 import { BsFillTrashFill } from "react-icons/bs";
@@ -10,10 +10,39 @@ import { Button } from "../../components/ui/Button";
 import Router from "next/router";
 import { Avisos } from "../../components/Avisos";
 import { HeaderCart } from "../../components/HeaderCart";
+import { setupAPIClient } from "../../services/api";
 
 export default function Carrinho() {
     /* @ts-ignore */
     const { addMoreItemCart, removeItemCart, removeProductCart, cartProducts, totalCart } = useContext(CartContext);
+
+    const [totalPercentual, setTotalPercentual] = useState(Number);
+
+    /* valor do pedido - (valor do pedido * porcentagem de desconto / 100) */
+    
+    const [codePromotion, setCodePromotion] = useState("");
+
+    async function loadCupomCode() {
+        const apiClient = setupAPIClient();
+        try {
+            const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
+
+            setCodePromotion(data?.coupomsconditionals || "");
+            descontoPercentual();
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
+
+    function descontoPercentual() {
+        /* @ts-ignore */
+        const percent = totalCart - (totalCart * codePromotion[0]?.value / 100);
+        return setTotalPercentual(percent);
+    }
+
+    console.log(totalPercentual)
+
 
     return (
         <>
@@ -108,8 +137,13 @@ export default function Carrinho() {
                         <BoxCupom>
                             <InputCupom
                                 placeholder="CÓDIGO"
+                                onChange={(e) => setCodePromotion(e.target.value)}
                             />
-                            <ButtonCupom>Calcular</ButtonCupom>
+                            <ButtonCupom
+                                onClick={loadCupomCode}
+                            >
+                                Calcular
+                            </ButtonCupom>
                         </BoxCupom>
 
                         <BoxPricesFinal>
