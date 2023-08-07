@@ -17,13 +17,14 @@ export default function Carrinho() {
     /* @ts-ignore */
     const { addMoreItemCart, removeItemCart, removeProductCart, cartProducts, totalCart } = useContext(CartContext);
 
+    const cartArray = cartProducts.map(item => item.id);
     const [totalPercentual, setTotalPercentual] = useState(Number);
-
-    const cartArray = cartProducts.map(item => item.id)
-
-    /* valor do pedido - (valor do pedido * porcentagem de desconto / 100) */
-    
     const [codePromotion, setCodePromotion] = useState("");
+    const [productCupom, setProductCupom] = useState<any[]>([]);
+    
+
+    console.log(productCupom)
+    
 
     async function loadCupomCode() {
         const apiClient = setupAPIClient();
@@ -35,25 +36,25 @@ export default function Carrinho() {
                 return;
             }
 
-            const productId = data?.cupomsproducts.map((item) => {
-                return(
-                    item?.product_id
-                )
-            })
+            const productId = data?.cupomsproducts.map(item => item?.product_id);
 
-            console.log("CART ", cartArray)
-            console.log("QUE VEIO DA BUSCA CUPOM  ", productId)
+            var cupomOk = [];
+            setProductCupom(cupomOk);
 
-            console.log("IDS iguais? ", productId.every(b => b.includes(cartArray)))
+            for (var i = 0; i < cartArray.length; i++) {
+                if (productId.indexOf(cartArray[i]) > -1) {
+                    cupomOk.push(cartArray[i]);
+                }
+            }
 
-            if(data?.coupomsconditionals[0]?.conditional === "porcento") {
+            if (data?.coupomsconditionals[0]?.conditional === "porcento") {
                 /* @ts-ignore */
                 const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
                 setTotalPercentual(percent);
                 return;
             }
 
-            if(data?.coupomsconditionals[0]?.conditional === "valor") {
+            if (data?.coupomsconditionals[0]?.conditional === "valor") {
                 /* @ts-ignore */
                 const percent = totalCart - data?.coupomsconditionals[0]?.value;
                 setTotalPercentual(percent);
