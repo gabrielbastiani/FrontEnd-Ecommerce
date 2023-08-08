@@ -87,7 +87,7 @@ export const DropDownContent = styled.div`
 `
 
 export const DropDownContentCart = styled.div`
-  height: 80vh;
+  height: 38vh;
   overflow-y: auto;
   right: 5px;
   padding: 20px;
