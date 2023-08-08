@@ -27,7 +27,24 @@ import {
     AmountItens,
     Amaunt,
     CartButton,
-    BoxCart
+    BoxCart,
+    BoxProductCart,
+    ListItemsCart,
+    ImageBoxProduct,
+    BoxQuantity,
+    MinText,
+    Quantity,
+    MaxText,
+    ContainerItems,
+    ContainerDataProducts,
+    BoxPriceProduct,
+    PriceText,
+    BoxDeleteProduct,
+    TextDelete,
+    BoxTotalCart,
+    TotalPriceCart,
+    DropDownLiCart,
+    DropDownContentCart
 } from './styles';
 import PesquisaHeaderStore from './PesquisaHeaderStore';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -42,6 +59,7 @@ import { Accordion, AccordionItem as Item } from "@szhsin/react-accordion";
 import styled from "styled-components";
 import chevronDown from "../../assets/chevron-down.svg";
 import { CartContext } from '../../contexts/CartContext';
+import { BsTrash } from 'react-icons/bs';
 
 
 const ItemWithChevron = ({ header, ...rest }) => (
@@ -117,7 +135,7 @@ export const HeaderStore = () => {
 
     const { customer } = useContext(AuthContext);
     /* @ts-ignore */
-    const { totalCart, cartProducts } = useContext(CartContext);
+    const { totalCart, cartProducts, removeItemCart, addMoreItemCart, removeProductCart } = useContext(CartContext);
 
     const [logo, setLogo] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -144,6 +162,26 @@ export const HeaderStore = () => {
     }
 
     const [productsFavorites, setProductsFavorites] = useState<any[]>([]);
+
+    const [count, setCount] = useState(1);
+    const [activeTab, setActiveTab] = useState("");
+
+    const handleIncrement = (id: string) => {
+        setActiveTab(id);
+        /* @ts-ignore */
+        addMoreItemCart(id)
+        setCount(count + 1);
+    };
+
+    const handleDescrement = (id: string) => {
+        setActiveTab(id);
+        /* @ts-ignore */
+        removeItemCart(id)
+        if (count === 1) {
+            return;
+        }
+        setCount(count - 1);
+    };
 
     useEffect(() => {
         let dadosFavorites = localStorage.getItem("@favoriteproduct");
@@ -414,7 +452,7 @@ export const HeaderStore = () => {
                                     }
                                 </StyledA>
                             </StyledLi>
-                            <DropDownLi>
+                            <DropDownLiCart>
                                 <BoxCart>
                                     <AmountItens>
                                         <Amaunt>{cartProducts?.length}</Amaunt>
@@ -431,19 +469,49 @@ export const HeaderStore = () => {
                                         </Link>
                                     </CartButton>
                                 </BoxCart>
-                                <DropDownContent>
-                                    <BlockContact>
-                                        <FontStrong>TOTAL</FontStrong>
-                                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-                                        {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
-                                        <br />
-                                        <br />
-                                        <Link href='/carrinho' target="_blank">
-                                            <ButtonAtentimento>IR PARA O CARRINHO</ButtonAtentimento>
-                                        </Link>
-                                    </BlockContact>
-                                </DropDownContent>
-                            </DropDownLi>
+                                <DropDownContentCart>
+                                    {cartProducts.map((prod) => {
+                                        return (
+                                            <BoxProductCart>
+                                                <ImageBoxProduct>
+                                                    <Image src={"http://localhost:3333/files/" + prod?.image} width={60} height={60} alt="foto produto" />
+                                                </ImageBoxProduct>
+
+                                                <ContainerDataProducts>
+                                                    <ListItemsCart>{prod?.name}</ListItemsCart>
+                                                    <BoxPriceProduct>
+                                                        <PriceText>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price)}</PriceText>
+                                                        <ContainerItems>
+                                                            <BoxQuantity>
+                                                                <MinText onClick={() => handleDescrement(prod?.id)}>-</MinText>
+                                                                {activeTab === prod?.id ?
+                                                                    <Quantity>{count}</Quantity>
+                                                                    :
+                                                                    <Quantity>{prod?.amount}</Quantity>
+                                                                }
+                                                                <MaxText onClick={() => handleIncrement(prod?.id)}>+</MaxText>
+                                                            </BoxQuantity>
+                                                            <BoxDeleteProduct
+                                                                onClick={() => removeProductCart(prod)}
+                                                            >
+                                                                <TextDelete>Excluir</TextDelete>
+                                                                <BsTrash size={20} />
+                                                            </BoxDeleteProduct>
+                                                        </ContainerItems>
+                                                    </BoxPriceProduct>
+                                                </ContainerDataProducts>
+                                            </BoxProductCart>
+                                        )
+                                    })}
+                                    <BoxTotalCart>
+                                        <TotalPriceCart>TOTAL</TotalPriceCart>
+                                        <TotalPriceCart>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</TotalPriceCart>
+                                    </BoxTotalCart>
+                                    <Link href='/carrinho' target="_blank">
+                                        <ButtonAtentimento>IR PARA O CARRINHO</ButtonAtentimento>
+                                    </Link>
+                                </DropDownContentCart>
+                            </DropDownLiCart>
                         </StyledUl>
                     </BlockItems>
                 </ContentHeaderStore>

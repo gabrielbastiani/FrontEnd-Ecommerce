@@ -75,7 +75,7 @@ export const DropDownContent = styled.div`
   background-color: ${props => props?.theme?.colors?.white};
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 99;
 
   @media (max-width: 440px) {
     left: 20px;
@@ -83,6 +83,43 @@ export const DropDownContent = styled.div`
 
   @media (max-width: 350px) {
     width: 300px;
+  }
+`
+
+export const DropDownContentCart = styled.div`
+  height: 80vh;
+  overflow-y: auto;
+  right: 5px;
+  padding: 20px;
+  display: none;
+  position: absolute;
+  background-color: ${props => props?.theme?.colors?.white};
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 99;
+
+  @media (max-width: 440px) {
+    left: 20px;
+  }
+
+  @media (max-width: 350px) {
+    width: 300px;
+  }
+`
+
+export const DropDownLiCart = styled(StyledLi)`
+  display: inline-block;
+
+  &:hover ${DropDownContentCart} {
+    display: block;
+  }
+`
+
+export const DropDownLi = styled(StyledLi)`
+  display: inline-block;
+
+  &:hover ${DropDownContent} {
+    display: block;
   }
 `
 
@@ -152,14 +189,6 @@ export const TextContent = styled.span`
   text-align: left;
   margin-top: 15px;
   display: flex;
-`
-
-export const DropDownLi = styled(StyledLi)`
-  display: inline-block;
-
-  &:hover ${DropDownContent} {
-    display: block;
-  }
 `
 
 export const StyledA = styled.button`
@@ -288,4 +317,98 @@ export const BoxProductSearch = styled.div`
   margin: 30px 0;
 `
 
+export const BoxProductCart = styled.div`
+  display: flex;
+  align-items: center;
+  width: 300px;
+  margin-bottom: 30px;
+`
+
+export const ImageBoxProduct = styled.div`
+  padding-right: 15px;
+`
+
+export const ContainerDataProducts = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const BoxPriceProduct = styled.div``
+
+export const PriceText = styled.span`
+  font-weight: bold;
+`
+
+export const ListItemsCart = styled.span`
+  padding-bottom: 15px;
+  font-size: 15px;
+`
+
+export const ContainerItems = styled.div`
+  display: flex;
+  margin-top: 40px;
+  margin-left: -55px;
+  justify-content: space-around;
+  align-items: center;
+`
+
+export const BoxDeleteProduct = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+`
+
+export const TextDelete = styled.span`
+  font-size: 12px;
+  padding-right: 5px;
+`
+
+export const BoxQuantity = styled.div`
+  width: 50%;
+  border: 1px solid #f2f2f2;
+  height: 30px;
+  text-align: left;
+  overflow: hidden;
+  line-height: 30px;
+  margin-top: 5px;
+  float: left;
+`
+
+export const MinText = styled.span`
+  display: inline-block;
+  width: calc(33.33% - 2px);
+  color: #000;
+  text-align: center;
+  height: 100%;
+  cursor: pointer;
+`
+
+export const Quantity = styled.span`
+  display: inline-block;
+  width: calc(33.33% - 2px);
+  color: #000;
+  text-align: center;
+  height: 100%;
+  border-left: 1px solid #f2f2f2;
+  border-right: 1px solid #f2f2f2;
+`
+
+export const MaxText = styled.span`
+  display: inline-block;
+  width: calc(33.33% - 2px);
+  color: #000;
+  text-align: center;
+  height: 100%;
+  cursor: pointer;
+`
+
 export const LinkRoute = styled.a``
+
+export const BoxTotalCart = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`
+export const TotalPriceCart = styled.span`
+  font-weight: bold;
+`
