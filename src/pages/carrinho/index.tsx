@@ -59,7 +59,7 @@ export default function Carrinho() {
                 return;
             }
 
-            if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
+            /* if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
                 
             }
 
@@ -69,10 +69,10 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
 
-            }
+            } */
 
             if (data?.coupomsconditionals[0]?.conditional === "percent") {
-                /* @ts-ignore */
+                
                 const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
                 setTotalDesconto(percent);
                 return;
