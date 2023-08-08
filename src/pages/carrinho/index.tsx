@@ -38,18 +38,37 @@ export default function Carrinho() {
 
             console.log(data)
 
-            if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
+            if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
                 /* @ts-ignore */
-                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
+                const percent = totalCart - data?.coupomsconditionals[0]?.value;
                 setTotalDesconto(percent);
                 return;
             }
 
-            if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
+            if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
                 /* @ts-ignore */
-                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
+                const percent = totalCart - data?.coupomsconditionals[0]?.value;
                 setTotalDesconto(percent);
                 return;
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "valueProduct") {
+                /* @ts-ignore */
+                const percent = totalCart - data?.coupomsconditionals[0]?.value;
+                setTotalDesconto(percent);
+                return;
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
+                
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
+
+            }
+
+            if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
+
             }
 
             if (data?.coupomsconditionals[0]?.conditional === "percent") {
@@ -66,24 +85,9 @@ export default function Carrinho() {
                 return;
             }
 
-            if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
-
-            }
-
-            if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
-
-            }
-
-            if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
+            if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
                 /* @ts-ignore */
-                const percent = totalCart - data?.coupomsconditionals[0]?.value;
-                setTotalDesconto(percent);
-                return;
-            }
-
-            if (data?.coupomsconditionals[0]?.conditional === "valueProduct") {
-                /* @ts-ignore */
-                const percent = totalCart - data?.coupomsconditionals[0]?.value;
+                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
                 setTotalDesconto(percent);
                 return;
             }
