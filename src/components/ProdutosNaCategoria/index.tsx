@@ -37,7 +37,7 @@ interface ProductsRequest {
 }
 
 const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: ProductsRequest) => {
-    
+
     const { saveProductCart } = useContext(CartContext);
 
     const [count, setCount] = useState(1);
@@ -56,9 +56,21 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
         setCount(count - 1);
     };
 
-    function handleAddItemCart(count: any, id: any, name: any, image: any, promotion: any, relationattributeproducts: any) {
+    function handleAddItemCart(
+        count: any,
+        id: any,
+        name: any,
+        image: any,
+        promotion: any,
+        relationattributeproducts: any,
+        stock: number,
+        weight: number,
+        width: number,
+        height: number,
+        depth: number
+    ) {
         /* @ts-ignore */
-        saveProductCart(count, id, name, image, promotion, relationattributeproducts)
+        saveProductCart(count, id, name, image, promotion, relationattributeproducts, stock, weight, width, height, depth);
         setCount(1);
     }
 
@@ -125,7 +137,12 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                                                 prod?.product?.name,
                                                 count,
                                                 prod?.product?.promotion,
-                                                prod?.product?.relationattributeproducts
+                                                prod?.product?.relationattributeproducts,
+                                                prod?.product?.stock,
+                                                prod?.product?.weight,
+                                                prod?.product?.width,
+                                                prod?.product?.height,
+                                                prod?.product?.depth
                                             )}
                                         >
                                             <AiOutlineShoppingCart

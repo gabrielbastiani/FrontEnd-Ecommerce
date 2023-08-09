@@ -22,6 +22,11 @@ type AddLocalItemStorage = {
   count: any;
   promotion: any;
   relationattributeproducts: any;
+  stock: number;
+  weight: number;
+  width: number;
+  height: number;
+  depth: number;
 }
 
 type Props = {
@@ -43,7 +48,19 @@ export function CartProviderProducts({ children }: Props) {
     setTotalCart(Number(priceTotal));
   }, []);
 
-  function saveProductCart(id: any, image: any, name: any, count: any, promotion: any, relationattributeproducts: any) {
+  function saveProductCart(
+    id: any,
+    image: any,
+    name: any,
+    count: any,
+    promotion: any,
+    relationattributeproducts: any,
+    stock: number,
+    weight: number,
+    width: number,
+    height: number,
+    depth: number
+  ) {
 
     const indexItem = cartProducts.findIndex(item => item.id === id);
 
@@ -70,6 +87,11 @@ export function CartProviderProducts({ children }: Props) {
       amount: count,
       price: promotion,
       relationattributeproducts: relationattributeproducts,
+      stock: Number(stock),
+      weight: Number(weight),
+      width: Number(width),
+      height: Number(height),
+      depth: Number(depth),
       total: promotion * count
     });
 

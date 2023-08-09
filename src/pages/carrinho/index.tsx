@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { PageSection } from "../../components/dateStoreUx/styles";
 import FooterAccount from "../../components/FooterAccount";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import Image from "next/image";
 import { BsFillTrashFill } from "react-icons/bs";
@@ -12,6 +12,9 @@ import { Avisos } from "../../components/Avisos";
 import { HeaderCart } from "../../components/HeaderCart";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
+import { IMaskInput } from "react-imask";
+import { Input } from "../../components/ui/Input";
+
 
 export default function Carrinho() {
     /* @ts-ignore */
@@ -22,9 +25,27 @@ export default function Carrinho() {
     const [codePromotion, setCodePromotion] = useState("");
     const [productCupom, setProductCupom] = useState<any[]>([]);
 
+    const [cep, setCep] = useState("");
 
-    console.log(totalDesconto)
 
+    /* async function searchCep() {
+        try {
+            const apiClient = setupAPIClient();
+            await apiClient.post('/freteCalculo', {
+                nCdServico: "04014",
+                sCepDestino: cep,
+                nVlPeso: nVlPeso,
+                nCdFormato: 1,
+                nVlComprimento: nVlComprimento,
+                nVlAltura: nVlAltura,
+                nVlLargura: nVlLargura,
+                nVlDiametro: nVlDiametro
+            });
+
+        } catch (error) {
+            console.log(error)
+        }
+    } */
 
     async function loadCupomCode() {
         const apiClient = setupAPIClient();
@@ -203,10 +224,23 @@ export default function Carrinho() {
                     <ContainerData>
                         <TextCep>Digite o CEP de entrega para calcular o frete.</TextCep>
                         <BoxCep>
-                            <InputCep
+                            <Input
+                                style={{ backgroundColor: 'white', color: 'black' }}
+                                /* @ts-ignore */
+                                as={IMaskInput}
+                                /* @ts-ignore */
+                                mask="00000-000"
+                                type="text"
                                 placeholder="CEP"
+                                onChange={(e) => setCep(e.target.value)}
                             />
-                            <ButtonCep>Calcular</ButtonCep>
+                            {/* <ButtonCep
+                                onClick={searchCep}
+                            >
+                                Calcular
+                            </ButtonCep> */}
+
+
                         </BoxCep>
 
                         <TextCep>Possui um cupom de desconto? Insira o código do cupom abaixo, e clique em calcular para poder aplicar seu cupom, OBS: è possivel usar apenas um código de cupom por pedido!</TextCep>

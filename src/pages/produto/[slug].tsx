@@ -37,10 +37,10 @@ export default function Produto() {
     const [promotion, setPromotion] = useState(Number);
     const [sku, setSku] = useState('');
     const [stock, setStock] = useState(Number);
-    const [weight, setWeight] = useState('');
-    const [width, setWidth] = useState('');
-    const [height, setHeight] = useState('');
-    const [depth, setDepth] = useState('');
+    const [weight, setWeight] = useState(Number);
+    const [width, setWidth] = useState(Number);
+    const [height, setHeight] = useState(Number);
+    const [depth, setDepth] = useState(Number);
     const [brand, setBrand] = useState('');
     const [urlVideo, setUrlVideo] = useState('');
     const [gtin, setGtin] = useState('');
@@ -143,11 +143,15 @@ export default function Produto() {
                             price={price}
                             promotion={promotion}
                             sku={sku}
-                            stock={stock}
                             variations={productsvariations}
                             atribute={relationattributeproducts}
                             images={photoProduct}
                             amount={amount}
+                            stock={stock}
+                            weight={weight}
+                            width={width}
+                            height={height}
+                            depth={depth}
                         />
                     </ProductContainer>
                 </ContainerContentProduct>

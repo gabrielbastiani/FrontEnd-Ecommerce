@@ -57,9 +57,21 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
         setCount(count - 1);
     };
 
-    function handleAddItemCart(count: any, id: any, name: any, image: any, promotion: any, relationattributeproducts: any) {
+    function handleAddItemCart(
+        count: any,
+        id: any,
+        name: any,
+        image: any,
+        promotion: any,
+        relationattributeproducts: any,
+        stock: number,
+        weight: number,
+        width: number,
+        height: number,
+        depth: number
+    ) {
         /* @ts-ignore */
-        saveProductCart(count, id, name, image, promotion, relationattributeproducts)
+        saveProductCart(count, id, name, image, promotion, relationattributeproducts, stock, weight, width, height, depth)
         setCount(1);
     }
 
@@ -158,7 +170,12 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
                                                         item?.name,
                                                         count,
                                                         item?.promotion,
-                                                        item?.relationattributeproducts
+                                                        item?.relationattributeproducts,
+                                                        item?.stock,
+                                                        item?.weight,
+                                                        item?.width,
+                                                        item?.height,
+                                                        item?.depth
                                                     )}
                                                 >
                                                     <AiOutlineShoppingCart

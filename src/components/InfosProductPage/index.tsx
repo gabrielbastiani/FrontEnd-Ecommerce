@@ -48,14 +48,33 @@ interface InfosRequest {
     price: number;
     promotion: number;
     sku: string;
-    stock: number;
     variations: any;
     atribute: any;
     images: any;
     amount: number;
+    stock: number;
+    weight: number;
+    width: number;
+    height: number;
+    depth: number;
 }
 
-const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, variations, atribute, images, amount }: InfosRequest) => {
+const InfosProductPage = ({
+    product_id,
+    name,
+    price,
+    promotion,
+    sku,
+    variations,
+    atribute,
+    images,
+    amount,
+    stock,
+    weight,
+    width,
+    height,
+    depth
+}: InfosRequest) => {
 
     const { saveProductCart } = useContext(CartContext);
 
@@ -75,9 +94,21 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, vari
         setCount(count - 1);
     };
 
-    function handleAddItemCart(count: any, id: any, name: any, image: any, promotion: any, relationattributeproducts: any) {
+    function handleAddItemCart(
+        count: any,
+        id: any,
+        name: any,
+        image: any,
+        promotion: any,
+        relationattributeproducts: any,
+        stock: any,
+        weight: any,
+        width: any,
+        height: any,
+        depth: any
+    ) {
         /* @ts-ignore */
-        saveProductCart(count, id, name, image, promotion, relationattributeproducts)
+        saveProductCart(count, id, name, image, promotion, relationattributeproducts, stock, weight, width, height, depth)
         setCount(1);
     }
 
@@ -335,7 +366,12 @@ const InfosProductPage = ({ product_id, name, price, promotion, sku, stock, vari
                                 name,
                                 count,
                                 promotion,
-                                atribute
+                                atribute,
+                                stock,
+                                weight,
+                                width,
+                                height,
+                                depth
                             )}
                         >
                             ADICIONAR AO CARRINHO

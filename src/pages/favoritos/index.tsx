@@ -44,9 +44,21 @@ export default function Favoritos() {
         setCount(count - 1);
     };
 
-    function handleAddItemCart(count: any, id: any, name: any, image: any, promotion: any, relationattributeproducts: any) {
+    function handleAddItemCart(
+        count: any,
+        id: any,
+        name: any,
+        image: any,
+        promotion: any,
+        relationattributeproducts: any,
+        stock: number,
+        weight: number,
+        width: number,
+        height: number,
+        depth: number
+        ) {
         /* @ts-ignore */
-        saveProductCart(count, id, name, image, promotion, relationattributeproducts)
+        saveProductCart(count, id, name, image, promotion, relationattributeproducts, stock, weight, width, height, depth);
         setCount(1);
     }
 
@@ -208,7 +220,12 @@ export default function Favoritos() {
                                                                 prod?.name,
                                                                 count,
                                                                 prod?.promotion,
-                                                                prod?.relationattributeproducts
+                                                                prod?.relationattributeproducts,
+                                                                prod?.stock,
+                                                                prod?.weight,
+                                                                prod?.width,
+                                                                prod?.height,
+                                                                prod?.depth
                                                             )}
                                                         >
                                                             <AiOutlineShoppingCart
