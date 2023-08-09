@@ -38,12 +38,16 @@ export default function Carrinho() {
 
             console.log(data)
 
+            /*"Valor de desconto", value: "productsValue"*/
+
             if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
                 /* @ts-ignore */
                 const percent = totalCart - data?.coupomsconditionals[0]?.value;
                 setTotalDesconto(percent);
                 return;
             }
+
+            /*"Valor de desconto em todos os produtos da loja", value: "allProductsValue"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
                 /* @ts-ignore */
@@ -52,6 +56,8 @@ export default function Carrinho() {
                 return;
             }
 
+            /*"Valor de desconto no valor total", value: "valueProduct"*/
+
             if (data?.coupomsconditionals[0]?.conditional === "valueProduct") {
                 /* @ts-ignore */
                 const percent = totalCart - data?.coupomsconditionals[0]?.value;
@@ -59,17 +65,25 @@ export default function Carrinho() {
                 return;
             }
 
+            /*"Frete grátis total", value: "freeShipping"*/
+
             /* if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
                 
             }
 
-            if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
+            /*"Valor de desconto no valor do frete", value: "valueShipping"*/
 
-            }
-
-            if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
+            /* if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
 
             } */
+
+            /*"Percentual de desconto no valor do frete", value: "shippingPercent"*/
+
+            /* if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
+
+            } */
+
+            /*"Percentual de desconto", value: "percent"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "percent") {
                 
@@ -78,6 +92,8 @@ export default function Carrinho() {
                 return;
             }
 
+            /*"Percentual de desconto no valor total", value: "percentAll"*/
+
             if (data?.coupomsconditionals[0]?.conditional === "percentAll") {
                 /* @ts-ignore */
                 const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
@@ -85,6 +101,8 @@ export default function Carrinho() {
                 return;
             }
 
+            /*"Percentual de desconto em todos os produtos da loja", value: "allProductsValuePercent"*/
+            
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
                 /* @ts-ignore */
                 const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
