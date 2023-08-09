@@ -41,7 +41,6 @@ export default function Carrinho() {
             /*"Valor de desconto", value: "productsValue"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
-                /* @ts-ignore */
                 const percent = totalCart - data?.coupomsconditionals[0]?.value;
                 setTotalDesconto(percent);
                 return;
@@ -50,7 +49,6 @@ export default function Carrinho() {
             /*"Valor de desconto em todos os produtos da loja", value: "allProductsValue"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
-                /* @ts-ignore */
                 const percent = totalCart - data?.coupomsconditionals[0]?.value;
                 setTotalDesconto(percent);
                 return;
@@ -59,7 +57,6 @@ export default function Carrinho() {
             /*"Valor de desconto no valor total", value: "valueProduct"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "valueProduct") {
-                /* @ts-ignore */
                 const percent = totalCart - data?.coupomsconditionals[0]?.value;
                 setTotalDesconto(percent);
                 return;
@@ -86,7 +83,6 @@ export default function Carrinho() {
             /*"Percentual de desconto", value: "percent"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "percent") {
-                
                 const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
                 setTotalDesconto(percent);
                 return;
@@ -95,16 +91,14 @@ export default function Carrinho() {
             /*"Percentual de desconto no valor total", value: "percentAll"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "percentAll") {
-                /* @ts-ignore */
                 const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
                 setTotalDesconto(percent);
                 return;
             }
 
             /*"Percentual de desconto em todos os produtos da loja", value: "allProductsValuePercent"*/
-            
+
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
-                /* @ts-ignore */
                 const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
                 setTotalDesconto(percent);
                 return;
