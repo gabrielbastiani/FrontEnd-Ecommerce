@@ -28,7 +28,22 @@ export default function Carrinho() {
     const [cep, setCep] = useState("");
 
 
-    /* async function searchCep() {
+    console.log(cartProducts)
+
+
+    const dadosFrete: any = [];
+    (cartProducts || []).forEach((item) => {
+        dadosFrete.push({
+            "peso": item.weight * item.count,
+            "comprimento": item.depth,
+            "altura": item.height,
+            "largura": item.width
+        });
+    });
+
+    console.log(dadosFrete)
+
+    async function searchCep() {
         try {
             const apiClient = setupAPIClient();
             await apiClient.post('/freteCalculo', {
@@ -45,7 +60,7 @@ export default function Carrinho() {
         } catch (error) {
             console.log(error)
         }
-    } */
+    }
 
     async function loadCupomCode() {
         const apiClient = setupAPIClient();
@@ -234,12 +249,11 @@ export default function Carrinho() {
                                 placeholder="CEP"
                                 onChange={(e) => setCep(e.target.value)}
                             />
-                            {/* <ButtonCep
+                            <ButtonCep
                                 onClick={searchCep}
                             >
                                 Calcular
-                            </ButtonCep> */}
-
+                            </ButtonCep>
 
                         </BoxCep>
 
