@@ -5,7 +5,40 @@ import { useContext, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import Image from "next/image";
 import { BsFillTrashFill } from "react-icons/bs";
-import { AtributeProduct, BoxCep, BoxCupom, BoxData, BoxDataProduct, BoxDelete, BoxFinalCart, BoxPriceProductCart, BoxPrices, BoxPricesFinal, BoxPricesTotalProduct, BoxProductCart, BoxQuantidadeCart, ButtonCep, ButtonCupom, ButtonFinal, ConditionPrices, ContainerData, ContainerProduct, ImageProductCart, InputCep, InputCupom, MaxCart, MinCart, NameProduct, PriceProduct, PriceProductData, QuantidadeProductCart, SectionCart, SubTotal, TextCep, Total, ValueQuantCart } from "./styles";
+import {
+    AtributeProduct,
+    BoxCep,
+    BoxCupom,
+    BoxData,
+    BoxDataProduct,
+    BoxDelete,
+    BoxFinalCart,
+    BoxPriceProductCart,
+    BoxPrices,
+    BoxPricesFinal,
+    BoxPricesTotalProduct,
+    BoxProductCart,
+    BoxQuantidadeCart,
+    ButtonCep,
+    ButtonCupom,
+    ButtonFinal,
+    ConditionPrices,
+    ContainerData,
+    ContainerProduct,
+    ImageProductCart,
+    InputCupom,
+    MaxCart,
+    MinCart,
+    NameProduct,
+    PriceProduct,
+    PriceProductData,
+    QuantidadeProductCart,
+    SectionCart,
+    SubTotal,
+    TextCep,
+    Total,
+    ValueQuantCart
+} from "./styles";
 import { Button } from "../../components/ui/Button";
 import Router from "next/router";
 import { Avisos } from "../../components/Avisos";
@@ -26,36 +59,44 @@ export default function Carrinho() {
     const [productCupom, setProductCupom] = useState<any[]>([]);
 
     const [cep, setCep] = useState("");
+    const [dataFrete, setDataFrete] = useState<any[]>([]);
 
-
-    console.log(cartProducts)
-
-
-    const dadosFrete: any = [];
+    let dadosFrete: any = [];
     (cartProducts || []).forEach((item) => {
         dadosFrete.push({
-            "peso": item.weight * item.count,
-            "comprimento": item.depth,
-            "altura": item.height,
-            "largura": item.width
+            "peso": item.weight * item.amount,
+            "comprimento": item.depth * item.amount,
+            "altura": item.height * item.amount,
+            "largura": item.width * item.amount
         });
     });
 
-    console.log(dadosFrete)
+    var totalPeso = 0;
+    var totalComprimento = 0;
+    var totalAltura = 0;
+    var totalLargura = 0;
+
+    for (var i = 0; i < dadosFrete.length; i++) {
+        totalPeso += dadosFrete[i].peso;
+        totalComprimento += dadosFrete[i].comprimento;
+        totalAltura += dadosFrete[i].altura;
+        totalLargura += dadosFrete[i].largura;
+    }
 
     async function searchCep() {
         try {
             const apiClient = setupAPIClient();
-            await apiClient.post('/freteCalculo', {
-                nCdServico: "04014",
+            const { data } = await apiClient.post('/freteCalculo', {
+                nCdServico: "04162",
                 sCepDestino: cep,
-                nVlPeso: nVlPeso,
+                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
                 nCdFormato: 1,
-                nVlComprimento: nVlComprimento,
-                nVlAltura: nVlAltura,
-                nVlLargura: nVlLargura,
-                nVlDiametro: nVlDiametro
+                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
+                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
+                nVlLargura: totalLargura > 82 ? 81 : totalLargura
             });
+
+            setDataFrete(data);
 
         } catch (error) {
             console.log(error)
@@ -255,6 +296,24 @@ export default function Carrinho() {
                                 Calcular
                             </ButtonCep>
 
+                            <div>
+                                {dataFrete.map((item, index) => {
+                                    return (
+                                        <div key={index}>
+                                            {item?.Valor === "0,00" || item?.Valor === "" ? (
+                                                <span>Erro ao calcular o frete.</span>
+                                            ) :
+                                                <>
+                                                    <span>Valor do frete: R${item?.Valor}</span>
+                                                    <br />
+                                                    <span>Prazo de entrega em dias úteis: <strong>{item?.PrazoEntrega} dias</strong></span>
+                                                </>
+                                            }
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                            <br />
                         </BoxCep>
 
                         <TextCep>Possui um cupom de desconto? Insira o código do cupom abaixo, e clique em calcular para poder aplicar seu cupom, OBS: è possivel usar apenas um código de cupom por pedido!</TextCep>
