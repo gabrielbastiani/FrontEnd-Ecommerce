@@ -13,6 +13,7 @@ import {
     BoxDataProduct,
     BoxDelete,
     BoxFinalCart,
+    BoxFrete,
     BoxPriceProductCart,
     BoxPrices,
     BoxPricesFinal,
@@ -24,7 +25,9 @@ import {
     ButtonFinal,
     ConditionPrices,
     ContainerData,
+    ContainerFrete,
     ContainerProduct,
+    ErrorText,
     ImageProductCart,
     InputCupom,
     MaxCart,
@@ -36,6 +39,8 @@ import {
     SectionCart,
     SubTotal,
     TextCep,
+    TextFrete,
+    TextStrong,
     Total,
     ValueQuantCart
 } from "./styles";
@@ -296,24 +301,23 @@ export default function Carrinho() {
                                 Calcular
                             </ButtonCep>
 
-                            <div>
-                                {dataFrete.map((item, index) => {
-                                    return (
-                                        <div key={index}>
-                                            {item?.Valor === "0,00" || item?.Valor === "" ? (
-                                                <span>Erro ao calcular o frete.</span>
+                            {dataFrete.map((item, index) => {
+                                return (
+                                    <ContainerFrete key={index}>
+                                        <BoxFrete>
+                                            {item?.Valor === "0,00" || item?.Valor === "" || item?.Valor === "0" ? (
+                                                <ErrorText>Erro ao calcular o frete.</ErrorText>
                                             ) :
                                                 <>
-                                                    <span>Valor do frete: <strong>R${item?.Valor}</strong></span>
-                                                    <br />
-                                                    <span>Prazo de entrega em dia(s) úteis: <strong>{item?.PrazoEntrega} dia(s)</strong></span>
+                                                    <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
+                                                    <TextFrete>Prazo de entrega em dia(s) úteis: <TextStrong>{item?.PrazoEntrega} dia(s)</TextStrong></TextFrete>
                                                 </>
                                             }
-                                        </div>
-                                    )
-                                })}
-                            </div>
-                            <br />
+                                        </BoxFrete>
+                                    </ContainerFrete>
+                                )
+                            })}
+
                         </BoxCep>
 
                         <TextCep>Possui um cupom de desconto? Insira o código do cupom abaixo, e clique em calcular para poder aplicar seu cupom, OBS: è possivel usar apenas um código de cupom por pedido!</TextCep>

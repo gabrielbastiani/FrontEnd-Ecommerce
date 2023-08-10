@@ -211,3 +211,24 @@ export const MaxCart = styled.button`
   color: #838282;
   cursor: pointer;
 `
+
+export const ContainerFrete = styled.div`
+  margin-bottom: 15px;
+  border: 2px solid gray;
+  padding: 8px;
+`
+
+export const BoxFrete = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const ErrorText = styled.span`
+  color: red;
+`
+
+export const TextFrete = styled.span`
+  padding: 5px;
+`
+
+export const TextStrong = styled.strong``
