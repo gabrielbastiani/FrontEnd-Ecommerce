@@ -304,7 +304,7 @@ export default function Carrinho() {
                                                 <span>Erro ao calcular o frete.</span>
                                             ) :
                                                 <>
-                                                    <span>Valor do frete: R${item?.Valor}</span>
+                                                    <span>Valor do frete: <strong>R${item?.Valor}</strong></span>
                                                     <br />
                                                     <span>Prazo de entrega em dias úteis: <strong>{item?.PrazoEntrega} dias</strong></span>
                                                 </>
