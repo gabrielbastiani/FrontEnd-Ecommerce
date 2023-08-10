@@ -306,7 +306,7 @@ export default function Carrinho() {
                                                 <>
                                                     <span>Valor do frete: <strong>R${item?.Valor}</strong></span>
                                                     <br />
-                                                    <span>Prazo de entrega em dias úteis: <strong>{item?.PrazoEntrega} dias</strong></span>
+                                                    <span>Prazo de entrega em dia(s) úteis: <strong>{item?.PrazoEntrega} dia(s)</strong></span>
                                                 </>
                                             }
                                         </div>
