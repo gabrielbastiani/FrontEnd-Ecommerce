@@ -45,6 +45,38 @@ export function ModalProposta({ isOpen, onRequestClose, priceProduct, nameProduc
     const [moreInformation, setMoreInformation] = useState("");
 
 
+    var priceFormated = String(price);
+    priceFormated = priceFormated + '';
+    /* @ts-ignore */
+    priceFormated = parseInt(priceFormated.replace(/[\D]+/g, ''));
+    priceFormated = priceFormated + '';
+    priceFormated = priceFormated.replace(/([0-9]{2})$/g, ",$1");
+
+    if (priceFormated.length > 6) {
+        priceFormated = priceFormated.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    if (priceFormated == 'NaN') priceFormated = '';
+    const formatedPrice = priceFormated.replace(".", "");
+    const formatedPricePonto = formatedPrice.replace(",", ".");
+    const numberPrice = formatedPricePonto;
+
+
+    var offerprice = String(counterOfferPrice);
+    offerprice = offerprice + '';
+    /* @ts-ignore */
+    offerprice = parseInt(offerprice.replace(/[\D]+/g, ''));
+    offerprice = offerprice + '';
+    offerprice = offerprice.replace(/([0-9]{2})$/g, ",$1");
+
+    if (offerprice.length > 6) {
+        offerprice = offerprice.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    if (offerprice == 'NaN') offerprice = '';
+    const formatedOffer = offerprice.replace(".", "");
+    const formatedOfferPonto = formatedOffer.replace(",", ".");
+    const numberOffer = formatedOfferPonto;
+
+
     useEffect(() => {
         async function loadStore() {
             const apiClient = setupAPIClient();
@@ -69,9 +101,9 @@ export function ModalProposta({ isOpen, onRequestClose, priceProduct, nameProduc
                 return;
             }
             const apiClient = setupAPIClient();
-            await apiClient.post('/createCounterProposal', {/* @ts-ignore */
-                currentPrice: Number(price.replace(/[^\d]+/g, '')),/* @ts-ignore */
-                counterOfferPrice: Number(counterOfferPrice.replace(/[^\d]+/g, '')),
+            await apiClient.post('/createCounterProposal', {
+                currentPrice: Number(numberPrice),
+                counterOfferPrice: Number(numberOffer),
                 name: name,
                 email: email,
                 phone: phone,
@@ -127,9 +159,9 @@ export function ModalProposta({ isOpen, onRequestClose, priceProduct, nameProduc
                             <BlockInputs>
                                 <EtiquetaInput>Preço da contraproposta:</EtiquetaInput>
                                 <Input
-                                    maxLength={10}
+                                    maxLength={9}
                                     placeholder="Digite aqui o valor sem pontos e sem virgulas"
-                                    value={counterOfferPrice}/* @ts-ignore */
+                                    value={offerprice}/* @ts-ignore */
                                     onChange={(e) => setCounterOfferPrice(e.target.value)}
                                 />
                             </BlockInputs>
