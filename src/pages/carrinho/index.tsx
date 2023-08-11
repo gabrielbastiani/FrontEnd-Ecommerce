@@ -69,7 +69,7 @@ export default function Carrinho() {
     const valueFrete = dataFrete[0]?.Valor.replace(",", ".");
     const formatedFrete = Number(valueFrete);
 
-    
+
 
     let dadosFrete: any = [];
     (cartProducts || []).forEach((item) => {
