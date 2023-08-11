@@ -66,6 +66,11 @@ export default function Carrinho() {
     const [cep, setCep] = useState("");
     const [dataFrete, setDataFrete] = useState<any[]>([]);
 
+    const valueFrete = dataFrete[0]?.Valor.replace(",", ".");
+    const formatedFrete = Number(valueFrete);
+
+    
+
     let dadosFrete: any = [];
     (cartProducts || []).forEach((item) => {
         dadosFrete.push({
