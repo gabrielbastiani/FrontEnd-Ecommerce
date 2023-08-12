@@ -112,9 +112,9 @@ const AvaliacoesBox = ({ product_id }: AvalietionRequest) => {
                             </ContainerPage>
                         </ContainerPagination>
                         <BoxContainerAvalietion>
-                            {avaliations.map((item) => {
+                            {avaliations.map((item, index) => {
                                 return (
-                                    <BoxAvaliacoes key={item?.id}>
+                                    <BoxAvaliacoes key={index}>
                                         <NameClient>{item?.customer?.name}</NameClient>
                                         {item?.point === "Péssimo" && (
                                             <Box>

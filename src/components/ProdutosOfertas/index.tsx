@@ -111,9 +111,9 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
             <SectionDestaqueProducts>
                 <Container>
                     <Carousel ref={carousel}>
-                        {products.map((item) => {
+                        {products.map((item, index) => {
                             return (
-                                <Item key={item.id}>
+                                <Item key={index}>
                                     <Link href={'/produto/' + item?.slug}>
                                         <Images>
                                             {item.photoproducts[0] ? (

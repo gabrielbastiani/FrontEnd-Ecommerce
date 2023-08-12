@@ -39,10 +39,10 @@ const DescricoesProduct = ({ descriptions }: DescricaoRequest) => {
     return (
         <Container>
             <Carousel ref={carousel}>
-                {descriptions.map((item: any) => {
+                {descriptions.map((item: any, index: any) => {
                     return (
                         <Item
-                            key={item.id}
+                            key={index}
                             onClick={() => handleClick(item.id)}
                         >
                             {item?.title}
@@ -58,12 +58,12 @@ const DescricoesProduct = ({ descriptions }: DescricaoRequest) => {
                     <FaArrowRight size={35} color='gray' />
                 </Button>
             </Buttons>
-            {descriptions.map((desc: any) => {
+            {descriptions.map((desc: any, index) => {
                 return (
                     <>
                         {activeTab === desc?.id ? (
                             <BoxDescription
-                                key={desc?.id}
+                                key={index}
                                 dangerouslySetInnerHTML={createMarkup(desc?.description)}
                             ></BoxDescription>
                         ) :

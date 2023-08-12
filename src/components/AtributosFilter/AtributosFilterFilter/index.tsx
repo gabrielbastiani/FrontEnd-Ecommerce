@@ -49,27 +49,25 @@ const AtributosFilterFilter = ({ products, onClick }: FilterAtributesRequest) =>
                 <>
                     <TextAtribute>Atributos:</TextAtribute>
                     <SubCategsBlockExtra>
-                        {arrayOb.map((item) => {
+                        {arrayOb.map((item, index) => {
                             return (
                                 <>
-                                    <TypeAtribute>{item?.typeAttribute?.type}</TypeAtribute>
+                                    <TypeAtribute key={index}>{item?.typeAttribute?.type}</TypeAtribute>
                                     {item?.typeAttribute?.valueattribute.map((val: any) => {
                                         return (
                                             <>
-                                                {val?.RelationAttributeProduct.map((rel: any) => {
+                                                {val?.RelationAttributeProduct.map((rel: any, index) => {
                                                     return (
-                                                        <>
-                                                            <SectionAtributes>
-                                                                <InputAttribute
-                                                                    type='checkbox'
-                                                                    name="filter"
-                                                                    id={rel?.valueAttribute?.id}
-                                                                    value={rel?.valueAttribute?.slug}
-                                                                    onClick={onClick}
-                                                                />
-                                                                <FilterText>{rel?.valueAttribute?.value}</FilterText>
-                                                            </SectionAtributes>
-                                                        </>
+                                                        <SectionAtributes key={index}>
+                                                            <InputAttribute
+                                                                type='checkbox'
+                                                                name="filter"
+                                                                id={rel?.valueAttribute?.id}
+                                                                value={rel?.valueAttribute?.slug}
+                                                                onClick={onClick}
+                                                            />
+                                                            <FilterText>{rel?.valueAttribute?.value}</FilterText>
+                                                        </SectionAtributes>
                                                     )
                                                 })}
                                             </>

@@ -188,9 +188,9 @@ export default function Atendimento() {
                 <br />
                 <br />
                 <br />
-                {content.map((item) => {
+                {content.map((item, index) => {
                     return (
-                        <SectionPage>
+                        <SectionPage key={index}>
                             <ContentBox
                                 dangerouslySetInnerHTML={{ __html: item?.description }}
                             ></ContentBox>

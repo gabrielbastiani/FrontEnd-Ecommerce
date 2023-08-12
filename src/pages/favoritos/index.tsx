@@ -151,9 +151,9 @@ export default function Favoritos() {
                             style={{ display: 'contents' }}
                         >
                             <GridSectionProducts>
-                                {products.map((prod: any) => {
+                                {products.map((prod: any, index) => {
                                     return (
-                                        <BoxProduct key={prod?.id}>
+                                        <BoxProduct key={index}>
                                             <DeleteFavorite
                                                 onClick={() => removeFavorite(prod?.id)}
                                             >

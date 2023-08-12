@@ -76,9 +76,9 @@ const BannersCategoria = ({ slug }: BannerPageRequest) => {
                                 width: "95%"
                             } as CSSProperties}
                         >
-                            {bannerPages.map((item) => (
+                            {bannerPages.map((item, index) => (
                                 <SwiperSlide
-                                    key={item?.id}
+                                    key={index}
                                     style={{
                                         width: "100%"
                                     } as CSSProperties}
@@ -119,9 +119,9 @@ const BannersCategoria = ({ slug }: BannerPageRequest) => {
                                 width: "95%"
                             } as CSSProperties}
                         >
-                            {bannerAllCategories.map((item) => (
+                            {bannerAllCategories.map((item, index) => (
                                 <SwiperSlide
-                                    key={item?.id}
+                                    key={index}
                                     style={{
                                         width: "100%"
                                     } as CSSProperties}

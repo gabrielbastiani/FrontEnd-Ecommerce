@@ -65,36 +65,30 @@ const FooterAccount = () => {
     const anoAtual = new Date().getFullYear();
 
     return (
-        <>
-            <FooterContainer>
-                <ContentFooter>
-                    <BlockPayments>
-                        {orderImageUm.map((item) => {
-                            return (
-                                <>
-                                    <Image src={'http://localhost:3333/files/' + item?.image} width={580} height={65} alt="Pagamentos Loja Builder Seu Negocio Online" />
-                                </>
-                            )
-                        })}
-                    </BlockPayments>
-                    <BlockSecuryty>
-                        {orderImageDois.map((item) => {
-                            return (
-                                <>
-                                    <Image src={'http://localhost:3333/files/' + item?.image} width={450} height={65} alt="Selos de Seguranca Loja Builder Seu Negocio Online" />
-                                </>
-                            )
-                        })}
-                    </BlockSecuryty>
-                </ContentFooter>
-                <LinhaDivisoria />
-                <BlockDataContent>
-                    <BlockDateLoja>
-                        <DateLoja>Copyright {anoAtual} © Todos os direitos reservados.<br /> {cnpjLoja} {ruaLoja}, {numeroLoja} - {bairroLoja} - {cityLoja} - CEP: {cepLoja}</DateLoja>
-                    </BlockDateLoja>
-                </BlockDataContent>
-            </FooterContainer>
-        </>
+        <FooterContainer>
+            <ContentFooter>
+                <BlockPayments>
+                    {orderImageUm.map((item, index) => {
+                        return (
+                            <Image key={index} src={'http://localhost:3333/files/' + item?.image} width={580} height={65} alt="Pagamentos Loja Builder Seu Negocio Online" />
+                        )
+                    })}
+                </BlockPayments>
+                <BlockSecuryty>
+                    {orderImageDois.map((item, index) => {
+                        return (
+                            <Image key={index} src={'http://localhost:3333/files/' + item?.image} width={450} height={65} alt="Selos de Seguranca Loja Builder Seu Negocio Online" />
+                        )
+                    })}
+                </BlockSecuryty>
+            </ContentFooter>
+            <LinhaDivisoria />
+            <BlockDataContent>
+                <BlockDateLoja>
+                    <DateLoja>Copyright {anoAtual} © Todos os direitos reservados.<br /> {cnpjLoja} {ruaLoja}, {numeroLoja} - {bairroLoja} - {cityLoja} - CEP: {cepLoja}</DateLoja>
+                </BlockDateLoja>
+            </BlockDataContent>
+        </FooterContainer>
     )
 }
 

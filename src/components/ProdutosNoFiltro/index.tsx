@@ -79,9 +79,9 @@ const ProdutosNoFiltro = ({ products, currentPage, setCurrentPage, pages }: Prod
     return (
         <>
             <GridSectionProducts>
-                {products.map((prod: any) => {
+                {products.map((prod: any, index) => {
                     return (
-                        <BoxProduct key={prod?.id}>
+                        <BoxProduct key={index}>
                             <Link href={'/produto/' + prod?.slug}>
                                 <Images>
                                     {prod?.photoproducts[0] ? (

@@ -225,9 +225,9 @@ export default function Carrinho() {
                             <Avisos texto="Não há produtos no seu carrinho de compras..." />
                         ) :
                             <>
-                                {cartProducts.map((item) => {
+                                {cartProducts.map((item, index) => {
                                     return (
-                                        <BoxProductCart key={item?.id}>
+                                        <BoxProductCart key={index}>
                                             <ImageProductCart>
                                                 <Image src={'http://localhost:3333/files/' + item?.image} width={80} height={80} alt={item?.name} />
                                             </ImageProductCart>
@@ -235,9 +235,9 @@ export default function Carrinho() {
                                             <BoxDataProduct>
                                                 <BoxData>
                                                     <NameProduct>{item?.name}</NameProduct>
-                                                    {item?.relationattributeproducts.map((atr: any) => {
+                                                    {item?.relationattributeproducts.map((atr: any, index) => {
                                                         return (
-                                                            <AtributeProduct key={atr?.id}>{atr?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
+                                                            <AtributeProduct key={index}>{atr?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
                                                         )
                                                     })}
                                                 </BoxData>

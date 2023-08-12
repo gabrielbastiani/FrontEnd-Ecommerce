@@ -41,9 +41,9 @@ const BlockCategoriasHome = () => {
                     </BoxTitle>
                     <SectionCategorysHome>
                         <GridContainer>
-                            {categoryNames.map((item) => {
+                            {categoryNames.map((item, index) => {
                                 return (
-                                    <Link key={item.id} href={`/categoria/${item?.category?.slug}`} target="_blank">
+                                    <Link key={index} href={`/categoria/${item?.category?.slug}`} target="_blank">
                                         {item?.imagemenucategories[0]?.image ? (
                                             <Image
                                                 src={'http://localhost:3333/files/' + item?.imagemenucategories[0]?.image}

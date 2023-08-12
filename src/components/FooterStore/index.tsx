@@ -117,9 +117,10 @@ export const FooterStore = () => {
                     </Block1>
 
                     <Block2>
-                        {orderArrayTextos.map((text) => {
+                        {orderArrayTextos.map((text, index) => {
                             return (
                                 <TextInstitucional
+                                    key={index}
                                     dangerouslySetInnerHTML={{ __html: text?.description }}
                                 ></TextInstitucional>
                             )
@@ -134,9 +135,9 @@ export const FooterStore = () => {
                             null
                         }
                         <BlockRedesContent>
-                            {orderArrayRedes.map((item) => {
+                            {orderArrayRedes.map((item, index) => {
                                 return (
-                                    <BlockRedes key={item.id}>
+                                    <BlockRedes key={index}>
                                         <Link href={item.link} target="_blank">
                                             <Image src={'http://localhost:3333/files/' + item.image} width={55} height={55} alt={nameLoja} />
                                         </Link>

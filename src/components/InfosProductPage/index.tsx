@@ -325,9 +325,9 @@ const InfosProductPage = ({
                     </BlockProductNames>
 
                     <ContainerVariations>
-                        {variations.map((item: any) => {
+                        {variations.map((item: any, index) => {
                             return (
-                                <Link href={`/produto/${slugProduct(item?.variationProduct)}`}>
+                                <Link key={index} href={`/produto/${slugProduct(item?.variationProduct)}`}>
                                     <Variation>{item?.variationName}</Variation>
                                 </Link>
                             )

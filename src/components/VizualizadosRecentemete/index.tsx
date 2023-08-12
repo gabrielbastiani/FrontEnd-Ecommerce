@@ -11,7 +11,8 @@ import {
     Buttons,
     Button,
     Container,
-    BoxTitle
+    BoxTitle,
+    ContainerFavoritos
 } from './styles';
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -57,9 +58,9 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
             <SectionDestaqueProducts>
                 <Container>
                     <Carousel ref={carousel}>
-                        {productsVizualizados.map((item) => {
+                        {productsVizualizados.map((item, index) => {
                             return (
-                                <>
+                                <ContainerFavoritos key={index}>
                                     {item?.name ? (
                                         <Item>
                                             <Link href={'/produto/' + item?.slug}>
@@ -80,8 +81,7 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
                                     ) :
                                         null
                                     }
-                                </>
-
+                                </ContainerFavoritos>
                             );
                         })}
                     </Carousel>

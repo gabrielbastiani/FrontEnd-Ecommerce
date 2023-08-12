@@ -1,3 +1,4 @@
+import { Key } from "react";
 import Titulos from "../Titulos";
 import { Container, TableContainer, TbodyContent, TdContent, ThContent, TheadContent, TrContent, BoxTitulo } from "./styles";
 
@@ -15,18 +16,18 @@ const AtributesProduct = ({ atributes }: AtributeRequest) => {
             <TableContainer>
                 <TheadContent>
                     <TrContent>
-                        {atributes.map((item: any) => {
+                        {atributes.map((item: any, index: Key) => {
                             return (
-                                <ThContent key={item?.id}>{item?.type}</ThContent>
+                                <ThContent key={index}>{item?.type}</ThContent>
                             )
                         })}
                     </TrContent>
                 </TheadContent>
                 <TbodyContent>
                     <TrContent>
-                        {atributes.map((val: any) => {
+                        {atributes.map((val: any, index: Key) => {
                             return (
-                                <TdContent key={val?.id}>{val?.valueAttribute?.value}</TdContent>
+                                <TdContent key={index}>{val?.valueAttribute?.value}</TdContent>
                             )
                         })}
                     </TrContent>

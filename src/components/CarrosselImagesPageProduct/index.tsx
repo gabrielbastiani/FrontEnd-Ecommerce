@@ -258,9 +258,9 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
             </Buttons>
             <Container>
                 <Carousel ref={carousel}>
-                    {photosProduct.map((item) => {
+                    {photosProduct.map((item, index) => {
                         return (
-                            <Item key={item.id}>
+                            <Item key={index}>
                                 <Images>
                                     <Image
                                         src={'http://localhost:3333/files/' + item?.image}
@@ -300,15 +300,11 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
                 </Button>
             </Buttons>
 
-
-
-
-
             <ContainerMobile>
                 <CarouselMobile ref={carouselMobile}>
-                    {photosProduct.map((item) => {
+                    {photosProduct.map((item, index) => {
                         return (
-                            <ItemMobile key={item.id}>
+                            <ItemMobile key={index}>
                                 <ImagesMobile>
                                     <Image
                                         src={'http://localhost:3333/files/' + item?.image}

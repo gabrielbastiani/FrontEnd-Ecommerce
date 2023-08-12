@@ -78,9 +78,9 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
     return (
         <>
             <GridSectionProducts>
-                {products.map((prod: any) => {
+                {products.map((prod: any, index) => {
                     return (
-                        <BoxProduct key={prod?.id}>
+                        <BoxProduct key={index}>
                             <Link href={'/produto/' + prod?.product?.slug}>
                                 <Images>
                                     {prod?.product?.photoproducts[0] ? (

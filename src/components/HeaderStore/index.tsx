@@ -392,10 +392,10 @@ export const HeaderStore = () => {
                                     </BlockContact>
                                     <br />
                                     <br />
-                                    {orderArrayTextos.map((atend) => {
+                                    {orderArrayTextos.map((atend, index) => {
                                         return (
                                             <SmallText
-                                                key={atend.id}
+                                                key={index}
                                                 dangerouslySetInnerHTML={{ __html: atend?.description }}
                                             ></SmallText>
                                         )
@@ -470,9 +470,9 @@ export const HeaderStore = () => {
                                     </CartButton>
                                 </BoxCart>
                                 <DropDownContentCart>
-                                    {cartProducts.map((prod) => {
+                                    {cartProducts.map((prod, index) => {
                                         return (
-                                            <BoxProductCart>
+                                            <BoxProductCart key={index}>
                                                 <ImageBoxProduct>
                                                     <Image src={"http://localhost:3333/files/" + prod?.image} width={60} height={60} alt="foto produto" />
                                                 </ImageBoxProduct>
@@ -518,29 +518,27 @@ export const HeaderStore = () => {
 
                 <CategorysHeader>
                     <StyledUl>
-                        {categoryNames.map((item) => {
+                        {categoryNames.map((item, index) => {
                             return (
-                                <>
-                                    <DropDownLi>
-                                        <LinkRoute key={item.id} href={`http://localhost:3001/categoria/${item?.category?.slug}`}>
-                                            <StyledA onMouseOver={() => load(item.id)} >
-                                                {item?.categoryName}
-                                            </StyledA>
-                                        </LinkRoute>
+                                <DropDownLi key={index}>
+                                    <LinkRoute href={`http://localhost:3001/categoria/${item?.category?.slug}`}>
+                                        <StyledA onMouseOver={() => load(item.id)} >
+                                            {item?.categoryName}
+                                        </StyledA>
+                                    </LinkRoute>
 
-                                        {categories.length >= 1 && (
-                                            <DropDownContent>
-                                                {categories.map((categ) => {
-                                                    return (
-                                                        <LinkRoute key={categ.id} href={`http://localhost:3001/categoria/${categ?.category?.slug}`}>
-                                                            <Categ>{categ?.categoryName}</Categ>
-                                                        </LinkRoute>
-                                                    )
-                                                })}
-                                            </DropDownContent>
-                                        )}
-                                    </DropDownLi>
-                                </>
+                                    {categories.length >= 1 && (
+                                        <DropDownContent>
+                                            {categories.map((categ, index) => {
+                                                return (
+                                                    <LinkRoute key={index} href={`http://localhost:3001/categoria/${categ?.category?.slug}`}>
+                                                        <Categ>{categ?.categoryName}</Categ>
+                                                    </LinkRoute>
+                                                )
+                                            })}
+                                        </DropDownContent>
+                                    )}
+                                </DropDownLi>
                             )
                         })}
                     </StyledUl>
@@ -553,16 +551,16 @@ export const HeaderStore = () => {
                     {element ? (
                         <>
                             <Accordion>
-                                {categoryNames.map((item) => {
+                                {categoryNames.map((item, index) => {
                                     return (
                                         <AccordionItem
-                                            key={item?.id}
+                                            key={index}
                                             onClick={() => load(item?.id)}
                                             header={item?.categoryName}
                                         >
-                                            {categories.map((categ) => {
+                                            {categories.map((categ, index) => {
                                                 return (
-                                                    <Link key={categ.id} href={'/categoria/' + `${categ?.category?.slug}`}>
+                                                    <Link key={index} href={'/categoria/' + `${categ?.category?.slug}`}>
                                                         {categ?.categoryName}
                                                     </Link>
                                                 )

@@ -88,8 +88,8 @@ const CarrosselBannerHome = () => {
                             "--swiper-pagination-bullet-horizontal-gap": "6px"
                         } as CSSProperties}
                     >
-                        {bannersHome.map((item) => (
-                            <SwiperSlide key={item?.id}>
+                        {bannersHome.map((item, index) => (
+                            <SwiperSlide key={index}>
                                 <Link href={item?.url} target="_blank">
                                     <Image
                                         src={'http://localhost:3333/files/' + item?.banner}

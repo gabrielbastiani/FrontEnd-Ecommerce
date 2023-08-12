@@ -40,9 +40,9 @@ export default function Envioeprazodeentrega() {
                 {content.length < 1 ? (
                     <Avisos texto="Não há conteúdo nenhum ainda por aqui..." />
                 ) : 
-                    content.map((item) => {
+                    content.map((item, index) => {
                         return (
-                            <SectionPage>
+                            <SectionPage key={index}>
                                 <Titulos tipo="h1" titulo={item?.title} />
                                 <ContentBox
                                     dangerouslySetInnerHTML={{ __html: item?.description }}

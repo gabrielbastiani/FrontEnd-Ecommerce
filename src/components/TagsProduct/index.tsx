@@ -26,9 +26,9 @@ export const TagsProduct = ({ product_id }: TagRequest) => {
 
     return (
         <Container>
-            {tags.map((item) => {
+            {tags.map((item, index) => {
                 return (
-                    <TagsName key={item?.id}>#{item?.tagName}</TagsName>
+                    <TagsName key={index}>#{item?.tagName}</TagsName>
                 )
             })}
         </Container>

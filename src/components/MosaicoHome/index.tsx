@@ -34,18 +34,18 @@ export const MosaicoHome = () => {
     return (
         <>
             <ContainerGaleria>
-                {orderArray.splice(3).map((mos1) => {
+                {orderArray.splice(3).map((mos1, index) => {
                     return (
-                        <ItemGaleria1 key={mos1.id}>
+                        <ItemGaleria1 key={index}>
                             <Link href={mos1.url}>
                                 <Image src={'http://localhost:3333/files/' + mos1.banner} width={mos1.width ? mos1.width : 539} height={mos1.height ? mos1.height : 300} alt="Mosaico Home Loja" />
                             </Link>
                         </ItemGaleria1>
                     )
                 })}
-                {orderArray.splice(2).map((mos2) => {
+                {orderArray.splice(2).map((mos2, index) => {
                     return (
-                        <ItemGaleria2 key={mos2.id}>
+                        <ItemGaleria2 key={index}>
                             <Link href={mos2.url}>
                                 <Image src={'http://localhost:3333/files/' + mos2.banner} width={mos2.width ? mos2.width : 539} height={mos2.height ? mos2.height : 300} alt="Mosaico Home Loja" />
                             </Link>
@@ -55,18 +55,18 @@ export const MosaicoHome = () => {
             </ContainerGaleria>
 
             <ContainerGaleriaBotton>
-                {orderArray.splice(1).map((mos3) => {
+                {orderArray.splice(1).map((mos3, index) => {
                     return (
-                        <ItemGaleriaBotton1 key={mos3.id}>
+                        <ItemGaleriaBotton1 key={index}>
                             <Link href={mos3.url}>
                                 <Image src={'http://localhost:3333/files/' + mos3.banner} width={mos3.width ? mos3.width : 858} height={mos3.height ? mos3.height : 350} alt="Mosaico Home Loja" />
                             </Link>
                         </ItemGaleriaBotton1>
                     )
                 })}
-                {orderArray.splice(0).map((mos4) => {
+                {orderArray.splice(0).map((mos4, index) => {
                     return (
-                        <ItemGaleriaBotton2 key={mos4.id}>
+                        <ItemGaleriaBotton2 key={index}>
                             <Link href={mos4.url}>
                                 <Image src={'http://localhost:3333/files/' + mos4.banner} width={mos4.width ? mos4.width : 440} height={mos4.height ? mos4.height : 350} alt="Mosaico Home Loja" />
                             </Link>
