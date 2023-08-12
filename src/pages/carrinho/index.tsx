@@ -32,6 +32,7 @@ import {
     InputCupom,
     MaxCart,
     MinCart,
+    More,
     NameProduct,
     PriceProduct,
     PriceProductData,
@@ -40,9 +41,11 @@ import {
     SubTotal,
     TextCep,
     TextFrete,
+    TextSemFrete,
     TextStrong,
     Total,
-    ValueQuantCart
+    ValueQuantCart,
+    ValuesMore
 } from "./styles";
 import { Button } from "../../components/ui/Button";
 import Router from "next/router";
@@ -66,9 +69,25 @@ export default function Carrinho() {
     const [cep, setCep] = useState("");
     const [dataFrete, setDataFrete] = useState<any[]>([]);
 
-    const valueFrete = dataFrete[0]?.Valor.replace(",", ".");
-    const formatedFrete = Number(valueFrete);
 
+    var freteFormat = String(dataFrete[0]?.Valor);
+    freteFormat = freteFormat + '';
+    /* @ts-ignore */
+    freteFormat = parseInt(freteFormat.replace(/[\D]+/g, ''));
+    freteFormat = freteFormat + '';
+    freteFormat = freteFormat.replace(/([0-9]{2})$/g, ",$1");
+
+    if (freteFormat.length > 6) {
+        freteFormat = freteFormat.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    if (freteFormat == 'NaN') freteFormat = '';
+    const formatedPrice = freteFormat.replace(".", "");
+    const formatedPricePonto = formatedPrice.replace(",", ".");
+    const formatedFrete = Number(formatedPricePonto);
+
+
+    console.log("frete: ", formatedFrete)
+    console.log("desconto: ", totalDesconto)
 
 
     let dadosFrete: any = [];
@@ -325,43 +344,57 @@ export default function Carrinho() {
 
                         </BoxCep>
 
-                        <TextCep>Possui um cupom de desconto? Insira o código do cupom abaixo, e clique em calcular para poder aplicar seu cupom, OBS: è possivel usar apenas um código de cupom por pedido!</TextCep>
-
-                        <BoxCupom>
-                            <InputCupom
-                                placeholder="CÓDIGO"
-                                onChange={(e) => setCodePromotion(e.target.value)}
-                            />
-                            <ButtonCupom
-                                onClick={loadCupomCode}
-                            >
-                                Calcular
-                            </ButtonCupom>
-                        </BoxCupom>
-
-                        <BoxPricesFinal>
-                            <SubTotal>SUBTOTAL</SubTotal>
-                            <SubTotal>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</SubTotal>
-                        </BoxPricesFinal>
-                        <hr />
-
-                        {totalDesconto === 0 ? (
+                        {formatedFrete ? (
                             <>
+                                <TextCep>Possui um cupom de desconto? Insira o código do cupom abaixo, e clique em calcular para poder aplicar seu cupom, OBS: è possivel usar apenas um código de cupom por pedido!</TextCep>
+
+                                <BoxCupom>
+                                    <InputCupom
+                                        placeholder="CÓDIGO"
+                                        onChange={(e) => setCodePromotion(e.target.value)}
+                                    />
+                                    <ButtonCupom
+                                        onClick={loadCupomCode}
+                                    >
+                                        Calcular
+                                    </ButtonCupom>
+                                </BoxCupom>
+                            </>
+                        ) :
+                            null
+                        }
+
+                        {formatedFrete ? (
+                            <>
+                                <BoxPricesFinal>
+                                    <SubTotal>FRETE</SubTotal>
+                                    <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
+                                </BoxPricesFinal>
+                                <BoxPricesFinal>
+                                    <SubTotal></SubTotal>
+                                    <More>+</More>
+                                </BoxPricesFinal>
+                                <BoxPricesFinal>
+                                    <SubTotal>SUBTOTAL</SubTotal>
+                                    <SubTotal>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</SubTotal>
+                                </BoxPricesFinal>
+                                <hr />
+                                <BoxPricesFinal>
+                                    <Total>TOTAL</Total>
+                                    <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete)}</Total>
+                                </BoxPricesFinal>
+
+                                <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format((totalCart + formatedFrete) / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                            </>
+                        ) :
+                            <>
+                                <TextSemFrete>(Total ainda sem frete, ou qualquer tipo de desconto)</TextSemFrete>
                                 <BoxPricesFinal>
                                     <Total>TOTAL</Total>
                                     <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
                                 </BoxPricesFinal>
 
                                 <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart / 12)} com juros de Cartão de Crédito</ConditionPrices>
-                            </>
-                        ) :
-                            <>
-                                <BoxPricesFinal>
-                                    <Total>TOTAL</Total>
-                                    <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalDesconto)}</Total>
-                                </BoxPricesFinal>
-
-                                <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalDesconto / 12)} com juros de Cartão de Crédito</ConditionPrices>
                             </>
                         }
 

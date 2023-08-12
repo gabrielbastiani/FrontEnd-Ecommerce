@@ -232,3 +232,17 @@ export const TextFrete = styled.span`
 `
 
 export const TextStrong = styled.strong``
+
+export const ValuesMore = styled.span`
+  font-size: 13px;
+  color: red;
+`
+
+export const More = styled.strong`
+  color: red;
+`
+
+export const TextSemFrete = styled.span`
+  font-size: 11px;
+  color: red;
+`
