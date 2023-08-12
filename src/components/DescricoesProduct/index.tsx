@@ -58,7 +58,7 @@ const DescricoesProduct = ({ descriptions }: DescricaoRequest) => {
                     <FaArrowRight size={35} color='gray' />
                 </Button>
             </Buttons>
-            {descriptions.map((desc: any, index) => {
+            {descriptions.map((desc: any, index: any) => {
                 return (
                     <>
                         {activeTab === desc?.id ? (
