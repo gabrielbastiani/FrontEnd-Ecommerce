@@ -216,23 +216,22 @@ export default function Carrinho() {
                 } else {
 
                     const cartArrayPrice = cartProducts.map(item => item.price);
-                    /* const cartArrayCount = cartProducts.map(item => item.amount); */
                     const productPrice = data?.cupomsproducts.map(item => item?.product?.promotion);
+                    const cartArrayCount = cartProducts.map(item => item.amount);
 
                     var cupomOkPrice: any = [];
-                    for (var i = 0; i < cartArrayPrice.length; i++) {
-                        if (productPrice.indexOf(cartArrayPrice[i]) > -1) {
-                            cupomOkPrice.push(cartArrayPrice[i] - (cartArrayPrice[i] * data?.coupomsconditionals[0]?.value / 100));
+                    for (var i = 0; i < cartArrayPrice.length && cartArrayCount.length; i++) {
+                        if (productPrice.indexOf(cartArrayPrice[i]) > -1 && cartArrayCount.indexOf(cartArrayCount[i]) > -1) {
+                            cupomOkPrice.push(cartArrayCount[i] * (cartArrayPrice[i] - (cartArrayPrice[i] * data?.coupomsconditionals[0]?.value / 100)));
                         };
                     };
 
                     var totalPriceDescProduct = 0;
-
                     for (var i = 0; i < cupomOkPrice.length; i++) {
                         totalPriceDescProduct += cupomOkPrice[i];
                     }
 
-                    console.log(totalPriceDescProduct)
+                    console.log(cupomOkPrice)
 
                     setDesconto(data?.name);
                     setTotalDesconto(totalPriceDescProduct + formatedFrete);
