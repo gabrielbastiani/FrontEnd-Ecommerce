@@ -68,8 +68,6 @@ export default function Carrinho() {
     const [dataFrete, setDataFrete] = useState<any[]>([]);
     const [newPriceArray, setNewPriceArray] = useState<any[]>([]);
 
-    console.log("Novo valores: ", newPriceArray)
-    
     const [cupomButton, setCupomButton] = useState(false);
 
     const handleShowMenu = () => {
@@ -221,17 +219,17 @@ export default function Carrinho() {
                 if (cupomOk?.length === 0) {
                     toast.error('Nenhum dos produtos no carrinho de compras estão dentro dessa promoção.');
                 } else {
-                      
+
                     let newCart = cartProducts.reduce((acc, o) => {
                         let obj = cupomOk.includes(o.id) ? Object.assign(
                             o, { price: o.price - (o.price * data?.coupomsconditionals[0]?.value / 100) }) : o;
-                    
+
                         acc.push(obj);
-                    
+
                         return acc;
-                    
+
                     }, []);
-                    
+
                     setNewPriceArray(newCart);
 
 
@@ -322,64 +320,129 @@ export default function Carrinho() {
                             <Avisos texto="Não há produtos no seu carrinho de compras..." />
                         ) :
                             <>
-                                {cartProducts.map((item, index) => {
-                                    return (
-                                        <BoxProductCart key={index}>
-                                            <ImageProductCart>
-                                                <Image src={'http://localhost:3333/files/' + item?.image} width={80} height={80} alt={item?.name} />
-                                            </ImageProductCart>
+                                {newPriceArray?.length >= 1 ? (
+                                    <>
+                                        {newPriceArray.map((item, index) => {
+                                            return (
+                                                <BoxProductCart key={index}>
+                                                    <ImageProductCart>
+                                                        <Image src={'http://localhost:3333/files/' + item?.image} width={80} height={80} alt={item?.name} />
+                                                    </ImageProductCart>
 
-                                            <BoxDataProduct>
-                                                <BoxData>
-                                                    <NameProduct>{item?.name}</NameProduct>
-                                                    {item?.relationattributeproducts.map((atr: any, index) => {
-                                                        return (
-                                                            <AtributeProduct key={index}>{atr?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
-                                                        )
-                                                    })}
-                                                </BoxData>
-                                            </BoxDataProduct>
+                                                    <BoxDataProduct>
+                                                        <BoxData>
+                                                            <NameProduct>{item?.name}</NameProduct>
+                                                            {item?.relationattributeproducts.map((atr: any, index) => {
+                                                                return (
+                                                                    <AtributeProduct key={index}>{atr?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
+                                                                )
+                                                            })}
+                                                        </BoxData>
+                                                    </BoxDataProduct>
 
-                                            <BoxDelete>
-                                                <BsFillTrashFill
-                                                    cursor="pointer"
-                                                    color="red"
-                                                    size={25}
-                                                    onClick={() => removeProductCart(item)}
-                                                />
-                                            </BoxDelete>
+                                                    <BoxDelete>
+                                                        <BsFillTrashFill
+                                                            cursor="pointer"
+                                                            color="red"
+                                                            size={25}
+                                                            /* onClick={() => removeProductCart(item)} */
+                                                        />
+                                                    </BoxDelete>
 
-                                            <BoxQuantidadeCart>
-                                                <QuantidadeProductCart>
-                                                    <MinCart
-                                                        /* @ts-ignore */
-                                                        onClick={() => removeItemCart(item?.id)}
-                                                    >
-                                                        -
-                                                    </MinCart>
-                                                    <ValueQuantCart>{item?.amount}</ValueQuantCart>
-                                                    <MaxCart
-                                                        /* @ts-ignore */
-                                                        onClick={() => addMoreItemCart(item?.id)}
-                                                    >
-                                                        +
-                                                    </MaxCart>
-                                                </QuantidadeProductCart>
-                                            </BoxQuantidadeCart>
+                                                    <BoxQuantidadeCart>
+                                                        <QuantidadeProductCart>
+                                                            <MinCart
+                                                                /* @ts-ignore */
+                                                                /* onClick={() => removeItemCart(item?.id)} */
+                                                            >
+                                                                -
+                                                            </MinCart>
+                                                            <ValueQuantCart>{item?.amount}</ValueQuantCart>
+                                                            <MaxCart
+                                                                /* @ts-ignore */
+                                                                /* onClick={() => addMoreItemCart(item?.id)} */
+                                                            >
+                                                                +
+                                                            </MaxCart>
+                                                        </QuantidadeProductCart>
+                                                    </BoxQuantidadeCart>
 
-                                            <BoxPriceProductCart>
-                                                <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</PriceProduct>
-                                            </BoxPriceProductCart>
+                                                    <BoxPriceProductCart>
+                                                        <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</PriceProduct>
+                                                    </BoxPriceProductCart>
 
-                                            <BoxPricesTotalProduct>
-                                                <BoxPrices>
-                                                    <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price * item?.amount)}</PriceProductData>
-                                                    <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price * item?.amount / 12)} com juros de Cartão de Crédito</ConditionPrices>
-                                                </BoxPrices>
-                                            </BoxPricesTotalProduct>
-                                        </BoxProductCart>
-                                    )
-                                })}
+                                                    <BoxPricesTotalProduct>
+                                                        <BoxPrices>
+                                                            <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price * item?.amount)}</PriceProductData>
+                                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price * item?.amount / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                                                        </BoxPrices>
+                                                    </BoxPricesTotalProduct>
+                                                </BoxProductCart>
+                                            )
+                                        })}
+                                    </>
+                                ) :
+                                    <>
+                                        {cartProducts.map((item, index) => {
+                                            return (
+                                                <BoxProductCart key={index}>
+                                                    <ImageProductCart>
+                                                        <Image src={'http://localhost:3333/files/' + item?.image} width={80} height={80} alt={item?.name} />
+                                                    </ImageProductCart>
+
+                                                    <BoxDataProduct>
+                                                        <BoxData>
+                                                            <NameProduct>{item?.name}</NameProduct>
+                                                            {item?.relationattributeproducts.map((atr: any, index) => {
+                                                                return (
+                                                                    <AtributeProduct key={index}>{atr?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
+                                                                )
+                                                            })}
+                                                        </BoxData>
+                                                    </BoxDataProduct>
+
+                                                    <BoxDelete>
+                                                        <BsFillTrashFill
+                                                            cursor="pointer"
+                                                            color="red"
+                                                            size={25}
+                                                            onClick={() => removeProductCart(item)}
+                                                        />
+                                                    </BoxDelete>
+
+                                                    <BoxQuantidadeCart>
+                                                        <QuantidadeProductCart>
+                                                            <MinCart
+                                                                /* @ts-ignore */
+                                                                onClick={() => removeItemCart(item?.id)}
+                                                            >
+                                                                -
+                                                            </MinCart>
+                                                            <ValueQuantCart>{item?.amount}</ValueQuantCart>
+                                                            <MaxCart
+                                                                /* @ts-ignore */
+                                                                onClick={() => addMoreItemCart(item?.id)}
+                                                            >
+                                                                +
+                                                            </MaxCart>
+                                                        </QuantidadeProductCart>
+                                                    </BoxQuantidadeCart>
+
+                                                    <BoxPriceProductCart>
+                                                        <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</PriceProduct>
+                                                    </BoxPriceProductCart>
+
+                                                    <BoxPricesTotalProduct>
+                                                        <BoxPrices>
+                                                            <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price * item?.amount)}</PriceProductData>
+                                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price * item?.amount / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                                                        </BoxPrices>
+                                                    </BoxPricesTotalProduct>
+                                                </BoxProductCart>
+                                            )
+                                        })}
+                                    </>
+                                }
                             </>
                         }
                     </ContainerProduct>
