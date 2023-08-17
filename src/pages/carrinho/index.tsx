@@ -61,13 +61,20 @@ export default function Carrinho() {
     /* @ts-ignore */
     const { addMoreItemCart, removeItemCart, removeProductCart, cartProducts, totalCart } = useContext(CartContext);
 
-
     const [desconto, setDesconto] = useState("");
     const [totalDesconto, setTotalDesconto] = useState(Number);
     const [codePromotion, setCodePromotion] = useState("");
     const [cep, setCep] = useState("");
     const [dataFrete, setDataFrete] = useState<any[]>([]);
+    const [newPriceArray, setNewPriceArray] = useState<any[]>([]);
 
+    console.log("Novo valores: ", newPriceArray)
+    
+    const [cupomButton, setCupomButton] = useState(false);
+
+    const handleShowMenu = () => {
+        setCupomButton(!cupomButton);
+    }
 
     var formatedDesconto = String(totalDesconto);
     formatedDesconto = formatedDesconto + '';
@@ -214,8 +221,21 @@ export default function Carrinho() {
                 if (cupomOk?.length === 0) {
                     toast.error('Nenhum dos produtos no carrinho de compras estão dentro dessa promoção.');
                 } else {
+                      
+                    let newCart = cartProducts.reduce((acc, o) => {
+                        let obj = cupomOk.includes(o.id) ? Object.assign(
+                            o, { price: o.price - (o.price * data?.coupomsconditionals[0]?.value / 100) }) : o;
+                    
+                        acc.push(obj);
+                    
+                        return acc;
+                    
+                    }, []);
+                    
+                    setNewPriceArray(newCart);
 
-                    const cartArrayPrice = cartProducts.map(item => item.price);
+
+                    /* const cartArrayPrice = cartProducts.map(item => item.price);
                     const productPrice = data?.cupomsproducts.map(item => item?.product?.promotion);
                     const cartArrayCount = cartProducts.map(item => item.amount);
 
@@ -231,10 +251,8 @@ export default function Carrinho() {
                         totalPriceDescProduct += cupomOkPrice[i];
                     }
 
-                    console.log(cupomOkPrice)
-
                     setDesconto(data?.name);
-                    setTotalDesconto(totalPriceDescProduct + formatedFrete);
+                    setTotalDesconto(totalPriceDescProduct + formatedFrete); */
 
                     return;
                 }
