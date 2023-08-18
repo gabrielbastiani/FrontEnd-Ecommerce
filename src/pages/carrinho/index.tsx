@@ -55,6 +55,8 @@ import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
 import { IMaskInput } from "react-imask";
 import { Input } from "../../components/ui/Input";
+import { GiCancel } from "react-icons/gi";
+import router from "next/router";
 
 
 export default function Carrinho() {
@@ -72,6 +74,10 @@ export default function Carrinho() {
 
     const handleShowMenu = () => {
         setCupomButton(!cupomButton);
+    }
+
+    function removeCupom() {
+        router.reload();
     }
 
     var formatedDesconto = String(totalDesconto);
@@ -231,6 +237,7 @@ export default function Carrinho() {
                     }, []);
 
                     setNewPriceArray(newCart);
+                    handleShowMenu();
 
 
                     /* const cartArrayPrice = cartProducts.map(item => item.price);
@@ -265,6 +272,7 @@ export default function Carrinho() {
 
                 setDesconto(data?.name);
                 setTotalDesconto(totalPercentStore);
+                handleShowMenu();
 
                 return;
             }
@@ -281,13 +289,15 @@ export default function Carrinho() {
                 });
 
                 var totalPriceDesconto = 0;
-
                 for (var i = 0; i < valuesProducts.length; i++) {
                     totalPriceDesconto += valuesProducts[i].preco;
                 }
 
+                console.log(totalPriceDesconto.toPrecision(4))
+
                 setDesconto(data?.name);
-                setTotalDesconto(formatedFrete + totalPriceDesconto);
+                setTotalDesconto(totalPriceDesconto.toPrecision(4) + formatedFrete.toPrecision(4));
+                handleShowMenu();
 
                 return;
             }
@@ -345,22 +355,22 @@ export default function Carrinho() {
                                                             cursor="pointer"
                                                             color="red"
                                                             size={25}
-                                                            /* onClick={() => removeProductCart(item)} */
+                                                        /* onClick={() => removeProductCart(item)} */
                                                         />
                                                     </BoxDelete>
 
                                                     <BoxQuantidadeCart>
                                                         <QuantidadeProductCart>
                                                             <MinCart
-                                                                /* @ts-ignore */
-                                                                /* onClick={() => removeItemCart(item?.id)} */
+                                                            /* @ts-ignore */
+                                                            /* onClick={() => removeItemCart(item?.id)} */
                                                             >
                                                                 -
                                                             </MinCart>
                                                             <ValueQuantCart>{item?.amount}</ValueQuantCart>
                                                             <MaxCart
-                                                                /* @ts-ignore */
-                                                                /* onClick={() => addMoreItemCart(item?.id)} */
+                                                            /* @ts-ignore */
+                                                            /* onClick={() => addMoreItemCart(item?.id)} */
                                                             >
                                                                 +
                                                             </MaxCart>
@@ -482,7 +492,6 @@ export default function Carrinho() {
                                     </ContainerFrete>
                                 )
                             })}
-
                         </BoxCep>
 
                         {formatedFrete ? (
@@ -495,10 +504,24 @@ export default function Carrinho() {
                                         onChange={(e) => setCodePromotion(e.target.value)}
                                     />
                                     <ButtonCupom
-                                        onClick={loadCupomCode}
-                                    >
-                                        Calcular
-                                    </ButtonCupom>
+                                            onClick={loadCupomCode}
+                                        >
+                                            Calcular
+                                        </ButtonCupom>
+                                    {/* {cupomButton ? (
+                                        <GiCancel
+                                            size={25}
+                                            color="red"
+                                            cursor="pointer"
+                                            onClick={removeCupom}
+                                        />
+                                    ) :
+                                        <ButtonCupom
+                                            onClick={loadCupomCode}
+                                        >
+                                            Calcular
+                                        </ButtonCupom>
+                                    } */}
                                 </BoxCupom>
                             </>
                         ) :
