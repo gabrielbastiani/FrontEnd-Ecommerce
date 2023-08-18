@@ -64,7 +64,7 @@ export default function Carrinho() {
     const { addMoreItemCart, removeItemCart, removeProductCart, cartProducts, totalCart } = useContext(CartContext);
 
     const [desconto, setDesconto] = useState("");
-    const [totalDesconto, setTotalDesconto] = useState(Number);
+    const [totalDesconto, setTotalDesconto] = useState("");
     const [codePromotion, setCodePromotion] = useState("");
     const [cep, setCep] = useState("");
     const [dataFrete, setDataFrete] = useState<any[]>([]);
@@ -270,8 +270,10 @@ export default function Carrinho() {
                 const maisCart = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
                 const totalPercentStore = formatedFrete + maisCart;
 
+                const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2});
+
                 setDesconto(data?.name);
-                setTotalDesconto(totalPercentStore);
+                setTotalDesconto(formated);
                 handleShowMenu();
 
                 return;
@@ -293,10 +295,11 @@ export default function Carrinho() {
                     totalPriceDesconto += valuesProducts[i].preco;
                 }
 
-                console.log(totalPriceDesconto.toPrecision(4))
+                const result = formatedFrete + totalPriceDesconto;
+                const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2});
 
                 setDesconto(data?.name);
-                setTotalDesconto(totalPriceDesconto.toPrecision(4) + formatedFrete.toPrecision(4));
+                setTotalDesconto(formated);
                 handleShowMenu();
 
                 return;
@@ -503,12 +506,7 @@ export default function Carrinho() {
                                         placeholder="CÓDIGO"
                                         onChange={(e) => setCodePromotion(e.target.value)}
                                     />
-                                    <ButtonCupom
-                                            onClick={loadCupomCode}
-                                        >
-                                            Calcular
-                                        </ButtonCupom>
-                                    {/* {cupomButton ? (
+                                    {cupomButton ? (
                                         <GiCancel
                                             size={25}
                                             color="red"
@@ -521,7 +519,7 @@ export default function Carrinho() {
                                         >
                                             Calcular
                                         </ButtonCupom>
-                                    } */}
+                                    }
                                 </BoxCupom>
                             </>
                         ) :
