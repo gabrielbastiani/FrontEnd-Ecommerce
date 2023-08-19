@@ -71,8 +71,8 @@ export default function Carrinho() {
     const [dataFrete, setDataFrete] = useState<any[]>([]);
     const [newPriceArray, setNewPriceArray] = useState<any[]>([]);
     const [freteCupom, setFreteCupom] = useState(Number);
+    const [zero, setZero] = useState(100);
 
-    console.log(freteCupom)
 
     const [cupomButton, setCupomButton] = useState(false);
 
@@ -170,43 +170,122 @@ export default function Carrinho() {
                 return;
             }
 
-            console.log("Dados inicio da funcao: ", data)
+            /*"Valor de desconto (Produto(s) selecionado(s) para essa promoção)", value: "productsValue"*/
 
-            /*"Valor de desconto", value: "productsValue"*/
+            if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
 
-            /* if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
-                const percent = totalCart - data?.coupomsconditionals[0]?.value;
-                setTotalDesconto(percent);
+                const cartArray = cartProducts.map(item => item.id);
+                const productId = data?.cupomsproducts.map((item: { product_id: any; }) => item?.product_id);
+
+                var cupomOk: any = [];
+                for (var i = 0; i < cartArray.length; i++) {
+                    if (productId.indexOf(cartArray[i]) > -1) {
+                        cupomOk.push(cartArray[i]);
+                    }
+                }
+
+                if (cupomOk?.length === 0) {
+                    toast.error('Nenhum dos produtos no carrinho de compras estão dentro dessa promoção.');
+                } else {
+
+                    let newCart = cartProducts.reduce((acc, o) => {
+                        let obj = cupomOk.includes(o.id) ? Object.assign(
+                            o, { price: o.price - data?.coupomsconditionals[0]?.value }) : o;
+
+                        acc.push(obj);
+
+                        return acc;
+
+                    }, []);
+
+                    let valuesProducts: any = [];
+                    (newCart || []).forEach((item) => {
+                        valuesProducts.push({
+                            "preco": item.price * item?.amount
+                        });
+                    });
+
+                    var totalPriceDesconto = 0;
+                    for (var i = 0; i < valuesProducts.length; i++) {
+                        totalPriceDesconto += valuesProducts[i].preco;
+                    }
+
+                    const result = formatedFrete + totalPriceDesconto;
+                    const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                    setDesconto(data?.name);
+                    setTotalDesconto(formated);
+                    setNewPriceArray(newCart);
+                    handleShowMenu();
+
+                }
+
                 return;
-            } */
+            }
 
             /*"Valor de desconto em todos os produtos da loja", value: "allProductsValue"*/
 
-            /* if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
-                const percent = totalCart - data?.coupomsconditionals[0]?.value;
-                setTotalDesconto(percent);
+            if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
+
+                let productsValue: any = [];
+                (cartProducts || []).forEach((item) => {
+                    productsValue.push({
+                        "preco": (item.price - data?.coupomsconditionals[0]?.value) * item?.amount
+                    });
+                });
+
+                var descontoPriceTotal = 0;
+                for (var i = 0; i < productsValue.length; i++) {
+                    descontoPriceTotal += productsValue[i].preco;
+                }
+
+                const result = formatedFrete + descontoPriceTotal;
+                const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                setDesconto(data?.name);
+                setTotalDesconto(formated);
+                handleShowMenu();
+
                 return;
-            } */
+            }
 
             /*"Valor de desconto no valor total", value: "totalValue"*/
 
-            /* if (data?.coupomsconditionals[0]?.conditional === "totalValue") {
-                const percent = totalCart - data?.coupomsconditionals[0]?.value;
-                setTotalDesconto(percent);
+            if (data?.coupomsconditionals[0]?.conditional === "totalValue") {
+                const valueDescont = totalCart - data?.coupomsconditionals[0]?.value;
+                const valueMore = valueDescont + formatedFrete;
+                const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                setDesconto(data?.name);
+                setTotalDesconto(formated);
+                handleShowMenu();
+
                 return;
-            } */
+            }
 
             /*"Frete grátis total", value: "freeShipping"*/
 
-            /* if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
-                
+            if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
+                const zeroFrete = formatedFrete - (formatedFrete * zero / 100);
+
+                setDesconto(data?.name);
+                setZero(zeroFrete);
+                handleShowMenu();
+
+                return;
             }
 
             /*"Valor de desconto no valor do frete", value: "valueShipping"*/
 
-            /* if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
+            if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
+                const valueFrete = formatedFrete - data?.coupomsconditionals[0]?.value;
 
-            } */
+                setDesconto(data?.name);
+                setFreteCupom(valueFrete);
+                handleShowMenu();
+
+                return;
+            }
 
             /*"Percentual de desconto no valor do frete", value: "shippingPercent"*/
 
@@ -267,26 +346,6 @@ export default function Carrinho() {
                     setTotalDesconto(formated);
                     setNewPriceArray(newCart);
                     handleShowMenu();
-
-
-                    /* const cartArrayPrice = cartProducts.map(item => item.price);
-                    const productPrice = data?.cupomsproducts.map(item => item?.product?.promotion);
-                    const cartArrayCount = cartProducts.map(item => item.amount);
-
-                    var cupomOkPrice: any = [];
-                    for (var i = 0; i < cartArrayPrice.length && cartArrayCount.length; i++) {
-                        if (productPrice.indexOf(cartArrayPrice[i]) > -1 && cartArrayCount.indexOf(cartArrayCount[i]) > -1) {
-                            cupomOkPrice.push(cartArrayCount[i] * (cartArrayPrice[i] - (cartArrayPrice[i] * data?.coupomsconditionals[0]?.value / 100)));
-                        };
-                    };
-
-                    var totalPriceDescProduct = 0;
-                    for (var i = 0; i < cupomOkPrice.length; i++) {
-                        totalPriceDescProduct += cupomOkPrice[i];
-                    }
-
-                    setDesconto(data?.name);
-                    setTotalDesconto(totalPriceDescProduct + formatedFrete); */
 
                     return;
                 }
@@ -534,9 +593,9 @@ export default function Carrinho() {
                                             onClick={removeCupom}
                                         >
                                             <GiCancel
-                                            size={25}
-                                            color="red"
-                                        />
+                                                size={25}
+                                                color="red"
+                                            />
                                             Remova o cupom
                                         </LabelCancelar>
                                     ) :
@@ -610,7 +669,17 @@ export default function Carrinho() {
                                         </BoxPricesFinal>
                                         <BoxPricesFinal>
                                             <SubTotal>FRETE</SubTotal>
-                                            <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
+                                            {freteCupom === 0 ? (
+                                                <>
+                                                    {zero === 0 ? (
+                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(zero)}</ValuesMore>
+                                                    ) :
+                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
+                                                    }
+                                                </>
+                                            ) :
+                                                <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(freteCupom)}</ValuesMore>
+                                            }
                                         </BoxPricesFinal>
                                         <BoxPricesFinal>
                                             <SubTotal></SubTotal>
@@ -619,7 +688,17 @@ export default function Carrinho() {
                                         <hr />
                                         <BoxPricesFinal>
                                             <Total>TOTAL</Total>
-                                            <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete)}</Total>
+                                            {freteCupom === 0 ? (
+                                                <>
+                                                    {zero === 0 ? (
+                                                        <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
+                                                    ) :
+                                                        <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete)}</Total>
+                                                    }
+                                                </>
+                                            ) :
+                                                <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + freteCupom)}</Total>
+                                            }
                                         </BoxPricesFinal>
 
                                         <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete / 12)} com juros de Cartão de Crédito</ConditionPrices>
@@ -628,7 +707,6 @@ export default function Carrinho() {
 
                             </>
                         }
-
                         <BoxFinalCart>
                             <Button
                                 style={{ margin: '30px 0' }}
