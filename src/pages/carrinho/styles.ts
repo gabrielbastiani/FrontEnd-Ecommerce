@@ -53,7 +53,10 @@ export const ButtonCep = styled.button`
 
 export const BoxCep = styled.div``
 
-export const BoxCupom = styled.div``
+export const BoxCupom = styled.div`
+  display: flex;
+  align-items: center;
+`
 
 export const InputCupom = styled.input`
   padding: 10px;
@@ -245,4 +248,10 @@ export const More = styled.strong`
 export const TextSemFrete = styled.span`
   font-size: 11px;
   color: red;
+`
+
+export const LabelCancelar = styled.label`
+  display: contents;
+  font-size: 12px;
+  cursor: pointer;
 `

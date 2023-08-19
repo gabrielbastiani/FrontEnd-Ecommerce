@@ -30,6 +30,7 @@ import {
     ErrorText,
     ImageProductCart,
     InputCupom,
+    LabelCancelar,
     MaxCart,
     MinCart,
     More,
@@ -69,6 +70,9 @@ export default function Carrinho() {
     const [cep, setCep] = useState("");
     const [dataFrete, setDataFrete] = useState<any[]>([]);
     const [newPriceArray, setNewPriceArray] = useState<any[]>([]);
+    const [freteCupom, setFreteCupom] = useState(Number);
+
+    console.log(freteCupom)
 
     const [cupomButton, setCupomButton] = useState(false);
 
@@ -78,6 +82,10 @@ export default function Carrinho() {
 
     function removeCupom() {
         router.reload();
+    }
+
+    function dataAlterar() {
+        toast.error("Retire esse cupom para que possa alterar a quantidade ou remover o produto, após isso insira o cupom novamente.");
     }
 
     var formatedDesconto = String(totalDesconto);
@@ -202,18 +210,22 @@ export default function Carrinho() {
 
             /*"Percentual de desconto no valor do frete", value: "shippingPercent"*/
 
-            /* if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
-                const percent = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
-                setTotalDesconto(percent);
+            if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
+                const percentShipping = formatedFrete - (formatedFrete * data?.coupomsconditionals[0]?.value / 100);
+
+                setDesconto(data?.name);
+                setFreteCupom(percentShipping);
+                handleShowMenu();
+
                 return;
-            } */
+            }
 
             /*"Percentual de desconto (Produto(s) selecionado(s) para essa promoção)", value: "percentProduct"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "percentProduct") {
 
                 const cartArray = cartProducts.map(item => item.id);
-                const productId = data?.cupomsproducts.map(item => item?.product_id);
+                const productId = data?.cupomsproducts.map((item: { product_id: any; }) => item?.product_id);
 
                 var cupomOk: any = [];
                 for (var i = 0; i < cartArray.length; i++) {
@@ -236,6 +248,23 @@ export default function Carrinho() {
 
                     }, []);
 
+                    let valuesProducts: any = [];
+                    (newCart || []).forEach((item) => {
+                        valuesProducts.push({
+                            "preco": item.price * item?.amount
+                        });
+                    });
+
+                    var totalPriceDesconto = 0;
+                    for (var i = 0; i < valuesProducts.length; i++) {
+                        totalPriceDesconto += valuesProducts[i].preco;
+                    }
+
+                    const result = formatedFrete + totalPriceDesconto;
+                    const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                    setDesconto(data?.name);
+                    setTotalDesconto(formated);
                     setNewPriceArray(newCart);
                     handleShowMenu();
 
@@ -270,7 +299,7 @@ export default function Carrinho() {
                 const maisCart = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
                 const totalPercentStore = formatedFrete + maisCart;
 
-                const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2});
+                const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -296,7 +325,7 @@ export default function Carrinho() {
                 }
 
                 const result = formatedFrete + totalPriceDesconto;
-                const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2});
+                const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -309,10 +338,6 @@ export default function Carrinho() {
             console.log(error.response.data);
         }
     }
-
-
-    console.log("frete: ", formatedFrete)
-    console.log("desconto: ", formatedCupom)
 
 
 
@@ -358,22 +383,20 @@ export default function Carrinho() {
                                                             cursor="pointer"
                                                             color="red"
                                                             size={25}
-                                                        /* onClick={() => removeProductCart(item)} */
+                                                            onClick={dataAlterar}
                                                         />
                                                     </BoxDelete>
 
                                                     <BoxQuantidadeCart>
                                                         <QuantidadeProductCart>
                                                             <MinCart
-                                                            /* @ts-ignore */
-                                                            /* onClick={() => removeItemCart(item?.id)} */
+                                                                onClick={dataAlterar}
                                                             >
                                                                 -
                                                             </MinCart>
                                                             <ValueQuantCart>{item?.amount}</ValueQuantCart>
                                                             <MaxCart
-                                                            /* @ts-ignore */
-                                                            /* onClick={() => addMoreItemCart(item?.id)} */
+                                                                onClick={dataAlterar}
                                                             >
                                                                 +
                                                             </MaxCart>
@@ -507,12 +530,15 @@ export default function Carrinho() {
                                         onChange={(e) => setCodePromotion(e.target.value)}
                                     />
                                     {cupomButton ? (
-                                        <GiCancel
+                                        <LabelCancelar
+                                            onClick={removeCupom}
+                                        >
+                                            <GiCancel
                                             size={25}
                                             color="red"
-                                            cursor="pointer"
-                                            onClick={removeCupom}
                                         />
+                                            Remova o cupom
+                                        </LabelCancelar>
                                     ) :
                                         <ButtonCupom
                                             onClick={loadCupomCode}
@@ -575,12 +601,20 @@ export default function Carrinho() {
                                 ) :
                                     <>
                                         <BoxPricesFinal>
+                                            <Total>SUBTOTAL</Total>
+                                            <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
+                                        </BoxPricesFinal>
+                                        <BoxPricesFinal>
+                                            <SubTotal></SubTotal>
+                                            <More>+</More>
+                                        </BoxPricesFinal>
+                                        <BoxPricesFinal>
                                             <SubTotal>FRETE</SubTotal>
                                             <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
                                         </BoxPricesFinal>
                                         <BoxPricesFinal>
                                             <SubTotal></SubTotal>
-                                            <More>+</More>
+                                            <More>=</More>
                                         </BoxPricesFinal>
                                         <hr />
                                         <BoxPricesFinal>
