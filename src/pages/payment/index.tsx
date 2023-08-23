@@ -109,10 +109,8 @@ export default function Payment() {
                                 description: "Descrição do produto",
                                 paymentMethod: "cartao",
                                 email: email,
-                                identification: {
-                                    type: identificationType,
-                                    number: identificationNumber,
-                                },
+                                type: identificationType,
+                                number: identificationNumber,
                             },
                                 {
                                     headers: {
