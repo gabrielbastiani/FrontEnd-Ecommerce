@@ -8,6 +8,25 @@ import { toast } from "react-toastify";
 
 export default function Payment() {
 
+    const [payment_id, setPayment_id] = useState("");
+    const [title, setTitle] = useState("");
+    const [unit_price, setUnit_price] = useState(Number);
+    const [category_id, setCategory_id] = useState("");
+    const [description, setDescription] = useState("");
+    const [picture_url, setPicture_url] = useState("");
+    const [name, setName] = useState("");
+    const [surname, setSurname] = useState("");
+    const [email, setEmail] = useState("");
+    const [area_code, setArea_code] = useState("");
+    const [number, setNumber] = useState(Number);
+    const [type_identification, setType_identification] = useState("");
+    const [type_number, setType_number] = useState(Number);
+    const [street_name, setStreet_name] = useState("");
+    const [street_number, setStreet_number] = useState(Number);
+    const [zip_code, setZip_code] = useState("");
+
+
+
     useEffect(() => {
         const initializeMercadoPago = async () => {
             await loadMercadoPago();
@@ -17,7 +36,7 @@ export default function Payment() {
             );
 
             const cardForm = mp.cardForm({
-                amount: 150,
+                amount: '1000',
                 iframe: true,
                 form: {
                     id: "form-checkout",
@@ -68,7 +87,6 @@ export default function Payment() {
                     },
                     onSubmit: async (event: { preventDefault: () => void }) => {
                         event.preventDefault();
-
                         const {
                             paymentMethodId: payment_method_id,
                             issuerId: issuer_id,
@@ -89,13 +107,33 @@ export default function Payment() {
                             authToken = parsedData.token;
                         }
 
+
+                        payment_id,
+        title,
+        unit_price,
+        category_id,
+        description,
+        picture_url,
+        name,
+        surname,
+        email,
+        area_code,
+        number,
+        type_identification,
+        type_number,
+        street_name,
+        street_number,
+        zip_code
+
+
+
                         try {
                             const apiClient = setupAPIClient();
                             await apiClient.post("/paymentResult", {
-                                issuer_id: cardForm.issuerId,
-                                payment_method_id: cardForm.paymentMethodId,
-                                amount,
-                                transaction_amount: 1000,
+                                payment_id: cardForm.issuerId,
+                                type_identification: cardForm.paymentMethodId,
+                                category_id: "Solda",
+                                unit_price: 1000,
                                 installments: Number(installments),
                                 description: "Descrição do produto",
                                 paymentMethod: "cartao",
@@ -116,7 +154,7 @@ export default function Payment() {
                                 }
                             );
 
-                            console.log("rogerio: ",
+                            console.log("gabriel: ",
                                 JSON.stringify({
                                     issuer_id,
                                     payment_method_id,
@@ -166,19 +204,15 @@ export default function Payment() {
             <div className="PaymentForm">
                 <form id="form-checkout">
 
-
                     <div
                         id="form-checkout__cardNumber"
                         className="container mpFormInput"
                     ></div>
 
-
                     <div
                         id="form-checkout__expirationDate"
                         className="container mpFormInput"
                     ></div>
-
-
 
                     <div
                         id="form-checkout__securityCode"
@@ -196,18 +230,15 @@ export default function Payment() {
                         className="container mpFormInput"
                     ></select>
 
-
                     <select
                         id="form-checkout__installments"
                         className="container mpFormInput"
                     ></select>
 
-
                     <select
                         id="form-checkout__identificationType"
                         className="container mpFormInput"
                     ></select>
-
 
                     <input
                         type="text"
@@ -215,13 +246,11 @@ export default function Payment() {
                         className="container mpFormInput"
                     />
 
-
                     <input
                         type="email"
                         id="form-checkout__cardholderEmail"
                         className="container mpFormInput"
                     />
-
 
                     <button
                         type="submit"
