@@ -91,71 +91,40 @@ export default function Payment() {
                             paymentMethodId: payment_method_id,
                             issuerId: issuer_id,
                             cardholderEmail: email,
+                            token,
                             amount,
                             installments,
                             identificationNumber,
                             identificationType,
                         } = cardForm.getCardFormData();
 
-                        // mandar pro /bookticket
-                        const dataFromStorage = sessionStorage.getItem("user");
-                        let authToken = "";
-                        console.log("user", dataFromStorage);
-
-                        if (dataFromStorage) {
-                            const parsedData = JSON.parse(dataFromStorage);
-                            authToken = parsedData.token;
-                        }
-
-
-                        payment_id,
-        title,
-        unit_price,
-        category_id,
-        description,
-        picture_url,
-        name,
-        surname,
-        email,
-        area_code,
-        number,
-        type_identification,
-        type_number,
-        street_name,
-        street_number,
-        zip_code
-
-
-
                         try {
                             const apiClient = setupAPIClient();
                             await apiClient.post("/paymentResult", {
-                                payment_id: cardForm.issuerId,
+                                id: cardForm.issuerId,
                                 type_identification: cardForm.paymentMethodId,
                                 category_id: "Solda",
                                 unit_price: 1000,
                                 installments: Number(installments),
                                 description: "Descrição do produto",
                                 paymentMethod: "cartao",
-                                payer: {
-                                    email,
-                                    identification: {
-                                        type: identificationType,
-                                        number: identificationNumber,
-                                    },
+                                email: email,
+                                identification: {
+                                    type: identificationType,
+                                    number: identificationNumber,
                                 },
                             },
                                 {
                                     headers: {
                                         "Content-Type": "application/json",
-                                        Access: ACCESS_TOKEN_TEST,
-                                        Authorization: authToken,
+                                        Access: ACCESS_TOKEN_TEST
                                     },
                                 }
                             );
 
                             console.log("gabriel: ",
                                 JSON.stringify({
+                                    token,
                                     issuer_id,
                                     payment_method_id,
                                     amount,
