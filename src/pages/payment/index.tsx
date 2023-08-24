@@ -100,27 +100,20 @@ export default function Payment() {
 
                         try {
                             const apiClient = setupAPIClient();
-                            await apiClient.post("/paymentResult", {
-                                id: cardForm.issuerId,
-                                type_identification: cardForm.paymentMethodId,
-                                category_id: "Solda",
-                                unit_price: 1000,
-                                installments: Number(installments),
-                                description: "Descrição do produto",
-                                paymentMethod: "cartao",
+                            await apiClient.post(`/paymentResult?access_token=${ACCESS_TOKEN_TEST}`, {
+                                installments: 1,
+                                payment_method_id: payment_method_id,
+                                transaction_amount: 1000,
+                                description: "Solda",
+                                issuer_id: issuer_id,
+                                token: 24,
                                 email: email,
                                 type: identificationType,
-                                number: identificationNumber,
-                            },
-                                {
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                        Access: ACCESS_TOKEN_TEST
-                                    },
-                                }
+                                number: identificationNumber
+                            }
                             );
 
-                            console.log("gabriel: ",
+                            /* console.log("gabriel: ",
                                 JSON.stringify({
                                     token,
                                     issuer_id,
@@ -140,7 +133,7 @@ export default function Payment() {
                                 })
 
 
-                            );
+                            ); */
                         } catch (error) {
                             console.error("Erro ao fazer a requisição:", error);
                         }
