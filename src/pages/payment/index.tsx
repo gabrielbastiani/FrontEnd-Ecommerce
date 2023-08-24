@@ -36,17 +36,17 @@ export default function Payment() {
             );
 
             const cardForm = mp.cardForm({
-                amount: '1000',
+                amount: "100.5",
                 iframe: true,
                 form: {
                     id: "form-checkout",
                     cardNumber: {
                         id: "form-checkout__cardNumber",
-                        placeholder: "Numero do cartão",
+                        placeholder: "Número do cartão",
                     },
                     expirationDate: {
                         id: "form-checkout__expirationDate",
-                        placeholder: "Data de validade no formato: MM/AA",
+                        placeholder: "MM/YY",
                     },
                     securityCode: {
                         id: "form-checkout__securityCode",
@@ -54,11 +54,11 @@ export default function Payment() {
                     },
                     cardholderName: {
                         id: "form-checkout__cardholderName",
-                        placeholder: "Nome do titular do cartão",
+                        placeholder: "Titular do cartão",
                     },
                     issuer: {
                         id: "form-checkout__issuer",
-                        placeholder: "Banco",
+                        placeholder: "Banco emissor",
                     },
                     installments: {
                         id: "form-checkout__installments",
@@ -70,59 +70,48 @@ export default function Payment() {
                     },
                     identificationNumber: {
                         id: "form-checkout__identificationNumber",
-                        placeholder: "Número do documento do titular",
+                        placeholder: "Número do documento",
                     },
                     cardholderEmail: {
                         id: "form-checkout__cardholderEmail",
-                        placeholder: "Email do titular",
+                        placeholder: "E-mail",
                     },
                 },
                 callbacks: {
-                    onFormMounted: (error: any) => {
-                        if (error) {
-                            console.warn("Form Mounted handling error: ", error);
-                        } else {
-                            console.log("Form mounted");
-                        }
+                    onFormMounted: error => {
+                        if (error) return console.warn("Form Mounted handling error: ", error);
+                        console.log("Form mounted");
                     },
-                    onSubmit: async (event: { preventDefault: () => void }) => {
+                    onSubmit: event => {
                         event.preventDefault();
+
                         const {
                             paymentMethodId: payment_method_id,
                             issuerId: issuer_id,
                             cardholderEmail: email,
-                            token,
                             amount,
+                            token,
                             installments,
                             identificationNumber,
                             identificationType,
                         } = cardForm.getCardFormData();
 
-                        try {
-                            const apiClient = setupAPIClient();
-                            await apiClient.post(`/paymentResult?access_token=${ACCESS_TOKEN_TEST}`, {
-                                installments: 1,
-                                payment_method_id: payment_method_id,
-                                transaction_amount: 1000,
-                                description: "Solda",
-                                issuer_id: issuer_id,
-                                token: 24,
-                                email: email,
-                                type: identificationType,
-                                number: identificationNumber
-                            }
-                            );
+                        console.log(cardForm.getCardFormData())
 
-                            /* console.log("gabriel: ",
-                                JSON.stringify({
+                        try {
+                            fetch("http://localhost:3333/paymentResult", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
+                                },
+                                body: JSON.stringify({
                                     token,
                                     issuer_id,
                                     payment_method_id,
-                                    amount,
-                                    transaction_amount: 1000,
+                                    transaction_amount: Number(amount),
                                     installments: Number(installments),
                                     description: "Descrição do produto",
-                                    paymentMethod: "cartao",
                                     payer: {
                                         email,
                                         identification: {
@@ -130,29 +119,27 @@ export default function Payment() {
                                             number: identificationNumber,
                                         },
                                     },
-                                })
+                                }),
+                            });
 
-
-                            ); */
                         } catch (error) {
                             console.error("Erro ao fazer a requisição:", error);
                         }
                     },
-                    onFetching: (resource: any) => {
+                    onFetching: (resource) => {
                         console.log("Fetching resource: ", resource);
 
                         // Animate progress bar
                         const progressBar = document.querySelector(".progress-bar");
-                        if (progressBar) {
-                            progressBar.removeAttribute("value");
+                        progressBar.removeAttribute("value");
 
-                            return () => {
-                                progressBar.setAttribute("value", "0");
-                            };
-                        }
-                    },
+                        return () => {
+                            progressBar.setAttribute("value", "0");
+                        };
+                    }
                 },
             });
+
         };
 
         initializeMercadoPago();
