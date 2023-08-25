@@ -96,8 +96,6 @@ export default function Payment() {
                             identificationType,
                         } = cardForm.getCardFormData();
 
-                        console.log(cardForm.getCardFormData())
-
                         try {
                             fetch("http://localhost:3333/paymentResult", {
                                 method: "POST",
@@ -118,7 +116,7 @@ export default function Payment() {
                                             type: identificationType,
                                             number: identificationNumber,
                                         },
-                                    },
+                                    }
                                 }),
                             });
 
