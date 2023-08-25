@@ -1,12 +1,16 @@
-import { PUBLIC_KEY_TEST, ACCESS_TOKEN_TEST } from "../../utils/config";
-import { useEffect, useState } from "react";
+import { PUBLIC_KEY_TEST, URL_NOTIFICATION } from "../../utils/config";
+import { useContext, useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
 import { canSSRAuth } from "../../utils/canSSRAuth";
 import { loadMercadoPago } from "@mercadopago/sdk-js";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 export default function Payment() {
+
+    const { customer } = useContext(AuthContext);
+    let customer_id = customer?.id;
 
     const [payment_id, setPayment_id] = useState("");
     const [title, setTitle] = useState("");
@@ -97,7 +101,7 @@ export default function Payment() {
                         } = cardForm.getCardFormData();
 
                         try {
-                            fetch("http://localhost:3333/paymentResult", {
+                            fetch("http://localhost:3333/paymentCardResult", {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
@@ -116,7 +120,8 @@ export default function Payment() {
                                             type: identificationType,
                                             number: identificationNumber,
                                         },
-                                    }
+                                    },
+                                    notification_url: URL_NOTIFICATION
                                 }),
                             });
 
@@ -141,7 +146,59 @@ export default function Payment() {
         };
 
         initializeMercadoPago();
+
     }, []);
+
+
+
+    useEffect(() => {
+
+        const initializeBoleto = async () => {
+
+            await loadMercadoPago();
+            /* @ts-ignore */
+            const mp = new window.MercadoPago(
+                PUBLIC_KEY_TEST
+            );
+
+            (async function getIdentificationTypes() {
+                try {
+                    const identificationTypes = await mp.getIdentificationTypes();
+                    const identificationTypeElement = document.getElementById('form-checkout__identificationType');
+
+                    createSelectOptions(identificationTypeElement, identificationTypes);
+                } catch (e) {
+                    return console.error('Error getting identificationTypes: ', e);
+                }
+            })();
+
+            function createSelectOptions(elem, options, labelsAndKeys = { label: "name", value: "id" }) {
+                const { label, value } = labelsAndKeys;
+
+                elem.options.length = 0;
+
+                const tempOptions = document.createDocumentFragment();
+
+                options.forEach(option => {
+                    const optValue = option[value];
+                    const optLabel = option[label];
+
+                    const opt = document.createElement('option');
+                    opt.value = optValue;
+                    opt.textContent = optLabel;
+
+                    tempOptions.appendChild(opt);
+                });
+
+                elem.appendChild(tempOptions);
+            }
+        }
+
+        initializeBoleto();
+
+    }, []);
+
+
 
 
     return (
@@ -208,6 +265,48 @@ export default function Payment() {
                         Carregando...
                     </progress>
                 </form>
+            </div>
+
+            <br />
+
+            <h2>Boleto Bancario</h2>
+
+            <div>
+
+                <form id="form-checkout">
+                    <div>
+                        <div>
+                            <label htmlFor="payerFirstName">Nome</label>
+                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
+                        </div>
+                        <div>
+                            <label htmlFor="payerLastName">Sobrenome</label>
+                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
+                        </div>
+                        <div>
+                            <label htmlFor="email">E-mail</label>
+                            <input id="form-checkout__email" name="email" type="text" />
+                        </div>
+                        <div>
+                            <label htmlFor="identificationType">Tipo de documento</label>
+                            <select id="form-checkout__identificationType" name="identificationType" type="text"></select>
+                        </div>
+                        <div>
+                            <label htmlFor="identificationNumber">Número do documento</label>
+                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div>
+                            <input type="hidden" name="transactionAmount" id="transactionAmount" value="100" />
+                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
+                            <br />
+                            <button type="submit">Pagar</button>
+                        </div>
+                    </div>
+                </form>
+
             </div>
         </>
     )
