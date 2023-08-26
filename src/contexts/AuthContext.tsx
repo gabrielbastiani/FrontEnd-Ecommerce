@@ -9,6 +9,7 @@ type AuthContextData = {
   customer: UserProps;
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
+  signInPay: (credentials: SignInProps) => Promise<void>;
   signInAvalie: (credentials: SignInProps) => Promise<void>;
   signOut(): void;
 }
@@ -102,6 +103,41 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function signInPay({ email, password }: SignInProps) {
+    try {
+      const response = await api.post('/customer/session', {
+        email,
+        password
+      });
+
+      const { id, name, store_id, token } = response.data;
+
+      setCookie(undefined, '@storevirtual.token', token, {
+        maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
+        path: "/" // Quais caminhos terao acesso ao cookie
+      });
+
+      setCustomer({
+        id,
+        name,
+        email,
+        store_id
+      });
+
+      //Passar para proximas requisiçoes o nosso token
+      api.defaults.headers['Authorization'] = `Bearer ${token}`;
+
+      toast.success('Logado com sucesso!');
+
+      //Redirecionar o customer para /myAccount
+      Router.push('/payment');
+
+    } catch (err) {
+      toast.error("Erro ao acessar, confirmou seu cadastro em seu email?");
+      console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err);
+    }
+  }
+
   async function signInAvalie({ email, password }: SignInProps) {
     try {
       const response = await api.post('/customer/session', {
@@ -135,7 +171,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ customer, isAuthenticated, signIn, signInAvalie, signOut }}>
+    <AuthContext.Provider value={{ customer, isAuthenticated, signIn, signInPay, signInAvalie, signOut }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     ContainerCenter,
     BoxTop,
@@ -24,9 +24,12 @@ import { Button } from "../../components/ui/Button";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../services/api";
 import Router from "next/router";
+import { CartContext } from "../../contexts/CartContext";
 
 
 export default function createAccount() {
+
+    const { cartProducts } = useContext(CartContext);
 
     const [loading, setLoading] = useState(false);
 
@@ -151,6 +154,11 @@ export default function createAccount() {
             setCidades('');
             setCpfs('');
 
+            if(cartProducts?.length >= 1) {
+                Router.push('/payment');
+                return;
+            }
+
             Router.push('/');
 
         } catch (error) {
@@ -224,6 +232,11 @@ export default function createAccount() {
             setCnpjs('');
             setCidades('');
             setCeps('');
+
+            if(cartProducts?.length >= 1) {
+                Router.push('/payment');
+                return;
+            }
 
             Router.push('/');
 

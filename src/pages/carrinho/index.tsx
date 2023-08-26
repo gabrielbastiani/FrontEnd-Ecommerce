@@ -58,10 +58,13 @@ import { IMaskInput } from "react-imask";
 import { Input } from "../../components/ui/Input";
 import { GiCancel } from "react-icons/gi";
 import router from "next/router";
+import { AuthContext } from "../../contexts/AuthContext";
+import Link from "next/link";
 
 
 export default function Carrinho() {
-    /* @ts-ignore */
+
+    const { isAuthenticated } = useContext(AuthContext);
     const { addMoreItemCart, removeItemCart, removeProductCart, cartProducts, totalCart } = useContext(CartContext);
 
     const [desconto, setDesconto] = useState("");
@@ -542,185 +545,200 @@ export default function Carrinho() {
                         }
                     </ContainerProduct>
 
-                    <ContainerData>
-                        <TextCep>Digite o CEP de entrega para calcular o frete.</TextCep>
-                        <BoxCep>
-                            <Input
-                                style={{ backgroundColor: 'white', color: 'black' }}
-                                /* @ts-ignore */
-                                as={IMaskInput}
-                                /* @ts-ignore */
-                                mask="00000-000"
-                                type="text"
-                                placeholder="CEP"
-                                onChange={(e) => setCep(e.target.value)}
-                            />
-                            <ButtonCep
-                                onClick={searchCep}
-                            >
-                                Calcular
-                            </ButtonCep>
+                    {cartProducts?.length >= 1 ? (
+                        <ContainerData>
+                            <TextCep>Digite o CEP de entrega para calcular o frete.</TextCep>
+                            <BoxCep>
+                                <Input
+                                    style={{ backgroundColor: 'white', color: 'black' }}
+                                    /* @ts-ignore */
+                                    as={IMaskInput}
+                                    /* @ts-ignore */
+                                    mask="00000-000"
+                                    type="text"
+                                    placeholder="CEP"
+                                    onChange={(e) => setCep(e.target.value)}
+                                />
+                                <ButtonCep
+                                    onClick={searchCep}
+                                >
+                                    Calcular
+                                </ButtonCep>
 
-                            {dataFrete.map((item, index) => {
-                                return (
-                                    <ContainerFrete key={index}>
-                                        <BoxFrete>
-                                            {item?.Valor === "0,00" || item?.Valor === "" || item?.Valor === "0" ? (
-                                                <ErrorText>Erro ao calcular o frete.</ErrorText>
-                                            ) :
-                                                <>
-                                                    <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
-                                                    <TextFrete>Prazo de entrega em dia(s) úteis: <TextStrong>{item?.PrazoEntrega} dia(s)</TextStrong></TextFrete>
-                                                </>
-                                            }
-                                        </BoxFrete>
-                                    </ContainerFrete>
-                                )
-                            })}
-                        </BoxCep>
+                                {dataFrete.map((item, index) => {
+                                    return (
+                                        <ContainerFrete key={index}>
+                                            <BoxFrete>
+                                                {item?.Valor === "0,00" || item?.Valor === "" || item?.Valor === "0" ? (
+                                                    <ErrorText>Erro ao calcular o frete.</ErrorText>
+                                                ) :
+                                                    <>
+                                                        <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
+                                                        <TextFrete>Prazo de entrega em dia(s) úteis: <TextStrong>{item?.PrazoEntrega} dia(s)</TextStrong></TextFrete>
+                                                    </>
+                                                }
+                                            </BoxFrete>
+                                        </ContainerFrete>
+                                    )
+                                })}
+                            </BoxCep>
 
-                        {formatedFrete ? (
-                            <>
-                                <TextCep>Possui um cupom de desconto? Insira o código do cupom abaixo, e clique em calcular para poder aplicar seu cupom, OBS: è possivel usar apenas um código de cupom por pedido!</TextCep>
+                            {formatedFrete ? (
+                                <>
+                                    <TextCep>Possui um cupom de desconto? Insira o código do cupom abaixo, e clique em calcular para poder aplicar seu cupom, OBS: è possivel usar apenas um código de cupom por pedido!</TextCep>
 
-                                <BoxCupom>
-                                    <InputCupom
-                                        placeholder="CÓDIGO"
-                                        onChange={(e) => setCodePromotion(e.target.value)}
-                                    />
-                                    {cupomButton ? (
-                                        <LabelCancelar
-                                            onClick={removeCupom}
-                                        >
-                                            <GiCancel
-                                                size={25}
-                                                color="red"
-                                            />
-                                            Remova o cupom
-                                        </LabelCancelar>
+                                    <BoxCupom>
+                                        <InputCupom
+                                            placeholder="CÓDIGO"
+                                            onChange={(e) => setCodePromotion(e.target.value)}
+                                        />
+                                        {cupomButton ? (
+                                            <LabelCancelar
+                                                onClick={removeCupom}
+                                            >
+                                                <GiCancel
+                                                    size={25}
+                                                    color="red"
+                                                />
+                                                Remova o cupom
+                                            </LabelCancelar>
+                                        ) :
+                                            <ButtonCupom
+                                                onClick={loadCupomCode}
+                                            >
+                                                Calcular
+                                            </ButtonCupom>
+                                        }
+                                    </BoxCupom>
+                                </>
+                            ) :
+                                null
+                            }
+
+                            {formatedFrete === 0 && formatedCupom === 0 ? (
+                                <>
+                                    <TextSemFrete>(Total ainda sem frete, ou qualquer tipo de desconto)</TextSemFrete>
+                                    <BoxPricesFinal>
+                                        <Total>TOTAL</Total>
+                                        <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
+                                    </BoxPricesFinal>
+
+                                    <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                                </>
+                            ) :
+                                <>
+                                    {formatedCupom ? (
+                                        <>
+                                            <BoxPricesFinal>
+                                                <Total>SUBTOTAL</Total>
+                                                <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
+                                            </BoxPricesFinal>
+                                            <BoxPricesFinal>
+                                                <SubTotal></SubTotal>
+                                                <More>+</More>
+                                            </BoxPricesFinal>
+                                            <BoxPricesFinal>
+                                                <SubTotal>FRETE</SubTotal>
+                                                <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
+                                            </BoxPricesFinal>
+                                            <BoxPricesFinal>
+                                                <SubTotal></SubTotal>
+                                                <More>-</More>
+                                            </BoxPricesFinal>
+                                            <BoxPricesFinal>
+                                                <SubTotal>DESCONTO</SubTotal>
+                                                <ValuesMore>{desconto}</ValuesMore>
+                                            </BoxPricesFinal>
+                                            <BoxPricesFinal>
+                                                <SubTotal></SubTotal>
+                                                <More>=</More>
+                                            </BoxPricesFinal>
+                                            <hr />
+                                            <BoxPricesFinal>
+                                                <Total>TOTAL</Total>
+                                                <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedCupom)}</Total>
+                                            </BoxPricesFinal>
+
+                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format((formatedCupom) / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                                        </>
                                     ) :
-                                        <ButtonCupom
-                                            onClick={loadCupomCode}
-                                        >
-                                            Calcular
-                                        </ButtonCupom>
+                                        <>
+                                            <BoxPricesFinal>
+                                                <Total>SUBTOTAL</Total>
+                                                <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
+                                            </BoxPricesFinal>
+                                            <BoxPricesFinal>
+                                                <SubTotal></SubTotal>
+                                                <More>+</More>
+                                            </BoxPricesFinal>
+                                            <BoxPricesFinal>
+                                                <SubTotal>FRETE</SubTotal>
+                                                {freteCupom === 0 ? (
+                                                    <>
+                                                        {zero === 0 ? (
+                                                            <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(zero)}</ValuesMore>
+                                                        ) :
+                                                            <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
+                                                        }
+                                                    </>
+                                                ) :
+                                                    <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(freteCupom)}</ValuesMore>
+                                                }
+                                            </BoxPricesFinal>
+                                            <BoxPricesFinal>
+                                                <SubTotal></SubTotal>
+                                                <More>=</More>
+                                            </BoxPricesFinal>
+                                            <hr />
+                                            <BoxPricesFinal>
+                                                <Total>TOTAL</Total>
+                                                {freteCupom === 0 ? (
+                                                    <>
+                                                        {zero === 0 ? (
+                                                            <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
+                                                        ) :
+                                                            <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete)}</Total>
+                                                        }
+                                                    </>
+                                                ) :
+                                                    <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + freteCupom)}</Total>
+                                                }
+                                            </BoxPricesFinal>
+
+                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                                        </>
                                     }
-                                </BoxCupom>
-                            </>
-                        ) :
-                            null
-                        }
 
-                        {formatedFrete === 0 && formatedCupom === 0 ? (
-                            <>
-                                <TextSemFrete>(Total ainda sem frete, ou qualquer tipo de desconto)</TextSemFrete>
-                                <BoxPricesFinal>
-                                    <Total>TOTAL</Total>
-                                    <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
-                                </BoxPricesFinal>
-
-                                <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart / 12)} com juros de Cartão de Crédito</ConditionPrices>
-                            </>
-                        ) :
-                            <>
-                                {formatedCupom ? (
-                                    <>
-                                        <BoxPricesFinal>
-                                            <Total>SUBTOTAL</Total>
-                                            <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
-                                        </BoxPricesFinal>
-                                        <BoxPricesFinal>
-                                            <SubTotal></SubTotal>
-                                            <More>+</More>
-                                        </BoxPricesFinal>
-                                        <BoxPricesFinal>
-                                            <SubTotal>FRETE</SubTotal>
-                                            <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
-                                        </BoxPricesFinal>
-                                        <BoxPricesFinal>
-                                            <SubTotal></SubTotal>
-                                            <More>-</More>
-                                        </BoxPricesFinal>
-                                        <BoxPricesFinal>
-                                            <SubTotal>DESCONTO</SubTotal>
-                                            <ValuesMore>{desconto}</ValuesMore>
-                                        </BoxPricesFinal>
-                                        <BoxPricesFinal>
-                                            <SubTotal></SubTotal>
-                                            <More>=</More>
-                                        </BoxPricesFinal>
-                                        <hr />
-                                        <BoxPricesFinal>
-                                            <Total>TOTAL</Total>
-                                            <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedCupom)}</Total>
-                                        </BoxPricesFinal>
-
-                                        <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format((formatedCupom) / 12)} com juros de Cartão de Crédito</ConditionPrices>
-                                    </>
+                                </>
+                            }
+                            <BoxFinalCart>
+                                {isAuthenticated ? (
+                                    <Link href={"/payment"}>
+                                        <Button
+                                            style={{ margin: '30px', width: '80%' }}
+                                        >
+                                            FINALIZAR COMPRA
+                                        </Button>
+                                    </Link>
                                 ) :
-                                    <>
-                                        <BoxPricesFinal>
-                                            <Total>SUBTOTAL</Total>
-                                            <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
-                                        </BoxPricesFinal>
-                                        <BoxPricesFinal>
-                                            <SubTotal></SubTotal>
-                                            <More>+</More>
-                                        </BoxPricesFinal>
-                                        <BoxPricesFinal>
-                                            <SubTotal>FRETE</SubTotal>
-                                            {freteCupom === 0 ? (
-                                                <>
-                                                    {zero === 0 ? (
-                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(zero)}</ValuesMore>
-                                                    ) :
-                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
-                                                    }
-                                                </>
-                                            ) :
-                                                <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(freteCupom)}</ValuesMore>
-                                            }
-                                        </BoxPricesFinal>
-                                        <BoxPricesFinal>
-                                            <SubTotal></SubTotal>
-                                            <More>=</More>
-                                        </BoxPricesFinal>
-                                        <hr />
-                                        <BoxPricesFinal>
-                                            <Total>TOTAL</Total>
-                                            {freteCupom === 0 ? (
-                                                <>
-                                                    {zero === 0 ? (
-                                                        <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
-                                                    ) :
-                                                        <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete)}</Total>
-                                                    }
-                                                </>
-                                            ) :
-                                                <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + freteCupom)}</Total>
-                                            }
-                                        </BoxPricesFinal>
-
-                                        <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete / 12)} com juros de Cartão de Crédito</ConditionPrices>
-                                    </>
+                                    <Link href={"/loginClient"}>
+                                        <Button
+                                            style={{ margin: '30px', width: '80%' }}
+                                        >
+                                            FINALIZAR COMPRA
+                                        </Button>
+                                    </Link>
                                 }
-
-                            </>
-                        }
-                        <BoxFinalCart>
-                            <Button
-                                style={{ margin: '30px 0' }}
-                            >
-                                FINALIZAR COMPRA
-                            </Button>
-
-                            <ButtonFinal
-                                onClick={() => Router.back()}
-                            >
-                                CONTINUAR COMPRANDO
-                            </ButtonFinal>
-                        </BoxFinalCart>
-                    </ContainerData>
+                                <ButtonFinal
+                                    onClick={() => Router.back()}
+                                >
+                                    CONTINUAR COMPRANDO
+                                </ButtonFinal>
+                            </BoxFinalCart>
+                        </ContainerData>
+                    ) :
+                        null
+                    }
                 </SectionCart >
             </PageSection >
             <br />
