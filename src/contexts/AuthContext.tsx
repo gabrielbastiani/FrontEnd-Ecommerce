@@ -97,9 +97,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       //Redirecionar o customer para /myAccount
       Router.push('/myAccount/meusdados');
 
-    } catch (err) {
-      toast.error("Erro ao acessar, confirmou seu cadastro em seu email?");
-      console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err);
+    } catch (error) {
+      console.log(error.data.response);
     }
   }
 
@@ -132,9 +131,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       //Redirecionar o customer para /myAccount
       Router.push('/payment');
 
-    } catch (err) {
-      toast.error("Erro ao acessar, confirmou seu cadastro em seu email?");
-      console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err);
+    } catch (error) {
+      console.log(error.data.response);
     }
   }
 
@@ -164,9 +162,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       toast.success('Logado com sucesso!');
 
-    } catch (err) {
-      toast.error("Erro ao acessar, confirmou seu cadastro em seu email?");
-      console.log("Erro ao acessar, confirmou seu cadastro em seu email? ", err);
+    } catch (error) {
+      console.log(error.data.response);
     }
   }
 

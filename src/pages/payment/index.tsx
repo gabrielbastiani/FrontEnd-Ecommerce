@@ -5,12 +5,17 @@ import { canSSRAuth } from "../../utils/canSSRAuth";
 import { loadMercadoPago } from "@mercadopago/sdk-js";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../contexts/AuthContext";
+import { CartContext } from "../../contexts/CartContext";
+import { PageSection } from "../../components/dateStoreUx/styles";
+import { HeaderCart } from "../../components/HeaderCart";
+import Head from "next/head";
+import FooterAccount from "../../components/FooterAccount";
 
 
 export default function Payment() {
 
+    const { cartProducts, totalCart } = useContext(CartContext);
     const { customer } = useContext(AuthContext);
-    let customer_id = customer?.id;
 
     const [payment_id, setPayment_id] = useState("");
     const [title, setTitle] = useState("");
@@ -321,6 +326,15 @@ export default function Payment() {
 
     return (
         <>
+            <Head>
+                <title>Pagamento</title>
+            </Head>
+
+            <HeaderCart />
+
+            <PageSection>
+
+            </PageSection>
             <div>
                 <form id="form-checkout">
 
@@ -466,6 +480,10 @@ export default function Payment() {
                 </form>
 
             </div>
+            
+            <br />
+            <br />
+            <FooterAccount />
         </>
     )
 }

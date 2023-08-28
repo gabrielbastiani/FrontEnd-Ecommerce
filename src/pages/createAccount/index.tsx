@@ -25,18 +25,20 @@ import { toast } from "react-toastify";
 import { setupAPIClient } from "../../services/api";
 import Router from "next/router";
 import { CartContext } from "../../contexts/CartContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 export default function createAccount() {
 
     const { cartProducts } = useContext(CartContext);
+    const { signInPay } = useContext(AuthContext);
 
     const [loading, setLoading] = useState(false);
 
     const [lojas_id, setLojas_id] = useState('');
     const [names, setNames] = useState('');
-    const [emails, setEmails] = useState('');
-    const [passwords, setPasswords] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [cpfs, setCpfs] = useState('');
     const [cnpjs, setCnpjs] = useState('');
@@ -73,8 +75,8 @@ export default function createAccount() {
 
     const [currentRadioValue, setCurrentValue] = useState('off');
 
-    function isEmail(emails: string) {
-        return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails);
+    function isEmail(email: string) {
+        return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(email);
     };
 
     useEffect(() => {
@@ -89,7 +91,7 @@ export default function createAccount() {
     async function handleRegisterClientCPF() {
         try {
             if (names === '' ||
-                emails === '' ||
+                email === '' ||
                 confirmPassword === '' ||
                 cpfs === '' ||
                 phones === '' ||
@@ -105,12 +107,12 @@ export default function createAccount() {
                 return
             }
 
-            if (!isEmail(emails)) {
+            if (!isEmail(email)) {
                 toast.error('Por favor digite um email valido!');
                 return;
             }
 
-            if (confirmPassword != passwords) {
+            if (confirmPassword != password) {
                 toast.error('Senhas diferentes');
                 return;
             }
@@ -120,7 +122,7 @@ export default function createAccount() {
             const apiClient = setupAPIClient();
             await apiClient.post('/customer/createCustomer', {
                 name: names,
-                email: emails,
+                email: email,
                 password: confirmPassword,
                 cpf: cpfs,
                 phone: phones,
@@ -142,7 +144,7 @@ export default function createAccount() {
             setLoading(false);
 
             setNames('');
-            setEmails('');
+            setEmail('');
             setConfirmPassword('');
             setPhones('');
             setNascimento('');
@@ -155,22 +157,28 @@ export default function createAccount() {
             setCpfs('');
 
             if(cartProducts?.length >= 1) {
-                Router.push('/payment');
+                let data = {
+                    email,
+                    password
+                }
+                /* @ts-ignore */
+                await signInPay(data);
+
                 return;
             }
 
             Router.push('/');
 
         } catch (error) {
-            console.log(error.response.data);
-            toast.error('Ops erro ao cadastrar o cliente!')
+            console.log(error);
+            toast.error('Ops erro ao cadastrar o cliente!');
         }
     }
 
     async function handleRegisterClientCNPJ() {
         try {
             if (names === '' ||
-                emails === '' ||
+                email === '' ||
                 confirmPassword === '' ||
                 cnpjs === '' ||
                 phones === '' ||
@@ -185,12 +193,12 @@ export default function createAccount() {
                 return
             }
 
-            if (!isEmail(emails)) {
+            if (!isEmail(email)) {
                 toast.error('Por favor digite um email valido!');
                 return;
             }
 
-            if (confirmPassword != passwords) {
+            if (confirmPassword != password) {
                 toast.error('Senhas diferentes');
                 return;
             }
@@ -200,7 +208,7 @@ export default function createAccount() {
             const apiClient = setupAPIClient();
             await apiClient.post('/customer/createCustomer', {
                 name: names,
-                email: emails,
+                email: email,
                 password: confirmPassword,
                 cnpj: cnpjs,
                 phone: phones,
@@ -221,7 +229,7 @@ export default function createAccount() {
             setLoading(false);
 
             setNames('');
-            setEmails('');
+            setEmail('');
             setConfirmPassword('');
             setPhones('');
             setInscricao('');
@@ -234,7 +242,13 @@ export default function createAccount() {
             setCeps('');
 
             if(cartProducts?.length >= 1) {
-                Router.push('/payment');
+                let data = {
+                    email,
+                    password
+                }
+                /* @ts-ignore */
+                await signInPay(data);
+
                 return;
             }
 
@@ -309,8 +323,8 @@ export default function createAccount() {
                                         <Input
                                             name='email'
                                             placeholder="E-mail"
-                                            value={emails}
-                                            onChange={(e) => setEmails(e.target.value)}
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -374,8 +388,8 @@ export default function createAccount() {
                                         <Input
                                             type="password"
                                             placeholder="Senha"
-                                            value={passwords}
-                                            onChange={(e) => setPasswords(e.target.value)}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -542,8 +556,8 @@ export default function createAccount() {
                                         <Input
                                             name='email'
                                             placeholder="E-mail"
-                                            value={emails}
-                                            onChange={(e) => setEmails(e.target.value)}
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                         />
                                     </BlockInputs>
 
@@ -590,8 +604,8 @@ export default function createAccount() {
                                         <Input
                                             type="password"
                                             placeholder="Senha"
-                                            value={passwords}
-                                            onChange={(e) => setPasswords(e.target.value)}
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
                                         />
                                     </BlockInputs>
 

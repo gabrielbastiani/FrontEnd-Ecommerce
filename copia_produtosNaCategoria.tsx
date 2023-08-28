@@ -58,10 +58,19 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
 
     function handleAddItemCart(
         count: any,
-        id: any
+        id: any,
+        name: any,
+        image: any,
+        promotion: any,
+        relationattributeproducts: any,
+        stock: number,
+        weight: number,
+        width: number,
+        height: number,
+        depth: number
     ) {
         /* @ts-ignore */
-        saveProductCart(count, id);
+        saveProductCart(count, id, name, image, promotion, relationattributeproducts, stock, weight, width, height, depth);
         setCount(1);
     }
 
@@ -124,7 +133,16 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                                             /* @ts-ignore */
                                             onClick={() => handleAddItemCart(
                                                 prod?.product?.id,
-                                                count
+                                                prod?.product?.photoproducts[0]?.image,
+                                                prod?.product?.name,
+                                                count,
+                                                prod?.product?.promotion,
+                                                prod?.product?.relationattributeproducts,
+                                                prod?.product?.stock,
+                                                prod?.product?.weight,
+                                                prod?.product?.width,
+                                                prod?.product?.height,
+                                                prod?.product?.depth
                                             )}
                                         >
                                             <AiOutlineShoppingCart

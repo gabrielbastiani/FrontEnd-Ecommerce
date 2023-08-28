@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useEffect, useState } from 'react';
 import { CartDataContextType } from '../../@types/cart';
 import router from 'next/router';
-import { setupAPIClient } from '../services/api';
 
 type MyContextProps = {
   cartProducts: Array<CartDataContextType>;
@@ -9,6 +8,7 @@ type MyContextProps = {
   addMoreItemCart: (id: AddItemsProps) => Promise<void>;
   removeItemCart: (id: AddItemsProps) => Promise<void>;
   removeProductCart: (id: AddItemsProps) => Promise<void>;
+  totalCart: number;
 };
 
 type AddItemsProps = {
@@ -17,6 +17,16 @@ type AddItemsProps = {
 
 type AddLocalItemStorage = {
   id: any;
+  image: any;
+  name: any;
+  count: any;
+  promotion: any;
+  relationattributeproducts: any;
+  stock: number;
+  weight: number;
+  width: number;
+  height: number;
+  depth: number;
 }
 
 type Props = {
@@ -30,41 +40,27 @@ export function CartProviderProducts({ children }: Props) {
   const [cartProducts, setCartProducts] = useState<any[]>([]);
   const [totalCart, setTotalCart] = useState(Number);
 
-  const [searchCart, setSearchCart] = useState<any[]>([]);
-
   useEffect(() => {
     let dadosCart = localStorage.getItem("@cartProducts");
     let arrayCart = JSON.parse(dadosCart);
     setCartProducts(arrayCart || []);
+    let priceTotal = localStorage.getItem("@totalCart");
+    setTotalCart(Number(priceTotal));
   }, []);
 
-  const ids = cartProducts.map(item => item?.id);
-
-  const WEB_URL = 'http://localhost:3001';
-  let param = '';
-  ids && ids.map((ele) => {
-    param = param + 'product_id=' + ele + '&'
-  });
-  const NEW_URL = WEB_URL + '?' + param;
-  let url = new URL(NEW_URL);
-
-  useEffect(() => {
-    async function loadCartProduct() {
-      try {
-        const apiClient = setupAPIClient();
-        const { data } = await apiClient.get(`/findProductsCart${url?.search}`);
-        setSearchCart(data)
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    loadCartProduct();
-  }, []);
-
-
-  
-
-  function saveProductCart(id: any, count: any) {
+  function saveProductCart(
+    id: any,
+    image: any,
+    name: any,
+    count: any,
+    promotion: any,
+    relationattributeproducts: any,
+    stock: number,
+    weight: number,
+    width: number,
+    height: number,
+    depth: number
+  ) {
 
     const indexItem = cartProducts.findIndex(item => item.id === id);
 
@@ -86,12 +82,25 @@ export function CartProviderProducts({ children }: Props) {
 
     cartItems.push({
       id: id,
+      image: image,
+      name: name,
       amount: count,
-      total: count
+      price: promotion,
+      relationattributeproducts: relationattributeproducts,
+      stock: Number(stock),
+      weight: Number(weight),
+      width: Number(width),
+      height: Number(height),
+      depth: Number(depth),
+      total: promotion * count
     });
 
     localStorage.setItem('@cartProducts', JSON.stringify(cartItems));
     totalResultCart(cartItems);
+
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
 
   }
 
@@ -109,8 +118,11 @@ export function CartProviderProducts({ children }: Props) {
       localStorage.setItem('@cartProducts', JSON.stringify(cartListCookieMore));
       totalResultCart(cartListCookieMore);
 
-      return;
+      setTimeout(() => {
+        router.reload();
+      }, 1500);
 
+      return;
     }
 
   }
@@ -128,12 +140,20 @@ export function CartProviderProducts({ children }: Props) {
       localStorage.setItem('@cartProducts', JSON.stringify(cartListDelete));
       totalResultCart(cartListDelete);
 
+      setTimeout(() => {
+        router.reload();
+      }, 1500);
+
       return;
     }
 
     const removeItem = cartProducts.filter(item => item.id !== id);
     localStorage.setItem('@cartProducts', JSON.stringify(removeItem));
     totalResultCart(removeItem);
+
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
 
   }
 
@@ -152,6 +172,10 @@ export function CartProviderProducts({ children }: Props) {
     const removeItem = cartProducts.filter(item => item.id !== product.id);
     localStorage.setItem('@cartProducts', JSON.stringify(removeItem));
     totalResultCart(removeItem);
+
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
 
   }
 

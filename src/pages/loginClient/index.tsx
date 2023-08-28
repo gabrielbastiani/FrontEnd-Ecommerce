@@ -26,7 +26,7 @@ import { CartContext } from '../../contexts/CartContext';
 export default function loginClient() {
 
     const { cartProducts } = useContext(CartContext);
-    const { signIn, signInPay } = useContext(AuthContext)
+    const { signIn, signInPay } = useContext(AuthContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState(false);
