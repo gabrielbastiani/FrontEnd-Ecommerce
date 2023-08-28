@@ -2,6 +2,8 @@ import { ReactNode, createContext, useEffect, useState } from 'react';
 import { CartDataContextType } from '../../@types/cart';
 import router from 'next/router';
 import { setupAPIClient } from '../services/api';
+import generateUniqueId from 'generate-unique-id';
+
 
 type MyContextProps = {
   cartProducts: Array<CartDataContextType>;
@@ -16,7 +18,9 @@ type AddItemsProps = {
 }
 
 type AddLocalItemStorage = {
-  id: any;
+  id: string;
+  count: any;
+  prod: any;
 }
 
 type Props = {
@@ -27,10 +31,15 @@ export const CartContext = createContext({} as MyContextProps);
 
 export function CartProviderProducts({ children }: Props) {
 
+  const idCart = generateUniqueId({
+    includeSymbols: ['@', '#', ')', '$', '('],
+    useLetters: true,
+    useNumbers: true,
+    length: 30
+  });
+
   const [cartProducts, setCartProducts] = useState<any[]>([]);
   const [totalCart, setTotalCart] = useState(Number);
-
-  const [searchCart, setSearchCart] = useState<any[]>([]);
 
   useEffect(() => {
     let dadosCart = localStorage.getItem("@cartProducts");
@@ -38,64 +47,57 @@ export function CartProviderProducts({ children }: Props) {
     setCartProducts(arrayCart || []);
   }, []);
 
-  const ids = cartProducts.map(item => item?.id);
 
-  const WEB_URL = 'http://localhost:3001';
-  let param = '';
-  ids && ids.map((ele) => {
-    param = param + 'product_id=' + ele + '&'
-  });
-  const NEW_URL = WEB_URL + '?' + param;
-  let url = new URL(NEW_URL);
+  async function saveProductCart(id: string, count: any, prod: any) {
 
-  useEffect(() => {
-    async function loadCartProduct() {
-      try {
-        const apiClient = setupAPIClient();
-        const { data } = await apiClient.get(`/findProductsCart${url?.search}`);
-        setSearchCart(data)
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    loadCartProduct();
-  }, []);
+    const apiClient = setupAPIClient();
+    const findProduct = cartProducts.filter(item => item?.product_id === id);
+    const mapFilter = findProduct.map(pro => pro?.product_id);
 
+    if (mapFilter[0] === id) {
 
-  
+      const storageId = String(cartProducts[0]?.store_cart_id);
+      const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${id}`);
 
-  function saveProductCart(id: any, count: any) {
+      let more_amount = data?.amount + count;
+      let total_more = more_amount * prod?.product?.promotion;
 
-    const indexItem = cartProducts.findIndex(item => item.id === id);
+      await apiClient.put(`/updateCart?store_cart_id=${storageId}&product_id=${id}`, {
+        amount: more_amount,
+        total: total_more
+      });
 
-    if (indexItem !== -1) {
-
-      let cartListCookie = cartProducts;
-
-      cartListCookie[indexItem].amount = cartListCookie[indexItem].amount + count;
-
-      cartListCookie[indexItem].total = cartListCookie[indexItem].amount * cartListCookie[indexItem].price;
-
-      localStorage.setItem('@cartProducts', JSON.stringify(cartListCookie));
-      totalResultCart(cartListCookie);
+      setTimeout(() => {
+        router.reload();
+      }, 1500);
 
       return;
     }
 
+
     const cartItems = localStorage['@cartProducts'] ? JSON.parse(localStorage['@cartProducts']) : [];
 
     cartItems.push({
-      id: id,
-      amount: count,
-      total: count
+      store_cart_id: idCart,
+      product_id: id
     });
 
     localStorage.setItem('@cartProducts', JSON.stringify(cartItems));
-    totalResultCart(cartItems);
+
+    await apiClient.post(`/createCart`, {
+      store_cart_id: cartItems[0].store_cart_id,
+      product_id: id,
+      amount: count,
+      total: prod?.product?.promotion * count
+    });
+
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
 
   }
 
-  function addMoreItemCart(id: string) {
+  /* function addMoreItemCart(id: string) {
     const indexItem = cartProducts.findIndex(item => item.id === id);
 
     if (indexItem !== -1) {
@@ -160,10 +162,10 @@ export function CartProviderProducts({ children }: Props) {
     let result = myCart.reduce((acc: any, obj: any) => { return acc + obj.total }, 0);
 
     localStorage.setItem("@totalCart", result.toFixed(2));
-  }
+  } */
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ cartProducts, totalCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart }}>
+    <CartContext.Provider value={{ /* cartProducts, totalCart,  */saveProductCart/* , addMoreItemCart, removeItemCart, removeProductCart */ }}>
       {children}
     </CartContext.Provider>
   )

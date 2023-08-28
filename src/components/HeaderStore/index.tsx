@@ -470,7 +470,7 @@ export const HeaderStore = () => {
                                     </CartButton>
                                 </BoxCart>
                                 <DropDownContentCart>
-                                    {cartProducts.map((prod, index) => {
+                                    {/* {cartProducts.map((prod, index) => {
                                         return (
                                             <BoxProductCart key={index}>
                                                 <ImageBoxProduct>
@@ -502,7 +502,7 @@ export const HeaderStore = () => {
                                                 </ContainerDataProducts>
                                             </BoxProductCart>
                                         )
-                                    })}
+                                    })} */}
                                     <BoxTotalCart>
                                         <TotalPriceCart>TOTAL</TotalPriceCart>
                                         <TotalPriceCart>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</TotalPriceCart>

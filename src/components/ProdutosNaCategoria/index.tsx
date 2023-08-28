@@ -57,11 +57,12 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
     };
 
     function handleAddItemCart(
+        prod: any,
         count: any,
         id: any
     ) {
         /* @ts-ignore */
-        saveProductCart(count, id);
+        saveProductCart(count, id, prod);
         setCount(1);
     }
 
@@ -123,6 +124,7 @@ const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: P
                                         <Add
                                             /* @ts-ignore */
                                             onClick={() => handleAddItemCart(
+                                                prod,
                                                 prod?.product?.id,
                                                 count
                                             )}
