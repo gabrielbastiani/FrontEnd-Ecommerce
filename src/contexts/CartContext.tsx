@@ -15,8 +15,7 @@ type MyContextProps = {
 };
 
 type AddItemsProps = {
-  id: string;
-  prod: any;
+  product_id: string;
 }
 
 type AddLocalItemStorage = {
@@ -34,10 +33,9 @@ export const CartContext = createContext({} as MyContextProps);
 export function CartProviderProducts({ children }: Props) {
 
   const idCart = generateUniqueId({
-    includeSymbols: ['@', '#', ')', '$', '('],
     useLetters: true,
     useNumbers: true,
-    length: 30
+    length: 17
   });
 
   const [cartProducts, setCartProducts] = useState<any[]>([]);
@@ -56,14 +54,32 @@ export function CartProviderProducts({ children }: Props) {
       async function loadCart() {
         const storageId = String(cartProducts[0]?.store_cart_id);
         const { data } = await apiClient.get(`/findProductsCart?store_cart_id=${storageId}`);
-        console.log(data)
-        setProductsCart(data);
+        setProductsCart(data || []);
       }
       loadCart();
     } catch (error) {
       console.log(error);
     }
   }, [cartProducts]);
+
+  useEffect(() => {
+    try {
+      const apiClient = setupAPIClient();
+      async function loadCartTotal() {
+        const storageId = String(cartProducts[0]?.store_cart_id);
+        const { data } = await apiClient.get(`/findTotalCart?store_cart_id=${storageId}`);
+        setTotalCart(data?.total);
+      }
+      loadCartTotal();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [cartProducts]);
+
+
+  console.log(totalCart)
+
+  
 
   async function saveProductCart(id: string, count: any, prod: any) {
 
@@ -81,6 +97,10 @@ export function CartProviderProducts({ children }: Props) {
 
       await apiClient.put(`/updateCart?store_cart_id=${storageId}&product_id=${id}`, {
         amount: more_amount,
+        total: total_more
+      });
+
+      await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
         total: total_more
       });
 
@@ -109,6 +129,11 @@ export function CartProviderProducts({ children }: Props) {
         total: prod?.product?.promotion * count
       });
 
+      await apiClient.post(`/createTotalCart`, {
+        store_cart_id: cartItems[0].store_cart_id,
+        total: prod?.product?.promotion * count
+      });
+
       setTimeout(() => {
         router.reload();
       }, 1500);
@@ -131,6 +156,13 @@ export function CartProviderProducts({ children }: Props) {
       total: prod?.product?.promotion * count
     });
 
+    const cart_total = prod?.product?.promotion * count + totalCart;
+
+    const storageId = String(cartProducts[0]?.store_cart_id);
+    await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+      total: cart_total
+    });
+
     setTimeout(() => {
       router.reload();
     }, 1500);
@@ -139,23 +171,29 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
-  async function addMoreItemCart(id: string, prod: any) {
+  async function addMoreItemCart(product_id: string) {
 
     const apiClient = setupAPIClient();
-    const findProduct = cartProducts.filter(item => item?.product_id === id);
+    const findProduct = cartProducts.filter(item => item?.product_id === product_id);
     const mapFilter = findProduct.map(pro => pro?.product_id);
 
-    if (mapFilter[0] === id) {
+    if (mapFilter[0] === product_id) {
 
       const storageId = String(cartProducts[0]?.store_cart_id);
-      const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${id}`);
+      const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
 
       let more_amountadd = data?.amount + 1;
-      let total_more = more_amountadd * prod?.product?.promotion;
+      let total_more = more_amountadd * data?.product?.promotion;
 
-      await apiClient.put(`/updateCart?store_cart_id=${storageId}&product_id=${id}`, {
+      await apiClient.put(`/updateCart?store_cart_id=${storageId}&product_id=${product_id}`, {
         amount: more_amountadd,
         total: total_more
+      });
+
+      const cart_total = total_more + totalCart;
+
+      await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+        total: cart_total
       });
 
       setTimeout(() => {
@@ -167,47 +205,63 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
-  /* function removeItemCart(id: string) {
-    const indexItem = cartProducts.findIndex(item => item.id === id);
+  async function removeItemCart(product_id: string, prod: any) {
 
-    if (cartProducts[indexItem]?.amount > 1) {
-      let cartListDelete = cartProducts;
+    const apiClient = setupAPIClient();
 
-      cartListDelete[indexItem].amount = cartListDelete[indexItem].amount - 1;
+    if (prod?.amount > 1) {
 
-      cartListDelete[indexItem].total = cartListDelete[indexItem].total - cartListDelete[indexItem].price;
+      const storageId = String(cartProducts[0]?.store_cart_id);
+      const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
 
-      localStorage.setItem('@cartProducts', JSON.stringify(cartListDelete));
-      totalResultCart(cartListDelete);
+      let sub_amount = Number(data?.amount) - 1;
+      let total_sub = Number(data?.total) - Number(data?.product?.promotion);
+
+      await apiClient.put(`/updateCart?store_cart_id=${storageId}&product_id=${product_id}`, {
+        amount: sub_amount,
+        total: total_sub
+      });
+
+      await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+        total: total_sub
+      });
+
+      setTimeout(() => {
+        router.reload();
+      }, 1500);
 
       return;
     }
 
-    const removeItem = cartProducts.filter(item => item.id !== id);
+    const storageId = String(cartProducts[0]?.store_cart_id);
+    await apiClient.delete(`/deleteCart?store_cart_id=${storageId}&product_id=${product_id}`);
+
+    const removeItem = cartProducts.filter(item => item?.product_id !== product_id);
     localStorage.setItem('@cartProducts', JSON.stringify(removeItem));
-    totalResultCart(removeItem);
+
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
 
   }
 
-  function removeProductCart(product: any) {
-    const indexItem = cartProducts.findIndex(item => item.id === product.id);
+  async function removeProductCart(product_id: string) {
 
-    let deleteProductCart = cartProducts;
+    const apiClient = setupAPIClient();
 
-    deleteProductCart[indexItem].amount = deleteProductCart[indexItem].amount - product?.amount;
+    const storageId = String(cartProducts[0]?.store_cart_id);
+    await apiClient.delete(`/deleteCart?store_cart_id=${storageId}&product_id=${product_id}`);
 
-    deleteProductCart[indexItem].total = deleteProductCart[indexItem].total - deleteProductCart[indexItem].price;
-
-    localStorage.setItem('@cartProducts', JSON.stringify(deleteProductCart));
-    totalResultCart(deleteProductCart);
-
-    const removeItem = cartProducts.filter(item => item.id !== product.id);
+    const removeItem = cartProducts.filter(item => item.product_id !== product_id);
     localStorage.setItem('@cartProducts', JSON.stringify(removeItem));
-    totalResultCart(removeItem);
+
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
 
   }
 
-  function totalResultCart(items: any) {
+  /* function totalResultCart(items: any) {
     let myCart = items;
     let result = myCart.reduce((acc: any, obj: any) => { return acc + obj.total }, 0);
 
@@ -215,7 +269,7 @@ export function CartProviderProducts({ children }: Props) {
   } */
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ productsCart, /* cartProducts, totalCart,  */saveProductCart, addMoreItemCart, /*removeItemCart, removeProductCart */ }}>
+    <CartContext.Provider value={{ productsCart, cartProducts, totalCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart }}>
       {children}
     </CartContext.Provider>
   )

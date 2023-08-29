@@ -38,9 +38,7 @@ interface ProductsRequest {
 
 const ProdutosNaCategoria = ({ products, currentPage, setCurrentPage, pages }: ProductsRequest) => {
     /* @ts-ignore */
-    const { saveProductCart, productsCart } = useContext(CartContext);
-
-    console.log(productsCart)
+    const { saveProductCart } = useContext(CartContext);
 
     const [count, setCount] = useState(1);
     const [activeTab, setActiveTab] = useState("");
