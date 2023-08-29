@@ -7,6 +7,7 @@ import generateUniqueId from 'generate-unique-id';
 
 type MyContextProps = {
   cartProducts: Array<CartDataContextType>;
+  productsCart: Array<CartDataContextType>;
   saveProductCart: (id: AddLocalItemStorage) => Promise<void>;
   addMoreItemCart: (id: AddItemsProps) => Promise<void>;
   removeItemCart: (id: AddItemsProps) => Promise<void>;
@@ -15,6 +16,7 @@ type MyContextProps = {
 
 type AddItemsProps = {
   id: string;
+  prod: any;
 }
 
 type AddLocalItemStorage = {
@@ -39,6 +41,7 @@ export function CartProviderProducts({ children }: Props) {
   });
 
   const [cartProducts, setCartProducts] = useState<any[]>([]);
+  const [productsCart, setProductsCart] = useState<any[]>([]);
   const [totalCart, setTotalCart] = useState(Number);
 
   useEffect(() => {
@@ -47,6 +50,20 @@ export function CartProviderProducts({ children }: Props) {
     setCartProducts(arrayCart || []);
   }, []);
 
+  useEffect(() => {
+    try {
+      const apiClient = setupAPIClient();
+      async function loadCart() {
+        const storageId = String(cartProducts[0]?.store_cart_id);
+        const { data } = await apiClient.get(`/findProductsCart?store_cart_id=${storageId}`);
+        console.log(data)
+        setProductsCart(data);
+      }
+      loadCart();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [cartProducts]);
 
   async function saveProductCart(id: string, count: any, prod: any) {
 
@@ -74,11 +91,34 @@ export function CartProviderProducts({ children }: Props) {
       return;
     }
 
-
     const cartItems = localStorage['@cartProducts'] ? JSON.parse(localStorage['@cartProducts']) : [];
 
+    if (cartItems?.length === 0) {
+
+      cartItems.push({
+        store_cart_id: idCart,
+        product_id: id
+      });
+
+      localStorage.setItem('@cartProducts', JSON.stringify(cartItems));
+
+      await apiClient.post(`/createCart`, {
+        store_cart_id: cartItems[0].store_cart_id,
+        product_id: id,
+        amount: count,
+        total: prod?.product?.promotion * count
+      });
+
+      setTimeout(() => {
+        router.reload();
+      }, 1500);
+
+      return;
+
+    }
+
     cartItems.push({
-      store_cart_id: idCart,
+      store_cart_id: cartItems[0].store_cart_id,
       product_id: id
     });
 
@@ -95,29 +135,39 @@ export function CartProviderProducts({ children }: Props) {
       router.reload();
     }, 1500);
 
+    return;
+
   }
 
-  /* function addMoreItemCart(id: string) {
-    const indexItem = cartProducts.findIndex(item => item.id === id);
+  async function addMoreItemCart(id: string, prod: any) {
 
-    if (indexItem !== -1) {
+    const apiClient = setupAPIClient();
+    const findProduct = cartProducts.filter(item => item?.product_id === id);
+    const mapFilter = findProduct.map(pro => pro?.product_id);
 
-      let cartListCookieMore = cartProducts;
+    if (mapFilter[0] === id) {
 
-      cartListCookieMore[indexItem].amount = cartListCookieMore[indexItem].amount + 1;
+      const storageId = String(cartProducts[0]?.store_cart_id);
+      const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${id}`);
 
-      cartListCookieMore[indexItem].total = cartListCookieMore[indexItem].amount * cartListCookieMore[indexItem].price;
+      let more_amountadd = data?.amount + 1;
+      let total_more = more_amountadd * prod?.product?.promotion;
 
-      localStorage.setItem('@cartProducts', JSON.stringify(cartListCookieMore));
-      totalResultCart(cartListCookieMore);
+      await apiClient.put(`/updateCart?store_cart_id=${storageId}&product_id=${id}`, {
+        amount: more_amountadd,
+        total: total_more
+      });
+
+      setTimeout(() => {
+        router.reload();
+      }, 1500);
 
       return;
-
     }
 
   }
 
-  function removeItemCart(id: string) {
+  /* function removeItemCart(id: string) {
     const indexItem = cartProducts.findIndex(item => item.id === id);
 
     if (cartProducts[indexItem]?.amount > 1) {
@@ -165,7 +215,7 @@ export function CartProviderProducts({ children }: Props) {
   } */
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ /* cartProducts, totalCart,  */saveProductCart/* , addMoreItemCart, removeItemCart, removeProductCart */ }}>
+    <CartContext.Provider value={{ productsCart, /* cartProducts, totalCart,  */saveProductCart, addMoreItemCart, /*removeItemCart, removeProductCart */ }}>
       {children}
     </CartContext.Provider>
   )
