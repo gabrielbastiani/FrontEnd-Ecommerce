@@ -76,7 +76,7 @@ export function CartProviderProducts({ children }: Props) {
     }
   }, [cartProducts]);
 
-  
+
 
   async function saveProductCart(id: string, count: any, prod: any) {
 
@@ -255,8 +255,21 @@ export function CartProviderProducts({ children }: Props) {
   async function removeProductCart(product_id: string) {
 
     const apiClient = setupAPIClient();
-
     const storageId = String(cartProducts[0]?.store_cart_id);
+
+    const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
+    const cart_total = totalCart - data?.total;
+
+    await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+      total: cart_total
+    });
+
+    const response = await apiClient.get(`/findTotalCart?store_cart_id=${storageId}`);
+
+    if (response?.data?.total === 0) {
+      await apiClient.delete(`/deleteTotalCart?store_cart_id=${storageId}`);
+    }
+
     await apiClient.delete(`/deleteCart?store_cart_id=${storageId}&product_id=${product_id}`);
 
     const removeItem = cartProducts.filter(item => item.product_id !== product_id);
@@ -267,13 +280,6 @@ export function CartProviderProducts({ children }: Props) {
     }, 1500);
 
   }
-
-  /* function totalResultCart(items: any) {
-    let myCart = items;
-    let result = myCart.reduce((acc: any, obj: any) => { return acc + obj.total }, 0);
-
-    localStorage.setItem("@totalCart", result.toFixed(2));
-  } */
 
   return (/* @ts-ignore */
     <CartContext.Provider value={{ productsCart, cartProducts, totalCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart }}>

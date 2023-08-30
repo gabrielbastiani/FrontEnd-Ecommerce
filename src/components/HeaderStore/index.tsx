@@ -135,7 +135,7 @@ export const HeaderStore = () => {
 
     const { customer } = useContext(AuthContext);
     /* @ts-ignore */
-    const { totalCart, cartProducts, removeItemCart, addMoreItemCart, removeProductCart } = useContext(CartContext);
+    const { totalCart, productsCart, cartProducts, removeItemCart, addMoreItemCart, removeProductCart } = useContext(CartContext);
 
     const [logo, setLogo] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -470,29 +470,30 @@ export const HeaderStore = () => {
                                     </CartButton>
                                 </BoxCart>
                                 <DropDownContentCart>
-                                    {/* {cartProducts.map((prod, index) => {
+                                    {productsCart.map((prod, index) => {
                                         return (
                                             <BoxProductCart key={index}>
                                                 <ImageBoxProduct>
-                                                    <Image src={"http://localhost:3333/files/" + prod?.image} width={60} height={60} alt="foto produto" />
+                                                    <Image src={"http://localhost:3333/files/" + prod?.product?.photoproducts[0]?.image} width={60} height={60} alt={prod?.product?.name} />
                                                 </ImageBoxProduct>
 
                                                 <ContainerDataProducts>
-                                                    <ListItemsCart>{prod?.name}</ListItemsCart>
+                                                    <ListItemsCart>{prod?.product?.name}</ListItemsCart>
                                                     <BoxPriceProduct>
-                                                        <PriceText>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price)}</PriceText>
+                                                        <PriceText>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion)}</PriceText>
                                                         <ContainerItems>
                                                             <BoxQuantity>
-                                                                <MinText onClick={() => handleDescrement(prod?.id)}>-</MinText>
-                                                                {activeTab === prod?.id ?
+                                                                <MinText onClick={() => handleDescrement(prod?.product_id, prod)}>-</MinText>
+                                                                {activeTab === prod?.product_id ?
                                                                     <Quantity>{count}</Quantity>
                                                                     :
                                                                     <Quantity>{prod?.amount}</Quantity>
                                                                 }
-                                                                <MaxText onClick={() => handleIncrement(prod?.id)}>+</MaxText>
+                                                                <MaxText onClick={() => handleIncrement(prod?.product_id)}>+</MaxText>
                                                             </BoxQuantity>
                                                             <BoxDeleteProduct
-                                                                onClick={() => removeProductCart(prod)}
+                                                                /* @ts-ignore */
+                                                                onClick={() => removeProductCart(prod?.product_id)}
                                                             >
                                                                 <TextDelete>Excluir</TextDelete>
                                                                 <BsTrash size={20} />
@@ -502,7 +503,7 @@ export const HeaderStore = () => {
                                                 </ContainerDataProducts>
                                             </BoxProductCart>
                                         )
-                                    })} */}
+                                    })}
                                     <BoxTotalCart>
                                         <TotalPriceCart>TOTAL</TotalPriceCart>
                                         <TotalPriceCart>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</TotalPriceCart>
