@@ -68,7 +68,7 @@ export default function Carrinho() {
     const { productsCart, addMoreItemCart, removeItemCart, removeProductCart, cartProducts, totalCart } = useContext(CartContext);
 
 
-    console.log(productsCart)
+
 
 
     return (

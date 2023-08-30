@@ -40,7 +40,7 @@ export function CartProviderProducts({ children }: Props) {
 
   const [cartProducts, setCartProducts] = useState<any[]>([]);
   const [productsCart, setProductsCart] = useState<any[]>([]);
-  const [totalCart, setTotalCart] = useState(Number);
+  const [totalCart, setTotalCart] = useState(0);
 
   useEffect(() => {
     let dadosCart = localStorage.getItem("@cartProducts");
@@ -68,16 +68,13 @@ export function CartProviderProducts({ children }: Props) {
       async function loadCartTotal() {
         const storageId = String(cartProducts[0]?.store_cart_id);
         const { data } = await apiClient.get(`/findTotalCart?store_cart_id=${storageId}`);
-        setTotalCart(data?.total);
+        setTotalCart(data?.total || 0);
       }
       loadCartTotal();
     } catch (error) {
       console.log(error);
     }
   }, [cartProducts]);
-
-
-  console.log(totalCart)
 
   
 
@@ -190,7 +187,7 @@ export function CartProviderProducts({ children }: Props) {
         total: total_more
       });
 
-      const cart_total = total_more + totalCart;
+      const cart_total = totalCart + data?.product?.promotion;
 
       await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
         total: cart_total
@@ -201,6 +198,7 @@ export function CartProviderProducts({ children }: Props) {
       }, 1500);
 
       return;
+
     }
 
   }
@@ -222,8 +220,10 @@ export function CartProviderProducts({ children }: Props) {
         total: total_sub
       });
 
+      const cart_total = totalCart - data?.product?.promotion;
+
       await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-        total: total_sub
+        total: cart_total
       });
 
       setTimeout(() => {
@@ -234,6 +234,13 @@ export function CartProviderProducts({ children }: Props) {
     }
 
     const storageId = String(cartProducts[0]?.store_cart_id);
+    const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
+    const cart_total = totalCart - data?.product?.promotion;
+
+    await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+      total: cart_total
+    });
+
     await apiClient.delete(`/deleteCart?store_cart_id=${storageId}&product_id=${product_id}`);
 
     const removeItem = cartProducts.filter(item => item?.product_id !== product_id);
