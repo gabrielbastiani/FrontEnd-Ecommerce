@@ -68,7 +68,7 @@ export interface DataCart {
 
 export default function Carrinho() {
 
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, customer } = useContext(AuthContext);
     /* @ts-ignore */
     const { productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
 
@@ -415,7 +415,8 @@ export default function Carrinho() {
                 const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: formatedCupom
+                    totalCartFinish: formatedCupom,
+                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -428,7 +429,8 @@ export default function Carrinho() {
                 const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: formatedCupom
+                    totalCartFinish: formatedCupom,
+                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -441,7 +443,8 @@ export default function Carrinho() {
                 const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: formatedCupom + formatedFrete
+                    totalCartFinish: formatedCupom + formatedFrete,
+                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -454,7 +457,8 @@ export default function Carrinho() {
                 const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: totalCart
+                    totalCartFinish: totalCart,
+                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -467,7 +471,8 @@ export default function Carrinho() {
                 const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: totalCart + freteCupom
+                    totalCartFinish: totalCart + freteCupom,
+                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -480,7 +485,8 @@ export default function Carrinho() {
                 const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: totalCart + freteCupom
+                    totalCartFinish: totalCart + freteCupom,
+                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -493,7 +499,8 @@ export default function Carrinho() {
                 const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: formatedCupom
+                    totalCartFinish: formatedCupom,
+                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -506,7 +513,8 @@ export default function Carrinho() {
                 const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: formatedCupom
+                    totalCartFinish: formatedCupom,
+                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -519,7 +527,8 @@ export default function Carrinho() {
                 const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: formatedCupom
+                    totalCartFinish: formatedCupom,
+                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -528,7 +537,8 @@ export default function Carrinho() {
             const storageId = String(cartProducts[0]?.store_cart_id);
             await apiClient.post(`/createCartTotalFinish`, {
                 store_cart_id: storageId,
-                totalCartFinish: totalCart + formatedFrete
+                totalCartFinish: totalCart + formatedFrete,
+                customer_id: customer ? customer?.id : null
             });
 
             return;

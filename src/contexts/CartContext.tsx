@@ -1,8 +1,9 @@
-import { ReactNode, createContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { CartDataContextType } from '../../@types/cart';
 import router from 'next/router';
 import { setupAPIClient } from '../services/api';
 import generateUniqueId from 'generate-unique-id';
+import { AuthContext } from './AuthContext';
 
 
 type MyContextProps = {
@@ -32,6 +33,8 @@ type Props = {
 export const CartContext = createContext({} as MyContextProps);
 
 export function CartProviderProducts({ children }: Props) {
+
+  const { isAuthenticated, customer } = useContext(AuthContext);
 
   const idCart = generateUniqueId({
     useLetters: true,
@@ -77,7 +80,7 @@ export function CartProviderProducts({ children }: Props) {
     }
   }, [cartProducts]);
 
-
+  
 
   async function saveProductCart(id: string, count: any, prod: any) {
 
@@ -124,12 +127,14 @@ export function CartProviderProducts({ children }: Props) {
         store_cart_id: cartItems[0].store_cart_id,
         product_id: id,
         amount: count,
-        total: prod?.product?.promotion * count
+        total: prod?.product?.promotion * count,
+        customer_id: customer ? customer?.id : null
       });
 
       await apiClient.post(`/createTotalCart`, {
         store_cart_id: cartItems[0].store_cart_id,
-        total: prod?.product?.promotion * count
+        total: prod?.product?.promotion * count,
+        customer_id: customer ? customer?.id : null
       });
 
       setTimeout(() => {
@@ -151,7 +156,8 @@ export function CartProviderProducts({ children }: Props) {
       store_cart_id: cartItems[0].store_cart_id,
       product_id: id,
       amount: count,
-      total: prod?.product?.promotion * count
+      total: prod?.product?.promotion * count,
+      customer_id: customer ? customer?.id : null
     });
 
     const cart_total = prod?.product?.promotion * count + totalCart;
