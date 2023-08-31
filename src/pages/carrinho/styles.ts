@@ -255,3 +255,8 @@ export const LabelCancelar = styled.label`
   font-size: 12px;
   cursor: pointer;
 `
+
+export const BoxClear = styled.div`
+  display: flex;
+  justify-content: center;
+`

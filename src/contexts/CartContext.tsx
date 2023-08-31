@@ -12,6 +12,7 @@ type MyContextProps = {
   addMoreItemCart: (id: AddItemsProps) => Promise<void>;
   removeItemCart: (id: AddItemsProps) => Promise<void>;
   removeProductCart: (id: AddItemsProps) => Promise<void>;
+  clearAllCart(): void;
 };
 
 type AddItemsProps = {
@@ -281,8 +282,24 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
+  async function clearAllCart() {
+
+    const apiClient = setupAPIClient();
+    const storageId = String(cartProducts[0]?.store_cart_id);
+
+    await apiClient.delete(`/clearCart?store_cart_id=${storageId}`);
+    await apiClient.delete(`/deleteTotalCart?store_cart_id=${storageId}`);
+
+    localStorage.removeItem('@cartProducts');
+
+    setTimeout(() => {
+      router.reload();
+    }, 1500);
+
+  }
+
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ productsCart, cartProducts, totalCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart }}>
+    <CartContext.Provider value={{ productsCart, cartProducts, totalCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )

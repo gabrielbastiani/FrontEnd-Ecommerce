@@ -1,13 +1,14 @@
 import Head from "next/head";
 import { PageSection } from "../../components/dateStoreUx/styles";
 import FooterAccount from "../../components/FooterAccount";
-import { use, useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import Image from "next/image";
 import { BsFillTrashFill } from "react-icons/bs";
 import {
     AtributeProduct,
     BoxCep,
+    BoxClear,
     BoxCupom,
     BoxData,
     BoxDataProduct,
@@ -61,12 +62,15 @@ import router from "next/router";
 import { AuthContext } from "../../contexts/AuthContext";
 import Link from "next/link";
 
+export interface DataCart {
+    promotion: number;
+}
 
 export default function Carrinho() {
 
     const { isAuthenticated } = useContext(AuthContext);
     /* @ts-ignore */
-    const { productsCart, addMoreItemCart, removeItemCart, removeProductCart, cartProducts, totalCart } = useContext(CartContext);
+    const { productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
 
     const [desconto, setDesconto] = useState("");
     const [totalDesconto, setTotalDesconto] = useState("");
@@ -207,8 +211,6 @@ export default function Carrinho() {
                         });
                     });
 
-                    console.log(valuesProducts)
-
                     var totalPriceDesconto = 0;
                     for (var i = 0; i < valuesProducts.length; i++) {
                         totalPriceDesconto += valuesProducts[i].preco;
@@ -340,8 +342,6 @@ export default function Carrinho() {
                         totalPriceDesconto += valuesProducts[i].preco;
                     }
 
-                    
-
                     const result = formatedFrete + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -382,8 +382,6 @@ export default function Carrinho() {
                     });
                 });
 
-                console.log(valuesProducts)
-
                 var totalPriceDesconto = 0;
                 for (var i = 0; i < valuesProducts.length; i++) {
                     totalPriceDesconto += valuesProducts[i].preco;
@@ -402,6 +400,141 @@ export default function Carrinho() {
 
         } catch (error) {/* @ts-ignore */
             console.log(error.response.data);
+        }
+    }
+
+    async function cartFinish(totalCart: number, formatedFrete: number, freteCupom: number, formatedCupom: number) {
+        const apiClient = setupAPIClient();
+        try {
+            const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
+
+            /*"Valor de desconto (Produto(s) selecionado(s) para essa promoção)", value: "productsValue"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.post(`/createCartTotalFinish`, {
+                    store_cart_id: storageId,
+                    totalCartFinish: formatedCupom
+                });
+
+                return;
+            }
+
+            /*"Valor de desconto em todos os produtos da loja", value: "allProductsValue"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.post(`/createCartTotalFinish`, {
+                    store_cart_id: storageId,
+                    totalCartFinish: formatedCupom
+                });
+
+                return;
+            }
+
+            /*"Valor de desconto no valor total", value: "totalValue"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "totalValue") {
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.post(`/createCartTotalFinish`, {
+                    store_cart_id: storageId,
+                    totalCartFinish: formatedCupom + formatedFrete
+                });
+
+                return;
+            }
+
+            /*"Frete grátis total", value: "freeShipping"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.post(`/createCartTotalFinish`, {
+                    store_cart_id: storageId,
+                    totalCartFinish: totalCart
+                });
+
+                return;
+            }
+
+            /*"Valor de desconto no valor do frete", value: "valueShipping"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.post(`/createCartTotalFinish`, {
+                    store_cart_id: storageId,
+                    totalCartFinish: totalCart + freteCupom
+                });
+
+                return;
+            }
+
+            /*"Percentual de desconto no valor do frete", value: "shippingPercent"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.post(`/createCartTotalFinish`, {
+                    store_cart_id: storageId,
+                    totalCartFinish: totalCart + freteCupom
+                });
+
+                return;
+            }
+
+            /*"Percentual de desconto (Produto(s) selecionado(s) para essa promoção)", value: "percentProduct"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "percentProduct") {
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.post(`/createCartTotalFinish`, {
+                    store_cart_id: storageId,
+                    totalCartFinish: formatedCupom
+                });
+
+                return;
+            }
+
+            /*"Percentual de desconto no valor total", value: "totalPercent"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "totalPercent") {
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.post(`/createCartTotalFinish`, {
+                    store_cart_id: storageId,
+                    totalCartFinish: formatedCupom
+                });
+
+                return;
+            }
+
+            /*"Percentual de desconto em todos os produtos da loja", value: "allProductsValuePercent"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.post(`/createCartTotalFinish`, {
+                    store_cart_id: storageId,
+                    totalCartFinish: formatedCupom
+                });
+
+                return;
+            }
+
+            const storageId = String(cartProducts[0]?.store_cart_id);
+            await apiClient.post(`/createCartTotalFinish`, {
+                store_cart_id: storageId,
+                totalCartFinish: totalCart + formatedFrete
+            });
+
+            return;
+
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -546,6 +679,13 @@ export default function Carrinho() {
                                         })}
                                     </>
                                 }
+                                <BoxClear>
+                                    <Button
+                                        onClick={clearAllCart}
+                                    >
+                                        LIMPAR CARRINHO
+                                    </Button>
+                                </BoxClear>
                             </>
                         }
                     </ContainerProduct>
@@ -687,7 +827,20 @@ export default function Carrinho() {
                                                         }
                                                     </>
                                                 ) :
-                                                    <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(freteCupom)}</ValuesMore>
+                                                    <>
+                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(freteCupom)}</ValuesMore>
+
+                                                    </>
+                                                }
+                                            </BoxPricesFinal>
+                                            <BoxPricesFinal>
+                                                {freteCupom ? (
+                                                    <>
+                                                        <SubTotal>DESCONTO</SubTotal>
+                                                        <ValuesMore>{desconto}</ValuesMore>
+                                                    </>
+                                                ) :
+                                                    null
                                                 }
                                             </BoxPricesFinal>
                                             <BoxPricesFinal>
@@ -716,11 +869,40 @@ export default function Carrinho() {
 
                                 </>
                             }
+
                             <BoxFinalCart>
+                                {isAuthenticated ? (
+
+                                    <Button
+                                        style={{ margin: '30px', width: '80%' }}
+                                        onClick={() => cartFinish(totalCart, formatedFrete, freteCupom, formatedCupom)}
+                                    >
+                                        FINALIZAR COMPRA
+                                    </Button>
+
+                                ) :
+
+                                    <Button
+                                        style={{ margin: '30px', width: '80%' }}
+                                        onClick={() => cartFinish(totalCart, formatedFrete, freteCupom, formatedCupom)}
+                                    >
+                                        FINALIZAR COMPRA
+                                    </Button>
+
+                                }
+                                <ButtonFinal
+                                    onClick={() => Router.back()}
+                                >
+                                    CONTINUAR COMPRANDO
+                                </ButtonFinal>
+                            </BoxFinalCart>
+
+                            {/* <BoxFinalCart>
                                 {isAuthenticated ? (
                                     <Link href={"/payment"}>
                                         <Button
                                             style={{ margin: '30px', width: '80%' }}
+                                            onClick={cartFinish}
                                         >
                                             FINALIZAR COMPRA
                                         </Button>
@@ -729,6 +911,7 @@ export default function Carrinho() {
                                     <Link href={"/loginClient"}>
                                         <Button
                                             style={{ margin: '30px', width: '80%' }}
+                                            onClick={cartFinish}
                                         >
                                             FINALIZAR COMPRA
                                         </Button>
@@ -739,7 +922,8 @@ export default function Carrinho() {
                                 >
                                     CONTINUAR COMPRANDO
                                 </ButtonFinal>
-                            </BoxFinalCart>
+                            </BoxFinalCart> */}
+
                         </ContainerData>
                     ) :
                         null
