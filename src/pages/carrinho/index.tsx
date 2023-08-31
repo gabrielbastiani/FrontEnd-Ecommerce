@@ -74,6 +74,7 @@ export default function Carrinho() {
     const [cep, setCep] = useState("");
     const [dataFrete, setDataFrete] = useState<any[]>([]);
     const [newPriceArray, setNewPriceArray] = useState<any[]>([]);
+    const [newSubTotalPrice, setNewSubTotalPrice] = useState(Number);
     const [freteCupom, setFreteCupom] = useState(Number);
     const [zero, setZero] = useState(100);
 
@@ -178,36 +179,35 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
 
-                const cartArray = productsCart.map(item => item.product_id);
+                const cartArray = productsCart.map(item => item?.product_id);
                 const productId = data?.cupomsproducts.map((item: { product_id: any; }) => item?.product_id);
 
-                var cupomOk: any = [];
+                var cupomOkValue: any = [];
                 for (var i = 0; i < cartArray.length; i++) {
                     if (productId.indexOf(cartArray[i]) > -1) {
-                        cupomOk.push(cartArray[i]);
+                        cupomOkValue.push(cartArray[i]);
                     }
                 }
 
-                if (cupomOk?.length === 0) {
+                if (cupomOkValue?.length === 0) {
                     toast.error('Nenhum dos produtos no carrinho de compras estão dentro dessa promoção.');
                 } else {
 
-                    let newCart = productsCart.reduce((acc, o) => {
-                        let obj = cupomOk.includes(o?.product_id) ? Object.assign(
-                            o, { price: o?.product?.promotion - data?.coupomsconditionals[0]?.value }) : o;
-
+                    let newCartValue = productsCart.reduce((acc, o) => {
+                        let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
+                            o, { price: o?.product?.promotion }) : o;
                         acc.push(obj);
-
                         return acc;
-
                     }, []);
 
                     let valuesProducts: any = [];
-                    (newCart || []).forEach((item) => {
+                    (newCartValue || []).forEach((item) => {
                         valuesProducts.push({
-                            "preco": item?.product?.promotion * item?.amount
+                            "preco": item?.price ? (item?.price - data?.coupomsconditionals[0]?.value) * item?.amount : item?.product?.promotion * item?.amount
                         });
                     });
+
+                    console.log(valuesProducts)
 
                     var totalPriceDesconto = 0;
                     for (var i = 0; i < valuesProducts.length; i++) {
@@ -219,7 +219,7 @@ export default function Carrinho() {
 
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
-                    setNewPriceArray(newCart);
+                    setNewPriceArray(newCartValue);
                     handleShowMenu();
 
                 }
@@ -324,23 +324,16 @@ export default function Carrinho() {
                     let newCart = productsCart.reduce((acc, o) => {
                         let obj = cupomOk.includes(o?.product_id) ? Object.assign(
                             o, { price: o?.product?.promotion - (o?.product?.promotion * data?.coupomsconditionals[0]?.value / 100) }) : o;
-
                         acc.push(obj);
-
                         return acc;
-
                     }, []);
 
                     let valuesProducts: any = [];
                     (newCart || []).forEach((item) => {
                         valuesProducts.push({
-                            "preco": item?.price * item?.amount
+                            "preco": item?.price ? item?.price * item?.amount : item?.product?.promotion * item?.amount
                         });
                     });
-
-
-                    console.log(valuesProducts)
-                    
 
                     var totalPriceDesconto = 0;
                     for (var i = 0; i < valuesProducts.length; i++) {
@@ -352,6 +345,7 @@ export default function Carrinho() {
                     const result = formatedFrete + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+                    setNewSubTotalPrice(totalPriceDesconto);
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
                     setNewPriceArray(newCart);
@@ -388,6 +382,8 @@ export default function Carrinho() {
                     });
                 });
 
+                console.log(valuesProducts)
+
                 var totalPriceDesconto = 0;
                 for (var i = 0; i < valuesProducts.length; i++) {
                     totalPriceDesconto += valuesProducts[i].preco;
@@ -396,6 +392,7 @@ export default function Carrinho() {
                 const result = formatedFrete + totalPriceDesconto;
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+                setNewSubTotalPrice(totalPriceDesconto);
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
                 handleShowMenu();
@@ -473,13 +470,13 @@ export default function Carrinho() {
                                                     </BoxQuantidadeCart>
 
                                                     <BoxPriceProductCart>
-                                                        <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion)}</PriceProduct>
+                                                        <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price ? prod?.price : prod?.product?.promotion)}</PriceProduct>
                                                     </BoxPriceProductCart>
 
                                                     <BoxPricesTotalProduct>
                                                         <BoxPrices>
-                                                            <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion * prod?.amount)}</PriceProductData>
-                                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion * prod?.amount / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                                                            <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price ? prod?.price * prod?.amount : prod?.product?.promotion * prod?.amount)}</PriceProductData>
+                                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price ? prod?.price * prod?.amount / 12 : prod?.product?.promotion * prod?.amount / 12)} com juros de Cartão de Crédito</ConditionPrices>
                                                         </BoxPrices>
                                                     </BoxPricesTotalProduct>
                                                 </BoxProductCart>
@@ -639,7 +636,7 @@ export default function Carrinho() {
                                         <>
                                             <BoxPricesFinal>
                                                 <Total>SUBTOTAL</Total>
-                                                <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</Total>
+                                                <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(newSubTotalPrice === 0 ? totalCart : newSubTotalPrice)}</Total>
                                             </BoxPricesFinal>
                                             <BoxPricesFinal>
                                                 <SubTotal></SubTotal>
