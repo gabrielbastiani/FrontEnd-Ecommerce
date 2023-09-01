@@ -294,7 +294,6 @@ export function CartProviderProducts({ children }: Props) {
     const storageId = String(cartProducts[0]?.store_cart_id);
 
     await apiClient.delete(`/clearCart?store_cart_id=${storageId}`);
-    await apiClient.delete(`/deleteTotalCart?store_cart_id=${storageId}`);
 
     localStorage.removeItem('@cartProducts');
 

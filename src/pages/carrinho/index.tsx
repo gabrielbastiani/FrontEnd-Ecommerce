@@ -412,28 +412,43 @@ export default function Carrinho() {
 
     async function cartFinish(totalCart: number, formatedFrete: number, freteCupom: number, formatedCupom: number) {
         const apiClient = setupAPIClient();
+
+        if (totalCart === 0) {
+            router.reload();
+            return;
+        }
+
+        if (cep === "") {
+            toast.error("Digite o CEP de destino antes!!!");
+            return;
+        }
+
+        if (formatedFrete === 0) {
+            toast.error("Calcule o frete antes!!!");
+            return;
+        }
+
         try {
             const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
+            const storageId = String(cartProducts[0]?.store_cart_id);
+            const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
 
             /*"Valor de desconto (Produto(s) selecionado(s) para essa promoção)", value: "productsValue"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
-                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-                if (existFinish) {
-                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                if (existFinish?.data === null) {
+                    await apiClient.post(`/createCartTotalFinish`, {
+                        store_cart_id: storageId,
                         totalCartFinish: formatedCupom,
+                        customer_id: customer ? customer?.id : null
                     });
 
                     return;
                 }
 
-                await apiClient.post(`/createCartTotalFinish`, {
-                    store_cart_id: storageId,
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom,
-                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -443,21 +458,18 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
-                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-                if (existFinish) {
-                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                if (existFinish?.data === null) {
+                    await apiClient.post(`/createCartTotalFinish`, {
+                        store_cart_id: storageId,
                         totalCartFinish: formatedCupom,
+                        customer_id: customer ? customer?.id : null
                     });
 
                     return;
                 }
 
-                await apiClient.post(`/createCartTotalFinish`, {
-                    store_cart_id: storageId,
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom,
-                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -467,21 +479,18 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "totalValue") {
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
-                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-                if (existFinish) {
-                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                if (existFinish?.data === null) {
+                    await apiClient.post(`/createCartTotalFinish`, {
+                        store_cart_id: storageId,
                         totalCartFinish: formatedCupom,
+                        customer_id: customer ? customer?.id : null
                     });
 
                     return;
                 }
 
-                await apiClient.post(`/createCartTotalFinish`, {
-                    store_cart_id: storageId,
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom,
-                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -491,21 +500,18 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
-                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-                if (existFinish) {
-                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                if (existFinish?.data === null) {
+                    await apiClient.post(`/createCartTotalFinish`, {
+                        store_cart_id: storageId,
                         totalCartFinish: totalCart,
+                        customer_id: customer ? customer?.id : null
                     });
 
                     return;
                 }
 
-                await apiClient.post(`/createCartTotalFinish`, {
-                    store_cart_id: storageId,
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: totalCart,
-                    customer_id: customer ? customer?.id : null
                 });
 
                 return;
@@ -515,21 +521,18 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
-                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-                if (existFinish) {
-                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
-                        totalCartFinish: totalCart + freteCupom
+                if (existFinish?.data === null) {
+                    await apiClient.post(`/createCartTotalFinish`, {
+                        store_cart_id: storageId,
+                        totalCartFinish: totalCart + freteCupom,
+                        customer_id: customer ? customer?.id : null
                     });
 
                     return;
                 }
 
-                await apiClient.post(`/createCartTotalFinish`, {
-                    store_cart_id: storageId,
-                    totalCartFinish: totalCart + freteCupom,
-                    customer_id: customer ? customer?.id : null
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: totalCart + freteCupom
                 });
 
                 return;
@@ -539,21 +542,18 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
-                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-                if (existFinish) {
-                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
-                        totalCartFinish: totalCart + freteCupom
+                if (existFinish?.data === null) {
+                    await apiClient.post(`/createCartTotalFinish`, {
+                        store_cart_id: storageId,
+                        totalCartFinish: totalCart + freteCupom,
+                        customer_id: customer ? customer?.id : null
                     });
 
                     return;
                 }
 
-                await apiClient.post(`/createCartTotalFinish`, {
-                    store_cart_id: storageId,
-                    totalCartFinish: totalCart + freteCupom,
-                    customer_id: customer ? customer?.id : null
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: totalCart + freteCupom
                 });
 
                 return;
@@ -563,21 +563,18 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "percentProduct") {
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
-                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-                if (existFinish) {
-                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
-                        totalCartFinish: formatedCupom
+                if (existFinish?.data === null) {
+                    await apiClient.post(`/createCartTotalFinish`, {
+                        store_cart_id: storageId,
+                        totalCartFinish: formatedCupom,
+                        customer_id: customer ? customer?.id : null
                     });
 
                     return;
                 }
 
-                await apiClient.post(`/createCartTotalFinish`, {
-                    store_cart_id: storageId,
-                    totalCartFinish: formatedCupom,
-                    customer_id: customer ? customer?.id : null
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: formatedCupom
                 });
 
                 return;
@@ -587,21 +584,18 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "totalPercent") {
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
-                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-                if (existFinish) {
-                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
-                        totalCartFinish: formatedCupom
+                if (existFinish?.data === null) {
+                    await apiClient.post(`/createCartTotalFinish`, {
+                        store_cart_id: storageId,
+                        totalCartFinish: formatedCupom,
+                        customer_id: customer ? customer?.id : null
                     });
 
                     return;
                 }
 
-                await apiClient.post(`/createCartTotalFinish`, {
-                    store_cart_id: storageId,
-                    totalCartFinish: formatedCupom,
-                    customer_id: customer ? customer?.id : null
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: formatedCupom
                 });
 
                 return;
@@ -611,40 +605,36 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
-                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-                if (existFinish) {
-                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
-                        totalCartFinish: formatedCupom
+                if (existFinish?.data === null) {
+                    await apiClient.post(`/createCartTotalFinish`, {
+                        store_cart_id: storageId,
+                        totalCartFinish: formatedCupom,
+                        customer_id: customer ? customer?.id : null
                     });
 
                     return;
                 }
 
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: formatedCupom
+                });
+
+                return;
+            }
+
+            if (existFinish?.data === null) {
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: formatedCupom,
+                    totalCartFinish: totalCart + formatedFrete,
                     customer_id: customer ? customer?.id : null
                 });
 
                 return;
             }
 
-            const storageId = String(cartProducts[0]?.store_cart_id);
-            const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-
-            if (existFinish) {
-                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
-                    totalCartFinish: totalCart + formatedFrete
-                });
-
-                return;
-            }
-            await apiClient.post(`/createCartTotalFinish`, {
-                store_cart_id: storageId,
-                totalCartFinish: totalCart + formatedFrete,
-                customer_id: customer ? customer?.id : null
+            await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                totalCartFinish: totalCart + formatedFrete
             });
 
             return;
