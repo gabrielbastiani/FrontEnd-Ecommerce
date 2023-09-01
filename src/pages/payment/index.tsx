@@ -14,25 +14,67 @@ import FooterAccount from "../../components/FooterAccount";
 
 export default function Payment() {
 
-    const { cartProducts, productsCart } = useContext(CartContext);
+    const { cartProducts, productsCart, totalFinishCart } = useContext(CartContext);
     const { customer } = useContext(AuthContext);
+    let customer_id = customer?.id;
 
-    const [payment_id, setPayment_id] = useState("");
-    const [title, setTitle] = useState("");
-    const [unit_price, setUnit_price] = useState(Number);
-    const [category_id, setCategory_id] = useState("");
-    const [description, setDescription] = useState("");
-    const [picture_url, setPicture_url] = useState("");
-    const [name, setName] = useState("");
-    const [surname, setSurname] = useState("");
-    const [email, setEmail] = useState("");
-    const [area_code, setArea_code] = useState("");
-    const [number, setNumber] = useState(Number);
-    const [type_identification, setType_identification] = useState("");
-    const [type_number, setType_number] = useState(Number);
-    const [street_name, setStreet_name] = useState("");
-    const [street_number, setStreet_number] = useState(Number);
-    const [zip_code, setZip_code] = useState("");
+    const [nameCompletes, setNameCompletes] = useState('');
+    const [cpfs, setCpfs] = useState('');
+    const [cnpjs, setCnpjs] = useState('');
+    const [stateRegistration, setStateRegistration] = useState('');
+    const [phones, setPhones] = useState('');
+    const [emails, setEmails] = useState('');
+    const [dataNascimentos, setDataNascimentos] = useState('');
+    const [locals, setLocals] = useState('');
+    const [numeros, setNumeros] = useState('');
+    const [bairros, setBairros] = useState('');
+    const [cidades, setCidades] = useState('');
+    const [estados, setEstados] = useState([]);
+    const [ceps, setCeps] = useState('');
+    const [newslatters, setNewslatters] = useState("");
+    const [store, setStore] = useState("");
+
+    const cpfCnpj = cpfs ? cpfs : cnpjs;
+
+    function removerAcentos(s: any) {
+        return s.normalize('NFD')
+            .replace(/-{2,}/g, "")
+            .replace(".", "")
+            .replace(".", "")
+            .replace("/", "")
+            .replace("-", "")
+    }
+
+    const tipo = removerAcentos(cpfCnpj).length >= 14 ? "CNPJ" : "CPF";
+
+    useEffect(() => {
+        async function loadCustomerData() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
+
+                setNameCompletes(data?.name || "");
+                setCnpjs(data?.cnpj || "");
+                setCpfs(data?.cpf || "");
+                setStateRegistration(data?.stateRegistration || "");
+                setPhones(data?.phone || "");
+                setEmails(data?.email || "");
+                setDataNascimentos(data?.dateOfBirth || "");
+                setLocals(data?.address || "");
+                setNumeros(data?.number || "");
+                setBairros(data?.neighborhood || "");
+                setCidades(data?.city || "");
+                setEstados(data?.state || "");
+                setCeps(data?.cep || "");
+                setNewslatters(data?.newslatter || "");
+                setStore(data?.store?.name || "");
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadCustomerData();
+    }, [customer_id]);
 
 
 
@@ -45,7 +87,7 @@ export default function Payment() {
             );
 
             const cardForm = mp.cardForm({
-                amount: "100.5",
+                amount: String(totalFinishCart),
                 iframe: true,
                 form: {
                     id: "form-checkout",
@@ -169,6 +211,7 @@ export default function Payment() {
                 const identificationTypeElement = document.getElementById('form-checkout__identificationTypeBoleto');
 
                 createSelectOptions(identificationTypeElement, identificationTypes);
+
             } catch (e) {
                 return console.error('Error getting identificationTypes: ', e);
             }
@@ -255,24 +298,24 @@ export default function Payment() {
                     "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
                 },
                 body: JSON.stringify({
-                    transaction_amount: 100,
-                    description: 'Título do produto',
+                    transaction_amount: totalFinishCart,
+                    description: store,
                     payment_method_id: 'bolbradesco',
                     payer: {
-                        email: 'gabriel.bastiani@sumig.com',
-                        first_name: 'Test',
-                        last_name: 'User',
+                        email: emails,
+                        first_name: nameCompletes,
+                        last_name: nameCompletes,
                         identification: {
-                            type: 'CNPJ',
-                            number: '92236629000153'
+                            type: tipo,
+                            number: removerAcentos(cpfCnpj)
                         },
                         address: {
-                            zip_code: '06233200',
-                            street_name: 'Av. das Nações Unidas',
-                            street_number: '3003',
-                            neighborhood: 'Bonfim',
-                            city: 'Osasco',
-                            federal_unit: 'SP'
+                            zip_code: removerAcentos(ceps),
+                            street_name: locals,
+                            street_number: numeros,
+                            neighborhood: bairros,
+                            city: cidades,
+                            federal_unit: estados
                         }
                     },
                     notification_url: URL_NOTIFICATION
@@ -294,24 +337,24 @@ export default function Payment() {
                     "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
                 },
                 body: JSON.stringify({
-                    transaction_amount: 100,
-                    description: 'Título do produto',
+                    transaction_amount: totalFinishCart,
+                    description: store,
                     payment_method_id: 'pix',
                     payer: {
-                        email: 'gabriel.bastiani@sumig.com',
-                        first_name: 'Test',
-                        last_name: 'User',
+                        email: emails,
+                        first_name: nameCompletes,
+                        last_name: nameCompletes,
                         identification: {
-                            type: 'CPF',
-                            number: '00700244050'
+                            type: tipo,
+                            number: removerAcentos(cpfCnpj)
                         },
                         address: {
-                            zip_code: '06233200',
-                            street_name: 'Av. das Nações Unidas',
-                            street_number: '3003',
-                            neighborhood: 'Bonfim',
-                            city: 'Osasco',
-                            federal_unit: 'SP'
+                            zip_code: removerAcentos(ceps),
+                            street_name: locals,
+                            street_number: numeros,
+                            neighborhood: bairros,
+                            city: cidades,
+                            federal_unit: estados
                         }
                     },
                     notification_url: URL_NOTIFICATION

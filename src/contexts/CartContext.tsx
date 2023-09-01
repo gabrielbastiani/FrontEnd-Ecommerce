@@ -14,6 +14,8 @@ type MyContextProps = {
   removeItemCart: (id: AddItemsProps) => Promise<void>;
   removeProductCart: (id: AddItemsProps) => Promise<void>;
   clearAllCart(): void;
+  totalFinishCart: number;
+  totalCart: number;
 };
 
 type AddItemsProps = {
@@ -45,6 +47,7 @@ export function CartProviderProducts({ children }: Props) {
   const [cartProducts, setCartProducts] = useState<any[]>([]);
   const [productsCart, setProductsCart] = useState<any[]>([]);
   const [totalCart, setTotalCart] = useState(0);
+  const [totalFinishCart, setTotalFinishCart] = useState(0);
 
   useEffect(() => {
     let dadosCart = localStorage.getItem("@cartProducts");
@@ -80,7 +83,19 @@ export function CartProviderProducts({ children }: Props) {
     }
   }, [cartProducts]);
 
-  
+  useEffect(() => {
+    try {
+      const apiClient = setupAPIClient();
+      async function loadFinishCart() {
+        const storageId = String(cartProducts[0]?.store_cart_id);
+        const { data } = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+        setTotalFinishCart(data?.totalCartFinish || 0);
+      }
+      loadFinishCart();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [cartProducts]);
 
   async function saveProductCart(id: string, count: any, prod: any) {
 
@@ -304,7 +319,7 @@ export function CartProviderProducts({ children }: Props) {
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ productsCart, cartProducts, totalCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )
