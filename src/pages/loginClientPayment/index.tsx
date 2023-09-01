@@ -55,25 +55,14 @@ export default function loginClientPayment() {
 
         setLoading(true);
 
-        if (cartProducts?.length >= 1) {
-            let data = {
-                email,
-                password
-            }
-            /* @ts-ignore */
-            await signInPay(data);
-
-            setLoading(false);
-
-            return;
-        }
-
         let data = {
             email,
-            password
+            password,
+            cartProducts
         }
+
         /* @ts-ignore */
-        await signIn(data);
+        await signInPay(data);
 
         setLoading(false);
 

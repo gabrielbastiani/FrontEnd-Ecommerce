@@ -159,7 +159,8 @@ export default function createAccount() {
             if(cartProducts?.length >= 1) {
                 let data = {
                     email,
-                    password
+                    password,
+                    cartProducts
                 }
                 /* @ts-ignore */
                 await signInPay(data);
@@ -244,7 +245,8 @@ export default function createAccount() {
             if(cartProducts?.length >= 1) {
                 let data = {
                     email,
-                    password
+                    password,
+                    cartProducts
                 }
                 /* @ts-ignore */
                 await signInPay(data);

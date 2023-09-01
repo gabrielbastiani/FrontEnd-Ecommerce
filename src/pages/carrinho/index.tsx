@@ -630,12 +630,24 @@ export default function Carrinho() {
                     customer_id: customer ? customer?.id : null
                 });
 
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
+
                 return;
             }
 
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                 totalCartFinish: totalCart + formatedFrete
             });
+
+            if (isAuthenticated === true) {
+                Router.push('/payment');
+            } else {
+                Router.push('/loginClientPayment');
+            }
 
             return;
 
@@ -977,59 +989,19 @@ export default function Carrinho() {
                             }
 
                             <BoxFinalCart>
-                                {isAuthenticated ? (
+                                <Button
+                                    style={{ margin: '30px', width: '80%' }}
+                                    onClick={() => cartFinish(totalCart, formatedFrete, freteCupom, formatedCupom)}
+                                >
+                                    FINALIZAR COMPRA
+                                </Button>
 
-                                    <Button
-                                        style={{ margin: '30px', width: '80%' }}
-                                        onClick={() => cartFinish(totalCart, formatedFrete, freteCupom, formatedCupom)}
-                                    >
-                                        FINALIZAR COMPRA
-                                    </Button>
-
-                                ) :
-
-                                    <Button
-                                        style={{ margin: '30px', width: '80%' }}
-                                        onClick={() => cartFinish(totalCart, formatedFrete, freteCupom, formatedCupom)}
-                                    >
-                                        FINALIZAR COMPRA
-                                    </Button>
-
-                                }
                                 <ButtonFinal
                                     onClick={() => Router.back()}
                                 >
                                     CONTINUAR COMPRANDO
                                 </ButtonFinal>
                             </BoxFinalCart>
-
-                            {/* <BoxFinalCart>
-                                {isAuthenticated ? (
-                                    <Link href={"/payment"}>
-                                        <Button
-                                            style={{ margin: '30px', width: '80%' }}
-                                            onClick={cartFinish}
-                                        >
-                                            FINALIZAR COMPRA
-                                        </Button>
-                                    </Link>
-                                ) :
-                                    <Link href={"/loginClientPayment"}>
-                                        <Button
-                                            style={{ margin: '30px', width: '80%' }}
-                                            onClick={cartFinish}
-                                        >
-                                            FINALIZAR COMPRA
-                                        </Button>
-                                    </Link>
-                                }
-                                <ButtonFinal
-                                    onClick={() => Router.back()}
-                                >
-                                    CONTINUAR COMPRANDO
-                                </ButtonFinal>
-                            </BoxFinalCart> */}
-
                         </ContainerData>
                     ) :
                         null

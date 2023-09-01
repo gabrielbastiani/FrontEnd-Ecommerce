@@ -113,7 +113,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function signInPay({ email, password }: SignInProps) {
+  async function signInPay({ email, password, cartProducts }: SignInProps) {
     try {
       const response = await api.post('/customer/session', {
         email,
@@ -137,7 +137,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       //Passar para proximas requisiçoes o nosso token
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
-      toast.success('Logado com sucesso!');
+      if (cartProducts.length >= 1) {
+
+        const storageId = String(cartProducts[0]?.store_cart_id);
+        api.put(`/updateCartCustomer?store_cart_id=${storageId}`, {
+          customer_id: String(id)
+        });
+
+      }
 
       //Redirecionar o customer para /myAccount
       Router.push('/payment');
