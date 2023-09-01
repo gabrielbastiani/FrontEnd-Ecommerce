@@ -14,7 +14,7 @@ import FooterAccount from "../../components/FooterAccount";
 
 export default function Payment() {
 
-    const { cartProducts, totalCart } = useContext(CartContext);
+    const { cartProducts, productsCart } = useContext(CartContext);
     const { customer } = useContext(AuthContext);
 
     const [payment_id, setPayment_id] = useState("");
