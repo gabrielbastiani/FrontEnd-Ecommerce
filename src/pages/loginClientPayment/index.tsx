@@ -23,10 +23,10 @@ import Titulos from '../../components/Titulos';
 import { CartContext } from '../../contexts/CartContext';
 
 
-export default function loginClient() {
+export default function loginClientPayment() {
 
-    const { signIn } = useContext(AuthContext);
     const { cartProducts } = useContext(CartContext);
+    const { signIn, signInPay } = useContext(AuthContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState(false);
@@ -55,10 +55,22 @@ export default function loginClient() {
 
         setLoading(true);
 
+        if (cartProducts?.length >= 1) {
+            let data = {
+                email,
+                password
+            }
+            /* @ts-ignore */
+            await signInPay(data);
+
+            setLoading(false);
+
+            return;
+        }
+
         let data = {
             email,
-            password,
-            cartProducts
+            password
         }
         /* @ts-ignore */
         await signIn(data);

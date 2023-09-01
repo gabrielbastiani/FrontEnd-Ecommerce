@@ -89,8 +89,15 @@ export default function Carrinho() {
         setCupomButton(!cupomButton);
     }
 
-    function removeCupom() {
-        router.reload();
+    async function removeCupom() {
+        try {
+            const apiClient = setupAPIClient();
+            const storageId = String(cartProducts[0]?.store_cart_id);
+            await apiClient.delete(`/deleteCartTotalFinish?store_cart_id=${storageId}`);
+            router.reload();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     function dataAlterar() {
@@ -413,6 +420,16 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
 
                 const storageId = String(cartProducts[0]?.store_cart_id);
+                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+                if (existFinish) {
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: formatedCupom,
+                    });
+
+                    return;
+                }
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
                     totalCartFinish: formatedCupom,
@@ -427,6 +444,16 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
 
                 const storageId = String(cartProducts[0]?.store_cart_id);
+                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+                if (existFinish) {
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: formatedCupom,
+                    });
+
+                    return;
+                }
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
                     totalCartFinish: formatedCupom,
@@ -441,9 +468,19 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "totalValue") {
 
                 const storageId = String(cartProducts[0]?.store_cart_id);
+                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+                if (existFinish) {
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: formatedCupom,
+                    });
+
+                    return;
+                }
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
-                    totalCartFinish: formatedCupom + formatedFrete,
+                    totalCartFinish: formatedCupom,
                     customer_id: customer ? customer?.id : null
                 });
 
@@ -455,6 +492,16 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
 
                 const storageId = String(cartProducts[0]?.store_cart_id);
+                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+                if (existFinish) {
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: totalCart,
+                    });
+
+                    return;
+                }
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
                     totalCartFinish: totalCart,
@@ -469,6 +516,16 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
 
                 const storageId = String(cartProducts[0]?.store_cart_id);
+                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+                if (existFinish) {
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: totalCart + freteCupom
+                    });
+
+                    return;
+                }
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
                     totalCartFinish: totalCart + freteCupom,
@@ -483,6 +540,16 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
 
                 const storageId = String(cartProducts[0]?.store_cart_id);
+                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+                if (existFinish) {
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: totalCart + freteCupom
+                    });
+
+                    return;
+                }
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
                     totalCartFinish: totalCart + freteCupom,
@@ -497,6 +564,16 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "percentProduct") {
 
                 const storageId = String(cartProducts[0]?.store_cart_id);
+                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+                if (existFinish) {
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: formatedCupom
+                    });
+
+                    return;
+                }
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
                     totalCartFinish: formatedCupom,
@@ -511,6 +588,16 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "totalPercent") {
 
                 const storageId = String(cartProducts[0]?.store_cart_id);
+                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+                if (existFinish) {
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: formatedCupom
+                    });
+
+                    return;
+                }
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
                     totalCartFinish: formatedCupom,
@@ -525,6 +612,16 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
 
                 const storageId = String(cartProducts[0]?.store_cart_id);
+                const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+                if (existFinish) {
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: formatedCupom
+                    });
+
+                    return;
+                }
+
                 await apiClient.post(`/createCartTotalFinish`, {
                     store_cart_id: storageId,
                     totalCartFinish: formatedCupom,
@@ -535,6 +632,15 @@ export default function Carrinho() {
             }
 
             const storageId = String(cartProducts[0]?.store_cart_id);
+            const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+
+            if (existFinish) {
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: totalCart + formatedFrete
+                });
+
+                return;
+            }
             await apiClient.post(`/createCartTotalFinish`, {
                 store_cart_id: storageId,
                 totalCartFinish: totalCart + formatedFrete,
@@ -918,7 +1024,7 @@ export default function Carrinho() {
                                         </Button>
                                     </Link>
                                 ) :
-                                    <Link href={"/loginClient"}>
+                                    <Link href={"/loginClientPayment"}>
                                         <Button
                                             style={{ margin: '30px', width: '80%' }}
                                             onClick={cartFinish}

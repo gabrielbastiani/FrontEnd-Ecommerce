@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState, useEffect } from 'react';
+import { createContext, ReactNode, useState, useEffect, useContext } from 'react';
 import { api } from '../services/apiClient';
 import { destroyCookie, setCookie, parseCookies } from 'nookies';
 import Router from 'next/router';
@@ -24,6 +24,7 @@ type UserProps = {
 type SignInProps = {
   email: string;
   password: string;
+  cartProducts: any;
 }
 
 type AuthProviderProps = {
@@ -43,6 +44,7 @@ export function signOut() {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
+
   const [customer, setCustomer] = useState<UserProps>();
   const isAuthenticated = !!customer;
 
@@ -68,7 +70,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   }, []);
 
-  async function signIn({ email, password }: SignInProps) {
+  async function signIn({ email, password, cartProducts }: SignInProps) {
     try {
       const response = await api.post('/customer/session', {
         email,
@@ -93,6 +95,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
       toast.success('Logado com sucesso!');
+
+      if (cartProducts.length >= 1) {
+
+        const storageId = String(cartProducts[0]?.store_cart_id);
+        api.put(`/updateCartCustomer?store_cart_id=${storageId}`, {
+          customer_id: String(id)
+        });
+
+      }
 
       //Redirecionar o customer para /myAccount
       Router.push('/myAccount/meusdados');
