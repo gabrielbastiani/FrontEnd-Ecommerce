@@ -75,7 +75,7 @@ export const Aside = () => {
                     Alterar Senha
                 </Link>
 
-                <MenuItemButton onClick={() => signOut()}>
+                <MenuItemButton onClick={signOut}>
                     <MdExitToApp />
                     Sair
                 </MenuItemButton>

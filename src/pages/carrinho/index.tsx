@@ -444,12 +444,24 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
+                    if (isAuthenticated === true) {
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/loginClientPayment');
+                    }
+
                     return;
                 }
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom,
                 });
+
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
 
                 return;
             }
@@ -465,12 +477,24 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
+                    if (isAuthenticated === true) {
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/loginClientPayment');
+                    }
+
                     return;
                 }
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom,
                 });
+
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
 
                 return;
             }
@@ -486,12 +510,24 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
+                    if (isAuthenticated === true) {
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/loginClientPayment');
+                    }
+
                     return;
                 }
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom,
                 });
+
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
 
                 return;
             }
@@ -507,12 +543,24 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
+                    if (isAuthenticated === true) {
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/loginClientPayment');
+                    }
+
                     return;
                 }
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: totalCart,
                 });
+
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
 
                 return;
             }
@@ -528,12 +576,24 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
+                    if (isAuthenticated === true) {
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/loginClientPayment');
+                    }
+
                     return;
                 }
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: totalCart + freteCupom
                 });
+
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
 
                 return;
             }
@@ -549,12 +609,24 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
+                    if (isAuthenticated === true) {
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/loginClientPayment');
+                    }
+
                     return;
                 }
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: totalCart + freteCupom
                 });
+
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
 
                 return;
             }
@@ -570,12 +642,24 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
+                    if (isAuthenticated === true) {
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/loginClientPayment');
+                    }
+
                     return;
                 }
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom
                 });
+
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
 
                 return;
             }
@@ -591,12 +675,24 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
+                    if (isAuthenticated === true) {
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/loginClientPayment');
+                    }
+
                     return;
                 }
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom
                 });
+
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
 
                 return;
             }
@@ -612,12 +708,24 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
+                    if (isAuthenticated === true) {
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/loginClientPayment');
+                    }
+
                     return;
                 }
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom
                 });
+
+                if (isAuthenticated === true) {
+                    Router.push('/payment');
+                } else {
+                    Router.push('/loginClientPayment');
+                }
 
                 return;
             }

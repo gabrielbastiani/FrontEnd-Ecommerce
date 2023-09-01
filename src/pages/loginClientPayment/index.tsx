@@ -144,7 +144,7 @@ export default function loginClientPayment() {
 
                     <ButtonCreateAccount>
                         <LinkCreateAccount
-                            href="/createAccount"
+                            href="/createAccountPayment"
                         >
                             Cadastre-se aqui!
                         </LinkCreateAccount>

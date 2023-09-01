@@ -23,15 +23,14 @@ import { IMaskInput } from "react-imask";
 import { Button } from "../../components/ui/Button";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../services/api";
-import Router from "next/router";
 import { CartContext } from "../../contexts/CartContext";
 import { AuthContext } from "../../contexts/AuthContext";
 
 
-export default function createAccount() {
+export default function createAccountPayment() {
 
     const { cartProducts } = useContext(CartContext);
-    const { signIn } = useContext(AuthContext);
+    const { signInPay } = useContext(AuthContext);
 
     const [loading, setLoading] = useState(false);
 
@@ -157,14 +156,14 @@ export default function createAccount() {
             setCeps('');
             setCidades('');
             setCpfs('');
-            
+
             let data = {
                 email,
                 password,
                 cartProducts
             }
 
-            await signIn(data);
+            await signInPay(data);
 
             return;
 
@@ -246,7 +245,7 @@ export default function createAccount() {
                 cartProducts
             }
 
-            await signIn(data);
+            await signInPay(data);
 
             return;
 
