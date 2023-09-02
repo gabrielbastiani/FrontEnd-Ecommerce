@@ -10,6 +10,12 @@ import { PageSection } from "../../components/dateStoreUx/styles";
 import { HeaderCart } from "../../components/HeaderCart";
 import Head from "next/head";
 import FooterAccount from "../../components/FooterAccount";
+import { BoxButtonsData, BoxData, BoxPayment, BoxTitle, ButtonsData, ContainerFechamento, Datas, SectionPayment } from "./styles";
+import Titulos from "../../components/Titulos";
+import { AiOutlineMail } from "react-icons/ai";
+import { BsFillPersonFill, BsTelephoneFill } from "react-icons/bs";
+import { FaIdCard } from "react-icons/fa";
+import Link from "next/link";
 
 
 export default function Payment() {
@@ -76,7 +82,20 @@ export default function Payment() {
         loadCustomerData();
     }, [customer_id]);
 
+    useEffect(() => {
+        async function deliverys() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/customer/findAlldeliveryCustomer?customer_id=${customer_id}`);
 
+                console.log(data)
+
+            } catch (error) {
+                console.log(error);
+            }
+        }   
+        deliverys();
+    },[])
 
     useEffect(() => {
         const initializeMercadoPago = async () => {
@@ -375,9 +394,66 @@ export default function Payment() {
 
             <HeaderCart />
 
-            <PageSection>
+            <SectionPayment>
+                <ContainerFechamento>
+                    <BoxPayment>
+                        <Titulos tipo="h3" titulo="Informações Pessoais" />
+                        <br />
+                        <BoxTitle>Olá {nameCompletes}</BoxTitle>
+                        <BoxData>
+                            <AiOutlineMail color="black" size={20} />
+                            <Datas>{emails}</Datas>
+                        </BoxData>
+                        <BoxData>
+                            <BsFillPersonFill color="black" size={20} />
+                            <Datas>{nameCompletes}</Datas>
+                        </BoxData>
+                        <BoxData>
+                            <BsTelephoneFill color="black" size={20} />
+                            <Datas>{phones}</Datas>
+                        </BoxData>
+                        <BoxData>
+                            <FaIdCard color="black" size={20} />
+                            <Datas>{cpfCnpj}</Datas>
+                        </BoxData>
+                        <BoxButtonsData>
+                            <Link
+                                href='/myAccount/meusdados'
+                            >
+                                <ButtonsData>Editar dados</ButtonsData>
+                            </Link>
+                            <Link
+                                href='/createAccountPayment'
+                            >
+                                <ButtonsData>Cadastrar novo</ButtonsData>
+                            </Link>
+                        </BoxButtonsData>
+                    </BoxPayment>
 
-            </PageSection>
+                    <BoxPayment>
+                        <Titulos tipo="h3" titulo="Endereço de Entrega" />
+                        <br />
+                    </BoxPayment>
+                    
+                    <BoxPayment>
+                        <Titulos tipo="h3" titulo="Resumo do Pedido" />
+                        <br />
+                    </BoxPayment>
+                </ContainerFechamento>
+
+                <ContainerFechamento>
+                    <BoxPayment>
+                        <Titulos tipo="h3" titulo="Envio" />
+                        <br />
+                    </BoxPayment>
+                    <BoxPayment>
+                        <Titulos tipo="h3" titulo="Formas de Pagamento" />
+                        <br />
+                    </BoxPayment>
+                </ContainerFechamento>
+            </SectionPayment>
+
+
             <div>
                 <form id="form-checkout">
 
@@ -523,7 +599,7 @@ export default function Payment() {
                 </form>
 
             </div>
-            
+
             <br />
             <br />
             <FooterAccount />
