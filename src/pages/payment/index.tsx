@@ -10,12 +10,16 @@ import { PageSection } from "../../components/dateStoreUx/styles";
 import { HeaderCart } from "../../components/HeaderCart";
 import Head from "next/head";
 import FooterAccount from "../../components/FooterAccount";
-import { BoxButtonsData, BoxData, BoxPayment, BoxTitle, ButtonsData, ContainerFechamento, Datas, SectionPayment } from "./styles";
+import { BoxButtonsData, BoxData, BoxDelivery, BoxPayment, BoxTitle, ButtonsData, ContainerFechamento, DataDelivery, Datas, EditDelivery, SectionPayment } from "./styles";
 import Titulos from "../../components/Titulos";
-import { AiOutlineMail } from "react-icons/ai";
+import { AiFillEdit, AiOutlineCompass, AiOutlineMail } from "react-icons/ai";
 import { BsFillPersonFill, BsTelephoneFill } from "react-icons/bs";
 import { FaIdCard } from "react-icons/fa";
 import Link from "next/link";
+import SelectUpdate from "../../components/ui/SelectUpdate";
+import { Input } from "../../components/ui/Input";
+import { IMaskInput } from "react-imask";
+import { InputUpdate } from "../../components/ui/InputUpdate";
 
 
 export default function Payment() {
@@ -39,6 +43,23 @@ export default function Payment() {
     const [ceps, setCeps] = useState('');
     const [newslatters, setNewslatters] = useState("");
     const [store, setStore] = useState("");
+
+    const [complement, setComplement] = useState("");
+    const [reference, setReference] = useState("");
+    const [destinatario, setDestinatario] = useState("");
+
+    const [deliverysCustomer, setDeliverysCustomer] = useState<any[]>([]);
+
+    const [activeTab, setActiveTab] = useState("");
+    const [toogle, setToogle] = useState(!activeTab);
+
+    const handleEditDelivery = (id: string) => {
+        setActiveTab(id);
+        setToogle(state => !state)
+    };
+
+    const [cepBusca, setCepBusca] = useState("");
+    const [searchAddress, setSearchAddress] = useState({});
 
     const cpfCnpj = cpfs ? cpfs : cnpjs;
 
@@ -70,6 +91,8 @@ export default function Payment() {
                 setNumeros(data?.number || "");
                 setBairros(data?.neighborhood || "");
                 setCidades(data?.city || "");
+                setComplement(data?.complement || "");
+                setReference(data?.reference || "");
                 setEstados(data?.state || "");
                 setCeps(data?.cep || "");
                 setNewslatters(data?.newslatter || "");
@@ -87,15 +110,13 @@ export default function Payment() {
             const apiClient = setupAPIClient();
             try {
                 const { data } = await apiClient.get(`/customer/findAlldeliveryCustomer?customer_id=${customer_id}`);
-
-                console.log(data)
-
+                setDeliverysCustomer(data || []);
             } catch (error) {
                 console.log(error);
             }
-        }   
+        }
         deliverys();
-    },[])
+    }, [customer_id])
 
     useEffect(() => {
         const initializeMercadoPago = async () => {
@@ -385,6 +406,32 @@ export default function Payment() {
         }
     }
 
+    const [cepLoad, setCepLoad] = useState(false);
+
+    const handleCep = () => {
+        setCepLoad(!cepLoad);
+    }
+
+    async function loadCep() {
+        try {
+            const apiClient = setupAPIClient();
+
+            const response = await apiClient.post(`/findAddressCep`, {
+                cep: cepBusca
+            });
+
+            setSearchAddress(response?.data);
+
+            handleCep();
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    console.log(searchAddress)
+
 
     return (
         <>
@@ -433,8 +480,163 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Endereço de Entrega" />
                         <br />
+
+                        {deliverysCustomer.map((item, index) => {
+                            return (
+                                <>
+                                    {activeTab === item.id ? (
+                                        <>
+                                            <BoxDelivery>
+                                                <Input
+                                                    style={{ backgroundColor: 'white', color: 'black' }}
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="00000-000"
+                                                    type="text"
+                                                    placeholder="CEP"
+                                                    onChange={(e) => setCepBusca(e.target.value)}
+                                                />
+                                                <button
+                                                    onClick={loadCep}
+                                                >
+                                                    Buscar
+                                                </button>
+                                            </BoxDelivery>
+
+                                            <BoxDelivery>
+
+
+                                                {cepLoad ? 
+                                                    <>
+                                                        <InputUpdate
+                                                            /* @ts-ignore */
+                                                            value={searchAddress?.logradouro}
+                                                            onChange={(e) => setLocals(e.target.value)}
+                                                            /* @ts-ignore */
+                                                            dado={searchAddress?.logradouro}
+                                                            handleSubmit={function (param?: any, param2?: any): void {
+                                                                throw new Error("Function not implemented.");
+                                                            }}
+                                                        />
+
+                                                        <InputUpdate
+                                                            /* @ts-ignore */
+                                                            value={searchAddress?.bairro}
+                                                            onChange={(e) => setBairros(e.target.value)}
+                                                            /* @ts-ignore */
+                                                            dado={searchAddress?.bairro}
+                                                            handleSubmit={function (param?: any, param2?: any): void {
+                                                                throw new Error("Function not implemented.");
+                                                            }}
+                                                        />
+
+                                                        <InputUpdate
+                                                            /* @ts-ignore */
+                                                            value={searchAddress?.localidade}
+                                                            onChange={(e) => setCidades(e.target.value)}
+                                                            /* @ts-ignore */
+                                                            dado={searchAddress?.localidade}
+                                                            handleSubmit={function (param?: any, param2?: any): void {
+                                                                throw new Error("Function not implemented.");
+                                                            }}
+                                                        />
+
+                                                        <InputUpdate
+                                                            /* @ts-ignore */
+                                                            value={searchAddress?.uf}
+                                                            /* @ts-ignore */
+                                                            onChange={(e) => setEstados(e.target.value)}
+                                                            /* @ts-ignore */
+                                                            dado={searchAddress?.uf}
+                                                            handleSubmit={function (param?: any, param2?: any): void {
+                                                                throw new Error("Function not implemented.");
+                                                            }}
+                                                        />
+
+                                                        <InputUpdate
+                                                            /* @ts-ignore */
+                                                            value={searchAddress?.cep}
+                                                            onChange={(e) => setCeps(e.target.value)}
+                                                            /* @ts-ignore */
+                                                            dado={searchAddress?.cep}
+                                                            handleSubmit={function (param?: any, param2?: any): void {
+                                                                throw new Error("Function not implemented.");
+                                                            }}
+                                                        />
+                                                    </>
+                                                 :
+                                                    <>
+                                                        <span>{locals}</span>
+                                                        <span>{bairros} - {cidades}</span>
+                                                        <span>{estados}</span>
+                                                        <span>{ceps}</span>
+                                                    </>
+                                                }
+
+
+
+                                            </BoxDelivery>
+
+                                            <Input
+                                                style={{ backgroundColor: 'white', color: 'black' }}
+                                                placeholder="Nome do destinatario"
+                                                onChange={(e) => setDestinatario(e.target.value)}
+                                            />
+
+                                            <Input
+                                                style={{ backgroundColor: 'white', color: 'black' }}
+                                                placeholder="Numero"
+                                                onChange={(e) => setNumeros(e.target.value)}
+                                            />
+
+                                            <Input
+                                                style={{ backgroundColor: 'white', color: 'black' }}
+                                                placeholder="Complemento"
+                                                onChange={(e) => setComplement(e.target.value)}
+                                            />
+
+                                            <Input
+                                                style={{ backgroundColor: 'white', color: 'black' }}
+                                                placeholder="Referencia"
+                                                onChange={(e) => setReference(e.target.value)}
+                                            />
+
+                                            <EditDelivery
+                                                onClick={() => handleEditDelivery("11111111")}
+                                            >
+                                                <AiFillEdit
+                                                    color="black"
+                                                    size={15}
+                                                />
+                                                CANCELAR EDIÇÃO
+                                            </EditDelivery>
+                                        </>
+                                    ) :
+                                        <>
+                                            <BoxDelivery key={index}>
+                                                <DataDelivery><AiOutlineCompass color="black" size={20} />{item?.address} - {item?.number}</DataDelivery>
+                                                <DataDelivery>{item?.city} - {item?.state}</DataDelivery>
+                                                <DataDelivery>{item?.neighborhood}</DataDelivery>
+                                                <DataDelivery>{item?.cep}</DataDelivery>
+                                                <DataDelivery>{item?.customer?.name}</DataDelivery>
+                                                <EditDelivery
+                                                    onClick={() => handleEditDelivery(item.id)}
+                                                >
+                                                    <AiFillEdit
+                                                        color="black"
+                                                        size={15}
+                                                    />
+                                                    EDITAR
+                                                </EditDelivery>
+                                            </BoxDelivery>
+                                        </>
+                                    }
+                                </>
+                            )
+                        })}
                     </BoxPayment>
-                    
+
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Resumo do Pedido" />
                         <br />

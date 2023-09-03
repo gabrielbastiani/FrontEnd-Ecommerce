@@ -45,3 +45,20 @@ export const ButtonsData = styled.button`
   font-weight: 600;
   border: none;
 `
+
+export const BoxDelivery = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const DataDelivery = styled.span``
+
+export const EditDelivery = styled.button`
+  border: none;
+  background: transparent;
+  margin-top: 20px;
+
+  svg {
+    margin: 0 5px;
+  }
+`
