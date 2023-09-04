@@ -236,8 +236,6 @@ const CarrosselImagesPageProduct = ({ product_id }: PhotoRequest) => {
 
     if (!photosProduct || !photosProduct.length) return null;
 
-
-
     function handleCloseModalDelete() {
         setModalVisible(false);
     }
