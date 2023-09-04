@@ -62,6 +62,7 @@ export default function createAccountPayment() {
     const [enderecos, setEnderecos] = useState('');
     const [numeros, setNumeros] = useState('');
     const [referencias, setReferencias] = useState('');
+    const [complement, setComplement] = useState('');
     const [bairros, setBairros] = useState('');
     const [ceps, setCeps] = useState('');
     const [cidades, setCidades] = useState('');
@@ -131,7 +132,8 @@ export default function createAccountPayment() {
                 gender: generoSelected,
                 address: enderecos,
                 number: numeros,
-                complement: referencias,
+                complement: complement,
+                reference: referencias,
                 neighborhood: bairros,
                 cep: ceps,
                 city: cidades,
@@ -213,7 +215,8 @@ export default function createAccountPayment() {
                 stateRegistration: inscricao,
                 address: enderecos,
                 number: numeros,
-                complement: referencias,
+                complement: complement,
+                reference: referencias,
                 neighborhood: bairros,
                 cep: ceps,
                 city: cidades,
@@ -432,6 +435,16 @@ export default function createAccountPayment() {
                                     </BlockInputs>
 
                                     <BlockInputs>
+                                        <EtiquetaInput>Complemento</EtiquetaInput>
+                                        <Input
+                                            type="text"
+                                            placeholder="Complemento"
+                                            value={complement}
+                                            onChange={(e) => setComplement(e.target.value)}
+                                        />
+                                    </BlockInputs>
+
+                                    <BlockInputs>
                                         <EtiquetaInput>Referência</EtiquetaInput>
                                         <Input
                                             type="text"
@@ -482,33 +495,33 @@ export default function createAccountPayment() {
                                             onChange={handleChangeEstado}
                                         >
                                             <OpcoesGenero value="">Selecione...</OpcoesGenero>
-                                            <OpcoesGenero value="Acre">Acre</OpcoesGenero>
-                                            <OpcoesGenero value="Alagoas">Alagoas</OpcoesGenero>
-                                            <OpcoesGenero value="Amapá">Amapá</OpcoesGenero>
-                                            <OpcoesGenero value="Amazonas">Amazonas</OpcoesGenero>
-                                            <OpcoesGenero value="Bahia">Bahia</OpcoesGenero>
-                                            <OpcoesGenero value="Ceara">Ceara</OpcoesGenero>
-                                            <OpcoesGenero value="Distrito Federal">Distrito Federal</OpcoesGenero>
-                                            <OpcoesGenero value="Espírito Santo">Espírito Santo</OpcoesGenero>
-                                            <OpcoesGenero value="Goiás">Goiás</OpcoesGenero>
-                                            <OpcoesGenero value="Maranhão">Maranhão</OpcoesGenero>
-                                            <OpcoesGenero value="Mato Grosso">Mato Grosso</OpcoesGenero>
-                                            <OpcoesGenero value="Mato Grosso do Sul">Mato Grosso do Sul</OpcoesGenero>
-                                            <OpcoesGenero value="Minas Gerais">Minas Gerais</OpcoesGenero>
-                                            <OpcoesGenero value="Pará">Pará</OpcoesGenero>
-                                            <OpcoesGenero value="Paraíba">Paraíba</OpcoesGenero>
-                                            <OpcoesGenero value="Paraná">Paraná</OpcoesGenero>
-                                            <OpcoesGenero value="Pernambuco">Pernambuco</OpcoesGenero>
-                                            <OpcoesGenero value="Piauí">Piauí</OpcoesGenero>
-                                            <OpcoesGenero value="Rio de Janeiro">Rio de Janeiro</OpcoesGenero>
-                                            <OpcoesGenero value="Rio Grande do Norte">Rio Grande do Norte</OpcoesGenero>
-                                            <OpcoesGenero value="Rio Grande do Sul">Rio Grande do Sul</OpcoesGenero>
-                                            <OpcoesGenero value="Rondônia">Rondônia</OpcoesGenero>
-                                            <OpcoesGenero value="Roraima">Roraima</OpcoesGenero>
-                                            <OpcoesGenero value="Santa Catarina">Santa Catarina</OpcoesGenero>
-                                            <OpcoesGenero value="São Paulo">São Paulo</OpcoesGenero>
-                                            <OpcoesGenero value="Sergipe">Sergipe</OpcoesGenero>
-                                            <OpcoesGenero value="Tocantins">Tocantins</OpcoesGenero>
+                                            <OpcoesGenero value="AC">Acre</OpcoesGenero>
+                                            <OpcoesGenero value="AL">Alagoas</OpcoesGenero>
+                                            <OpcoesGenero value="AP">Amapá</OpcoesGenero>
+                                            <OpcoesGenero value="AM">Amazonas</OpcoesGenero>
+                                            <OpcoesGenero value="BA">Bahia</OpcoesGenero>
+                                            <OpcoesGenero value="CE">Ceara</OpcoesGenero>
+                                            <OpcoesGenero value="DF">Distrito Federal</OpcoesGenero>
+                                            <OpcoesGenero value="ES">Espírito Santo</OpcoesGenero>
+                                            <OpcoesGenero value="GO">Goiás</OpcoesGenero>
+                                            <OpcoesGenero value="MA">Maranhão</OpcoesGenero>
+                                            <OpcoesGenero value="MT">Mato Grosso</OpcoesGenero>
+                                            <OpcoesGenero value="MS">Mato Grosso do Sul</OpcoesGenero>
+                                            <OpcoesGenero value="MG">Minas Gerais</OpcoesGenero>
+                                            <OpcoesGenero value="PA">Pará</OpcoesGenero>
+                                            <OpcoesGenero value="PB">Paraíba</OpcoesGenero>
+                                            <OpcoesGenero value="PR">Paraná</OpcoesGenero>
+                                            <OpcoesGenero value="PE">Pernambuco</OpcoesGenero>
+                                            <OpcoesGenero value="PI">Piauí</OpcoesGenero>
+                                            <OpcoesGenero value="RJ">Rio de Janeiro</OpcoesGenero>
+                                            <OpcoesGenero value="RN">Rio Grande do Norte</OpcoesGenero>
+                                            <OpcoesGenero value="RS">Rio Grande do Sul</OpcoesGenero>
+                                            <OpcoesGenero value="RO">Rondônia</OpcoesGenero>
+                                            <OpcoesGenero value="RR">Roraima</OpcoesGenero>
+                                            <OpcoesGenero value="SC">Santa Catarina</OpcoesGenero>
+                                            <OpcoesGenero value="SP">São Paulo</OpcoesGenero>
+                                            <OpcoesGenero value="SE">Sergipe</OpcoesGenero>
+                                            <OpcoesGenero value="TO">Tocantins</OpcoesGenero>
                                         </SelectGenero>
                                     </BlockInputs>
 
@@ -648,6 +661,16 @@ export default function createAccountPayment() {
                                     </BlockInputs>
 
                                     <BlockInputs>
+                                        <EtiquetaInput>Complemento</EtiquetaInput>
+                                        <Input
+                                            type="text"
+                                            placeholder="Complemento"
+                                            value={complement}
+                                            onChange={(e) => setComplement(e.target.value)}
+                                        />
+                                    </BlockInputs>
+
+                                    <BlockInputs>
                                         <EtiquetaInput>Referência</EtiquetaInput>
                                         <Input
                                             type="text"
@@ -698,33 +721,33 @@ export default function createAccountPayment() {
                                             onChange={handleChangeEstado}
                                         >
                                             <OpcoesGenero value="">Selecione...</OpcoesGenero>
-                                            <OpcoesGenero value="Acre">Acre</OpcoesGenero>
-                                            <OpcoesGenero value="Alagoas">Alagoas</OpcoesGenero>
-                                            <OpcoesGenero value="Amapá">Amapá</OpcoesGenero>
-                                            <OpcoesGenero value="Amazonas">Amazonas</OpcoesGenero>
-                                            <OpcoesGenero value="Bahia">Bahia</OpcoesGenero>
-                                            <OpcoesGenero value="Ceara">Ceara</OpcoesGenero>
-                                            <OpcoesGenero value="Distrito Federal">Distrito Federal</OpcoesGenero>
-                                            <OpcoesGenero value="Espírito Santo">Espírito Santo</OpcoesGenero>
-                                            <OpcoesGenero value="Goiás">Goiás</OpcoesGenero>
-                                            <OpcoesGenero value="Maranhão">Maranhão</OpcoesGenero>
-                                            <OpcoesGenero value="Mato Grosso">Mato Grosso</OpcoesGenero>
-                                            <OpcoesGenero value="Mato Grosso do Sul">Mato Grosso do Sul</OpcoesGenero>
-                                            <OpcoesGenero value="Minas Gerais">Minas Gerais</OpcoesGenero>
-                                            <OpcoesGenero value="Pará">Pará</OpcoesGenero>
-                                            <OpcoesGenero value="Paraíba">Paraíba</OpcoesGenero>
-                                            <OpcoesGenero value="Paraná">Paraná</OpcoesGenero>
-                                            <OpcoesGenero value="Pernambuco">Pernambuco</OpcoesGenero>
-                                            <OpcoesGenero value="Piauí">Piauí</OpcoesGenero>
-                                            <OpcoesGenero value="Rio de Janeiro">Rio de Janeiro</OpcoesGenero>
-                                            <OpcoesGenero value="Rio Grande do Norte">Rio Grande do Norte</OpcoesGenero>
-                                            <OpcoesGenero value="Rio Grande do Sul">Rio Grande do Sul</OpcoesGenero>
-                                            <OpcoesGenero value="Rondônia">Rondônia</OpcoesGenero>
-                                            <OpcoesGenero value="Roraima">Roraima</OpcoesGenero>
-                                            <OpcoesGenero value="Santa Catarina">Santa Catarina</OpcoesGenero>
-                                            <OpcoesGenero value="São Paulo">São Paulo</OpcoesGenero>
-                                            <OpcoesGenero value="Sergipe">Sergipe</OpcoesGenero>
-                                            <OpcoesGenero value="Tocantins">Tocantins</OpcoesGenero>
+                                            <OpcoesGenero value="AC">Acre</OpcoesGenero>
+                                            <OpcoesGenero value="AL">Alagoas</OpcoesGenero>
+                                            <OpcoesGenero value="AP">Amapá</OpcoesGenero>
+                                            <OpcoesGenero value="AM">Amazonas</OpcoesGenero>
+                                            <OpcoesGenero value="BA">Bahia</OpcoesGenero>
+                                            <OpcoesGenero value="CE">Ceara</OpcoesGenero>
+                                            <OpcoesGenero value="DF">Distrito Federal</OpcoesGenero>
+                                            <OpcoesGenero value="ES">Espírito Santo</OpcoesGenero>
+                                            <OpcoesGenero value="GO">Goiás</OpcoesGenero>
+                                            <OpcoesGenero value="MA">Maranhão</OpcoesGenero>
+                                            <OpcoesGenero value="MT">Mato Grosso</OpcoesGenero>
+                                            <OpcoesGenero value="MS">Mato Grosso do Sul</OpcoesGenero>
+                                            <OpcoesGenero value="MG">Minas Gerais</OpcoesGenero>
+                                            <OpcoesGenero value="PA">Pará</OpcoesGenero>
+                                            <OpcoesGenero value="PB">Paraíba</OpcoesGenero>
+                                            <OpcoesGenero value="PR">Paraná</OpcoesGenero>
+                                            <OpcoesGenero value="PE">Pernambuco</OpcoesGenero>
+                                            <OpcoesGenero value="PI">Piauí</OpcoesGenero>
+                                            <OpcoesGenero value="RJ">Rio de Janeiro</OpcoesGenero>
+                                            <OpcoesGenero value="RN">Rio Grande do Norte</OpcoesGenero>
+                                            <OpcoesGenero value="RS">Rio Grande do Sul</OpcoesGenero>
+                                            <OpcoesGenero value="RO">Rondônia</OpcoesGenero>
+                                            <OpcoesGenero value="RR">Roraima</OpcoesGenero>
+                                            <OpcoesGenero value="SC">Santa Catarina</OpcoesGenero>
+                                            <OpcoesGenero value="SP">São Paulo</OpcoesGenero>
+                                            <OpcoesGenero value="SE">Sergipe</OpcoesGenero>
+                                            <OpcoesGenero value="TO">Tocantins</OpcoesGenero>
                                         </SelectGenero>
                                     </BlockInputs>
 

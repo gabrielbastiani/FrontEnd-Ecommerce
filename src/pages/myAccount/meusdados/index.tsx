@@ -39,6 +39,8 @@ export default function Meusdados() {
     const [locals, setLocals] = useState('');
     const [numeros, setNumeros] = useState('');
     const [bairros, setBairros] = useState('');
+    const [complements, setComplements] = useState('');
+    const [references, setReferences] = useState('');
     const [cidades, setCidades] = useState('');
     const [estados, setEstados] = useState([]);
     const [estadoSelected, setEstadoSelected] = useState();
@@ -67,6 +69,8 @@ export default function Meusdados() {
         setLocals(data?.address || "");
         setNumeros(data?.number || "");
         setBairros(data?.neighborhood || "");
+        setComplements(data?.complement || "");
+        setReferences(data?.reference || "");
         setCidades(data?.city || "");
         setEstados(data?.state || "");
         setCeps(data?.cep || "");
@@ -91,6 +95,8 @@ export default function Meusdados() {
                 setLocals(data?.address || "");
                 setNumeros(data?.number || "");
                 setBairros(data?.neighborhood || "");
+                setComplements(data?.complement || "");
+                setReferences(data?.reference || "");
                 setCidades(data?.city || "");
                 setEstados(data?.state || "");
                 setCeps(data?.cep || "");
@@ -147,6 +153,8 @@ export default function Meusdados() {
                     address: locals,
                     number: numeros,
                     neighborhood: bairros,
+                    complement: complements,
+                    reference: references,
                     cep: ceps,
                     city: cidades,
                     state: estadoSelected
@@ -371,9 +379,7 @@ export default function Meusdados() {
                                         handleSubmit={updateNews}
                                     />
                                 </BlockDados>
-                            </SectionDate>
 
-                            <SectionDate>
                                 {cnpjs ? (
                                     null
                                 ) :
@@ -400,6 +406,9 @@ export default function Meusdados() {
                                         />
                                     </BlockDados>
                                 }
+                            </SectionDate>
+
+                            <SectionDate>
 
                                 <BlockDados>
                                     <TextoDados
@@ -451,6 +460,38 @@ export default function Meusdados() {
 
                                 <BlockDados>
                                     <TextoDados
+                                        chave={"Complemento"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={complements}
+                                                type="text"
+                                                placeholder={complements}
+                                                value={complements}
+                                                onChange={(e) => setComplements(e.target.value)}
+                                                handleSubmit={updateDataCustomer}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
+                                        chave={"Referência"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={references}
+                                                type="text"
+                                                placeholder={references}
+                                                value={references}
+                                                onChange={(e) => setReferences(e.target.value)}
+                                                handleSubmit={updateDataCustomer}
+                                            />
+                                        }
+                                    />
+                                </BlockDados>
+
+                                <BlockDados>
+                                    <TextoDados
                                         chave={"Cidade"}
                                         dados={
                                             <InputUpdate
@@ -477,33 +518,33 @@ export default function Meusdados() {
                                                 opcoes={
                                                     [
                                                         { label: "Selecionar...", value: "" },
-                                                        { label: "Acre", value: "Acre" },
-                                                        { label: "Alagoas", value: "Alagoas" },
-                                                        { label: "Amapá", value: "Amapá" },
-                                                        { label: "Amazonas", value: "Amazonas" },
-                                                        { label: "Bahia", value: "Bahia" },
-                                                        { label: "Ceara", value: "Ceara" },
-                                                        { label: "Distrito Federal", value: "Distrito Federal" },
-                                                        { label: "Espírito Santo", value: "Espírito Santo" },
-                                                        { label: "Goiás", value: "Goiás" },
-                                                        { label: "Maranhão", value: "Maranhão" },
-                                                        { label: "Mato Grosso", value: "Mato Grosso" },
-                                                        { label: "Mato Grosso do Sul", value: "Mato Grosso do Sul" },
-                                                        { label: "Minas Gerais", value: "Minas Gerais" },
-                                                        { label: "Pará", value: "Pará" },
-                                                        { label: "Paraíba", value: "Paraíba" },
-                                                        { label: "Paraná", value: "Paraná" },
-                                                        { label: "Pernambuco", value: "Pernambuco" },
-                                                        { label: "Piauí", value: "Piauí" },
-                                                        { label: "Rio de Janeiro", value: "Rio de Janeiro" },
-                                                        { label: "Rio Grande do Norte", value: "Rio Grande do Norte" },
-                                                        { label: "Rio Grande do Sul", value: "Rio Grande do Sul" },
-                                                        { label: "Rondônia", value: "Rondônia" },
-                                                        { label: "Roraima", value: "Roraima" },
-                                                        { label: "Santa Catarina", value: "Santa Catarina" },
-                                                        { label: "São Paulo", value: "São Paulo" },
-                                                        { label: "Sergipe", value: "Sergipe" },
-                                                        { label: "Tocantins", value: "Tocantins" }
+                                                        { label: "Acre", value: "AC" },
+                                                        { label: "Alagoas", value: "AL" },
+                                                        { label: "Amapá", value: "AP" },
+                                                        { label: "Amazonas", value: "AM" },
+                                                        { label: "Bahia", value: "BA" },
+                                                        { label: "Ceara", value: "CE" },
+                                                        { label: "Distrito Federal", value: "DF" },
+                                                        { label: "Espírito Santo", value: "ES" },
+                                                        { label: "Goiás", value: "GO" },
+                                                        { label: "Maranhão", value: "MA" },
+                                                        { label: "Mato Grosso", value: "MT" },
+                                                        { label: "Mato Grosso do Sul", value: "MS" },
+                                                        { label: "Minas Gerais", value: "MG" },
+                                                        { label: "Pará", value: "PA" },
+                                                        { label: "Paraíba", value: "PB" },
+                                                        { label: "Paraná", value: "PR" },
+                                                        { label: "Pernambuco", value: "PE" },
+                                                        { label: "Piauí", value: "PI" },
+                                                        { label: "Rio de Janeiro", value: "RJ" },
+                                                        { label: "Rio Grande do Norte", value: "RN" },
+                                                        { label: "Rio Grande do Sul", value: "RS" },
+                                                        { label: "Rondônia", value: "RO" },
+                                                        { label: "Roraima", value: "RR" },
+                                                        { label: "Santa Catarina", value: "SC" },
+                                                        { label: "São Paulo", value: "SP" },
+                                                        { label: "Sergipe", value: "SE" },
+                                                        { label: "Tocantins", value: "TO" }
                                                     ]
                                                 }
                                                 handleSubmit={updateDataCustomer}
