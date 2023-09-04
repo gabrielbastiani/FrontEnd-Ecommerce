@@ -713,6 +713,7 @@ export default function Payment() {
                                             <FiEdit
                                                 size={20}
                                                 color="black"
+                                                cursor="pointer"
                                                 onClick={handleDelivery}
                                             />
                                         </div>

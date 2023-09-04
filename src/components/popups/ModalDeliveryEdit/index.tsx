@@ -74,6 +74,8 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
 
             setSearchAddress(response?.data);
 
+            handleCepEdit();
+
         } catch (error) {
             console.log(error)
         }
@@ -121,94 +123,119 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
 
             <ContainerContent>
 
-                {deliveryEdits ?
-                    <>
-                        <Input
-                            style={{ backgroundColor: 'white', color: 'black' }}
-                            /* @ts-ignore */
-                            as={IMaskInput}
-                            /* @ts-ignore */
-                            mask="00000-000"
-                            type="text"
-                            placeholder="CEP"
-                            onChange={(e) => setCepBusca(e.target.value)}
+                <Input
+                    style={{ backgroundColor: 'white', color: 'black' }}
+                    /* @ts-ignore */
+                    as={IMaskInput}
+                    /* @ts-ignore */
+                    mask="00000-000"
+                    type="text"
+                    placeholder="CEP"
+                    onChange={(e) => setCepBusca(e.target.value)}
+                />
+                <button
+                    onClick={loadCep}
+                >
+                    Buscar
+                </button>
+
+                {cepLoadEdit ?
+                    <div>
+                        <input
+                            value={addresseeSelected}
+                            onChange={(e) => setAddresseeSelected(e.target.value)}
                         />
-                        <button
-                            onClick={loadCep}
-                        >
-                            Buscar
-                        </button>
 
-                        {cepLoadEdit ?
-                            <>
-                                <input
-                                    value={addresseeSelected}
-                                    onChange={(e) => setAddresseeSelected(e.target.value)}
-                                />
+                        <div>
+                            <span>{searchAddress?.logradouro}</span>
 
-                                <div>
-                                    <span>{searchAddress?.logradouro}</span>
+                            <input
+                                value={numeroSelected}
+                                onChange={(e) => setNumeroSelected(e.target.value)}
+                            />
+                        </div>
 
-                                    <input
-                                        value={numeroSelected}
-                                        onChange={(e) => setNumeroSelected(e.target.value)}
-                                    />
-                                </div>
+                        <div>
+                            <strong>Complemento: </strong>
+                            <input
+                                value={complementSelected}/* @ts-ignore */
+                                onChange={(e) => setComplementSelected(e.target.value)}
+                            />
+                        </div>
 
-                                <div>
-                                    <strong>Complemento: </strong>
-                                    <input
-                                        value={complementSelected}/* @ts-ignore */
-                                        onChange={(e) => setComplementSelected(e.target.value)}
-                                    />
-                                </div>
+                        <div>
+                            <strong>Bairro: </strong>
+                            <span>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</span>
+                        </div>
 
-                                <div>
-                                    <strong>Bairro: </strong>
-                                    <span>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</span>
-                                </div>
+                        <div>
+                            <strong>Referencia: </strong>
+                            <input
+                                value={referenceSelected}/* @ts-ignore */
+                                onChange={(e) => setReferenceSelected(e.target.value)}
+                            />
+                        </div>
 
-                                <div>
-                                    <strong>Referencia: </strong>
-                                    <input
-                                        value={referenceSelected}/* @ts-ignore */
-                                        onChange={(e) => setReferenceSelected(e.target.value)}
-                                    />
-                                </div>
+                        <span>{searchAddress?.localidade} - {searchAddress?.uf}</span>
 
-                                <span>{searchAddress?.localidade} - {searchAddress?.uf}</span>
-
-                                <span><strong>CEP: </strong>{searchAddress?.cep}</span>
-                            </>
-                            :
-                            <>
-                                <span>{addresseeSelected}</span>
-                                <span><AiOutlineCompass color="black" size={20} />{addressSelected} - {numeroSelected}</span>
-                                <span><strong>Complemento: </strong>{complementSelected}</span>
-                                <span><strong>Referencia: </strong>{referenceSelected}</span>
-                                <span><strong>Bairro: </strong>{bairroSelected}</span>
-                                <span>{citySelected} - {estadosSelected}</span>
-                                <span><strong>CEP: </strong>{cepSelected}</span>
-                            </>
-                        }
+                        <span><strong>CEP: </strong>{searchAddress?.cep}</span>
 
                         <button
                             onClick={updateDelivery}
                         >
                             Salvar alterações
                         </button>
-                    </>
+
+                        <button
+                            onClick={handleCepEdit}
+                        >
+                            Cancelar
+                        </button>
+                    </div>
                     :
-                    <>
-                        <span>{addresseeSelected}</span>
-                        <span><AiOutlineCompass color="black" size={20} />{addressSelected} - {numeroSelected}</span>
-                        <span><strong>Complemento: </strong>{complementSelected}</span>
-                        <span><strong>Referencia: </strong>{referenceSelected}</span>
-                        <span><strong>Bairro: </strong>{bairroSelected}</span>
-                        <span>{citySelected} - {estadosSelected}</span>
-                        <span><strong>CEP: </strong>{cepSelected}</span>
-                    </>
+                    <div>
+                        <input
+                            value={addresseeSelected}
+                            onChange={(e) => setAddresseeSelected(e.target.value)}
+                        />
+
+                        <div>
+                            <span>{searchAddress?.logradouro}</span>
+
+                            <input
+                                value={numeroSelected}
+                                onChange={(e) => setNumeroSelected(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <strong>Complemento: </strong>
+                            <input
+                                value={complementSelected}/* @ts-ignore */
+                                onChange={(e) => setComplementSelected(e.target.value)}
+                            />
+                        </div>
+
+                        <div>
+                            <strong>Bairro: </strong>
+                            <span>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</span>
+                        </div>
+
+                        <div>
+                            <strong>Referencia: </strong>
+                            <input
+                                value={referenceSelected}/* @ts-ignore */
+                                onChange={(e) => setReferenceSelected(e.target.value)}
+                            />
+                        </div>
+
+                        <span>{searchAddress?.localidade} - {searchAddress?.uf}</span>
+
+                        <span><strong>CEP: </strong>{searchAddress?.cep}</span>
+
+                    </div>
                 }
+
             </ContainerContent>
 
         </Modal >
