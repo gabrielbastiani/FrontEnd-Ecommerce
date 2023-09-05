@@ -9,6 +9,7 @@ import { CartContext } from "../../contexts/CartContext";
 import { HeaderCart } from "../../components/HeaderCart";
 import Head from "next/head";
 import FooterAccount from "../../components/FooterAccount";
+import logoCorreios from "../../assets/correios-logo.png";
 import {
     AddressTextIcon,
     BackButton,
@@ -54,6 +55,7 @@ import Modal from 'react-modal';
 import { ModalDeliveryEdit } from "../../components/popups/ModalDeliveryEdit";
 import { BiCircle } from "react-icons/bi";
 import router from "next/router";
+import Image from "next/image";
 
 
 type CepProps = {
@@ -978,6 +980,7 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Envio" />
                         <br />
+                        <Image src={logoCorreios} height={80} width={300} alt="envio-correios" />
                     </BoxPayment>
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Formas de Pagamento" />
