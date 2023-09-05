@@ -6,20 +6,49 @@ import { loadMercadoPago } from "@mercadopago/sdk-js";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../contexts/AuthContext";
 import { CartContext } from "../../contexts/CartContext";
-import { PageSection } from "../../components/dateStoreUx/styles";
 import { HeaderCart } from "../../components/HeaderCart";
 import Head from "next/head";
 import FooterAccount from "../../components/FooterAccount";
-import { AddressTextIcon, BackButton, BoxButtons, BoxButtonsData, BoxButtonsFunctions, BoxData, BoxDelivery, BoxDeliverySelected, BoxInputs, BoxPayment, BoxTitle, ButtonDelivery, ButtonsData, ContainerFechamento, DataDelivery, Datas, DestinyName, EditDelivery, InputDelivery, SectionPayment, TextCurrent, TextCurrentBold, TextCurrentInput } from "./styles";
+import {
+    AddressTextIcon,
+    BackButton,
+    BoxButtons,
+    BoxButtonsData,
+    BoxButtonsFunctions,
+    BoxData,
+    BoxDelivery,
+    BoxDeliverySelected,
+    BoxInputs,
+    BoxPayment,
+    BoxTitle,
+    ButtonDelivery,
+    ButtonsData,
+    ContainerFechamento,
+    Datas,
+    DestinyName,
+    EditDelivery,
+    InputDelivery,
+    SectionPayment,
+    TextCurrent,
+    TextCurrentBold,
+    TextCurrentInput
+} from "./styles";
 import Titulos from "../../components/Titulos";
-import { AiFillEdit, AiOutlineCompass, AiOutlineMail } from "react-icons/ai";
-import { BsFillArrowLeftSquareFill, BsFillCheckCircleFill, BsFillPersonFill, BsTelephoneFill } from "react-icons/bs";
+import {
+    AiFillEdit,
+    AiOutlineCompass,
+    AiOutlineMail
+} from "react-icons/ai";
+import {
+    BsFillArrowLeftSquareFill,
+    BsFillCheckCircleFill,
+    BsFillPersonFill,
+    BsTelephoneFill
+} from "react-icons/bs";
 import { FaIdCard } from "react-icons/fa";
 import Link from "next/link";
-import SelectUpdate from "../../components/ui/SelectUpdate";
 import { Input } from "../../components/ui/Input";
 import { IMaskInput } from "react-imask";
-import { InputUpdate } from "../../components/ui/InputUpdate";
 import { FiEdit } from "react-icons/fi";
 import Modal from 'react-modal';
 import { ModalDeliveryEdit } from "../../components/popups/ModalDeliveryEdit";
@@ -752,8 +781,8 @@ export default function Payment() {
                                                                 onClick={() => handleOpenModal(item.id)}
                                                             >
                                                                 <AiFillEdit
-                                                                    color="black"
-                                                                    size={15}
+                                                                    color="orange"
+                                                                    size={18}
                                                                 />
                                                                 EDITAR
                                                             </EditDelivery>

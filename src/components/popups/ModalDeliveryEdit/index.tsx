@@ -1,19 +1,22 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
-import { ButtonClose, ContAvaliacao, ContainerContent, OpcoesAvaliacao, SelectAvaliacao, TextAreaAvaliacao } from './styles';
-import { FormEvent, useContext, useRef, useState } from 'react';
-import { AuthContext } from '../../../contexts/AuthContext';
+import { ButtonClose, ContainerContent } from './styles';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { ButtonCreateAccount, ContLogin, Formulario, LinkCreateAccount, Recaptcha, TextInfo, TextLink } from '../../../pages/loginClient/styles';
 import Titulos from '../../Titulos';
 import { IMaskInput } from "react-imask";
 import { Input } from '../../ui/Input';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { Button } from '../../ui/Button';
-import Link from 'next/link';
-import { BlockInputs, EtiquetaInput } from '../../../pages/createAccount/styles';
 import { setupAPIClient } from '../../../services/api';
-import Router from 'next/router';
+import {
+    BoxButtonsFunctions,
+    BoxDelivery,
+    BoxInputs,
+    ButtonDelivery,
+    InputDelivery,
+    TextCurrent,
+    TextCurrentBold,
+    TextCurrentInput
+} from '../../../pages/payment/styles';
 import { AiOutlineCompass } from 'react-icons/ai';
 
 
@@ -118,130 +121,134 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
 
             <ContainerContent>
 
-                <Titulos
-                    tipo='h4'
-                    titulo='Insira um novo CEP abaixo se deseja mudar o endereço atual'
-                />
+                <BoxDelivery>
+                    <Titulos
+                        tipo='h4'
+                        titulo='Insira um novo CEP abaixo se deseja mudar o endereço atual'
+                    />
+                    <br />
+                    <Input
+                        style={{ backgroundColor: 'white', color: 'black' }}
+                        /* @ts-ignore */
+                        as={IMaskInput}
+                        /* @ts-ignore */
+                        mask="00000-000"
+                        type="text"
+                        placeholder="CEP"
+                        onChange={(e) => setCepBusca(e.target.value)}
+                    />
 
-                <Input
-                    style={{ backgroundColor: 'white', color: 'black' }}
-                    /* @ts-ignore */
-                    as={IMaskInput}
-                    /* @ts-ignore */
-                    mask="00000-000"
-                    type="text"
-                    placeholder="CEP"
-                    onChange={(e) => setCepBusca(e.target.value)}
-                />
-                <button
-                    onClick={loadCep}
-                >
-                    Buscar
-                </button>
+                    <ButtonDelivery
+                        style={{ width: '100%' }}
+                        onClick={loadCep}
+                    >
+                        Buscar
+                    </ButtonDelivery>
+                </BoxDelivery>
 
                 {cepLoadEdit ?
-                    <div>
-                        <input
+                    <BoxDelivery>
+                        <br />
+                        <InputDelivery
                             value={addresseeSelected}
                             onChange={(e) => setAddresseeSelected(e.target.value)}
                         />
 
-                        <div>
-                            <span>{searchAddress?.logradouro}</span>
-
-                            <input
+                        <BoxInputs>
+                            <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {searchAddress?.logradouro}</TextCurrentInput>
+                            <InputDelivery
                                 value={numeroSelected}
                                 onChange={(e) => setNumeroSelected(e.target.value)}
                             />
-                        </div>
+                        </BoxInputs>
 
-                        <div>
-                            <strong>Complemento: </strong>
-                            <input
+                        <BoxInputs>
+                            <TextCurrentBold>Complemento: </TextCurrentBold>
+                            <InputDelivery
                                 value={complementSelected}/* @ts-ignore */
                                 onChange={(e) => setComplementSelected(e.target.value)}
                             />
-                        </div>
+                        </BoxInputs>
 
-                        <div>
-                            <strong>Bairro: </strong>
-                            <span>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</span>
-                        </div>
+                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</TextCurrent>
 
-                        <div>
-                            <strong>Referencia: </strong>
-                            <input
+                        <BoxInputs>
+                            <TextCurrentBold>Referencia: </TextCurrentBold>
+                            <InputDelivery
                                 value={referenceSelected}/* @ts-ignore */
                                 onChange={(e) => setReferenceSelected(e.target.value)}
                             />
-                        </div>
+                        </BoxInputs>
 
-                        <span>{searchAddress?.localidade} - {searchAddress?.uf}</span>
+                        <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{searchAddress?.localidade} - {searchAddress?.uf}</TextCurrent>
 
-                        <span><strong>CEP: </strong>{searchAddress?.cep}</span>
+                        <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{searchAddress?.cep}</TextCurrent>
 
-                        <button
-                            onClick={updateDelivery}
-                        >
-                            Salvar alterações
-                        </button>
+                        <BoxButtonsFunctions>
+                            <ButtonDelivery
+                                style={{ backgroundColor: 'green' }}
+                                onClick={updateDelivery}
+                            >
+                                Salvar alterações
+                            </ButtonDelivery>
 
-                        <button
-                            onClick={handleCepEdit}
-                        >
-                            Cancelar
-                        </button>
-                    </div>
+                            <ButtonDelivery
+                                style={{ backgroundColor: 'red' }}
+                                onClick={handleCepEdit}
+                            >
+                                Cancelar
+                            </ButtonDelivery>
+                        </BoxButtonsFunctions>
+
+                    </BoxDelivery>
                     :
-                    <div>
-                        <input
+                    <BoxDelivery>
+                        <br />
+                        <InputDelivery
                             value={addresseeSelected}
                             onChange={(e) => setAddresseeSelected(e.target.value)}
                         />
+                        <br />
+                        <BoxInputs>
+                            <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {deliverys.address}</TextCurrentInput>
 
-                        <div>
-                            <span>{deliverys.address}</span>
-
-                            <input
+                            <InputDelivery
                                 value={numeroSelected}
                                 onChange={(e) => setNumeroSelected(e.target.value)}
                             />
-                        </div>
+                        </BoxInputs>
 
-                        <div>
-                            <strong>Complemento: </strong>
-                            <input
+                        <BoxInputs>
+                            <TextCurrentBold>Complemento: </TextCurrentBold>
+                            <InputDelivery
                                 value={complementSelected}/* @ts-ignore */
                                 onChange={(e) => setComplementSelected(e.target.value)}
                             />
-                        </div>
+                        </BoxInputs>
 
-                        <div>
-                            <strong>Bairro: </strong>
-                            <span>{deliverys.neighborhood ? deliverys.neighborhood : "Sem bairro"}</span>
-                        </div>
+                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{deliverys.neighborhood ? deliverys.neighborhood : "Sem bairro"}</TextCurrent>
 
-                        <div>
-                            <strong>Referencia: </strong>
-                            <input
+                        <BoxInputs>
+                            <TextCurrentBold>Referencia: </TextCurrentBold>
+                            <InputDelivery
                                 value={referenceSelected}/* @ts-ignore */
                                 onChange={(e) => setReferenceSelected(e.target.value)}
                             />
-                        </div>
+                        </BoxInputs>
 
-                        <span>{deliverys.city} - {deliverys.state}</span>
+                        <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{deliverys.city} - {deliverys.state}</TextCurrent>
 
-                        <span><strong>CEP: </strong>{deliverys.cep}</span>
+                        <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{deliverys.cep}</TextCurrent>
 
-                        <button
+                        <ButtonDelivery
+                            style={{ backgroundColor: 'green', width: '100%' }}
                             onClick={updateDelivery}
                         >
                             Salvar alterações
-                        </button>
+                        </ButtonDelivery>
 
-                    </div>
+                    </BoxDelivery>
                 }
-
             </ContainerContent>
 
         </Modal >

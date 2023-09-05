@@ -51,8 +51,6 @@ export const BoxDelivery = styled.div`
   flex-direction: column;
 `
 
-export const DataDelivery = styled.span``
-
 export const EditDelivery = styled.button`
   border: none;
   background: transparent;
