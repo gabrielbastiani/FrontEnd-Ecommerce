@@ -10,10 +10,10 @@ import { PageSection } from "../../components/dateStoreUx/styles";
 import { HeaderCart } from "../../components/HeaderCart";
 import Head from "next/head";
 import FooterAccount from "../../components/FooterAccount";
-import { BoxButtonsData, BoxData, BoxDelivery, BoxPayment, BoxTitle, ButtonsData, ContainerFechamento, DataDelivery, Datas, EditDelivery, SectionPayment } from "./styles";
+import { AddressTextIcon, BackButton, BoxButtons, BoxButtonsData, BoxButtonsFunctions, BoxData, BoxDelivery, BoxDeliverySelected, BoxInputs, BoxPayment, BoxTitle, ButtonDelivery, ButtonsData, ContainerFechamento, DataDelivery, Datas, DestinyName, EditDelivery, InputDelivery, SectionPayment, TextCurrent, TextCurrentBold, TextCurrentInput } from "./styles";
 import Titulos from "../../components/Titulos";
 import { AiFillEdit, AiOutlineCompass, AiOutlineMail } from "react-icons/ai";
-import { BsFillPersonFill, BsTelephoneFill } from "react-icons/bs";
+import { BsFillArrowLeftSquareFill, BsFillCheckCircleFill, BsFillPersonFill, BsTelephoneFill } from "react-icons/bs";
 import { FaIdCard } from "react-icons/fa";
 import Link from "next/link";
 import SelectUpdate from "../../components/ui/SelectUpdate";
@@ -23,6 +23,8 @@ import { InputUpdate } from "../../components/ui/InputUpdate";
 import { FiEdit } from "react-icons/fi";
 import Modal from 'react-modal';
 import { ModalDeliveryEdit } from "../../components/popups/ModalDeliveryEdit";
+import { BiCircle } from "react-icons/bi";
+import router from "next/router";
 
 
 type CepProps = {
@@ -40,6 +42,7 @@ export default function Payment() {
     const { customer } = useContext(AuthContext);
     let customer_id = customer?.id;
 
+    const [searchAddress, setSearchAddress] = useState<CepProps>();
     const [searchAddressEdit, setSearchAddressEdit] = useState<CepProps>();
 
     const [nameCompletes, setNameCompletes] = useState('');
@@ -76,8 +79,9 @@ export default function Payment() {
     const [deliveryEdits, setDeliveryEdits] = useState(false);
 
     const [allDeliverys, setAllDeliverys] = useState(false);
+    const [cepLoad, setCepLoad] = useState(false);
     const [cepLoadEdit, setCepLoadEdit] = useState(false);
-    const [activeEdit, setActiveEdit] = useState(false);
+    const [newDelivery, setNewDelivery] = useState(false);
 
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
@@ -90,12 +94,16 @@ export default function Payment() {
         setAllDeliverys(!allDeliverys);
     }
 
+    const handleCep = () => {
+        setCepLoad(!cepLoad);
+    }
+
     const handleCepEdit = () => {
         setCepLoadEdit(!cepLoadEdit);
     }
 
-    const handleEdit = () => {
-        setActiveEdit(!activeEdit);
+    const handleNewDelivery = () => {
+        setNewDelivery(!newDelivery);
     }
 
     const cpfCnpj = cpfs ? cpfs : cnpjs;
@@ -111,19 +119,63 @@ export default function Payment() {
 
     const tipo = removerAcentos(cpfCnpj).length >= 14 ? "CNPJ" : "CPF";
 
+    async function loadCep() {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.post(`/findAddressCep`, {
+                cep: cepBusca
+            });
+            setSearchAddress(response?.data);
+            handleCep();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     async function loadCepEdit() {
         const apiClient = setupAPIClient();
         try {
             const response = await apiClient.post(`/findAddressCep`, {
                 cep: cepBusca
             });
-
             setSearchAddressEdit(response?.data);
-
             handleCepEdit();
-
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    function closenewDelivery() {
+        handleNewDelivery();
+        handleCep();
+    }
+
+    async function handleNewDeliveryCustomer() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.post(`/customer/delivery/createDeliveryAddress`, {
+                customer_id: customer_id,
+                addressee: addresseeSelected,
+                address: searchAddress?.logradouro,
+                number: numeroSelected,
+                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro",
+                complement: complementSelected,
+                reference: referenceSelected,
+                cep: searchAddress?.cep,
+                city: searchAddress?.localidade,
+                state: searchAddress?.uf
+            });
+
+            toast.success("Novo endereço cadastrado com sucesso");
+
+            closenewDelivery();
+
+            setTimeout(() => {
+                router.reload();
+            }, 1500);
+
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -145,6 +197,10 @@ export default function Payment() {
             toast.success("Endereço atual alterado com sucesso");
 
             handleDelivery();
+
+            setTimeout(() => {
+                router.reload();
+            }, 1500);
 
         } catch (error) {
             console.log(error);
@@ -503,6 +559,20 @@ export default function Payment() {
         }
     }
 
+    async function updateCurrentDelivery(customer_id: string, id: string) {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
+
+            setTimeout(() => {
+                router.reload();
+            }, 1500);
+
+        } catch (error) {
+            console.log(error.response.data);
+        }
+    }
+
     function handleCloseModal() {
         setModalVisible(false);
     }
@@ -564,180 +634,308 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Endereço de Entrega" />
                         <br />
-                        {allDeliverys ?
-                            <>
-                                <button
-                                    onClick={handleAllDeliverys}
-                                >
-                                    Voltar
-                                </button>
-
-                                {deliverysCustomer.map((item, index) => {
-                                    return (
-                                        <>
-                                            <BoxDelivery key={index}>
-                                                <DataDelivery><AiOutlineCompass color="black" size={20} />{item?.address} - {item?.number}</DataDelivery>
-                                                <DataDelivery>{item?.city} - {item?.state}</DataDelivery>
-                                                <DataDelivery>{item?.neighborhood}</DataDelivery>
-                                                <DataDelivery>{item?.cep}</DataDelivery>
-                                                <DataDelivery>{item?.customer?.name}</DataDelivery>
-                                                <EditDelivery
-                                                    onClick={() => handleOpenModal(item.id)}
-                                                >
-                                                    <AiFillEdit
-                                                        color="black"
-                                                        size={15}
-                                                    />
-                                                    EDITAR
-                                                </EditDelivery>
-                                            </BoxDelivery>
-                                        </>
-                                    )
-                                })}
-                            </>
-                            :
+                        {newDelivery ?
                             <BoxDelivery>
-                                {deliveryEdits ?
+                                <BackButton
+                                    onClick={closenewDelivery}
+                                >
+                                    <BsFillArrowLeftSquareFill color="red" size={25} />
+                                    Voltar
+                                </BackButton>
+
+                                <Titulos
+                                    tipo="h4"
+                                    titulo="Insira um CEP abaixo para buscar o novo endereço"
+                                />
+                                <br />
+                                <Input
+                                    style={{ backgroundColor: 'white', color: 'black' }}
+                                    /* @ts-ignore */
+                                    as={IMaskInput}
+                                    /* @ts-ignore */
+                                    mask="00000-000"
+                                    type="text"
+                                    placeholder="CEP"
+                                    onChange={(e) => setCepBusca(e.target.value)}
+                                />
+
+                                <ButtonDelivery
+                                    style={{ width: '100%' }}
+                                    onClick={loadCep}
+                                >
+                                    Buscar
+                                </ButtonDelivery>
+
+                                {cepLoad ?
                                     <>
-                                        <Input
-                                            style={{ backgroundColor: 'white', color: 'black' }}
-                                            /* @ts-ignore */
-                                            as={IMaskInput}
-                                            /* @ts-ignore */
-                                            mask="00000-000"
-                                            type="text"
-                                            placeholder="CEP"
-                                            onChange={(e) => setCepBusca(e.target.value)}
+                                        <br />
+                                        <InputDelivery
+                                            value={addresseeSelected}
+                                            onChange={(e) => setAddresseeSelected(e.target.value)}
                                         />
-                                        <button
-                                            onClick={loadCepEdit}
+                                        <br />
+                                        <BoxInputs>
+                                            <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {searchAddress?.logradouro}</TextCurrentInput>
+                                            <InputDelivery
+                                                value={numeroSelected}
+                                                onChange={(e) => setNumeroSelected(e.target.value)}
+                                            />
+                                        </BoxInputs>
+
+                                        <BoxInputs>
+                                            <TextCurrentBold>Complemento: </TextCurrentBold>
+                                            <InputDelivery
+                                                value={complementSelected}
+                                                onChange={(e) => setComplementSelected(e.target.value)}
+                                            />
+                                        </BoxInputs>
+
+                                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</TextCurrent>
+
+                                        <BoxInputs>
+                                            <TextCurrentBold>Referencia: </TextCurrentBold>
+                                            <InputDelivery
+                                                value={referenceSelected}
+                                                onChange={(e) => setReferenceSelected(e.target.value)}
+                                            />
+                                        </BoxInputs>
+
+                                        <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{searchAddress?.localidade} - {searchAddress?.uf}</TextCurrent>
+
+                                        <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{searchAddress?.cep}</TextCurrent>
+
+                                        <BoxButtonsFunctions>
+                                            <ButtonDelivery
+                                                style={{ backgroundColor: 'green' }}
+                                                onClick={handleNewDeliveryCustomer}
+                                            >
+                                                Cadastrar endereço
+                                            </ButtonDelivery>
+
+                                            <ButtonDelivery
+                                                style={{ backgroundColor: 'red' }}
+                                                onClick={closenewDelivery}
+                                            >
+                                                Cancelar
+                                            </ButtonDelivery>
+                                        </BoxButtonsFunctions>
+                                    </>
+                                    :
+                                    null
+                                }
+                            </BoxDelivery>
+                            :
+                            <>
+                                {allDeliverys ?
+                                    <>
+                                        <BackButton
+                                            onClick={handleAllDeliverys}
                                         >
-                                            Buscar
-                                        </button>
+                                            <BsFillArrowLeftSquareFill color="red" size={25} />
+                                            Voltar
+                                        </BackButton>
 
-                                        {cepLoadEdit ?
+                                        {deliverysCustomer.map((item, index) => {
+                                            return (
+                                                <>
+                                                    <BoxDeliverySelected key={index}>
+                                                        <DestinyName>{item?.addressee}</DestinyName>
+                                                        <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {item?.address} - {item?.number}</TextCurrentInput>
+                                                        <TextCurrent><TextCurrentBold>Complemento: </TextCurrentBold>{item?.complement}</TextCurrent>
+                                                        <TextCurrent><TextCurrentBold>Referencia: </TextCurrentBold>{item?.reference}</TextCurrent>
+                                                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{item?.neighborhood}</TextCurrent>
+                                                        <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{item?.city} - {estadosSelected}</TextCurrent>
+                                                        <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{item?.cep}</TextCurrent>
+
+                                                        <BoxButtons>
+                                                            <EditDelivery
+                                                                onClick={() => handleOpenModal(item.id)}
+                                                            >
+                                                                <AiFillEdit
+                                                                    color="black"
+                                                                    size={15}
+                                                                />
+                                                                EDITAR
+                                                            </EditDelivery>
+
+                                                            {item?.deliverySelected === "Nao" ? (
+                                                                <BiCircle
+                                                                    color="red"
+                                                                    size={23}
+                                                                    cursor="pointer"
+                                                                    onClick={() => updateCurrentDelivery(item?.customer_id, item?.id)}
+                                                                />
+                                                            ) :
+                                                                <BsFillCheckCircleFill
+                                                                    color="green"
+                                                                    size={20}
+                                                                    cursor="pointer"
+                                                                />
+                                                            }
+                                                        </BoxButtons>
+                                                    </BoxDeliverySelected>
+                                                </>
+                                            )
+                                        })}
+                                    </>
+                                    :
+                                    <BoxDelivery>
+                                        {deliveryEdits ?
                                             <>
-                                                <input
-                                                    value={addresseeSelected}
-                                                    onChange={(e) => setAddresseeSelected(e.target.value)}
+                                                <Titulos
+                                                    tipo="h4"
+                                                    titulo="Insira um novo CEP se deseja mudar o endereço atual"
                                                 />
+                                                <br />
+                                                <Input
+                                                    style={{ backgroundColor: 'white', color: 'black' }}
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="00000-000"
+                                                    type="text"
+                                                    placeholder="CEP"
+                                                    onChange={(e) => setCepBusca(e.target.value)}
+                                                />
+                                                <ButtonDelivery
+                                                    style={{ width: '100%' }}
+                                                    onClick={loadCepEdit}
+                                                >
+                                                    Buscar
+                                                </ButtonDelivery>
 
-                                                <div>
-                                                    <span>{searchAddressEdit?.logradouro}</span>
+                                                {cepLoadEdit ?
+                                                    <>
+                                                        <br />
+                                                        <InputDelivery
+                                                            value={addresseeSelected}
+                                                            onChange={(e) => setAddresseeSelected(e.target.value)}
+                                                        />
+                                                        <br />
+                                                        <BoxInputs>
+                                                            <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {searchAddressEdit?.logradouro} - </TextCurrentInput>
 
-                                                    <input
-                                                        value={numeroSelected}
-                                                        onChange={(e) => setNumeroSelected(e.target.value)}
-                                                    />
-                                                </div>
+                                                            <InputDelivery
+                                                                value={numeroSelected}
+                                                                onChange={(e) => setNumeroSelected(e.target.value)}
+                                                            />
+                                                        </BoxInputs>
 
-                                                <div>
-                                                    <strong>Complemento: </strong>
-                                                    <input
-                                                        value={complementSelected}/* @ts-ignore */
-                                                        onChange={(e) => setComplementSelected(e.target.value)}
-                                                    />
-                                                </div>
+                                                        <BoxInputs>
+                                                            <TextCurrentBold>Complemento: </TextCurrentBold>
+                                                            <InputDelivery
+                                                                value={complementSelected}/* @ts-ignore */
+                                                                onChange={(e) => setComplementSelected(e.target.value)}
+                                                            />
+                                                        </BoxInputs>
 
-                                                <div>
-                                                    <strong>Bairro: </strong>
-                                                    <span>{searchAddressEdit?.bairro ? searchAddressEdit?.bairro : "Sem bairro"}</span>
-                                                </div>
+                                                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{searchAddressEdit?.bairro ? searchAddressEdit?.bairro : "Sem bairro"}</TextCurrent>
 
-                                                <div>
-                                                    <strong>Referencia: </strong>
-                                                    <input
-                                                        value={referenceSelected}/* @ts-ignore */
-                                                        onChange={(e) => setReferenceSelected(e.target.value)}
-                                                    />
-                                                </div>
+                                                        <BoxInputs>
+                                                            <TextCurrentBold>Referencia: </TextCurrentBold>
+                                                            <InputDelivery
+                                                                value={referenceSelected}/* @ts-ignore */
+                                                                onChange={(e) => setReferenceSelected(e.target.value)}
+                                                            />
+                                                        </BoxInputs>
 
-                                                <span>{searchAddressEdit?.localidade} - {searchAddressEdit?.uf}</span>
+                                                        <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{searchAddressEdit?.localidade} - {searchAddressEdit?.uf}</TextCurrent>
 
-                                                <span><strong>CEP: </strong>{searchAddressEdit?.cep}</span>
+                                                        <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{searchAddressEdit?.cep}</TextCurrent>
+                                                    </>
+                                                    :
+                                                    <>
+                                                        <br />
+                                                        <InputDelivery
+                                                            value={addresseeSelected}
+                                                            onChange={(e) => setAddresseeSelected(e.target.value)}
+                                                        />
+                                                        <br />
+                                                        <BoxInputs>
+                                                            <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {addressSelected} - </TextCurrentInput>
+
+                                                            <InputDelivery
+                                                                value={numeroSelected}
+                                                                placeholder="Numero"
+                                                                onChange={(e) => setNumeroSelected(e.target.value)}
+                                                            />
+                                                        </BoxInputs>
+
+                                                        <BoxInputs>
+                                                            <TextCurrentBold>Complemento: </TextCurrentBold>
+                                                            <InputDelivery
+                                                                value={complementSelected}/* @ts-ignore */
+                                                                onChange={(e) => setComplementSelected(e.target.value)}
+                                                            />
+                                                        </BoxInputs>
+
+                                                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{bairroSelected}</TextCurrent>
+
+                                                        <BoxInputs>
+                                                            <TextCurrentBold>Referencia: </TextCurrentBold>
+                                                            <InputDelivery
+                                                                value={referenceSelected}/* @ts-ignore */
+                                                                onChange={(e) => setReferenceSelected(e.target.value)}
+                                                            />
+                                                        </BoxInputs>
+
+                                                        <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{citySelected} - {estadosSelected}</TextCurrent>
+                                                        <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{cepSelected}</TextCurrent>
+                                                    </>
+                                                }
+                                                <BoxButtonsFunctions>
+                                                    <ButtonDelivery
+                                                        style={{ backgroundColor: 'green' }}
+                                                        onClick={updateSelectedDelivery}
+                                                    >
+                                                        Salvar alterações
+                                                    </ButtonDelivery>
+
+                                                    <ButtonDelivery
+                                                        style={{ backgroundColor: 'red' }}
+                                                        onClick={handleDelivery}
+                                                    >
+                                                        Cancelar edição
+                                                    </ButtonDelivery>
+                                                </BoxButtonsFunctions>
                                             </>
                                             :
                                             <>
-                                                <input
-                                                    value={addresseeSelected}
-                                                    onChange={(e) => setAddresseeSelected(e.target.value)}
-                                                />
-
-                                                <div>
-                                                    <span><AiOutlineCompass color="black" size={20} /> {addressSelected}</span>
-
-                                                    <input
-                                                        value={numeroSelected}
-                                                        onChange={(e) => setNumeroSelected(e.target.value)}
+                                                <BoxButtons>
+                                                    <DestinyName>{addresseeSelected}</DestinyName>
+                                                    <FiEdit
+                                                        size={20}
+                                                        color="black"
+                                                        cursor="pointer"
+                                                        onClick={handleDelivery}
                                                     />
-                                                </div>
+                                                </BoxButtons>
 
-                                                <div>
-                                                    <strong>Complemento: </strong>
-                                                    <input
-                                                        value={complementSelected}/* @ts-ignore */
-                                                        onChange={(e) => setComplementSelected(e.target.value)}
-                                                    />
-                                                </div>
+                                                <AddressTextIcon><AiOutlineCompass color="black" size={20} />{addressSelected} - {numeroSelected}</AddressTextIcon>
+                                                <TextCurrent><TextCurrentBold>Complemento: </TextCurrentBold>{complementSelected}</TextCurrent>
+                                                <TextCurrent><TextCurrentBold>Referencia: </TextCurrentBold>{referenceSelected}</TextCurrent>
+                                                <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{bairroSelected}</TextCurrent>
+                                                <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{citySelected} - {estadosSelected}</TextCurrent>
+                                                <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{cepSelected}</TextCurrent>
 
-                                                <span><strong>Bairro: </strong>{bairroSelected}</span>
+                                                <BoxButtonsFunctions>
+                                                    <ButtonDelivery
+                                                        onClick={handleAllDeliverys}
+                                                    >
+                                                        Selecionar outro endereço
+                                                    </ButtonDelivery>
 
-                                                <div>
-                                                    <strong>Referencia: </strong>
-                                                    <input
-                                                        value={referenceSelected}/* @ts-ignore */
-                                                        onChange={(e) => setReferenceSelected(e.target.value)}
-                                                    />
-                                                </div>
-
-                                                <span>{citySelected} - {estadosSelected}</span>
-                                                <span><strong>CEP: </strong>{cepSelected}</span>
+                                                    <ButtonDelivery
+                                                        onClick={handleNewDelivery}
+                                                    >
+                                                        Adicionar novo endereço
+                                                    </ButtonDelivery>
+                                                </BoxButtonsFunctions>
                                             </>
                                         }
-
-                                        <button
-                                            onClick={updateSelectedDelivery}
-                                        >
-                                            Salvar alterações
-                                        </button>
-
-                                        <button
-                                            onClick={handleDelivery}
-                                        >
-                                            Cancelar edição
-                                        </button>
-                                    </>
-                                    :
-                                    <>
-                                        <div>
-                                            <FiEdit
-                                                size={20}
-                                                color="black"
-                                                cursor="pointer"
-                                                onClick={handleDelivery}
-                                            />
-                                        </div>
-
-                                        <span>{addresseeSelected}</span>
-                                        <span><AiOutlineCompass color="black" size={20} />{addressSelected} - {numeroSelected}</span>
-                                        <span><strong>Complemento: </strong>{complementSelected}</span>
-                                        <span><strong>Referencia: </strong>{referenceSelected}</span>
-                                        <span><strong>Bairro: </strong>{bairroSelected}</span>
-                                        <span>{citySelected} - {estadosSelected}</span>
-                                        <span><strong>CEP: </strong>{cepSelected}</span>
-
-                                        <button
-                                            onClick={handleAllDeliverys}
-                                        >
-                                            Selecionar outro endereço
-                                        </button>
-
-                                        <button>
-                                            Adicionar novo endereço
-                                        </button>
-                                    </>
+                                    </BoxDelivery>
                                 }
-                            </BoxDelivery>
+                            </>
                         }
                     </BoxPayment>
 

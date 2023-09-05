@@ -62,3 +62,87 @@ export const EditDelivery = styled.button`
     margin: 0 5px;
   }
 `
+
+export const BoxButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+export const DestinyName = styled.span`
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+`
+
+export const AddressTextIcon = styled.span`
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+
+  svg {
+    margin-right: 8px;
+  }
+`
+
+export const TextCurrent = styled.span`
+  margin-bottom: 5px;
+`
+
+export const TextCurrentBold = styled.strong``
+
+export const BoxButtonsFunctions = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+
+export const TextCurrentInput = styled.span`
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+
+  svg {
+    margin-right: 8px;
+  }
+`
+
+export const ButtonDelivery = styled.button`
+  border: none;
+  width: 60%;
+  background-color: ${props => props?.theme?.colors?.info};
+  color: ${props => props?.theme?.colors?.black};
+  padding: 7px;
+  font-weight: 600;
+  margin: 7px 0;
+`
+export const BoxInputs = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+export const InputDelivery = styled.input`
+  padding: 5px;
+`
+
+export const BackButton = styled.button`
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  color: ${props => props?.theme?.colors?.black};
+  font-weight: 600;
+  margin-bottom: 20px;
+
+  svg {
+    margin-right: 8px;
+  }
+`
+
+export const BoxDeliverySelected = styled.div`
+  display: flex;
+  flex-direction: column;
+  border: 2px solid ${props => props?.theme?.colors?.gray};
+  margin-bottom: 14px;
+  padding: 15px;
+`

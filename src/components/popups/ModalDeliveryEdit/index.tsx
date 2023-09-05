@@ -34,6 +34,8 @@ type CepProps = {
 
 export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: DeliverysRequest) {
 
+    console.log(deliverys)
+
     const customStyles = {
         content: {
             top: '57%',
@@ -46,20 +48,15 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
         }
     };
 
-    const [addresseeSelected, setAddresseeSelected] = useState("");
-    const [numeroSelected, setNumeroSelected] = useState("");
-    const [referenceSelected, setReferenceSelected] = useState("");
-    const [complementSelected, setComplementSelected] = useState("");
+    const [addresseeSelected, setAddresseeSelected] = useState(deliverys.addressee);
+    const [numeroSelected, setNumeroSelected] = useState(deliverys.number);
+    const [referenceSelected, setReferenceSelected] = useState(deliverys.reference);
+    const [complementSelected, setComplementSelected] = useState(deliverys.complement);
 
     const [searchAddress, setSearchAddress] = useState<CepProps>();
     const [cepBusca, setCepBusca] = useState("");
 
-    const [deliveryEdits, setDeliveryEdits] = useState(false);
     const [cepLoadEdit, setCepLoadEdit] = useState(false);
-
-    const handleDelivery = () => {
-        setDeliveryEdits(!deliveryEdits);
-    }
 
     const handleCepEdit = () => {
         setCepLoadEdit(!cepLoadEdit);
@@ -81,8 +78,6 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
         }
     }
 
-    console.log(deliverys)
-
     async function updateDelivery() {
         const apiClient = setupAPIClient();
         try {
@@ -98,7 +93,7 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
                 state: searchAddress?.uf
             });
 
-            toast.success("Endereço de entrega alterado com sucesso");
+            toast.success("Dados(s) de entrega alterado com sucesso");
 
         } catch (error) {
             console.log(error);
@@ -122,6 +117,11 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
             </ButtonClose>
 
             <ContainerContent>
+
+                <Titulos
+                    tipo='h4'
+                    titulo='Insira um novo CEP abaixo se deseja mudar o endereço atual'
+                />
 
                 <Input
                     style={{ backgroundColor: 'white', color: 'black' }}
@@ -200,7 +200,7 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
                         />
 
                         <div>
-                            <span>{searchAddress?.logradouro}</span>
+                            <span>{deliverys.address}</span>
 
                             <input
                                 value={numeroSelected}
@@ -218,7 +218,7 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
 
                         <div>
                             <strong>Bairro: </strong>
-                            <span>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</span>
+                            <span>{deliverys.neighborhood ? deliverys.neighborhood : "Sem bairro"}</span>
                         </div>
 
                         <div>
@@ -229,9 +229,15 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
                             />
                         </div>
 
-                        <span>{searchAddress?.localidade} - {searchAddress?.uf}</span>
+                        <span>{deliverys.city} - {deliverys.state}</span>
 
-                        <span><strong>CEP: </strong>{searchAddress?.cep}</span>
+                        <span><strong>CEP: </strong>{deliverys.cep}</span>
+
+                        <button
+                            onClick={updateDelivery}
+                        >
+                            Salvar alterações
+                        </button>
 
                     </div>
                 }
