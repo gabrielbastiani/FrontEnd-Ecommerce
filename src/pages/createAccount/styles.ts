@@ -96,3 +96,7 @@ export const ButtonBox = styled.div`
   margin-top: 30px;
   width: 100%;
 `
+
+export const DataAddress = styled.span`
+  margin-bottom: 18px;
+`

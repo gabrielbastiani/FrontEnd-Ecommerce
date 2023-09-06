@@ -13,7 +13,8 @@ import {
     BoxNews,
     ButtonBox,
     OpcoesGenero,
-    SelectGenero
+    SelectGenero,
+    DataAddress
 } from './styles';
 import Head from "next/head";
 import { HeaderAccount } from "../../components/HeaderAccount";
@@ -26,6 +27,15 @@ import { setupAPIClient } from "../../services/api";
 import { CartContext } from "../../contexts/CartContext";
 import { AuthContext } from "../../contexts/AuthContext";
 
+
+type CepProps = {
+    bairro: string;
+    cep: string;
+    complemento: string;
+    localidade: string;
+    logradouro: string;
+    uf: string;
+}
 
 export default function createAccountPayment() {
 
@@ -59,21 +69,51 @@ export default function createAccountPayment() {
         setGeneroSelected(e.target.value);
     }
 
-    const [enderecos, setEnderecos] = useState('');
     const [numeros, setNumeros] = useState('');
     const [referencias, setReferencias] = useState('');
     const [complement, setComplement] = useState('');
-    const [bairros, setBairros] = useState('');
-    const [ceps, setCeps] = useState('');
-    const [cidades, setCidades] = useState('');
-
-    const [estadosSelected, setEstadosSelected] = useState();
-
-    function handleChangeEstado(e: any) {
-        setEstadosSelected(e.target.value);
-    }
 
     const [currentRadioValue, setCurrentValue] = useState('off');
+
+    const [cepBusca, setCepBusca] = useState("");
+    const [searchAddress, setSearchAddress] = useState<CepProps>();
+
+    const [cepLoad, setCepLoad] = useState(false);
+    const [cepLoadCnpjs, setCepLoadCnpjs] = useState(false);
+
+    const handleCep = () => {
+        setCepLoad(!cepLoad);
+    }
+
+    const handleCepCnpjs = () => {
+        setCepLoadCnpjs(!cepLoadCnpjs);
+    }
+
+    async function loadCep() {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.post(`/findAddressCep`, {
+                cep: cepBusca
+            });
+            setSearchAddress(response?.data);
+            handleCep();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function loadCepCnpjs() {
+        const apiClient = setupAPIClient();
+        try {
+            const response = await apiClient.post(`/findAddressCep`, {
+                cep: cepBusca
+            });
+            setSearchAddress(response?.data);
+            handleCepCnpjs();
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     function isEmail(email: string) {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(email);
@@ -88,8 +128,6 @@ export default function createAccountPayment() {
         loadLoja();
     }, []);
 
-
-
     async function handleRegisterClientCPF() {
         try {
             if (names === '' ||
@@ -98,12 +136,7 @@ export default function createAccountPayment() {
                 cpfs === '' ||
                 phones === '' ||
                 nascimento === '' ||
-                generoSelected === '' ||
-                enderecos === '' ||
-                bairros === '' ||
-                ceps === '' ||
-                cidades === '' ||
-                estadosSelected === ''
+                generoSelected === ''
             ) {
                 toast.error('Preencha todos os campos');
                 return
@@ -130,14 +163,14 @@ export default function createAccountPayment() {
                 phone: phones,
                 dateOfBirth: nascimento,
                 gender: generoSelected,
-                address: enderecos,
+                address: searchAddress?.logradouro,
                 number: numeros,
                 complement: complement,
                 reference: referencias,
-                neighborhood: bairros,
-                cep: ceps,
-                city: cidades,
-                state: estadosSelected,
+                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro",
+                cep: searchAddress?.cep,
+                city: searchAddress?.localidade,
+                state: searchAddress?.uf,
                 newslatter: news,
                 store_id: lojas_id
             });
@@ -151,12 +184,8 @@ export default function createAccountPayment() {
             setConfirmPassword('');
             setPhones('');
             setNascimento('');
-            setEnderecos('');
             setNumeros('');
             setReferencias('');
-            setBairros('');
-            setCeps('');
-            setCidades('');
             setCpfs('');
 
             let data = {
@@ -182,12 +211,7 @@ export default function createAccountPayment() {
                 confirmPassword === '' ||
                 cnpjs === '' ||
                 phones === '' ||
-                inscricao === '' ||
-                enderecos === '' ||
-                bairros === '' ||
-                ceps === '' ||
-                cidades === '' ||
-                estadosSelected === ''
+                inscricao === ''
             ) {
                 toast.error('Preencha todos os campos.');
                 return
@@ -213,14 +237,14 @@ export default function createAccountPayment() {
                 cnpj: cnpjs,
                 phone: phones,
                 stateRegistration: inscricao,
-                address: enderecos,
+                address: searchAddress?.logradouro,
                 number: numeros,
                 complement: complement,
                 reference: referencias,
-                neighborhood: bairros,
-                cep: ceps,
-                city: cidades,
-                state: estadosSelected,
+                neighborhood: searchAddress?.bairro,
+                cep: searchAddress?.cep,
+                city: searchAddress?.localidade,
+                state: searchAddress?.uf,
                 newslatter: news,
                 store_id: lojas_id
             });
@@ -234,13 +258,9 @@ export default function createAccountPayment() {
             setConfirmPassword('');
             setPhones('');
             setInscricao('');
-            setEnderecos('');
             setNumeros('');
             setReferencias('');
-            setBairros('');
             setCnpjs('');
-            setCidades('');
-            setCeps('');
 
             let data = {
                 email,
@@ -415,116 +435,119 @@ export default function createAccountPayment() {
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Endereço</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Endereço"
-                                            value={enderecos}
-                                            onChange={(e) => setEnderecos(e.target.value)}
-                                        />
+                                        <br />
+                                        <br />
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Número</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Número"
-                                            value={numeros}
-                                            onChange={(e) => setNumeros(e.target.value)}
-                                        />
+                                        <br />
+                                        <br />
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Complemento</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Complemento"
-                                            value={complement}
-                                            onChange={(e) => setComplement(e.target.value)}
-                                        />
+                                        <br />
+                                        <br />
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Referência</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Referência"
-                                            value={referencias}
-                                            onChange={(e) => setReferencias(e.target.value)}
-                                        />
+                                        <Titulos tipo="h1" titulo="Endereço de entrega" />
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Bairro</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Bairro"
-                                            value={bairros}
-                                            onChange={(e) => setBairros(e.target.value)}
-                                        />
+                                        <br />
+                                        <br />
                                     </BlockInputs>
 
-                                    <BlockInputs>
-                                        <EtiquetaInput>CEP</EtiquetaInput>
-                                        <Input
-                                            /* @ts-ignore */
-                                            as={IMaskInput}
-                                            /* @ts-ignore */
-                                            mask="00000-000"
-                                            type="text"
-                                            placeholder="CEP"
-                                            value={ceps}
-                                            onChange={(e) => setCeps(e.target.value)}
-                                        />
-                                    </BlockInputs>
+                                    {cepLoad ?
+                                        <>
+                                            <BlockInputs>
+                                                <Button
+                                                    style={{ backgroundColor: 'red', width: '50%' }}
+                                                    onClick={handleCep}
+                                                >
+                                                    Limpar endereço
+                                                </Button>
+                                            </BlockInputs>
+                                            <br />
+                                            <br />
+                                            <BlockInputs>
+                                                <EtiquetaInput>Endereço</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.logradouro}</DataAddress>
+                                            </BlockInputs>
 
-                                    <BlockInputs>
-                                        <EtiquetaInput>Cidade</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Cidade"
-                                            value={cidades}
-                                            onChange={(e) => setCidades(e.target.value)}
-                                        />
-                                    </BlockInputs>
+                                            <BlockInputs>
+                                                <EtiquetaInput>Número</EtiquetaInput>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Número"
+                                                    value={numeros}
+                                                    onChange={(e) => setNumeros(e.target.value)}
+                                                />
+                                            </BlockInputs>
 
-                                    <BlockInputs>
-                                        <EtiquetaInput>Estado</EtiquetaInput>
-                                        <SelectGenero
-                                            value={estadosSelected}
-                                            onChange={handleChangeEstado}
-                                        >
-                                            <OpcoesGenero value="">Selecione...</OpcoesGenero>
-                                            <OpcoesGenero value="AC">Acre</OpcoesGenero>
-                                            <OpcoesGenero value="AL">Alagoas</OpcoesGenero>
-                                            <OpcoesGenero value="AP">Amapá</OpcoesGenero>
-                                            <OpcoesGenero value="AM">Amazonas</OpcoesGenero>
-                                            <OpcoesGenero value="BA">Bahia</OpcoesGenero>
-                                            <OpcoesGenero value="CE">Ceara</OpcoesGenero>
-                                            <OpcoesGenero value="DF">Distrito Federal</OpcoesGenero>
-                                            <OpcoesGenero value="ES">Espírito Santo</OpcoesGenero>
-                                            <OpcoesGenero value="GO">Goiás</OpcoesGenero>
-                                            <OpcoesGenero value="MA">Maranhão</OpcoesGenero>
-                                            <OpcoesGenero value="MT">Mato Grosso</OpcoesGenero>
-                                            <OpcoesGenero value="MS">Mato Grosso do Sul</OpcoesGenero>
-                                            <OpcoesGenero value="MG">Minas Gerais</OpcoesGenero>
-                                            <OpcoesGenero value="PA">Pará</OpcoesGenero>
-                                            <OpcoesGenero value="PB">Paraíba</OpcoesGenero>
-                                            <OpcoesGenero value="PR">Paraná</OpcoesGenero>
-                                            <OpcoesGenero value="PE">Pernambuco</OpcoesGenero>
-                                            <OpcoesGenero value="PI">Piauí</OpcoesGenero>
-                                            <OpcoesGenero value="RJ">Rio de Janeiro</OpcoesGenero>
-                                            <OpcoesGenero value="RN">Rio Grande do Norte</OpcoesGenero>
-                                            <OpcoesGenero value="RS">Rio Grande do Sul</OpcoesGenero>
-                                            <OpcoesGenero value="RO">Rondônia</OpcoesGenero>
-                                            <OpcoesGenero value="RR">Roraima</OpcoesGenero>
-                                            <OpcoesGenero value="SC">Santa Catarina</OpcoesGenero>
-                                            <OpcoesGenero value="SP">São Paulo</OpcoesGenero>
-                                            <OpcoesGenero value="SE">Sergipe</OpcoesGenero>
-                                            <OpcoesGenero value="TO">Tocantins</OpcoesGenero>
-                                        </SelectGenero>
-                                    </BlockInputs>
+                                            <BlockInputs>
+                                                <EtiquetaInput>Complemento</EtiquetaInput>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Complemento"
+                                                    value={complement}
+                                                    onChange={(e) => setComplement(e.target.value)}
+                                                />
+                                            </BlockInputs>
 
+                                            <BlockInputs>
+                                                <EtiquetaInput>Referência</EtiquetaInput>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Referência"
+                                                    value={referencias}
+                                                    onChange={(e) => setReferencias(e.target.value)}
+                                                />
+                                            </BlockInputs>
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>Bairro</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</DataAddress>
+                                            </BlockInputs>
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>Cidade</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.localidade}</DataAddress>
+                                            </BlockInputs>
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>Estado</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.uf}</DataAddress>
+                                            </BlockInputs>
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>CEP</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.cep}</DataAddress>
+                                            </BlockInputs>
+                                        </>
+                                        :
+                                        <>
+                                            <BlockInputs>
+                                                <EtiquetaInput>CEP</EtiquetaInput>
+                                                <Input
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="00000-000"
+                                                    type="text"
+                                                    placeholder="CEP"
+                                                    onChange={(e) => setCepBusca(e.target.value)}
+                                                />
+                                            </BlockInputs>
+
+                                            <Button
+                                                style={{ backgroundColor: 'green', width: '50%' }}
+                                                onClick={loadCep}
+                                            >
+                                                Buscar endereço
+                                            </Button>
+                                        </>
+                                    }
                                 </CadastroPessoaFisica>
 
                                 <ButtonBox>
@@ -628,6 +651,11 @@ export default function createAccountPayment() {
                                     </BlockInputs>
 
                                     <BlockInputs>
+                                        <br />
+                                        <br />
+                                    </BlockInputs>
+
+                                    <BlockInputs>
                                         <BoxNews>
                                             <EtiquetaInput>Receba nossas ofertas</EtiquetaInput>
                                             <RadioBotton
@@ -641,115 +669,119 @@ export default function createAccountPayment() {
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Endereço</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Endereço"
-                                            value={enderecos}
-                                            onChange={(e) => setEnderecos(e.target.value)}
-                                        />
+                                        <br />
+                                        <br />
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Número</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Número"
-                                            value={numeros}
-                                            onChange={(e) => setNumeros(e.target.value)}
-                                        />
+                                        <br />
+                                        <br />
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Complemento</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Complemento"
-                                            value={complement}
-                                            onChange={(e) => setComplement(e.target.value)}
-                                        />
+                                        <br />
+                                        <br />
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Referência</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Referência"
-                                            value={referencias}
-                                            onChange={(e) => setReferencias(e.target.value)}
-                                        />
+                                        <Titulos tipo="h1" titulo="Endereço de entrega" />
                                     </BlockInputs>
 
                                     <BlockInputs>
-                                        <EtiquetaInput>Bairro</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Bairro"
-                                            value={bairros}
-                                            onChange={(e) => setBairros(e.target.value)}
-                                        />
+                                        <br />
+                                        <br />
                                     </BlockInputs>
 
-                                    <BlockInputs>
-                                        <EtiquetaInput>CEP</EtiquetaInput>
-                                        <Input
-                                            /* @ts-ignore */
-                                            as={IMaskInput}
-                                            /* @ts-ignore */
-                                            mask="00000-000"
-                                            type="text"
-                                            placeholder="CEP"
-                                            value={ceps}
-                                            onChange={(e) => setCeps(e.target.value)}
-                                        />
-                                    </BlockInputs>
+                                    {cepLoadCnpjs ?
+                                        <>
+                                            <BlockInputs>
+                                                <Button
+                                                    style={{ backgroundColor: 'red', width: '50%' }}
+                                                    onClick={handleCepCnpjs}
+                                                >
+                                                    Limpar endereço
+                                                </Button>
+                                            </BlockInputs>
+                                            <br />
+                                            <br />
+                                            <BlockInputs>
+                                                <EtiquetaInput>Endereço</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.logradouro}</DataAddress>
+                                            </BlockInputs>
 
-                                    <BlockInputs>
-                                        <EtiquetaInput>Cidade</EtiquetaInput>
-                                        <Input
-                                            type="text"
-                                            placeholder="Cidade"
-                                            value={cidades}
-                                            onChange={(e) => setCidades(e.target.value)}
-                                        />
-                                    </BlockInputs>
+                                            <BlockInputs>
+                                                <EtiquetaInput>Número</EtiquetaInput>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Número"
+                                                    value={numeros}
+                                                    onChange={(e) => setNumeros(e.target.value)}
+                                                />
+                                            </BlockInputs>
 
-                                    <BlockInputs>
-                                        <EtiquetaInput>Estado</EtiquetaInput>
-                                        <SelectGenero
-                                            value={estadosSelected}
-                                            onChange={handleChangeEstado}
-                                        >
-                                            <OpcoesGenero value="">Selecione...</OpcoesGenero>
-                                            <OpcoesGenero value="AC">Acre</OpcoesGenero>
-                                            <OpcoesGenero value="AL">Alagoas</OpcoesGenero>
-                                            <OpcoesGenero value="AP">Amapá</OpcoesGenero>
-                                            <OpcoesGenero value="AM">Amazonas</OpcoesGenero>
-                                            <OpcoesGenero value="BA">Bahia</OpcoesGenero>
-                                            <OpcoesGenero value="CE">Ceara</OpcoesGenero>
-                                            <OpcoesGenero value="DF">Distrito Federal</OpcoesGenero>
-                                            <OpcoesGenero value="ES">Espírito Santo</OpcoesGenero>
-                                            <OpcoesGenero value="GO">Goiás</OpcoesGenero>
-                                            <OpcoesGenero value="MA">Maranhão</OpcoesGenero>
-                                            <OpcoesGenero value="MT">Mato Grosso</OpcoesGenero>
-                                            <OpcoesGenero value="MS">Mato Grosso do Sul</OpcoesGenero>
-                                            <OpcoesGenero value="MG">Minas Gerais</OpcoesGenero>
-                                            <OpcoesGenero value="PA">Pará</OpcoesGenero>
-                                            <OpcoesGenero value="PB">Paraíba</OpcoesGenero>
-                                            <OpcoesGenero value="PR">Paraná</OpcoesGenero>
-                                            <OpcoesGenero value="PE">Pernambuco</OpcoesGenero>
-                                            <OpcoesGenero value="PI">Piauí</OpcoesGenero>
-                                            <OpcoesGenero value="RJ">Rio de Janeiro</OpcoesGenero>
-                                            <OpcoesGenero value="RN">Rio Grande do Norte</OpcoesGenero>
-                                            <OpcoesGenero value="RS">Rio Grande do Sul</OpcoesGenero>
-                                            <OpcoesGenero value="RO">Rondônia</OpcoesGenero>
-                                            <OpcoesGenero value="RR">Roraima</OpcoesGenero>
-                                            <OpcoesGenero value="SC">Santa Catarina</OpcoesGenero>
-                                            <OpcoesGenero value="SP">São Paulo</OpcoesGenero>
-                                            <OpcoesGenero value="SE">Sergipe</OpcoesGenero>
-                                            <OpcoesGenero value="TO">Tocantins</OpcoesGenero>
-                                        </SelectGenero>
-                                    </BlockInputs>
+                                            <BlockInputs>
+                                                <EtiquetaInput>Complemento</EtiquetaInput>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Complemento"
+                                                    value={complement}
+                                                    onChange={(e) => setComplement(e.target.value)}
+                                                />
+                                            </BlockInputs>
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>Referência</EtiquetaInput>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Referência"
+                                                    value={referencias}
+                                                    onChange={(e) => setReferencias(e.target.value)}
+                                                />
+                                            </BlockInputs>
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>Bairro</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</DataAddress>
+                                            </BlockInputs>
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>Cidade</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.localidade}</DataAddress>
+                                            </BlockInputs>
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>Estado</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.uf}</DataAddress>
+                                            </BlockInputs>
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>CEP</EtiquetaInput>
+                                                <DataAddress>{searchAddress?.cep}</DataAddress>
+                                            </BlockInputs>
+                                        </>
+                                        :
+                                        <>
+                                            <BlockInputs>
+                                                <EtiquetaInput>CEP</EtiquetaInput>
+                                                <Input
+                                                    /* @ts-ignore */
+                                                    as={IMaskInput}
+                                                    /* @ts-ignore */
+                                                    mask="00000-000"
+                                                    type="text"
+                                                    placeholder="CEP"
+                                                    onChange={(e) => setCepBusca(e.target.value)}
+                                                />
+                                            </BlockInputs>
+
+                                            <Button
+                                                style={{ backgroundColor: 'green', width: '50%' }}
+                                                onClick={loadCepCnpjs}
+                                            >
+                                                Buscar endereço
+                                            </Button>
+                                        </>
+                                    }
 
                                 </CadastroPessoaFisica>
 

@@ -43,9 +43,6 @@ export function ModalProposta({ isOpen, onRequestClose, priceProduct, nameProduc
     const [moreInformation, setMoreInformation] = useState("");
 
 
-    console.log(priceProduct)
-
-
     var offerprice = String(counterOfferPrice);
     offerprice = offerprice + '';
     /* @ts-ignore */
