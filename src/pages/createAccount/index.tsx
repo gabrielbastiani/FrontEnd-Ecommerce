@@ -69,6 +69,7 @@ export default function createAccount() {
         setGeneroSelected(e.target.value);
     }
 
+    const [addressees, setAddressees] = useState('');
     const [numeros, setNumeros] = useState('');
     const [referencias, setReferencias] = useState('');
     const [complement, setComplement] = useState('');
@@ -136,7 +137,8 @@ export default function createAccount() {
                 cpfs === '' ||
                 phones === '' ||
                 nascimento === '' ||
-                generoSelected === ''
+                generoSelected === '' ||
+                addressees === ''
             ) {
                 toast.error('Preencha todos os campos');
                 return
@@ -163,6 +165,7 @@ export default function createAccount() {
                 phone: phones,
                 dateOfBirth: nascimento,
                 gender: generoSelected,
+                addressee: addressees,
                 address: searchAddress?.logradouro,
                 number: numeros,
                 complement: complement,
@@ -187,6 +190,7 @@ export default function createAccount() {
             setNumeros('');
             setReferencias('');
             setCpfs('');
+            setAddressees('');
 
             let data = {
                 email,
@@ -211,7 +215,8 @@ export default function createAccount() {
                 confirmPassword === '' ||
                 cnpjs === '' ||
                 phones === '' ||
-                inscricao === ''
+                inscricao === '' ||
+                addressees === ''
             ) {
                 toast.error('Preencha todos os campos.');
                 return
@@ -237,6 +242,7 @@ export default function createAccount() {
                 cnpj: cnpjs,
                 phone: phones,
                 stateRegistration: inscricao,
+                addressee: addressees,
                 address: searchAddress?.logradouro,
                 number: numeros,
                 complement: complement,
@@ -261,6 +267,7 @@ export default function createAccount() {
             setNumeros('');
             setReferencias('');
             setCnpjs('');
+            setAddressees('');
 
             let data = {
                 email,
@@ -467,9 +474,20 @@ export default function createAccount() {
                                                 >
                                                     Limpar endereço
                                                 </Button>
+                                                <br />
+                                                <br />
                                             </BlockInputs>
-                                            <br />
-                                            <br />
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>Nome do destinatario</EtiquetaInput>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Nome destinatario"
+                                                    value={addressees}
+                                                    onChange={(e) => setAddressees(e.target.value)}
+                                                />
+                                            </BlockInputs>
+
                                             <BlockInputs>
                                                 <EtiquetaInput>Endereço</EtiquetaInput>
                                                 <DataAddress>{searchAddress?.logradouro}</DataAddress>
@@ -701,9 +719,20 @@ export default function createAccount() {
                                                 >
                                                     Limpar endereço
                                                 </Button>
+                                                <br />
+                                                <br />
                                             </BlockInputs>
-                                            <br />
-                                            <br />
+
+                                            <BlockInputs>
+                                                <EtiquetaInput>Nome do destinatario</EtiquetaInput>
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Nome destinatario"
+                                                    value={addressees}
+                                                    onChange={(e) => setAddressees(e.target.value)}
+                                                />
+                                            </BlockInputs>
+
                                             <BlockInputs>
                                                 <EtiquetaInput>Endereço</EtiquetaInput>
                                                 <DataAddress>{searchAddress?.logradouro}</DataAddress>
