@@ -22,8 +22,6 @@ interface PropostaRequest {
 
 export function ModalProposta({ isOpen, onRequestClose, priceProduct, nameProduct, skuProduct }: PropostaRequest) {
 
-    const price = String(priceProduct);
-
     const customStyles = {
         content: {
             top: '49%',
@@ -45,20 +43,7 @@ export function ModalProposta({ isOpen, onRequestClose, priceProduct, nameProduc
     const [moreInformation, setMoreInformation] = useState("");
 
 
-    var priceFormated = String(price);
-    priceFormated = priceFormated + '';
-    /* @ts-ignore */
-    priceFormated = parseInt(priceFormated.replace(/[\D]+/g, ''));
-    priceFormated = priceFormated + '';
-    priceFormated = priceFormated.replace(/([0-9]{2})$/g, ",$1");
-
-    if (priceFormated.length > 6) {
-        priceFormated = priceFormated.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-    }
-    if (priceFormated == 'NaN') priceFormated = '';
-    const formatedPrice = priceFormated.replace(".", "");
-    const formatedPricePonto = formatedPrice.replace(",", ".");
-    const numberPrice = formatedPricePonto;
+    console.log(priceProduct)
 
 
     var offerprice = String(counterOfferPrice);
@@ -102,7 +87,7 @@ export function ModalProposta({ isOpen, onRequestClose, priceProduct, nameProduc
             }
             const apiClient = setupAPIClient();
             await apiClient.post('/createCounterProposal', {
-                currentPrice: Number(numberPrice),
+                currentPrice: Number(priceProduct),
                 counterOfferPrice: Number(numberOffer),
                 name: name,
                 email: email,
