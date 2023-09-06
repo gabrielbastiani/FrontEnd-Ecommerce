@@ -14,9 +14,14 @@ type MyContextProps = {
   removeItemCart: (id: AddItemsProps) => Promise<void>;
   removeProductCart: (id: AddItemsProps) => Promise<void>;
   clearAllCart(): void;
+  cepCustomer: (cep: AddCepProps) => Promise<void>;
   totalFinishCart: number;
   totalCart: number;
 };
+
+type AddCepProps = {
+  cep: string;
+}
 
 type AddItemsProps = {
   product_id: string;
@@ -36,7 +41,7 @@ export const CartContext = createContext({} as MyContextProps);
 
 export function CartProviderProducts({ children }: Props) {
 
-  const { isAuthenticated, customer } = useContext(AuthContext);
+  const { customer } = useContext(AuthContext);
 
   const idCart = generateUniqueId({
     useLetters: true,
@@ -48,6 +53,8 @@ export function CartProviderProducts({ children }: Props) {
   const [productsCart, setProductsCart] = useState<any[]>([]);
   const [totalCart, setTotalCart] = useState(0);
   const [totalFinishCart, setTotalFinishCart] = useState(0);
+
+  const [cartCep, setCartCep] = useState<any>("");
 
   useEffect(() => {
     let dadosCart = localStorage.getItem("@cartProducts");
@@ -318,8 +325,21 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
+  async function cepCustomer(cep: string) {
+
+    setCartCep(cep);
+
+    const apiClient = setupAPIClient();
+    const storageId = String(cartProducts[0]?.store_cart_id);
+
+    await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+      cep: cep
+    });
+
+  }
+
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ cartCep, cepCustomer, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )

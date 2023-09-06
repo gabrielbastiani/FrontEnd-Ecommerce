@@ -3,6 +3,7 @@ import { api } from '../services/apiClient';
 import { destroyCookie, setCookie, parseCookies } from 'nookies';
 import Router from 'next/router';
 import { toast } from 'react-toastify';
+import { setupAPIClient } from '../services/api';
 
 
 type AuthContextData = {
@@ -113,8 +114,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       console.log(error.data.response);
     }
   }
-
-  async function signInPay({ email, password, cartProducts }: SignInProps) {
+  /* @ts-ignore */
+  async function signInPay({ email, password, cartProducts, cartCep }: SignInProps) {
+    const apiClient = setupAPIClient();
     try {
       const response = await api.post('/customer/session', {
         email,
@@ -144,6 +146,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         api.put(`/updateCartCustomer?store_cart_id=${storageId}`, {
           customer_id: String(id)
         });
+
+        const { data } = await apiClient.get(`/findCepCart?customer_id=${id}&cep=${cartCep}`);
+
+        if (data?.cep === cartCep) {
+          await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${id}&cep=${cartCep}`);
+        } else {
+          Router.push('/');
+        }
 
       }
 

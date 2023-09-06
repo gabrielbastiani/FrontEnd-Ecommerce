@@ -977,10 +977,10 @@ export default function Payment() {
                             return (
                                 <div key={index}>
                                     <div>
-                                    <Image src={'http://localhost:3333/files/' + item?.product?.photoproducts[0]?.image} width={80} height={80} alt={item?.product?.name} />
-                                    <div>
-                                        <h4>{item?.product?.name}</h4>
-                                    </div>
+                                        <Image src={'http://localhost:3333/files/' + item?.product?.photoproducts[0]?.image} width={80} height={80} alt={item?.product?.name} />
+                                        <div>
+                                            <h4>{item?.product?.name}</h4>
+                                        </div>
                                     </div>
                                 </div>
                             )

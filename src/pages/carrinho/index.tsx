@@ -60,7 +60,7 @@ import { Input } from "../../components/ui/Input";
 import { GiCancel } from "react-icons/gi";
 import router from "next/router";
 import { AuthContext } from "../../contexts/AuthContext";
-import Link from "next/link";
+
 
 export interface DataCart {
     promotion: number;
@@ -70,7 +70,7 @@ export default function Carrinho() {
 
     const { isAuthenticated, customer } = useContext(AuthContext);
     /* @ts-ignore */
-    const { productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
+    const { cepCustomer, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
 
     const [desconto, setDesconto] = useState("");
     const [totalDesconto, setTotalDesconto] = useState("");
@@ -158,6 +158,8 @@ export default function Carrinho() {
 
     async function searchCep() {
         try {
+            /* @ts-ignore */
+            cepCustomer(cep);
             const apiClient = setupAPIClient();
             const { data } = await apiClient.post('/freteCalculo', {
                 nCdServico: "04162",
