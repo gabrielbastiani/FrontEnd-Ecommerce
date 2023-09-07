@@ -60,6 +60,7 @@ import Image from "next/image";
 import { TextoDados } from "../../components/TextoDados";
 import { InputUpdate } from "../../components/ui/InputUpdate";
 import SelectUpdate from "../../components/ui/SelectUpdate";
+import { BoxPricesFinal, Total } from "../carrinho/styles";
 
 
 type CepProps = {
@@ -73,7 +74,7 @@ type CepProps = {
 
 export default function Payment() {
 
-    const { cartProducts, productsCart, totalFinishCart, cepCustomer } = useContext(CartContext);
+    const { cartProducts, productsCart, totalCart, totalFinishCart, cepCustomer } = useContext(CartContext);
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
@@ -1306,6 +1307,32 @@ export default function Payment() {
                                 </div>
                             )
                         })}
+                        <BoxPricesFinal>
+                            <Total
+                                style={{ fontSize: '19px' }}
+                            >
+                                SUBTOTAL
+                            </Total>
+                            <Total
+                                style={{ fontSize: '19px'}}
+                            >
+                                {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
+                            </Total>
+                        </BoxPricesFinal>
+                        <hr />
+                        <BoxPricesFinal>
+                            <Total
+                                style={{ fontSize: '22px' }}
+                            >
+                                TOTAL
+                            </Total>
+                            <Total
+                                style={{ fontSize: '22px', color: 'red' }}
+                            >
+                                {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}
+                            </Total>
+                        </BoxPricesFinal>
+
                     </BoxPayment>
                 </ContainerFechamento>
 
