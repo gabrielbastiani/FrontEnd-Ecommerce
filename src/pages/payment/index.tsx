@@ -49,7 +49,6 @@ import {
     BsTelephoneFill
 } from "react-icons/bs";
 import { FaBirthdayCake, FaIdCard } from "react-icons/fa";
-import Link from "next/link";
 import { Input } from "../../components/ui/Input";
 import { IMaskInput } from "react-imask";
 import { FiEdit } from "react-icons/fi";
@@ -94,7 +93,6 @@ export default function Payment() {
     const [cidades, setCidades] = useState('');
     const [estados, setEstados] = useState([]);
     const [ceps, setCeps] = useState('');
-    const [newslatters, setNewslatters] = useState("");
     const [store, setStore] = useState("");
 
     const [deliverysCustomer, setDeliverysCustomer] = useState<any[]>([]);
@@ -119,8 +117,6 @@ export default function Payment() {
     const [cepLoadEdit, setCepLoadEdit] = useState(false);
     const [newDelivery, setNewDelivery] = useState(false);
     const [editCustomer, setEditCustomer] = useState(false);
-
-    const [documentCustomer, setDocumentCustomer] = useState("");
 
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
@@ -292,7 +288,6 @@ export default function Payment() {
                 setCidades(data?.city || "");
                 setEstados(data?.state || "");
                 setCeps(data?.cep || "");
-                setNewslatters(data?.newslatter || "");
                 setStore(data?.store?.name || "");
                 setGeneros(data?.gender || "");
 
