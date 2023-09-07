@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import {
     ContLogin,
     ContainerCenter,
+    ExitDelivery,
 } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 import Head from 'next/head';
@@ -21,6 +22,8 @@ import {
 import { AiOutlineCompass } from 'react-icons/ai';
 import Router from 'next/router';
 import { canSSRAuth } from '../../utils/canSSRAuth';
+import { Button } from '../../components/ui/Button';
+import Link from 'next/link';
 
 
 type CepProps = {
@@ -112,6 +115,12 @@ export default function registerNewDelivey() {
                         tipo="h2"
                         titulo="Cadastre esse novo CEP/Endereço"
                     />
+
+                    <Link href='/payment'>
+                        <ExitDelivery>
+                            Não cadastrar, seguir para o pagamento
+                        </ExitDelivery>
+                    </Link>
 
                     <BoxDelivery>
                         <br />

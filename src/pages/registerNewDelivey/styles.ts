@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const ContainerCenter = styled.div`
   height: 100vh;
@@ -23,4 +23,12 @@ export const ContLogin = styled.div`
   @media (max-width: 620px) {
     width: 90%;
   }
+`
+
+export const ExitDelivery = styled.button`
+  background-color: ${props => props?.theme?.colors?.warning};
+  color: ${props => props?.theme?.colors?.white};
+  padding: 10px;
+  border: none;
+  margin-top: 10px;
 `

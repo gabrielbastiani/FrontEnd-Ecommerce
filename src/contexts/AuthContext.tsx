@@ -50,7 +50,7 @@ export function signOutPayment() {
   try {
     destroyCookie(undefined, '@storevirtual.token');
     console.log('deslogado')
-    Router.push('/createAccountPayment');
+    Router.push('/loginClientPayment');
   } catch {
     toast.error('Erro ao deslogar!');
     console.log('erro ao deslogar');

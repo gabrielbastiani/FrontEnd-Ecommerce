@@ -673,7 +673,7 @@ export default function Payment() {
                                 <ButtonsData
                                     onClick={newCustomer}
                                 >
-                                    Cadastrar novo
+                                    Cadastrar novo / Trocar
                                 </ButtonsData>
                         </BoxButtonsData>
                     </BoxPayment>
