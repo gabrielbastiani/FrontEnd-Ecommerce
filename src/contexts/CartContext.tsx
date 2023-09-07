@@ -21,6 +21,8 @@ type MyContextProps = {
 
 type AddCepProps = {
   cep: string;
+  frete: number;
+  codePromotion: string;
 }
 
 type AddItemsProps = {
@@ -325,7 +327,7 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
-  async function cepCustomer(cep: string) {
+  async function cepCustomer(cep: string, frete: number, codePromotion: string) {
 
     setCartCep(cep);
 
@@ -333,7 +335,9 @@ export function CartProviderProducts({ children }: Props) {
     const storageId = String(cartProducts[0]?.store_cart_id);
 
     await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-      cep: cep
+      cep: cep,
+      frete: frete,
+      coupon: codePromotion
     });
 
   }

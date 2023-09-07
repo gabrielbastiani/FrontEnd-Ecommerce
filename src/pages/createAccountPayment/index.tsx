@@ -39,7 +39,7 @@ type CepProps = {
 
 export default function createAccountPayment() {
 
-    const { cartProducts, cepCustomer } = useContext(CartContext);
+    const { cartProducts } = useContext(CartContext);
     const { signInPay } = useContext(AuthContext);
 
     const [loading, setLoading] = useState(false);

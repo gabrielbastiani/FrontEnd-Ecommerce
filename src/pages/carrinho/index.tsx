@@ -134,6 +134,12 @@ export default function Carrinho() {
     const formatedPricePonto = formatedPrice.replace(",", ".");
     const formatedFrete = Number(formatedPricePonto);
 
+    async function cepFrete() {
+        const frete = formatedFrete;
+        /* @ts-ignore */
+        cepCustomer(cep, frete, codePromotion);
+    }
+
     let dadosFrete: any = [];
     (productsCart || []).forEach((item) => {
         dadosFrete.push({
@@ -158,8 +164,6 @@ export default function Carrinho() {
 
     async function searchCep() {
         try {
-            /* @ts-ignore */
-            cepCustomer(cep);
             const apiClient = setupAPIClient();
             const { data } = await apiClient.post('/freteCalculo', {
                 nCdServico: "04162",
@@ -172,6 +176,8 @@ export default function Carrinho() {
             });
 
             setDataFrete(data);
+
+            cepFrete();
 
         } catch (error) {
             console.log(error)
@@ -228,6 +234,10 @@ export default function Carrinho() {
                     const result = formatedFrete + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+                    const frete = formatedFrete;
+                    /* @ts-ignore */
+                    cepCustomer(cep, frete, codePromotion);
+
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
                     setNewPriceArray(newCartValue);
@@ -257,6 +267,10 @@ export default function Carrinho() {
                 const result = formatedFrete + descontoPriceTotal;
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+                const frete = formatedFrete;
+                /* @ts-ignore */
+                cepCustomer(cep, frete, codePromotion);
+
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
                 handleShowMenu();
@@ -271,6 +285,10 @@ export default function Carrinho() {
                 const valueMore = valueDescont + formatedFrete;
                 const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+                const frete = formatedFrete;
+                /* @ts-ignore */
+                cepCustomer(cep, frete, codePromotion);
+
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
                 handleShowMenu();
@@ -282,6 +300,10 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
                 const zeroFrete = formatedFrete - (formatedFrete * zero / 100);
+
+                const frete = zeroFrete;
+                /* @ts-ignore */
+                cepCustomer(cep, frete, codePromotion);
 
                 setDesconto(data?.name);
                 setZero(zeroFrete);
@@ -295,6 +317,10 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
                 const valueFrete = formatedFrete - data?.coupomsconditionals[0]?.value;
 
+                const frete = valueFrete;
+                /* @ts-ignore */
+                cepCustomer(cep, frete, codePromotion);
+
                 setDesconto(data?.name);
                 setFreteCupom(valueFrete);
                 handleShowMenu();
@@ -306,6 +332,10 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
                 const percentShipping = formatedFrete - (formatedFrete * data?.coupomsconditionals[0]?.value / 100);
+
+                const frete = percentShipping;
+                /* @ts-ignore */
+                cepCustomer(cep, frete, codePromotion);
 
                 setDesconto(data?.name);
                 setFreteCupom(percentShipping);
@@ -354,6 +384,10 @@ export default function Carrinho() {
                     const result = formatedFrete + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+                    const frete = formatedFrete;
+                    /* @ts-ignore */
+                    cepCustomer(cep, frete, codePromotion);
+
                     setNewSubTotalPrice(totalPriceDesconto);
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
@@ -372,6 +406,10 @@ export default function Carrinho() {
                 const totalPercentStore = formatedFrete + maisCart;
 
                 const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                const frete = formatedFrete;
+                /* @ts-ignore */
+                cepCustomer(cep, frete, codePromotion);
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -398,6 +436,10 @@ export default function Carrinho() {
 
                 const result = formatedFrete + totalPriceDesconto;
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                const frete = formatedFrete;
+                /* @ts-ignore */
+                cepCustomer(cep, frete, codePromotion);
 
                 setNewSubTotalPrice(totalPriceDesconto);
                 setDesconto(data?.name);
