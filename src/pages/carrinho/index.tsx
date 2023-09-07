@@ -741,6 +741,7 @@ export default function Carrinho() {
                 });
 
                 if (isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
                 } else {
                     Router.push('/loginClientPayment');
@@ -754,6 +755,7 @@ export default function Carrinho() {
             });
 
             if (isAuthenticated === true) {
+                await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                 Router.push('/payment');
             } else {
                 Router.push('/loginClientPayment');

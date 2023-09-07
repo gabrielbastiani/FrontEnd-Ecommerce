@@ -152,12 +152,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (data?.cep === cartCep) {
           await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${id}&cep=${cartCep}`);
         } else {
-          Router.push('/');
+          Router.push('/registerNewDelivey');
+          return;
         }
 
       }
 
-      //Redirecionar o customer para /myAccount
       Router.push('/payment');
 
     } catch (error) {
