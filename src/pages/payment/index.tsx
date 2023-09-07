@@ -113,6 +113,7 @@ export default function Payment() {
     const [cepLoad, setCepLoad] = useState(false);
     const [cepLoadEdit, setCepLoadEdit] = useState(false);
     const [newDelivery, setNewDelivery] = useState(false);
+    const [editCustomer, setEditCustomer] = useState(false);
 
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
@@ -135,6 +136,10 @@ export default function Payment() {
 
     const handleNewDelivery = () => {
         setNewDelivery(!newDelivery);
+    }
+
+    const handleEditCustomer = () => {
+        setEditCustomer(!editCustomer);
     }
 
     const cpfCnpj = cpfs ? cpfs : cnpjs;
@@ -645,37 +650,88 @@ export default function Payment() {
             <SectionPayment>
                 <ContainerFechamento>
                     <BoxPayment>
-                        <Titulos tipo="h3" titulo="Informações Pessoais" />
-                        <br />
-                        <BoxTitle>Olá {nameCompletes}</BoxTitle>
-                        <BoxData>
-                            <AiOutlineMail color="black" size={20} />
-                            <Datas>{emails}</Datas>
-                        </BoxData>
-                        <BoxData>
-                            <BsFillPersonFill color="black" size={20} />
-                            <Datas>{nameCompletes}</Datas>
-                        </BoxData>
-                        <BoxData>
-                            <BsTelephoneFill color="black" size={20} />
-                            <Datas>{phones}</Datas>
-                        </BoxData>
-                        <BoxData>
-                            <FaIdCard color="black" size={20} />
-                            <Datas>{cpfCnpj}</Datas>
-                        </BoxData>
-                        <BoxButtonsData>
-                            <Link
-                                href='/myAccount/meusdados'
-                            >
-                                <ButtonsData>Editar dados</ButtonsData>
-                            </Link>
-                                <ButtonsData
-                                    onClick={newCustomer}
-                                >
-                                    Cadastrar novo / Trocar
-                                </ButtonsData>
-                        </BoxButtonsData>
+                        {editCustomer ?
+                            <>
+                                <Titulos tipo="h3" titulo="Editar Informações Pessoais" />
+                                <br />
+                                <BoxData>
+                                    <BsFillPersonFill color="black" size={20} />
+                                    <InputDelivery
+                                        value={nameCompletes}
+                                        onChange={(e) => setComplementSelected(e.target.value)}
+                                    />
+                                </BoxData>
+                                <BoxData>
+                                    <AiOutlineMail color="black" size={20} />
+                                    <InputDelivery
+                                        value={emails}
+                                        onChange={(e) => setComplementSelected(e.target.value)}
+                                    />
+                                </BoxData>
+                                <BoxData>
+                                    <BsTelephoneFill color="black" size={20} />
+                                    <InputDelivery
+                                        value={phones}
+                                        onChange={(e) => setComplementSelected(e.target.value)}
+                                    />
+                                </BoxData>
+                                <BoxData>
+                                    <FaIdCard color="black" size={20} />
+                                    <InputDelivery
+                                        value={cpfCnpj}
+                                        onChange={(e) => setComplementSelected(e.target.value)}
+                                    />
+                                </BoxData>
+                                <BoxButtonsData>
+                                    <ButtonsData
+                                        style={{ backgroundColor: 'red', color: 'white' }}
+                                        onClick={handleEditCustomer}
+                                    >
+                                        Cancelar
+                                    </ButtonsData>
+                                    <ButtonsData
+                                        style={{ backgroundColor: 'green', color: 'white' }}
+                                    >
+                                        Salvar alterações
+                                    </ButtonsData>
+                                </BoxButtonsData>
+                            </>
+                            :
+                            <>
+                                <Titulos tipo="h3" titulo="Informações Pessoais" />
+                                <br />
+                                <BoxTitle>Olá {nameCompletes}</BoxTitle>
+                                <BoxData>
+                                    <AiOutlineMail color="black" size={20} />
+                                    <Datas>{emails}</Datas>
+                                </BoxData>
+                                <BoxData>
+                                    <BsFillPersonFill color="black" size={20} />
+                                    <Datas>{nameCompletes}</Datas>
+                                </BoxData>
+                                <BoxData>
+                                    <BsTelephoneFill color="black" size={20} />
+                                    <Datas>{phones}</Datas>
+                                </BoxData>
+                                <BoxData>
+                                    <FaIdCard color="black" size={20} />
+                                    <Datas>{cpfCnpj}</Datas>
+                                </BoxData>
+                                <BoxButtonsData>
+                                    <ButtonsData
+                                        onClick={handleEditCustomer}
+                                    >
+                                        Editar dados
+                                    </ButtonsData>
+                                    <ButtonsData
+                                        onClick={newCustomer}
+                                    >
+                                        Cadastrar novo / Trocar
+                                    </ButtonsData>
+                                </BoxButtonsData>
+                            </>
+                        }
+
                     </BoxPayment>
 
                     <BoxPayment>
@@ -753,14 +809,14 @@ export default function Payment() {
 
                                         <BoxButtonsFunctions>
                                             <ButtonDelivery
-                                                style={{ backgroundColor: 'green' }}
+                                                style={{ backgroundColor: 'green', color: 'white' }}
                                                 onClick={handleNewDeliveryCustomer}
                                             >
                                                 Cadastrar endereço
                                             </ButtonDelivery>
 
                                             <ButtonDelivery
-                                                style={{ backgroundColor: 'red' }}
+                                                style={{ backgroundColor: 'red', color: 'white' }}
                                                 onClick={closenewDelivery}
                                             >
                                                 Cancelar
@@ -932,14 +988,14 @@ export default function Payment() {
                                                 }
                                                 <BoxButtonsFunctions>
                                                     <ButtonDelivery
-                                                        style={{ backgroundColor: 'green' }}
+                                                        style={{ backgroundColor: 'green', color: 'white' }}
                                                         onClick={updateSelectedDelivery}
                                                     >
                                                         Salvar alterações
                                                     </ButtonDelivery>
 
                                                     <ButtonDelivery
-                                                        style={{ backgroundColor: 'red' }}
+                                                        style={{ backgroundColor: 'red', color: 'white' }}
                                                         onClick={handleDelivery}
                                                     >
                                                         Cancelar edição
