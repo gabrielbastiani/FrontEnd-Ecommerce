@@ -38,7 +38,8 @@ import Titulos from "../../components/Titulos";
 import {
     AiFillEdit,
     AiOutlineCompass,
-    AiOutlineMail
+    AiOutlineMail,
+    AiOutlinePaperClip
 } from "react-icons/ai";
 import {
     BsFillArrowLeftSquareFill,
@@ -798,7 +799,7 @@ export default function Payment() {
                                     />
                                 </BoxData>
 
-                                {documentEdit.length >= 14 ?
+                                {cnpjs ?
                                     <>
                                         <BoxData>
                                             <FaIdCard color="black" size={20} />
@@ -821,6 +822,8 @@ export default function Payment() {
                                             />
                                         </BoxData>
                                         <BoxData>
+                                            <AiOutlinePaperClip color="black" size={20} />
+                                            &nbsp;
                                             <TextoDados
                                                 chave={"Inscrição estadual"}
                                                 dados={
@@ -837,6 +840,10 @@ export default function Payment() {
                                         </BoxData>
                                     </>
                                     :
+                                    null
+                                }
+
+                                {cpfs ?
                                     <>
                                         <BoxData>
                                             <FaIdCard color="black" size={20} />
@@ -903,6 +910,8 @@ export default function Payment() {
                                             />
                                         </BoxData>
                                     </>
+                                    :
+                                    null
                                 }
 
                                 <BoxButtonsData>
@@ -936,24 +945,30 @@ export default function Payment() {
                                     <Datas>{cpfCnpj}</Datas>
                                 </BoxData>
 
-                                {documentEdit.length >= 14 ?
+                                {cnpjs ?
                                     <>
                                         <BoxData>
-                                            <FaIdCard color="black" size={20} />
+                                            <AiOutlinePaperClip color="black" size={20} />
                                             <Datas>{stateRegistration}</Datas>
                                         </BoxData>
                                     </>
                                     :
+                                    null
+                                }
+
+                                {cpfs ?
                                     <>
                                         <BoxData>
                                             <BsGenderTrans color="black" size={20} />
                                             <Datas>{generos}</Datas>
                                         </BoxData>
                                         <BoxData>
-                                            <FaBirthdayCake color="black" size={20} />
+                                            <AiOutlinePaperClip color="black" size={20} />
                                             <Datas>{dataNascimentos}</Datas>
                                         </BoxData>
                                     </>
+                                    :
+                                    null
                                 }
 
                                 <BoxButtonsData>
