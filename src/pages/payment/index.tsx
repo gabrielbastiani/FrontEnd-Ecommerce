@@ -44,9 +44,10 @@ import {
     BsFillArrowLeftSquareFill,
     BsFillCheckCircleFill,
     BsFillPersonFill,
+    BsGenderTrans,
     BsTelephoneFill
 } from "react-icons/bs";
-import { FaIdCard } from "react-icons/fa";
+import { FaBirthdayCake, FaIdCard } from "react-icons/fa";
 import Link from "next/link";
 import { Input } from "../../components/ui/Input";
 import { IMaskInput } from "react-imask";
@@ -56,6 +57,9 @@ import { ModalDeliveryEdit } from "../../components/popups/ModalDeliveryEdit";
 import { BiCircle } from "react-icons/bi";
 import router from "next/router";
 import Image from "next/image";
+import { TextoDados } from "../../components/TextoDados";
+import { InputUpdate } from "../../components/ui/InputUpdate";
+import SelectUpdate from "../../components/ui/SelectUpdate";
 
 
 type CepProps = {
@@ -115,8 +119,21 @@ export default function Payment() {
     const [newDelivery, setNewDelivery] = useState(false);
     const [editCustomer, setEditCustomer] = useState(false);
 
+    const [documentCustomer, setDocumentCustomer] = useState("");
+
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+
+    const [generos, setGeneros] = useState([]);
+    const [generoSelected, setGeneroSelected] = useState();
+
+    function isEmail(emails: string) {
+        return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
+    };
+
+    function handleChangeGenero(e: any) {
+        setGeneroSelected(e.target.value)
+    }
 
     const handleDelivery = () => {
         setDeliveryEdits(!deliveryEdits);
@@ -276,6 +293,7 @@ export default function Payment() {
                 setCeps(data?.cep || "");
                 setNewslatters(data?.newslatter || "");
                 setStore(data?.store?.name || "");
+                setGeneros(data?.gender || "");
 
             } catch (error) {
                 console.log(error);
@@ -625,6 +643,77 @@ export default function Payment() {
         }
     }
 
+    async function updateName() {
+        try {
+            const apiClient = setupAPIClient();
+            if (nameCompletes === '') {
+                toast.error('Não deixe o nome em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/customer/updateNameCustomer?customer_id=${customer_id}`, { name: nameCompletes });
+
+                toast.success('Nome atualizado com sucesso.');
+
+                setTimeout(() => {
+                    router.reload();
+                }, 3000);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o nome.');
+        }
+    }
+
+    async function updateDataCustomer() {
+        try {
+            const apiClient = setupAPIClient();
+
+            await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, {
+                cpf: cpfs,
+                cnpj: cnpjs,
+                stateRegistration: stateRegistration,
+                phone: phones,
+                dateOfBirth: dataNascimentos,
+                gender: generoSelected,
+            });
+
+            toast.success('Dado atualizado com sucesso.');
+
+            setTimeout(() => {
+                router.reload();
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o dado.');
+        }
+    }
+
+    async function updateEmail() {
+        try {
+            const apiClient = setupAPIClient();
+            if (!isEmail(emails)) {
+                toast.error('Por favor digite um email valido!');
+                return;
+            }
+            if (emails === '') {
+                toast.error('Não deixe o email em branco!!!');
+                return;
+            } else {
+                await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, { email: emails });
+                toast.success('Email atualizado com sucesso.');
+                setTimeout(() => {
+                    router.reload();
+                }, 3000);
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Ops erro ao atualizar o email.');
+        }
+    }
+
+    const documentEdit = removerAcentos(cpfCnpj);
+
     function handleCloseModal() {
         setModalVisible(false);
     }
@@ -656,43 +745,172 @@ export default function Payment() {
                                 <br />
                                 <BoxData>
                                     <BsFillPersonFill color="black" size={20} />
-                                    <InputDelivery
-                                        value={nameCompletes}
-                                        onChange={(e) => setComplementSelected(e.target.value)}
+                                    &nbsp;
+                                    <TextoDados
+                                        chave={"Nome"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={nameCompletes}
+                                                type="text"
+                                                placeholder={nameCompletes}
+                                                value={nameCompletes}
+                                                onChange={(e) => setNameCompletes(e.target.value)}
+                                                handleSubmit={updateName}
+                                            />
+                                        }
                                     />
                                 </BoxData>
                                 <BoxData>
                                     <AiOutlineMail color="black" size={20} />
-                                    <InputDelivery
-                                        value={emails}
-                                        onChange={(e) => setComplementSelected(e.target.value)}
+                                    &nbsp;
+                                    <TextoDados
+                                        chave={"E-mail"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={emails}
+                                                type="text"
+                                                placeholder={emails}
+                                                value={emails}
+                                                onChange={(e) => setEmails(e.target.value)}
+                                                handleSubmit={updateEmail}
+                                            />
+                                        }
                                     />
                                 </BoxData>
                                 <BoxData>
                                     <BsTelephoneFill color="black" size={20} />
-                                    <InputDelivery
-                                        value={phones}
-                                        onChange={(e) => setComplementSelected(e.target.value)}
+                                    &nbsp;
+                                    <TextoDados
+                                        chave={"Telefone"}
+                                        dados={
+                                            <InputUpdate
+                                                dado={phones}
+                                                type="text"
+                                                /* @ts-ignore */
+                                                as={IMaskInput}
+                                                mask="(00) 0000-0000"
+                                                placeholder={phones}
+                                                value={phones}
+                                                onChange={(e) => setPhones(e.target.value)}
+                                                handleSubmit={updateDataCustomer}
+                                            />
+                                        }
                                     />
                                 </BoxData>
-                                <BoxData>
-                                    <FaIdCard color="black" size={20} />
-                                    <InputDelivery
-                                        value={cpfCnpj}
-                                        onChange={(e) => setComplementSelected(e.target.value)}
-                                    />
-                                </BoxData>
+
+                                {documentEdit.length >= 14 ?
+                                    <>
+                                        <BoxData>
+                                            <FaIdCard color="black" size={20} />
+                                            &nbsp;
+                                            <TextoDados
+                                                chave={"CNPJ"}
+                                                dados={
+                                                    <InputUpdate
+                                                        dado={cnpjs}
+                                                        /* @ts-ignore */
+                                                        as={IMaskInput}
+                                                        mask="00.000.000/0000-00"
+                                                        type="text"
+                                                        placeholder={cnpjs}
+                                                        value={cnpjs}
+                                                        onChange={(e) => setCnpjs(e.target.value)}
+                                                        handleSubmit={updateDataCustomer}
+                                                    />
+                                                }
+                                            />
+                                        </BoxData>
+                                        <BoxData>
+                                            <TextoDados
+                                                chave={"Inscrição estadual"}
+                                                dados={
+                                                    <InputUpdate
+                                                        dado={stateRegistration}
+                                                        type="text"
+                                                        placeholder={stateRegistration}
+                                                        value={stateRegistration}
+                                                        onChange={(e) => setStateRegistration(e.target.value)}
+                                                        handleSubmit={updateDataCustomer}
+                                                    />
+                                                }
+                                            />
+                                        </BoxData>
+                                    </>
+                                    :
+                                    <>
+                                        <BoxData>
+                                            <FaIdCard color="black" size={20} />
+                                            &nbsp;
+                                            <TextoDados
+                                                chave={"CPF"}
+                                                dados={
+                                                    <InputUpdate
+                                                        dado={cpfs}
+                                                        /* @ts-ignore */
+                                                        as={IMaskInput}
+                                                        mask="000.000.000-00"
+                                                        type="text"
+                                                        placeholder={cpfs}
+                                                        value={cpfs}
+                                                        onChange={(e) => setCpfs(e.target.value)}
+                                                        handleSubmit={updateDataCustomer}
+                                                    />
+                                                }
+                                            />
+                                        </BoxData>
+                                        <BoxData>
+                                            <BsGenderTrans color="black" size={20} />
+                                            &nbsp;
+                                            <TextoDados
+                                                chave={"Gênero"}
+                                                dados={
+                                                    <SelectUpdate
+                                                        dado={generos}
+                                                        value={generoSelected}
+                                                        /* @ts-ignore */
+                                                        onChange={handleChangeGenero}
+                                                        opcoes={
+                                                            [
+                                                                { label: "Selecionar...", value: "" },
+                                                                { label: "Masculino", value: "Masculino" },
+                                                                { label: "Feminino", value: "Feminino" },
+                                                                { label: "Outro", value: "Outro" },
+                                                            ]
+                                                        }
+                                                        handleSubmit={updateDataCustomer}
+                                                    />
+                                                }
+                                            />
+                                        </BoxData>
+                                        <BoxData>
+                                            <FaBirthdayCake color="black" size={20} />
+                                            &nbsp;
+                                            <TextoDados
+                                                chave={"Data de nascimento"}
+                                                dados={
+                                                    <InputUpdate
+                                                        dado={dataNascimentos}
+                                                        type="text"
+                                                        /* @ts-ignore */
+                                                        as={IMaskInput}
+                                                        mask="00/00/0000"
+                                                        placeholder={dataNascimentos}
+                                                        value={dataNascimentos}
+                                                        onChange={(e) => setDataNascimentos(e.target.value)}
+                                                        handleSubmit={updateDataCustomer}
+                                                    />
+                                                }
+                                            />
+                                        </BoxData>
+                                    </>
+                                }
+
                                 <BoxButtonsData>
                                     <ButtonsData
                                         style={{ backgroundColor: 'red', color: 'white' }}
                                         onClick={handleEditCustomer}
                                     >
                                         Cancelar
-                                    </ButtonsData>
-                                    <ButtonsData
-                                        style={{ backgroundColor: 'green', color: 'white' }}
-                                    >
-                                        Salvar alterações
                                     </ButtonsData>
                                 </BoxButtonsData>
                             </>
@@ -717,6 +935,27 @@ export default function Payment() {
                                     <FaIdCard color="black" size={20} />
                                     <Datas>{cpfCnpj}</Datas>
                                 </BoxData>
+
+                                {documentEdit.length >= 14 ?
+                                    <>
+                                        <BoxData>
+                                            <FaIdCard color="black" size={20} />
+                                            <Datas>{stateRegistration}</Datas>
+                                        </BoxData>
+                                    </>
+                                    :
+                                    <>
+                                        <BoxData>
+                                            <BsGenderTrans color="black" size={20} />
+                                            <Datas>{generos}</Datas>
+                                        </BoxData>
+                                        <BoxData>
+                                            <FaBirthdayCake color="black" size={20} />
+                                            <Datas>{dataNascimentos}</Datas>
+                                        </BoxData>
+                                    </>
+                                }
+
                                 <BoxButtonsData>
                                     <ButtonsData
                                         onClick={handleEditCustomer}
