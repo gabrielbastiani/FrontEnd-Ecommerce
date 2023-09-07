@@ -39,7 +39,7 @@ type CepProps = {
 
 export default function createAccountPayment() {
 
-    const { cartProducts } = useContext(CartContext);
+    const { cartProducts, cepCustomer } = useContext(CartContext);
     const { signInPay } = useContext(AuthContext);
 
     const [loading, setLoading] = useState(false);
@@ -129,6 +129,8 @@ export default function createAccountPayment() {
         loadLoja();
     }, []);
 
+    const cartCep = searchAddress?.cep
+
     async function handleRegisterClientCPF() {
         try {
             if (names === '' ||
@@ -195,7 +197,8 @@ export default function createAccountPayment() {
             let data = {
                 email,
                 password,
-                cartProducts
+                cartProducts,
+                cartCep
             }
 
             await signInPay(data);
@@ -272,7 +275,8 @@ export default function createAccountPayment() {
             let data = {
                 email,
                 password,
-                cartProducts
+                cartProducts,
+                cartCep
             }
 
             await signInPay(data);

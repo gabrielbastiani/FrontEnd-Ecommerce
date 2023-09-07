@@ -13,6 +13,7 @@ type AuthContextData = {
   signInPay: (credentials: SignInProps) => Promise<void>;
   signInAvalie: (credentials: SignInProps) => Promise<void>;
   signOut(): void;
+  signOutPayment(): void;
 }
 
 type UserProps = {
@@ -39,6 +40,17 @@ export function signOut() {
     destroyCookie(undefined, '@storevirtual.token');
     console.log('deslogado')
     Router.push('/');
+  } catch {
+    toast.error('Erro ao deslogar!');
+    console.log('erro ao deslogar');
+  };
+};
+
+export function signOutPayment() {
+  try {
+    destroyCookie(undefined, '@storevirtual.token');
+    console.log('deslogado')
+    Router.push('/createAccountPayment');
   } catch {
     toast.error('Erro ao deslogar!');
     console.log('erro ao deslogar');
@@ -143,8 +155,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (cartProducts.length >= 1) {
 
         const storageId = String(cartProducts[0]?.store_cart_id);
-        api.put(`/updateCartCustomer?store_cart_id=${storageId}`, {
-          customer_id: String(id)
+        api.put(`/updateCartPaymentCustomer?store_cart_id=${storageId}`, {
+          customer_id: String(id),
+          cep: cartCep
         });
 
         const { data } = await apiClient.get(`/findCepCart?customer_id=${id}&cep=${cartCep}`);
@@ -189,15 +202,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       //Passar para proximas requisiçoes o nosso token
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
-      toast.success('Logado com sucesso!');
-
     } catch (error) {
       console.log(error.data.response);
     }
   }
 
   return (
-    <AuthContext.Provider value={{ customer, isAuthenticated, signIn, signInPay, signInAvalie, signOut }}>
+    <AuthContext.Provider value={{ customer, isAuthenticated, signIn, signInPay, signInAvalie, signOut, signOutPayment }}>
       {children}
     </AuthContext.Provider>
   )

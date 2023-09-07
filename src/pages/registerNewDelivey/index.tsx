@@ -5,8 +5,6 @@ import {
 } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 import Head from 'next/head';
-import FooterAccount from '../../components/FooterAccount';
-import { HeaderAccount } from '../../components/HeaderAccount';
 import Titulos from '../../components/Titulos';
 import { CartContext } from '../../contexts/CartContext';
 import { setupAPIClient } from '../../services/api';
@@ -107,8 +105,6 @@ export default function registerNewDelivey() {
                 <title>Cadastro de endereço</title>
             </Head>
 
-            <HeaderAccount />
-
             <ContainerCenter>
 
                 <ContLogin>
@@ -170,8 +166,6 @@ export default function registerNewDelivey() {
 
                 </ContLogin>
             </ContainerCenter>
-
-            <FooterAccount />
         </>
     )
 }

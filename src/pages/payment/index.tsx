@@ -69,8 +69,8 @@ type CepProps = {
 
 export default function Payment() {
 
-    const { cartProducts, productsCart, totalFinishCart } = useContext(CartContext);
-    const { customer } = useContext(AuthContext);
+    const { cartProducts, productsCart, totalFinishCart, cepCustomer } = useContext(CartContext);
+    const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
     const [searchAddress, setSearchAddress] = useState<CepProps>();
@@ -150,6 +150,10 @@ export default function Payment() {
 
     const tipo = removerAcentos(cpfCnpj).length >= 14 ? "CNPJ" : "CPF";
 
+    async function newCustomer() {
+        signOutPayment();
+    }
+
     async function loadCep() {
         const apiClient = setupAPIClient();
         try {
@@ -181,6 +185,8 @@ export default function Payment() {
         handleCep();
     }
 
+    const cep = searchAddress?.cep;
+
     async function handleNewDeliveryCustomer() {
         const apiClient = setupAPIClient();
         try {
@@ -198,6 +204,8 @@ export default function Payment() {
             });
 
             toast.success("Novo endereço cadastrado com sucesso");
+            /* @ts-ignore */
+            cepCustomer(cep);
 
             closenewDelivery();
 
@@ -212,6 +220,7 @@ export default function Payment() {
 
     async function updateSelectedDelivery() {
         const apiClient = setupAPIClient();
+        const cep = searchAddressEdit?.cep;
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
                 addressee: addresseeSelected,
@@ -226,6 +235,9 @@ export default function Payment() {
             });
 
             toast.success("Endereço atual alterado com sucesso");
+
+            /* @ts-ignore */
+            cepCustomer(cep);
 
             handleDelivery();
 
@@ -590,14 +602,18 @@ export default function Payment() {
         }
     }
 
-    async function updateCurrentDelivery(customer_id: string, id: string) {
+    async function updateCurrentDelivery(customer_id: string, id: string, cep: string) {
         const apiClient = setupAPIClient();
         try {
             await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
+            /* @ts-ignore */
+            cepCustomer(cep);
+
+            toast.success('Endereço de entrega escolhido com sucesso')
 
             setTimeout(() => {
                 router.reload();
-            }, 1500);
+            }, 3000);
 
         } catch (error) {
             console.log(error.response.data);
@@ -654,11 +670,11 @@ export default function Payment() {
                             >
                                 <ButtonsData>Editar dados</ButtonsData>
                             </Link>
-                            <Link
-                                href='/createAccountPayment'
-                            >
-                                <ButtonsData>Cadastrar novo</ButtonsData>
-                            </Link>
+                                <ButtonsData
+                                    onClick={newCustomer}
+                                >
+                                    Cadastrar novo
+                                </ButtonsData>
                         </BoxButtonsData>
                     </BoxPayment>
 
@@ -794,7 +810,7 @@ export default function Payment() {
                                                                     color="red"
                                                                     size={23}
                                                                     cursor="pointer"
-                                                                    onClick={() => updateCurrentDelivery(item?.customer_id, item?.id)}
+                                                                    onClick={() => updateCurrentDelivery(item?.customer_id, item?.id, item?.cep)}
                                                                 />
                                                             ) :
                                                                 <BsFillCheckCircleFill
