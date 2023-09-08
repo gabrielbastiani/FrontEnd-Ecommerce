@@ -17,6 +17,7 @@ import {
     BoxButtons,
     BoxButtonsData,
     BoxButtonsFunctions,
+    BoxCupom,
     BoxCupomPayment,
     BoxData,
     BoxDataProductPayment,
@@ -68,8 +69,9 @@ import Image from "next/image";
 import { TextoDados } from "../../components/TextoDados";
 import { InputUpdate } from "../../components/ui/InputUpdate";
 import SelectUpdate from "../../components/ui/SelectUpdate";
-import { AtributeProduct, BoxPricesFinal, BoxPricesTotalProduct, More, NameProduct, PriceProduct, PriceProductData, SubTotal, Total, ValuesMore } from "../carrinho/styles";
+import { AtributeProduct, BoxPricesFinal, BoxPricesTotalProduct, ButtonCupom, InputCupom, LabelCancelar, More, NameProduct, PriceProduct, PriceProductData, SubTotal, Total, ValuesMore } from "../carrinho/styles";
 import { Button } from "../../components/ui/Button";
+import { GiCancel } from "react-icons/gi";
 
 
 type CepProps = {
@@ -132,6 +134,8 @@ export default function Payment() {
     const [cepLoadEdit, setCepLoadEdit] = useState(false);
     const [newDelivery, setNewDelivery] = useState(false);
     const [editCustomer, setEditCustomer] = useState(false);
+    const [cupomButton, setCupomButton] = useState(false);
+    const [removeCupom, setRemoveCupom] = useState(false);
 
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
@@ -140,6 +144,14 @@ export default function Payment() {
     const [generoSelected, setGeneroSelected] = useState();
 
     const [cupomCustomer, setCupomCustomer] = useState<CuoponProps>();
+
+    const [desconto, setDesconto] = useState("");
+    const [totalDesconto, setTotalDesconto] = useState("");
+    const [newPriceArray, setNewPriceArray] = useState<any[]>([]);
+    const [zero, setZero] = useState(100);
+    const [freteCupom, setFreteCupom] = useState(Number);
+    const [newSubTotalPrice, setNewSubTotalPrice] = useState(Number);
+    const [codePromotion, setCodePromotion] = useState("");
 
     function isEmail(emails: string) {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
@@ -171,6 +183,10 @@ export default function Payment() {
 
     const handleEditCustomer = () => {
         setEditCustomer(!editCustomer);
+    }
+
+    const handleRemoveCupom = () => {
+        setRemoveCupom(!removeCupom);
     }
 
     const cpfCnpj = cpfs ? cpfs : cnpjs;
@@ -740,6 +756,316 @@ export default function Payment() {
         }
         loadCupom();
     }, [cupomPayment]);
+
+    async function removeCupomPayment() {
+        try {
+            const apiClient = setupAPIClient();
+            const storageId = String(cartProducts[0]?.store_cart_id);
+            await apiClient.delete(`/deleteCartTotalFinish?store_cart_id=${storageId}`);
+            const frete = fretePayment;
+            const cepfrete = cep;
+            const code = null;
+            /* @ts-ignore */
+            cepCustomer(cepfrete, frete, code);
+            
+            toast.success("Você removeu o cupom aplicado para esse pedido");
+
+            setTimeout(() => {
+                router.reload();
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function loadCupomCode() {
+        const apiClient = setupAPIClient();
+        try {
+            const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
+
+            if (data === null) {
+                toast.error("Não ha cupom promocional ativo, ou com esse nome.");
+                return;
+            }
+
+            /*"Valor de desconto (Produto(s) selecionado(s) para essa promoção)", value: "productsValue"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
+
+                const cartArray = productsCart.map(item => item?.product_id);
+                const productId = data?.cupomsproducts.map((item: { product_id: any; }) => item?.product_id);
+
+                var cupomOkValue: any = [];
+                for (var i = 0; i < cartArray.length; i++) {
+                    if (productId.indexOf(cartArray[i]) > -1) {
+                        cupomOkValue.push(cartArray[i]);
+                    }
+                }
+
+                if (cupomOkValue?.length === 0) {
+                    toast.error('Nenhum dos produtos no carrinho de compras estão dentro dessa promoção.');
+                } else {
+
+                    let newCartValue = productsCart.reduce((acc, o) => {
+                        let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
+                            o, { price: o?.product?.promotion }) : o;
+                        acc.push(obj);
+                        return acc;
+                    }, []);
+
+                    let valuesProducts: any = [];
+                    (newCartValue || []).forEach((item) => {
+                        valuesProducts.push({
+                            "preco": item?.price ? (item?.price - data?.coupomsconditionals[0]?.value) * item?.amount : item?.product?.promotion * item?.amount
+                        });
+                    });
+
+                    var totalPriceDesconto = 0;
+                    for (var i = 0; i < valuesProducts.length; i++) {
+                        totalPriceDesconto += valuesProducts[i].preco;
+                    }
+
+                    const result = fretePayment + totalPriceDesconto;
+                    const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                    const frete = fretePayment;
+                    const cepfrete = cep;
+                    const code = codePromotion
+                    /* @ts-ignore */
+                    cepCustomer(cepfrete, frete, code);
+
+                    setDesconto(data?.name);
+                    setTotalDesconto(formated);
+                    setNewPriceArray(newCartValue);
+                    handleRemoveCupom();
+
+                }
+
+                return;
+            }
+
+            /*"Valor de desconto em todos os produtos da loja", value: "allProductsValue"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
+
+                let productsValue: any = [];
+                (productsCart || []).forEach((item) => {
+                    productsValue.push({
+                        "preco": (item?.product?.promotion - data?.coupomsconditionals[0]?.value) * item?.amount
+                    });
+                });
+
+                var descontoPriceTotal = 0;
+                for (var i = 0; i < productsValue.length; i++) {
+                    descontoPriceTotal += productsValue[i].preco;
+                }
+
+                const result = fretePayment + descontoPriceTotal;
+                const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                const frete = fretePayment;
+                const cepfrete = cep;
+                const code = codePromotion
+                /* @ts-ignore */
+                cepCustomer(cepfrete, frete, code);
+
+                setDesconto(data?.name);
+                setTotalDesconto(formated);
+                handleRemoveCupom();
+
+                return;
+            }
+
+            /*"Valor de desconto no valor total", value: "totalValue"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "totalValue") {
+                const valueDescont = totalCart - data?.coupomsconditionals[0]?.value;
+                const valueMore = valueDescont + fretePayment;
+                const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                const frete = fretePayment;
+                const cepfrete = cep;
+                const code = codePromotion
+                /* @ts-ignore */
+                cepCustomer(cepfrete, frete, code);
+
+                setDesconto(data?.name);
+                setTotalDesconto(formated);
+                handleRemoveCupom();
+
+                return;
+            }
+
+            /*"Frete grátis total", value: "freeShipping"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
+                const zeroFrete = fretePayment - (fretePayment * zero / 100);
+
+                const frete = zeroFrete;
+                const cepfrete = cep;
+                const code = codePromotion
+                /* @ts-ignore */
+                cepCustomer(cepfrete, frete, code);
+
+                setDesconto(data?.name);
+                setZero(zeroFrete);
+                handleRemoveCupom();
+
+                return;
+            }
+
+            /*"Valor de desconto no valor do frete", value: "valueShipping"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
+                const valueFrete = fretePayment - data?.coupomsconditionals[0]?.value;
+
+                const frete = valueFrete;
+                const cepfrete = cep;
+                const code = codePromotion
+                /* @ts-ignore */
+                cepCustomer(cepfrete, frete, code);
+
+                setDesconto(data?.name);
+                setFreteCupom(valueFrete);
+                handleRemoveCupom();
+
+                return;
+            }
+
+            /*"Percentual de desconto no valor do frete", value: "shippingPercent"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
+                const percentShipping = fretePayment - (fretePayment * data?.coupomsconditionals[0]?.value / 100);
+
+                const frete = percentShipping;
+                const cepfrete = cep;
+                const code = codePromotion
+                /* @ts-ignore */
+                cepCustomer(cepfrete, frete, code);
+
+                setDesconto(data?.name);
+                setFreteCupom(percentShipping);
+                handleRemoveCupom();
+
+                return;
+            }
+
+            /*"Percentual de desconto (Produto(s) selecionado(s) para essa promoção)", value: "percentProduct"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "percentProduct") {
+
+                const cartArray = productsCart.map(item => item?.product_id);
+                const productId = data?.cupomsproducts.map((item: { product_id: any; }) => item?.product_id);
+
+                var cupomOk: any = [];
+                for (var i = 0; i < cartArray.length; i++) {
+                    if (productId.indexOf(cartArray[i]) > -1) {
+                        cupomOk.push(cartArray[i]);
+                    }
+                }
+
+                if (cupomOk?.length === 0) {
+                    toast.error('Nenhum dos produtos no carrinho de compras estão dentro dessa promoção.');
+                } else {
+
+                    let newCart = productsCart.reduce((acc, o) => {
+                        let obj = cupomOk.includes(o?.product_id) ? Object.assign(
+                            o, { price: o?.product?.promotion - (o?.product?.promotion * data?.coupomsconditionals[0]?.value / 100) }) : o;
+                        acc.push(obj);
+                        return acc;
+                    }, []);
+
+                    let valuesProducts: any = [];
+                    (newCart || []).forEach((item) => {
+                        valuesProducts.push({
+                            "preco": item?.price ? item?.price * item?.amount : item?.product?.promotion * item?.amount
+                        });
+                    });
+
+                    var totalPriceDesconto = 0;
+                    for (var i = 0; i < valuesProducts.length; i++) {
+                        totalPriceDesconto += valuesProducts[i].preco;
+                    }
+
+                    const result = fretePayment + totalPriceDesconto;
+                    const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                    const frete = fretePayment;
+                    const cepfrete = cep;
+                    const code = codePromotion
+                    /* @ts-ignore */
+                    cepCustomer(cepfrete, frete, code);
+
+                    setNewSubTotalPrice(totalPriceDesconto);
+                    setDesconto(data?.name);
+                    setTotalDesconto(formated);
+                    setNewPriceArray(newCart);
+                    handleRemoveCupom();
+
+                    return;
+                }
+
+            }
+
+            /*"Percentual de desconto no valor total", value: "totalPercent"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "totalPercent") {
+                const maisCart = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
+                const totalPercentStore = fretePayment + maisCart;
+
+                const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                const frete = fretePayment;
+                const cepfrete = cep;
+                const code = codePromotion
+                /* @ts-ignore */
+                cepCustomer(cepfrete, frete, code);
+
+                setDesconto(data?.name);
+                setTotalDesconto(formated);
+                handleRemoveCupom();
+
+                return;
+            }
+
+            /*"Percentual de desconto em todos os produtos da loja", value: "allProductsValuePercent"*/
+
+            if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
+
+                let valuesProducts: any = [];
+                (productsCart || []).forEach((item) => {
+                    valuesProducts.push({
+                        "preco": item?.product?.promotion * item?.amount - (item?.product?.promotion * item?.amount * data?.coupomsconditionals[0]?.value / 100)
+                    });
+                });
+
+                var totalPriceDesconto = 0;
+                for (var i = 0; i < valuesProducts.length; i++) {
+                    totalPriceDesconto += valuesProducts[i].preco;
+                }
+
+                const result = fretePayment + totalPriceDesconto;
+                const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                const frete = fretePayment;
+                const cepfrete = cep;
+                const code = codePromotion
+                /* @ts-ignore */
+                cepCustomer(cepfrete, frete, code);
+
+                setNewSubTotalPrice(totalPriceDesconto);
+                setDesconto(data?.name);
+                setTotalDesconto(formated);
+                handleRemoveCupom();
+
+                return;
+            }
+
+        } catch (error) {/* @ts-ignore */
+            console.log(error.response.data);
+        }
+    }
 
     function handleCloseModal() {
         setModalVisible(false);
@@ -1325,25 +1651,67 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Cupom" />
                         <br />
-                        {cupomPayment ?
+                        {removeCupom ?
                             <>
-                                <BoxCupomPayment>
-                                    <Titulos
-                                        tipo="h3"
-                                        titulo="VOCÊ APLICOU UM CUPOM DE DESCONTO!!!"
+                                <Titulos
+                                    tipo="h4"
+                                    titulo="Tem cupom de desconto? Aplique o código abaixo e aproveite!!!"
+                                />
+                                <br />
+                                <BoxCupom>
+                                    <Input
+                                        style={{ backgroundColor: 'white', color: 'black' }}
+                                        placeholder="CÓDIGO"
+                                        onChange={(e) => setCodePromotion(e.target.value)}
                                     />
-                                    <br />
-                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
-                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
-                                    <br />
-                                    <Button>
-                                        Retirar o cupom
+                                    <Button
+                                        onClick={loadCupomCode}
+                                    >
+                                        Calcular
                                     </Button>
-                                </BoxCupomPayment>
+                                </BoxCupom>
                             </>
-                        :
+                            :
                             <>
-                            
+                                {cupomPayment ?
+                                    <>
+                                        <BoxCupomPayment>
+                                            <Titulos
+                                                tipo="h3"
+                                                titulo="VOCÊ APLICOU UM CUPOM DE DESCONTO!!!"
+                                            />
+                                            <br />
+                                            <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
+                                            <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
+                                            <br />
+                                            <Button
+                                                onClick={removeCupomPayment}
+                                            >
+                                                Retirar o cupom
+                                            </Button>
+                                        </BoxCupomPayment>
+                                    </>
+                                    :
+                                    <>
+                                        <Titulos
+                                            tipo="h4"
+                                            titulo="Tem cupom de desconto? Aplique o código abaixo e aproveite!!!"
+                                        />
+                                        <br />
+                                        <BoxCupom>
+                                            <Input
+                                                style={{ backgroundColor: 'white', color: 'black' }}
+                                                placeholder="CÓDIGO"
+                                                onChange={(e) => setCodePromotion(e.target.value)}
+                                            />
+                                            <Button
+                                                onClick={loadCupomCode}
+                                            >
+                                                Calcular
+                                            </Button>
+                                        </BoxCupom>
+                                    </>
+                                }
                             </>
                         }
                     </BoxPayment>

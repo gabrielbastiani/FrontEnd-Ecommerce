@@ -169,14 +169,12 @@ export const BoxPricesPayment = styled.div`
   flex-direction: column;
 `
 
-export const ImageProductPayment = styled.div`
-  
-`
+export const ImageProductPayment = styled.div``
 
 export const BoxCupomPayment = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #E8E8E8;
+  background-color: #e8e8e8;
   padding: 25px;
   border-radius: 15px;
   box-shadow: 0 4px 8px 0 rgba(255, 215, 0), 0 6px 20px 0 rgba(255, 215, 0);
@@ -186,6 +184,9 @@ export const TextCupom = styled.span`
   margin-bottom: 8px;
 `
 
-export const TextCupomStrong = styled.strong`
+export const TextCupomStrong = styled.strong``
 
+export const BoxCupom = styled.div`
+  display: flex;
+  flex-direction: column;
 `
