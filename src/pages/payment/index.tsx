@@ -776,10 +776,11 @@ export default function Payment() {
             });
 
             const frete = fretePayment;
+            const frete_coupon = 0;
             const cepfrete = cep;
             const code = null;
             /* @ts-ignore */
-            cepCustomer(cepfrete, frete, code);
+            cepCustomer(cepfrete, frete, code, frete_coupon);
 
             toast.success("Você removeu o cupom aplicado para esse pedido");
 
