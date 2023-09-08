@@ -224,8 +224,9 @@ export default function Payment() {
             });
 
             toast.success("Novo endereço cadastrado com sucesso");
+            const cepfrete = cep;
             /* @ts-ignore */
-            cepCustomer(cep);
+            cepCustomer(cepfrete);
 
             closenewDelivery();
 
@@ -256,8 +257,9 @@ export default function Payment() {
 
             toast.success("Endereço atual alterado com sucesso");
 
+            const cepfrete = cep;
             /* @ts-ignore */
-            cepCustomer(cep);
+            cepCustomer(cepfrete);
 
             handleDelivery();
 
@@ -626,8 +628,9 @@ export default function Payment() {
         const apiClient = setupAPIClient();
         try {
             await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
+            const cepfrete = cep;
             /* @ts-ignore */
-            cepCustomer(cep);
+            cepCustomer(cepfrete);
 
             toast.success('Endereço de entrega escolhido com sucesso')
 

@@ -14,15 +14,15 @@ type MyContextProps = {
   removeItemCart: (id: AddItemsProps) => Promise<void>;
   removeProductCart: (id: AddItemsProps) => Promise<void>;
   clearAllCart(): void;
-  cepCustomer: (cep: AddCepProps) => Promise<void>;
+  cepCustomer: (cepfrete: AddCepProps) => Promise<void>;
   totalFinishCart: number;
   totalCart: number;
 };
 
 type AddCepProps = {
-  cep: string;
+  cepfrete: string;
   frete: number;
-  codePromotion: string;
+  code: string;
 }
 
 type AddItemsProps = {
@@ -327,17 +327,17 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
-  async function cepCustomer(cep: string, frete: number, codePromotion: string) {
+  async function cepCustomer(cepfrete: string, frete: number, code: string) {
 
-    setCartCep(cep);
+    setCartCep(cepfrete);
 
     const apiClient = setupAPIClient();
     const storageId = String(cartProducts[0]?.store_cart_id);
 
     await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-      cep: cep,
+      cep: cepfrete,
       frete: frete,
-      coupon: codePromotion
+      coupon: code
     });
 
   }
