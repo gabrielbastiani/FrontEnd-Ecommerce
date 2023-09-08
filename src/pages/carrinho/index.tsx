@@ -94,6 +94,10 @@ export default function Carrinho() {
             const apiClient = setupAPIClient();
             const storageId = String(cartProducts[0]?.store_cart_id);
             await apiClient.delete(`/deleteCartTotalFinish?store_cart_id=${storageId}`);
+            const frete = formatedFrete;
+            const codePromotion= null;
+            /* @ts-ignore */
+            cepCustomer(cep, frete, codePromotion);
             router.reload();
         } catch (error) {
             console.log(error);
