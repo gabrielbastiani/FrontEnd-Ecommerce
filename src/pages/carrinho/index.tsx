@@ -95,10 +95,11 @@ export default function Carrinho() {
             const storageId = String(cartProducts[0]?.store_cart_id);
             await apiClient.delete(`/deleteCartTotalFinish?store_cart_id=${storageId}`);
             const frete = formatedFrete;
+            const frete_coupon = 0;
             const cepfrete = cep;
             const code = null;
             /* @ts-ignore */
-            cepCustomer(cepfrete, frete, code);
+            cepCustomer(cepfrete, frete, code, frete_coupon);
             router.reload();
         } catch (error) {
             console.log(error);
@@ -192,10 +193,11 @@ export default function Carrinho() {
             const formatedFrete = Number(formatedPricePonto);
 
             const frete = formatedFrete;
+            const frete_coupon = 0;
             const cepfrete = cep;
             const code = codePromotion
             /* @ts-ignore */
-            cepCustomer(cepfrete, frete, code);
+            cepCustomer(cepfrete, frete, code, frete_coupon);
 
         } catch (error) {
             console.log(error)
@@ -253,10 +255,11 @@ export default function Carrinho() {
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                     const frete = formatedFrete;
+                    const frete_coupon = 0;
                     const cepfrete = cep;
                     const code = codePromotion
                     /* @ts-ignore */
-                    cepCustomer(cepfrete, frete, code);
+                    cepCustomer(cepfrete, frete, code, frete_coupon);
 
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
@@ -288,10 +291,11 @@ export default function Carrinho() {
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = formatedFrete;
+                const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -308,10 +312,11 @@ export default function Carrinho() {
                 const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = formatedFrete;
+                const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -325,11 +330,12 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
                 const zeroFrete = formatedFrete - (formatedFrete * zero / 100);
 
-                const frete = zeroFrete;
+                const frete = formatedFrete;
+                const frete_coupon = zero;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setZero(zeroFrete);
@@ -343,11 +349,12 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
                 const valueFrete = formatedFrete - data?.coupomsconditionals[0]?.value;
 
-                const frete = valueFrete;
+                const frete = formatedFrete;
+                const frete_coupon = valueFrete;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setFreteCupom(valueFrete);
@@ -361,11 +368,12 @@ export default function Carrinho() {
             if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
                 const percentShipping = formatedFrete - (formatedFrete * data?.coupomsconditionals[0]?.value / 100);
 
-                const frete = percentShipping;
+                const frete = formatedFrete;
+                const frete_coupon = percentShipping;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setFreteCupom(percentShipping);
@@ -415,10 +423,11 @@ export default function Carrinho() {
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                     const frete = formatedFrete;
+                    const frete_coupon = 0;
                     const cepfrete = cep;
                     const code = codePromotion
                     /* @ts-ignore */
-                    cepCustomer(cepfrete, frete, code);
+                    cepCustomer(cepfrete, frete, code, frete_coupon);
 
                     setNewSubTotalPrice(totalPriceDesconto);
                     setDesconto(data?.name);
@@ -440,10 +449,11 @@ export default function Carrinho() {
                 const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = formatedFrete;
+                const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -472,10 +482,11 @@ export default function Carrinho() {
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = formatedFrete;
+                const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setNewSubTotalPrice(totalPriceDesconto);
                 setDesconto(data?.name);

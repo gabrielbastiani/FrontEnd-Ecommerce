@@ -69,9 +69,19 @@ import Image from "next/image";
 import { TextoDados } from "../../components/TextoDados";
 import { InputUpdate } from "../../components/ui/InputUpdate";
 import SelectUpdate from "../../components/ui/SelectUpdate";
-import { AtributeProduct, BoxPricesFinal, BoxPricesTotalProduct, ButtonCupom, InputCupom, LabelCancelar, More, NameProduct, PriceProduct, PriceProductData, SubTotal, Total, ValuesMore } from "../carrinho/styles";
+import {
+    AtributeProduct,
+    BoxPricesFinal,
+    BoxPricesTotalProduct,
+    More,
+    NameProduct,
+    PriceProduct,
+    PriceProductData,
+    SubTotal,
+    Total,
+    ValuesMore
+} from "../carrinho/styles";
 import { Button } from "../../components/ui/Button";
-import { GiCancel } from "react-icons/gi";
 
 
 type CepProps = {
@@ -90,7 +100,7 @@ type CuoponProps = {
 
 export default function Payment() {
 
-    const { cartProducts, productsCart, totalCart, totalFinishCart, cepCustomer, cupomPayment, fretePayment } = useContext(CartContext);
+    const { cartProducts, productsCart, totalCart, totalFinishCart, cepCustomer, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
@@ -833,10 +843,11 @@ export default function Payment() {
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                     const frete = fretePayment;
+                    const frete_coupon = 0;
                     const cepfrete = cep;
                     const code = codePromotion
                     /* @ts-ignore */
-                    cepCustomer(cepfrete, frete, code);
+                    cepCustomer(cepfrete, frete, code, frete_coupon);
 
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
@@ -868,10 +879,11 @@ export default function Payment() {
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = fretePayment;
+                const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -888,10 +900,11 @@ export default function Payment() {
                 const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = fretePayment;
+                const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -905,11 +918,12 @@ export default function Payment() {
             if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
                 const zeroFrete = fretePayment - (fretePayment * zero / 100);
 
-                const frete = zeroFrete;
+                const frete = fretePayment;
+                const frete_coupon = zero;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setZero(zeroFrete);
@@ -923,11 +937,12 @@ export default function Payment() {
             if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
                 const valueFrete = fretePayment - data?.coupomsconditionals[0]?.value;
 
-                const frete = valueFrete;
+                const frete = fretePayment;
+                const frete_coupon = valueFrete;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setFreteCupom(valueFrete);
@@ -941,11 +956,12 @@ export default function Payment() {
             if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
                 const percentShipping = fretePayment - (fretePayment * data?.coupomsconditionals[0]?.value / 100);
 
-                const frete = percentShipping;
+                const frete = fretePayment;
+                const frete_coupon = percentShipping;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setFreteCupom(percentShipping);
@@ -995,10 +1011,11 @@ export default function Payment() {
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                     const frete = fretePayment;
+                    const frete_coupon = 0;
                     const cepfrete = cep;
                     const code = codePromotion
                     /* @ts-ignore */
-                    cepCustomer(cepfrete, frete, code);
+                    cepCustomer(cepfrete, frete, code, frete_coupon);
 
                     setNewSubTotalPrice(totalPriceDesconto);
                     setDesconto(data?.name);
@@ -1020,10 +1037,11 @@ export default function Payment() {
                 const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = fretePayment;
+                const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -1052,10 +1070,11 @@ export default function Payment() {
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = fretePayment;
+                const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code);
+                cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setNewSubTotalPrice(totalPriceDesconto);
                 setDesconto(data?.name);

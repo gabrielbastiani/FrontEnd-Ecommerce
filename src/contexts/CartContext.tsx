@@ -18,6 +18,7 @@ type MyContextProps = {
   totalFinishCart: number;
   totalCart: number;
   fretePayment: number;
+  fretePaymentCoupon: number;
   cupomPayment: string;
 };
 
@@ -25,6 +26,7 @@ type AddCepProps = {
   cepfrete: string;
   frete: number;
   code: string;
+  frete_coupon: number;
 }
 
 type AddItemsProps = {
@@ -59,6 +61,7 @@ export function CartProviderProducts({ children }: Props) {
   const [totalFinishCart, setTotalFinishCart] = useState(0);
 
   const [fretePayment, setFretePayment] = useState(0);
+  const [fretePaymentCoupon, setFretePaymentCoupon] = useState(0);
   const [cupomPayment, setCupomPayment] = useState("");
 
   const [cartCep, setCartCep] = useState<any>("");
@@ -91,6 +94,7 @@ export function CartProviderProducts({ children }: Props) {
         const { data } = await apiClient.get(`/findTotalCart?store_cart_id=${storageId}`);
         setTotalCart(data?.total || 0);
         setFretePayment(data?.frete || 0);
+        setFretePaymentCoupon(data?.frete_coupon || 0);
         setCupomPayment(data?.coupon || "");
       }
       loadCartTotal();
@@ -334,7 +338,7 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
-  async function cepCustomer(cepfrete: string, frete: number, code: string) {
+  async function cepCustomer(cepfrete: string, frete: number, code: string, frete_coupon: number) {
 
     setCartCep(cepfrete);
 
@@ -344,13 +348,14 @@ export function CartProviderProducts({ children }: Props) {
     await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
       cep: cepfrete,
       frete: frete,
-      coupon: code
+      coupon: code,
+      frete_coupon: frete_coupon
     });
 
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ cartCep, cepCustomer, fretePayment, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ cartCep, cepCustomer, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )
