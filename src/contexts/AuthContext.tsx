@@ -174,7 +174,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       Router.push('/payment');
 
     } catch (error) {
-      console.log(error.data.response);
+      console.log(error.response.data);
     }
   }
 

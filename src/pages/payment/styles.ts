@@ -144,3 +144,48 @@ export const BoxDeliverySelected = styled.div`
   margin-bottom: 14px;
   padding: 15px;
 `
+
+export const BoxProductPayment = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
+export const BoxDataProductPayment = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+  width: 50%;
+  margin-bottom: 35px;
+`
+
+export const AmountProduct = styled.small`
+  font-size: 12px;
+  padding-bottom: 5px;
+`
+
+export const BoxPricesPayment = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const ImageProductPayment = styled.div`
+  
+`
+
+export const BoxCupomPayment = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #E8E8E8;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px 0 rgba(255, 215, 0), 0 6px 20px 0 rgba(255, 215, 0);
+`
+
+export const TextCupom = styled.span`
+  margin-bottom: 8px;
+`
+
+export const TextCupomStrong = styled.strong`
+
+`

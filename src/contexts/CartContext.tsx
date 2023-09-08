@@ -17,6 +17,8 @@ type MyContextProps = {
   cepCustomer: (cepfrete: AddCepProps) => Promise<void>;
   totalFinishCart: number;
   totalCart: number;
+  fretePayment: number;
+  cupomPayment: string;
 };
 
 type AddCepProps = {
@@ -56,6 +58,9 @@ export function CartProviderProducts({ children }: Props) {
   const [totalCart, setTotalCart] = useState(0);
   const [totalFinishCart, setTotalFinishCart] = useState(0);
 
+  const [fretePayment, setFretePayment] = useState(0);
+  const [cupomPayment, setCupomPayment] = useState("");
+
   const [cartCep, setCartCep] = useState<any>("");
 
   useEffect(() => {
@@ -85,6 +90,8 @@ export function CartProviderProducts({ children }: Props) {
         const storageId = String(cartProducts[0]?.store_cart_id);
         const { data } = await apiClient.get(`/findTotalCart?store_cart_id=${storageId}`);
         setTotalCart(data?.total || 0);
+        setFretePayment(data?.frete || 0);
+        setCupomPayment(data?.coupon || "");
       }
       loadCartTotal();
     } catch (error) {
@@ -343,7 +350,7 @@ export function CartProviderProducts({ children }: Props) {
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ cartCep, cepCustomer, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ cartCep, cepCustomer, fretePayment, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )

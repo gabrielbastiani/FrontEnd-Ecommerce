@@ -12,15 +12,20 @@ import FooterAccount from "../../components/FooterAccount";
 import logoCorreios from "../../assets/correios-logo.png";
 import {
     AddressTextIcon,
+    AmountProduct,
     BackButton,
     BoxButtons,
     BoxButtonsData,
     BoxButtonsFunctions,
+    BoxCupomPayment,
     BoxData,
+    BoxDataProductPayment,
     BoxDelivery,
     BoxDeliverySelected,
     BoxInputs,
     BoxPayment,
+    BoxPricesPayment,
+    BoxProductPayment,
     BoxTitle,
     ButtonDelivery,
     ButtonsData,
@@ -28,8 +33,11 @@ import {
     Datas,
     DestinyName,
     EditDelivery,
+    ImageProductPayment,
     InputDelivery,
     SectionPayment,
+    TextCupom,
+    TextCupomStrong,
     TextCurrent,
     TextCurrentBold,
     TextCurrentInput
@@ -60,7 +68,8 @@ import Image from "next/image";
 import { TextoDados } from "../../components/TextoDados";
 import { InputUpdate } from "../../components/ui/InputUpdate";
 import SelectUpdate from "../../components/ui/SelectUpdate";
-import { BoxPricesFinal, Total } from "../carrinho/styles";
+import { AtributeProduct, BoxPricesFinal, BoxPricesTotalProduct, More, NameProduct, PriceProduct, PriceProductData, SubTotal, Total, ValuesMore } from "../carrinho/styles";
+import { Button } from "../../components/ui/Button";
 
 
 type CepProps = {
@@ -72,9 +81,14 @@ type CepProps = {
     uf: string;
 }
 
+type CuoponProps = {
+    name: string;
+    code: string;
+}
+
 export default function Payment() {
 
-    const { cartProducts, productsCart, totalCart, totalFinishCart, cepCustomer } = useContext(CartContext);
+    const { cartProducts, productsCart, totalCart, totalFinishCart, cepCustomer, cupomPayment, fretePayment } = useContext(CartContext);
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
@@ -124,6 +138,8 @@ export default function Payment() {
 
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
+
+    const [cupomCustomer, setCupomCustomer] = useState<CuoponProps>();
 
     function isEmail(emails: string) {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
@@ -712,7 +728,18 @@ export default function Payment() {
         }
     }
 
-    const documentEdit = removerAcentos(cpfCnpj);
+    useEffect(() => {
+        async function loadCupom() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/getCouponCart?code=${cupomPayment}`);
+                setCupomCustomer(data || []);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadCupom();
+    }, [cupomPayment]);
 
     function handleCloseModal() {
         setModalVisible(false);
@@ -1296,18 +1323,69 @@ export default function Payment() {
                     </BoxPayment>
 
                     <BoxPayment>
+                        <Titulos tipo="h3" titulo="Cupom" />
+                        <br />
+                        {cupomPayment ?
+                            <>
+                                <BoxCupomPayment>
+                                    <Titulos
+                                        tipo="h3"
+                                        titulo="VOCÊ APLICOU UM CUPOM DE DESCONTO!!!"
+                                    />
+                                    <br />
+                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
+                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
+                                    <br />
+                                    <Button>
+                                        Retirar o cupom
+                                    </Button>
+                                </BoxCupomPayment>
+                            </>
+                        :
+                            <>
+                            
+                            </>
+                        }
+                    </BoxPayment>
+                </ContainerFechamento>
+
+                <ContainerFechamento>
+                    <BoxPayment>
+                        <Titulos tipo="h3" titulo="Envio" />
+                        <br />
+                        <Image src={logoCorreios} height={80} width={300} alt="envio-correios" />
+                    </BoxPayment>
+                    <BoxPayment>
+                        <Titulos tipo="h3" titulo="Formas de Pagamento" />
+                        <br />
+                    </BoxPayment>
+                    <BoxPayment>
                         <Titulos tipo="h3" titulo="Resumo do Pedido" />
                         <br />
                         {productsCart.map((item, index) => {
                             return (
-                                <div key={index}>
-                                    <div>
+                                <BoxProductPayment key={index}>
+                                    <ImageProductPayment>
                                         <Image src={'http://localhost:3333/files/' + item?.product?.photoproducts[0]?.image} width={80} height={80} alt={item?.product?.name} />
-                                        <div>
-                                            <h4>{item?.product?.name}</h4>
-                                        </div>
-                                    </div>
-                                </div>
+                                    </ImageProductPayment>
+
+                                    <BoxDataProductPayment>
+                                        <NameProduct>{item?.product?.name}</NameProduct>
+                                        {item?.product?.relationattributeproducts.map((atr: any, index) => {
+                                            return (
+                                                <AtributeProduct key={index}>{atr?.valueAttribute?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
+                                            )
+                                        })}
+                                    </BoxDataProductPayment>
+
+                                    <BoxPricesTotalProduct>
+                                        <BoxPricesPayment>
+                                            <AmountProduct>Qtd: {item?.amount}</AmountProduct>
+                                            <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.product?.promotion)}</PriceProduct>
+                                            <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.product?.promotion * item?.amount)}</PriceProductData>
+                                        </BoxPricesPayment>
+                                    </BoxPricesTotalProduct>
+                                </BoxProductPayment>
                             )
                         })}
                         <BoxPricesFinal>
@@ -1317,10 +1395,22 @@ export default function Payment() {
                                 SUBTOTAL
                             </Total>
                             <Total
-                                style={{ fontSize: '19px'}}
+                                style={{ fontSize: '19px' }}
                             >
                                 {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
                             </Total>
+                        </BoxPricesFinal>
+                        <BoxPricesFinal>
+                            <SubTotal></SubTotal>
+                            <More>+</More>
+                        </BoxPricesFinal>
+                        <BoxPricesFinal>
+                            <SubTotal>FRETE</SubTotal>
+                            <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePayment)}</ValuesMore>
+                        </BoxPricesFinal>
+                        <BoxPricesFinal>
+                            <SubTotal></SubTotal>
+                            <More>=</More>
                         </BoxPricesFinal>
                         <hr />
                         <BoxPricesFinal>
@@ -1335,19 +1425,6 @@ export default function Payment() {
                                 {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}
                             </Total>
                         </BoxPricesFinal>
-
-                    </BoxPayment>
-                </ContainerFechamento>
-
-                <ContainerFechamento>
-                    <BoxPayment>
-                        <Titulos tipo="h3" titulo="Envio" />
-                        <br />
-                        <Image src={logoCorreios} height={80} width={300} alt="envio-correios" />
-                    </BoxPayment>
-                    <BoxPayment>
-                        <Titulos tipo="h3" titulo="Formas de Pagamento" />
-                        <br />
                     </BoxPayment>
                 </ContainerFechamento>
             </SectionPayment>
