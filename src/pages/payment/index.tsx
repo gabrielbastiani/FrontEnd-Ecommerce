@@ -761,13 +761,16 @@ export default function Payment() {
         try {
             const apiClient = setupAPIClient();
             const storageId = String(cartProducts[0]?.store_cart_id);
-            await apiClient.delete(`/deleteCartTotalFinish?store_cart_id=${storageId}`);
+            await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`,{
+                totalCartFinish: totalCart
+            });
+
             const frete = fretePayment;
             const cepfrete = cep;
             const code = null;
             /* @ts-ignore */
             cepCustomer(cepfrete, frete, code);
-            
+
             toast.success("Você removeu o cupom aplicado para esse pedido");
 
             setTimeout(() => {
