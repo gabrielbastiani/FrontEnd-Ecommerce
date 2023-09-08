@@ -144,7 +144,6 @@ export default function Payment() {
     const [cepLoadEdit, setCepLoadEdit] = useState(false);
     const [newDelivery, setNewDelivery] = useState(false);
     const [editCustomer, setEditCustomer] = useState(false);
-    const [cupomButton, setCupomButton] = useState(false);
     const [removeCupom, setRemoveCupom] = useState(false);
 
     const [modalItem, setModalItem] = useState("");
@@ -152,6 +151,8 @@ export default function Payment() {
 
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
+
+    const [dataFrete, setDataFrete] = useState<any[]>([]);
 
     const [cupomCustomer, setCupomCustomer] = useState<CuoponProps>();
 
@@ -378,298 +379,11 @@ export default function Payment() {
         deliverys();
     }, [customer_id])
 
-    useEffect(() => {
-        const initializeMercadoPago = async () => {
-            await loadMercadoPago();
-            /* @ts-ignore */
-            const mp = new window.MercadoPago(
-                PUBLIC_KEY_TEST
-            );
-
-            const cardForm = mp.cardForm({
-                amount: String(totalFinishCart),
-                iframe: true,
-                form: {
-                    id: "form-checkout",
-                    cardNumber: {
-                        id: "form-checkout__cardNumber",
-                        placeholder: "Número do cartão",
-                    },
-                    expirationDate: {
-                        id: "form-checkout__expirationDate",
-                        placeholder: "MM/YY",
-                    },
-                    securityCode: {
-                        id: "form-checkout__securityCode",
-                        placeholder: "Código de segurança",
-                    },
-                    cardholderName: {
-                        id: "form-checkout__cardholderName",
-                        placeholder: "Titular do cartão",
-                    },
-                    issuer: {
-                        id: "form-checkout__issuer",
-                        placeholder: "Banco emissor",
-                    },
-                    installments: {
-                        id: "form-checkout__installments",
-                        placeholder: "Parcelas",
-                    },
-                    identificationType: {
-                        id: "form-checkout__identificationType",
-                        placeholder: "Tipo de documento",
-                    },
-                    identificationNumber: {
-                        id: "form-checkout__identificationNumber",
-                        placeholder: "Número do documento",
-                    },
-                    cardholderEmail: {
-                        id: "form-checkout__cardholderEmail",
-                        placeholder: "E-mail",
-                    },
-                },
-                callbacks: {
-                    onFormMounted: error => {
-                        if (error) return console.warn("Form Mounted handling error: ", error);
-                        console.log("Form mounted");
-                    },
-                    onSubmit: event => {
-                        event.preventDefault();
-
-                        const {
-                            paymentMethodId: payment_method_id,
-                            issuerId: issuer_id,
-                            cardholderEmail: email,
-                            amount,
-                            token,
-                            installments,
-                            identificationNumber,
-                            identificationType,
-                        } = cardForm.getCardFormData();
-
-                        try {
-                            fetch("http://localhost:3333/paymentCardResult", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
-                                },
-                                body: JSON.stringify({
-                                    token,
-                                    issuer_id,
-                                    payment_method_id,
-                                    transaction_amount: Number(amount),
-                                    installments: Number(installments),
-                                    description: "Descrição do produto",
-                                    payer: {
-                                        email,
-                                        identification: {
-                                            type: identificationType,
-                                            number: identificationNumber,
-                                        },
-                                    },
-                                    notification_url: URL_NOTIFICATION
-                                }),
-                            });
-
-                        } catch (error) {
-                            console.error("Erro ao fazer a requisição:", error);
-                        }
-                    },
-                    onFetching: (resource) => {
-                        console.log("Fetching resource: ", resource);
-
-                        // Animate progress bar
-                        const progressBar = document.querySelector(".progress-bar");
-                        progressBar.removeAttribute("value");
-
-                        return () => {
-                            progressBar.setAttribute("value", "0");
-                        };
-                    }
-                },
-            });
-
-        };
-
-        initializeMercadoPago();
-
-    }, []);
-
-    useEffect(() => {
-
-        const initializeBoleto = async () => {
-
-            await loadMercadoPago();
-            /* @ts-ignore */
-            const mp = new window.MercadoPago(
-                PUBLIC_KEY_TEST
-            );
-
-            try {
-                const identificationTypes = await mp.getIdentificationTypes();
-                const identificationTypeElement = document.getElementById('form-checkout__identificationTypeBoleto');
-
-                createSelectOptions(identificationTypeElement, identificationTypes);
-
-            } catch (e) {
-                return console.error('Error getting identificationTypes: ', e);
-            }
-
-            function createSelectOptions(elem, options, labelsAndKeys = { label: "name", value: "id" }) {
-                const { label, value } = labelsAndKeys;
-
-                elem.options.length = 0;
-
-                const tempOptions = document.createDocumentFragment();
-
-                options.forEach(option => {
-                    const optValue = option[value];
-                    const optLabel = option[label];
-
-                    const opt = document.createElement('option');
-                    opt.value = optValue;
-                    opt.textContent = optLabel;
-
-                    tempOptions.appendChild(opt);
-                });
-
-                elem.appendChild(tempOptions);
-            }
-        }
-
-        initializeBoleto();
-
-    }, []);
-
-    useEffect(() => {
-
-        const initializePix = async () => {
-
-            await loadMercadoPago();
-            /* @ts-ignore */
-            const mp = new window.MercadoPago(
-                PUBLIC_KEY_TEST
-            );
-
-            try {
-                const identificationTypes = await mp.getIdentificationTypes();
-                const identificationTypeElement = document.getElementById('form-checkout__identificationTypePix');
-
-                createSelectOptions(identificationTypeElement, identificationTypes);
-            } catch (e) {
-                return console.error('Error getting identificationTypes: ', e);
-            }
-
-            function createSelectOptions(elem, options, labelsAndKeys = { label: "name", value: "id" }) {
-                const { label, value } = labelsAndKeys;
-
-                elem.options.length = 0;
-
-                const tempOptions = document.createDocumentFragment();
-
-                options.forEach(option => {
-                    const optValue = option[value];
-                    const optLabel = option[label];
-
-                    const opt = document.createElement('option');
-                    opt.value = optValue;
-                    opt.textContent = optLabel;
-
-                    tempOptions.appendChild(opt);
-                });
-
-                elem.appendChild(tempOptions);
-            }
-
-        }
-
-        initializePix();
-
-    }, []);
-
-    async function handleRegisterBoleto(event: FormEvent) {
-        event.preventDefault();
-        try {
-            fetch("http://localhost:3333/paymentBoletoResult", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
-                },
-                body: JSON.stringify({
-                    transaction_amount: totalFinishCart,
-                    description: store,
-                    payment_method_id: 'bolbradesco',
-                    payer: {
-                        email: emails,
-                        first_name: nameCompletes,
-                        last_name: nameCompletes,
-                        identification: {
-                            type: tipo,
-                            number: removerAcentos(cpfCnpj)
-                        },
-                        address: {
-                            zip_code: removerAcentos(ceps),
-                            street_name: locals,
-                            street_number: numeros,
-                            neighborhood: bairros,
-                            city: cidades,
-                            federal_unit: estados
-                        }
-                    },
-                    notification_url: URL_NOTIFICATION
-                }),
-            });
-
-        } catch (error) {
-            console.error("Erro ao fazer a requisição:", error);
-        }
-    }
-
-    async function handleRegisterPix(event: FormEvent) {
-        event.preventDefault();
-        try {
-            fetch("http://localhost:3333/paymentPixResult", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
-                },
-                body: JSON.stringify({
-                    transaction_amount: totalFinishCart,
-                    description: store,
-                    payment_method_id: 'pix',
-                    payer: {
-                        email: emails,
-                        first_name: nameCompletes,
-                        last_name: nameCompletes,
-                        identification: {
-                            type: tipo,
-                            number: removerAcentos(cpfCnpj)
-                        },
-                        address: {
-                            zip_code: removerAcentos(ceps),
-                            street_name: locals,
-                            street_number: numeros,
-                            neighborhood: bairros,
-                            city: cidades,
-                            federal_unit: estados
-                        }
-                    },
-                    notification_url: URL_NOTIFICATION
-                }),
-            });
-
-        } catch (error) {
-            console.error("Erro ao fazer a requisição:", error);
-        }
-    }
-
     async function updateCurrentDelivery(customer_id: string, id: string, cep: string) {
         const apiClient = setupAPIClient();
         try {
             await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
+            searchCep();
             const cepfrete = cep;
             /* @ts-ignore */
             cepCustomer(cepfrete);
@@ -790,6 +504,100 @@ export default function Payment() {
 
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    var formatedDesconto = String(totalDesconto);
+    formatedDesconto = formatedDesconto + '';
+    /* @ts-ignore */
+    formatedDesconto = parseInt(formatedDesconto.replace(/[\D]+/g, ''));
+    formatedDesconto = formatedDesconto + '';
+    formatedDesconto = formatedDesconto.replace(/([0-9]{2})$/g, ",$1");
+
+    if (formatedDesconto.length > 6) {
+        formatedDesconto = formatedDesconto.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    if (formatedDesconto == 'NaN') formatedDesconto = '';
+    const descontoFormated = formatedDesconto.replace(".", "");
+    const formatedDescontoPonto = descontoFormated.replace(",", ".");
+    const formatedCupom = Number(formatedDescontoPonto);
+
+    var freteFormat = String(dataFrete[0]?.Valor);
+    freteFormat = freteFormat + '';
+    /* @ts-ignore */
+    freteFormat = parseInt(freteFormat.replace(/[\D]+/g, ''));
+    freteFormat = freteFormat + '';
+    freteFormat = freteFormat.replace(/([0-9]{2})$/g, ",$1");
+
+    if (freteFormat.length > 6) {
+        freteFormat = freteFormat.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+    }
+    if (freteFormat == 'NaN') freteFormat = '';
+    const formatedPrice = freteFormat.replace(".", "");
+    const formatedPricePonto = formatedPrice.replace(",", ".");
+    const formatedFrete = Number(formatedPricePonto);
+
+    let dadosFrete: any = [];
+    (productsCart || []).forEach((item) => {
+        dadosFrete.push({
+            "peso": item?.product?.weight * item?.amount,
+            "comprimento": item.product?.depth * item?.amount,
+            "altura": item?.product?.height * item?.amount,
+            "largura": item?.product?.width * item?.amount
+        });
+    });
+
+    var totalPeso = 0;
+    var totalComprimento = 0;
+    var totalAltura = 0;
+    var totalLargura = 0;
+
+    for (var i = 0; i < dadosFrete.length; i++) {
+        totalPeso += dadosFrete[i].peso;
+        totalComprimento += dadosFrete[i].comprimento;
+        totalAltura += dadosFrete[i].altura;
+        totalLargura += dadosFrete[i].largura;
+    }
+
+    async function searchCep() {
+        try {
+            const apiClient = setupAPIClient();
+            const { data } = await apiClient.post('/freteCalculo', {
+                nCdServico: "04162",
+                sCepDestino: cepSelected,
+                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
+                nCdFormato: 1,
+                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
+                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
+                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+            });
+
+            setDataFrete(data);
+
+            var freteFormat = data[0]?.Valor;
+            freteFormat = freteFormat + '';
+            /* @ts-ignore */
+            freteFormat = parseInt(freteFormat.replace(/[\D]+/g, ''));
+            freteFormat = freteFormat + '';
+            freteFormat = freteFormat.replace(/([0-9]{2})$/g, ",$1");
+
+            if (freteFormat.length > 6) {
+                freteFormat = freteFormat.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
+            if (freteFormat == 'NaN') freteFormat = '';
+            const formatedPrice = freteFormat.replace(".", "");
+            const formatedPricePonto = formatedPrice.replace(",", ".");
+            const formatedFrete = Number(formatedPricePonto);
+
+            const frete = formatedFrete;
+            const frete_coupon = 0;
+            const cepfrete = cep;
+            const code = codePromotion
+            /* @ts-ignore */
+            cepCustomer(cepfrete, frete, code, frete_coupon);
+
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -1102,6 +910,294 @@ export default function Payment() {
     }
 
     Modal.setAppElement('#__next');
+
+    useEffect(() => {
+        const initializeMercadoPago = async () => {
+            await loadMercadoPago();
+            /* @ts-ignore */
+            const mp = new window.MercadoPago(
+                PUBLIC_KEY_TEST
+            );
+
+            const cardForm = mp.cardForm({
+                amount: String(totalFinishCart),
+                iframe: true,
+                form: {
+                    id: "form-checkout",
+                    cardNumber: {
+                        id: "form-checkout__cardNumber",
+                        placeholder: "Número do cartão",
+                    },
+                    expirationDate: {
+                        id: "form-checkout__expirationDate",
+                        placeholder: "MM/YY",
+                    },
+                    securityCode: {
+                        id: "form-checkout__securityCode",
+                        placeholder: "Código de segurança",
+                    },
+                    cardholderName: {
+                        id: "form-checkout__cardholderName",
+                        placeholder: "Titular do cartão",
+                    },
+                    issuer: {
+                        id: "form-checkout__issuer",
+                        placeholder: "Banco emissor",
+                    },
+                    installments: {
+                        id: "form-checkout__installments",
+                        placeholder: "Parcelas",
+                    },
+                    identificationType: {
+                        id: "form-checkout__identificationType",
+                        placeholder: "Tipo de documento",
+                    },
+                    identificationNumber: {
+                        id: "form-checkout__identificationNumber",
+                        placeholder: "Número do documento",
+                    },
+                    cardholderEmail: {
+                        id: "form-checkout__cardholderEmail",
+                        placeholder: "E-mail",
+                    },
+                },
+                callbacks: {
+                    onFormMounted: error => {
+                        if (error) return console.warn("Form Mounted handling error: ", error);
+                        console.log("Form mounted");
+                    },
+                    onSubmit: event => {
+                        event.preventDefault();
+
+                        const {
+                            paymentMethodId: payment_method_id,
+                            issuerId: issuer_id,
+                            cardholderEmail: email,
+                            amount,
+                            token,
+                            installments,
+                            identificationNumber,
+                            identificationType,
+                        } = cardForm.getCardFormData();
+
+                        try {
+                            fetch("http://localhost:3333/paymentCardResult", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
+                                },
+                                body: JSON.stringify({
+                                    token,
+                                    issuer_id,
+                                    payment_method_id,
+                                    transaction_amount: Number(amount),
+                                    installments: Number(installments),
+                                    description: "Descrição do produto",
+                                    payer: {
+                                        email,
+                                        identification: {
+                                            type: identificationType,
+                                            number: identificationNumber,
+                                        },
+                                    },
+                                    notification_url: URL_NOTIFICATION
+                                }),
+                            });
+
+                        } catch (error) {
+                            console.error("Erro ao fazer a requisição:", error);
+                        }
+                    },
+                    onFetching: (resource) => {
+                        console.log("Fetching resource: ", resource);
+
+                        // Animate progress bar
+                        const progressBar = document.querySelector(".progress-bar");
+                        progressBar.removeAttribute("value");
+
+                        return () => {
+                            progressBar.setAttribute("value", "0");
+                        };
+                    }
+                },
+            });
+
+        };
+
+        initializeMercadoPago();
+
+    }, []);
+
+    useEffect(() => {
+
+        const initializeBoleto = async () => {
+
+            await loadMercadoPago();
+            /* @ts-ignore */
+            const mp = new window.MercadoPago(
+                PUBLIC_KEY_TEST
+            );
+
+            try {
+                const identificationTypes = await mp.getIdentificationTypes();
+                const identificationTypeElement = document.getElementById('form-checkout__identificationTypeBoleto');
+
+                createSelectOptions(identificationTypeElement, identificationTypes);
+
+            } catch (e) {
+                return console.error('Error getting identificationTypes: ', e);
+            }
+
+            function createSelectOptions(elem, options, labelsAndKeys = { label: "name", value: "id" }) {
+                const { label, value } = labelsAndKeys;
+
+                elem.options.length = 0;
+
+                const tempOptions = document.createDocumentFragment();
+
+                options.forEach(option => {
+                    const optValue = option[value];
+                    const optLabel = option[label];
+
+                    const opt = document.createElement('option');
+                    opt.value = optValue;
+                    opt.textContent = optLabel;
+
+                    tempOptions.appendChild(opt);
+                });
+
+                elem.appendChild(tempOptions);
+            }
+        }
+
+        initializeBoleto();
+
+    }, []);
+
+    useEffect(() => {
+
+        const initializePix = async () => {
+
+            await loadMercadoPago();
+            /* @ts-ignore */
+            const mp = new window.MercadoPago(
+                PUBLIC_KEY_TEST
+            );
+
+            try {
+                const identificationTypes = await mp.getIdentificationTypes();
+                const identificationTypeElement = document.getElementById('form-checkout__identificationTypePix');
+
+                createSelectOptions(identificationTypeElement, identificationTypes);
+            } catch (e) {
+                return console.error('Error getting identificationTypes: ', e);
+            }
+
+            function createSelectOptions(elem, options, labelsAndKeys = { label: "name", value: "id" }) {
+                const { label, value } = labelsAndKeys;
+
+                elem.options.length = 0;
+
+                const tempOptions = document.createDocumentFragment();
+
+                options.forEach(option => {
+                    const optValue = option[value];
+                    const optLabel = option[label];
+
+                    const opt = document.createElement('option');
+                    opt.value = optValue;
+                    opt.textContent = optLabel;
+
+                    tempOptions.appendChild(opt);
+                });
+
+                elem.appendChild(tempOptions);
+            }
+
+        }
+
+        initializePix();
+
+    }, []);
+
+    async function handleRegisterBoleto(event: FormEvent) {
+        event.preventDefault();
+        try {
+            fetch("http://localhost:3333/paymentBoletoResult", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
+                },
+                body: JSON.stringify({
+                    transaction_amount: totalFinishCart,
+                    description: store,
+                    payment_method_id: 'bolbradesco',
+                    payer: {
+                        email: emails,
+                        first_name: nameCompletes,
+                        last_name: nameCompletes,
+                        identification: {
+                            type: tipo,
+                            number: removerAcentos(cpfCnpj)
+                        },
+                        address: {
+                            zip_code: removerAcentos(ceps),
+                            street_name: locals,
+                            street_number: numeros,
+                            neighborhood: bairros,
+                            city: cidades,
+                            federal_unit: estados
+                        }
+                    },
+                    notification_url: URL_NOTIFICATION
+                }),
+            });
+
+        } catch (error) {
+            console.error("Erro ao fazer a requisição:", error);
+        }
+    }
+
+    async function handleRegisterPix(event: FormEvent) {
+        event.preventDefault();
+        try {
+            fetch("http://localhost:3333/paymentPixResult", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
+                },
+                body: JSON.stringify({
+                    transaction_amount: totalFinishCart,
+                    description: store,
+                    payment_method_id: 'pix',
+                    payer: {
+                        email: emails,
+                        first_name: nameCompletes,
+                        last_name: nameCompletes,
+                        identification: {
+                            type: tipo,
+                            number: removerAcentos(cpfCnpj)
+                        },
+                        address: {
+                            zip_code: removerAcentos(ceps),
+                            street_name: locals,
+                            street_number: numeros,
+                            neighborhood: bairros,
+                            city: cidades,
+                            federal_unit: estados
+                        }
+                    },
+                    notification_url: URL_NOTIFICATION
+                }),
+            });
+
+        } catch (error) {
+            console.error("Erro ao fazer a requisição:", error);
+        }
+    }
 
 
     return (
