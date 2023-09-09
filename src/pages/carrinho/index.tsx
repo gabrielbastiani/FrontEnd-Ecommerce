@@ -1148,7 +1148,6 @@ export default function Carrinho() {
                                                 ) :
                                                     <>
                                                         <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(freteCupom)}</ValuesMore>
-
                                                     </>
                                                 }
                                             </BoxPricesFinal>
@@ -1185,7 +1184,6 @@ export default function Carrinho() {
                                             <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete / 12)} com juros de Cartão de Crédito</ConditionPrices>
                                         </>
                                     }
-
                                 </>
                             }
 

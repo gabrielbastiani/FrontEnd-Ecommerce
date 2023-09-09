@@ -144,7 +144,7 @@ export default function Payment() {
     const [cepLoadEdit, setCepLoadEdit] = useState(false);
     const [newDelivery, setNewDelivery] = useState(false);
     const [editCustomer, setEditCustomer] = useState(false);
-    const [removeCupom, setRemoveCupom] = useState(false);
+    /* const [removeCupom, setRemoveCupom] = useState(false); */
 
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
@@ -196,9 +196,9 @@ export default function Payment() {
         setEditCustomer(!editCustomer);
     }
 
-    const handleRemoveCupom = () => {
+    /* const handleRemoveCupom = () => {
         setRemoveCupom(!removeCupom);
-    }
+    } */
 
     const cpfCnpj = cpfs ? cpfs : cnpjs;
 
@@ -377,7 +377,7 @@ export default function Payment() {
             }
         }
         deliverys();
-    }, [customer_id])
+    }, [customer_id]);
 
     async function updateCurrentDelivery(customer_id: string, id: string, cep: string) {
         const apiClient = setupAPIClient();
@@ -485,7 +485,7 @@ export default function Payment() {
         try {
             const apiClient = setupAPIClient();
             const storageId = String(cartProducts[0]?.store_cart_id);
-            await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`,{
+            await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                 totalCartFinish: totalCart
             });
 
@@ -648,10 +648,10 @@ export default function Payment() {
                         totalPriceDesconto += valuesProducts[i].preco;
                     }
 
-                    const result = fretePayment + totalPriceDesconto;
+                    const result = formatedFrete + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                    const frete = fretePayment;
+                    const frete = formatedFrete;
                     const frete_coupon = 0;
                     const cepfrete = cep;
                     const code = codePromotion
@@ -661,7 +661,7 @@ export default function Payment() {
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
                     setNewPriceArray(newCartValue);
-                    handleRemoveCupom();
+                    /* handleRemoveCupom(); */
 
                 }
 
@@ -684,10 +684,10 @@ export default function Payment() {
                     descontoPriceTotal += productsValue[i].preco;
                 }
 
-                const result = fretePayment + descontoPriceTotal;
+                const result = formatedFrete + descontoPriceTotal;
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                const frete = fretePayment;
+                const frete = formatedFrete;
                 const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
@@ -696,7 +696,7 @@ export default function Payment() {
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
-                handleRemoveCupom();
+                /* handleRemoveCupom(); */
 
                 return;
             }
@@ -705,10 +705,10 @@ export default function Payment() {
 
             if (data?.coupomsconditionals[0]?.conditional === "totalValue") {
                 const valueDescont = totalCart - data?.coupomsconditionals[0]?.value;
-                const valueMore = valueDescont + fretePayment;
+                const valueMore = valueDescont + formatedFrete;
                 const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                const frete = fretePayment;
+                const frete = formatedFrete;
                 const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
@@ -717,7 +717,7 @@ export default function Payment() {
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
-                handleRemoveCupom();
+                /* handleRemoveCupom(); */
 
                 return;
             }
@@ -725,9 +725,9 @@ export default function Payment() {
             /*"Frete grátis total", value: "freeShipping"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
-                const zeroFrete = fretePayment - (fretePayment * zero / 100);
+                const zeroFrete = formatedFrete - (formatedFrete * zero / 100);
 
-                const frete = fretePayment;
+                const frete = formatedFrete;
                 const frete_coupon = zero;
                 const cepfrete = cep;
                 const code = codePromotion
@@ -736,7 +736,7 @@ export default function Payment() {
 
                 setDesconto(data?.name);
                 setZero(zeroFrete);
-                handleRemoveCupom();
+                /* handleRemoveCupom(); */
 
                 return;
             }
@@ -744,9 +744,9 @@ export default function Payment() {
             /*"Valor de desconto no valor do frete", value: "valueShipping"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
-                const valueFrete = fretePayment - data?.coupomsconditionals[0]?.value;
+                const valueFrete = formatedFrete - data?.coupomsconditionals[0]?.value;
 
-                const frete = fretePayment;
+                const frete = formatedFrete;
                 const frete_coupon = valueFrete;
                 const cepfrete = cep;
                 const code = codePromotion
@@ -755,7 +755,7 @@ export default function Payment() {
 
                 setDesconto(data?.name);
                 setFreteCupom(valueFrete);
-                handleRemoveCupom();
+                /* handleRemoveCupom(); */
 
                 return;
             }
@@ -763,9 +763,9 @@ export default function Payment() {
             /*"Percentual de desconto no valor do frete", value: "shippingPercent"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
-                const percentShipping = fretePayment - (fretePayment * data?.coupomsconditionals[0]?.value / 100);
+                const percentShipping = formatedFrete - (formatedFrete * data?.coupomsconditionals[0]?.value / 100);
 
-                const frete = fretePayment;
+                const frete = formatedFrete;
                 const frete_coupon = percentShipping;
                 const cepfrete = cep;
                 const code = codePromotion
@@ -774,7 +774,7 @@ export default function Payment() {
 
                 setDesconto(data?.name);
                 setFreteCupom(percentShipping);
-                handleRemoveCupom();
+                /* handleRemoveCupom(); */
 
                 return;
             }
@@ -816,10 +816,10 @@ export default function Payment() {
                         totalPriceDesconto += valuesProducts[i].preco;
                     }
 
-                    const result = fretePayment + totalPriceDesconto;
+                    const result = formatedFrete + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                    const frete = fretePayment;
+                    const frete = formatedFrete;
                     const frete_coupon = 0;
                     const cepfrete = cep;
                     const code = codePromotion
@@ -830,7 +830,7 @@ export default function Payment() {
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
                     setNewPriceArray(newCart);
-                    handleRemoveCupom();
+                    /* handleRemoveCupom(); */
 
                     return;
                 }
@@ -841,11 +841,11 @@ export default function Payment() {
 
             if (data?.coupomsconditionals[0]?.conditional === "totalPercent") {
                 const maisCart = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
-                const totalPercentStore = fretePayment + maisCart;
+                const totalPercentStore = formatedFrete + maisCart;
 
                 const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                const frete = fretePayment;
+                const frete = formatedFrete;
                 const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
@@ -854,7 +854,7 @@ export default function Payment() {
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
-                handleRemoveCupom();
+                /* handleRemoveCupom(); */
 
                 return;
             }
@@ -875,10 +875,10 @@ export default function Payment() {
                     totalPriceDesconto += valuesProducts[i].preco;
                 }
 
-                const result = fretePayment + totalPriceDesconto;
+                const result = formatedFrete + totalPriceDesconto;
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                const frete = fretePayment;
+                const frete = formatedFrete;
                 const frete_coupon = 0;
                 const cepfrete = cep;
                 const code = codePromotion
@@ -888,7 +888,7 @@ export default function Payment() {
                 setNewSubTotalPrice(totalPriceDesconto);
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
-                handleRemoveCupom();
+                /* handleRemoveCupom(); */
 
                 return;
             }
@@ -1198,6 +1198,8 @@ export default function Payment() {
             console.error("Erro ao fazer a requisição:", error);
         }
     }
+
+    console.log("Frete feito aqui na pagina de pagamento", formatedFrete)
 
 
     return (
@@ -1770,7 +1772,25 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Cupom" />
                         <br />
-                        {removeCupom ?
+                        {cupomPayment ?
+                            <>
+                                <BoxCupomPayment>
+                                    <Titulos
+                                        tipo="h3"
+                                        titulo="VOCÊ APLICOU UM CUPOM DE DESCONTO!!!"
+                                    />
+                                    <br />
+                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
+                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
+                                    <br />
+                                    <Button
+                                        onClick={removeCupomPayment}
+                                    >
+                                        Retirar o cupom
+                                    </Button>
+                                </BoxCupomPayment>
+                            </>
+                            :
                             <>
                                 <Titulos
                                     tipo="h4"
@@ -1790,48 +1810,6 @@ export default function Payment() {
                                     </Button>
                                 </BoxCupom>
                             </>
-                            :
-                            <>
-                                {cupomPayment ?
-                                    <>
-                                        <BoxCupomPayment>
-                                            <Titulos
-                                                tipo="h3"
-                                                titulo="VOCÊ APLICOU UM CUPOM DE DESCONTO!!!"
-                                            />
-                                            <br />
-                                            <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
-                                            <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
-                                            <br />
-                                            <Button
-                                                onClick={removeCupomPayment}
-                                            >
-                                                Retirar o cupom
-                                            </Button>
-                                        </BoxCupomPayment>
-                                    </>
-                                    :
-                                    <>
-                                        <Titulos
-                                            tipo="h4"
-                                            titulo="Tem cupom de desconto? Aplique o código abaixo e aproveite!!!"
-                                        />
-                                        <br />
-                                        <BoxCupom>
-                                            <Input
-                                                style={{ backgroundColor: 'white', color: 'black' }}
-                                                placeholder="CÓDIGO"
-                                                onChange={(e) => setCodePromotion(e.target.value)}
-                                            />
-                                            <Button
-                                                onClick={loadCupomCode}
-                                            >
-                                                Calcular
-                                            </Button>
-                                        </BoxCupom>
-                                    </>
-                                }
-                            </>
                         }
                     </BoxPayment>
                 </ContainerFechamento>
@@ -1849,69 +1827,193 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Resumo do Pedido" />
                         <br />
-                        {productsCart.map((item, index) => {
-                            return (
-                                <BoxProductPayment key={index}>
-                                    <ImageProductPayment>
-                                        <Image src={'http://localhost:3333/files/' + item?.product?.photoproducts[0]?.image} width={80} height={80} alt={item?.product?.name} />
-                                    </ImageProductPayment>
+                        {newPriceArray?.length >= 1 ? (
+                            <>
+                                {newPriceArray.map((item, index) => {
+                                    return (
+                                        <BoxProductPayment key={index}>
+                                            <ImageProductPayment>
+                                                <Image src={'http://localhost:3333/files/' + item?.product?.photoproducts[0]?.image} width={80} height={80} alt={item?.product?.name} />
+                                            </ImageProductPayment>
 
-                                    <BoxDataProductPayment>
-                                        <NameProduct>{item?.product?.name}</NameProduct>
-                                        {item?.product?.relationattributeproducts.map((atr: any, index) => {
-                                            return (
-                                                <AtributeProduct key={index}>{atr?.valueAttribute?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
-                                            )
-                                        })}
-                                    </BoxDataProductPayment>
+                                            <BoxDataProductPayment>
+                                                <NameProduct>{item?.product?.name}</NameProduct>
+                                                {item?.product?.relationattributeproducts.map((atr: any, index) => {
+                                                    return (
+                                                        <AtributeProduct key={index}>{atr?.valueAttribute?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
+                                                    )
+                                                })}
+                                            </BoxDataProductPayment>
 
-                                    <BoxPricesTotalProduct>
-                                        <BoxPricesPayment>
-                                            <AmountProduct>Qtd: {item?.amount}</AmountProduct>
-                                            <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.product?.promotion)}</PriceProduct>
-                                            <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.product?.promotion * item?.amount)}</PriceProductData>
-                                        </BoxPricesPayment>
-                                    </BoxPricesTotalProduct>
-                                </BoxProductPayment>
-                            )
-                        })}
-                        <BoxPricesFinal>
-                            <Total
-                                style={{ fontSize: '19px' }}
-                            >
-                                SUBTOTAL
-                            </Total>
-                            <Total
-                                style={{ fontSize: '19px' }}
-                            >
-                                {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
-                            </Total>
-                        </BoxPricesFinal>
-                        <BoxPricesFinal>
-                            <SubTotal></SubTotal>
-                            <More>+</More>
-                        </BoxPricesFinal>
-                        <BoxPricesFinal>
-                            <SubTotal>FRETE</SubTotal>
-                            <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePayment)}</ValuesMore>
-                        </BoxPricesFinal>
-                        <BoxPricesFinal>
-                            <SubTotal></SubTotal>
-                            <More>=</More>
-                        </BoxPricesFinal>
-                        <hr />
-                        <BoxPricesFinal>
-                            <Total
-                                style={{ fontSize: '22px' }}
-                            >
-                                TOTAL
-                            </Total>
-                            <Total
-                                style={{ fontSize: '22px', color: 'red' }}
-                            >
-                                {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}
-                            </Total>
-                        </BoxPricesFinal>
+                                            <BoxPricesTotalProduct>
+                                                <BoxPricesPayment>
+                                                    <AmountProduct>Qtd: {item?.amount}</AmountProduct>
+                                                    <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price ? item?.price : item?.product?.promotion)}</PriceProduct>
+                                                    <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price ? item?.price * item?.amount : item?.product?.promotion * item?.amount)}</PriceProductData>
+                                                </BoxPricesPayment>
+                                            </BoxPricesTotalProduct>
+                                        </BoxProductPayment>
+                                    )
+                                })}
+                            </>
+                        ) :
+                            <>
+                                {productsCart.map((item, index) => {
+                                    return (
+                                        <BoxProductPayment key={index}>
+                                            <ImageProductPayment>
+                                                <Image src={'http://localhost:3333/files/' + item?.product?.photoproducts[0]?.image} width={80} height={80} alt={item?.product?.name} />
+                                            </ImageProductPayment>
+
+                                            <BoxDataProductPayment>
+                                                <NameProduct>{item?.product?.name}</NameProduct>
+                                                {item?.product?.relationattributeproducts.map((atr: any, index) => {
+                                                    return (
+                                                        <AtributeProduct key={index}>{atr?.valueAttribute?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
+                                                    )
+                                                })}
+                                            </BoxDataProductPayment>
+
+                                            <BoxPricesTotalProduct>
+                                                <BoxPricesPayment>
+                                                    <AmountProduct>Qtd: {item?.amount}</AmountProduct>
+                                                    <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.product?.promotion)}</PriceProduct>
+                                                    <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.product?.promotion * item?.amount)}</PriceProductData>
+                                                </BoxPricesPayment>
+                                            </BoxPricesTotalProduct>
+                                        </BoxProductPayment>
+                                    )
+                                })}
+                            </>
+                        }
+
+                        {cupomPayment ?
+                            <>
+                                <BoxPricesFinal>
+                                    <Total
+                                        style={{ fontSize: '19px' }}
+                                    >
+                                        SUBTOTAL
+                                    </Total>
+                                    <Total
+                                        style={{ fontSize: '19px' }}
+                                    >
+                                        {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
+                                    </Total>
+                                </BoxPricesFinal>
+                                <BoxPricesFinal>
+                                    <SubTotal></SubTotal>
+                                    <More>+</More>
+                                </BoxPricesFinal>
+                                <BoxPricesFinal>
+                                    <SubTotal>FRETE</SubTotal>
+                                    <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePayment)}</ValuesMore>
+                                </BoxPricesFinal>
+                                <BoxPricesFinal>
+                                    <SubTotal></SubTotal>
+                                    <More>=</More>
+                                </BoxPricesFinal>
+                                <hr />
+                                <BoxPricesFinal>
+                                    <Total
+                                        style={{ fontSize: '22px' }}
+                                    >
+                                        TOTAL
+                                    </Total>
+                                    <Total
+                                        style={{ fontSize: '22px', color: 'red' }}
+                                    >
+                                        {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}
+                                    </Total>
+                                </BoxPricesFinal>
+                            </>
+                            :
+                            <>
+                                {formatedCupom ?
+                                    <>
+                                        <BoxPricesFinal>
+                                            <Total
+                                                style={{ fontSize: '19px' }}
+                                            >
+                                                SUBTOTAL
+                                            </Total>
+                                            <Total
+                                                style={{ fontSize: '19px' }}
+                                            >
+                                                {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(newSubTotalPrice === 0 ? totalCart : newSubTotalPrice)}
+                                            </Total>
+                                        </BoxPricesFinal>
+                                        <BoxPricesFinal>
+                                            <SubTotal></SubTotal>
+                                            <More>+</More>
+                                        </BoxPricesFinal>
+                                        <BoxPricesFinal>
+                                            <SubTotal>FRETE</SubTotal>
+                                            <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
+                                        </BoxPricesFinal>
+                                        <BoxPricesFinal>
+                                            <SubTotal></SubTotal>
+                                            <More>=</More>
+                                        </BoxPricesFinal>
+                                        <hr />
+                                        <BoxPricesFinal>
+                                            <Total style={{ fontSize: '22px' }}>
+                                                TOTAL
+                                            </Total>
+                                            <Total style={{ fontSize: '22px', color: 'red' }}>
+                                                {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedCupom)}
+                                            </Total>
+                                        </BoxPricesFinal>
+                                    </>
+                                    :
+                                    <>
+                                        <BoxPricesFinal>
+                                            <Total style={{ fontSize: '19px' }}>
+                                                SUBTOTAL
+                                            </Total>
+                                            <Total style={{ fontSize: '19px' }}>
+                                                {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
+                                            </Total>
+                                        </BoxPricesFinal>
+                                        <BoxPricesFinal>
+                                            <SubTotal></SubTotal>
+                                            <More>+</More>
+                                        </BoxPricesFinal>
+                                        <BoxPricesFinal>
+                                            <SubTotal>FRETE</SubTotal>
+                                            {freteCupom === 0 ? (
+                                                <>
+                                                    {zero === 0 ? (
+                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(zero)}</ValuesMore>
+                                                    ) :
+                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
+                                                    }
+                                                </>
+                                            ) :
+                                                <>
+                                                    <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(freteCupom)}</ValuesMore>
+                                                </>
+                                            }
+                                        </BoxPricesFinal>
+                                        <BoxPricesFinal>
+                                            <SubTotal></SubTotal>
+                                            <More>=</More>
+                                        </BoxPricesFinal>
+                                        <hr />
+                                        <BoxPricesFinal>
+                                            <Total style={{ fontSize: '22px' }}>TOTAL</Total>
+                                            {freteCupom === 0 ? (
+                                                <Total style={{ fontSize: '22px', color: 'red' }}>
+                                                    {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
+                                                </Total>
+                                            ) :
+                                                <Total style={{ fontSize: '22px', color: 'red' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + freteCupom)}</Total>
+                                            }
+                                        </BoxPricesFinal>
+                                    </>
+                                }
+                            </>
+                        }
                     </BoxPayment>
                 </ContainerFechamento>
             </SectionPayment>
