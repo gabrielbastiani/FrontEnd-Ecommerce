@@ -248,73 +248,6 @@ export default function Payment() {
         handleCep();
     }
 
-    const cep = searchAddress?.cep;
-
-    async function handleNewDeliveryCustomer() {
-        const apiClient = setupAPIClient();
-        try {
-            await apiClient.post(`/customer/delivery/createDeliveryAddress`, {
-                customer_id: customer_id,
-                addressee: addresseeSelected,
-                address: searchAddress?.logradouro,
-                number: numeroSelected,
-                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro",
-                complement: complementSelected,
-                reference: referenceSelected,
-                cep: searchAddress?.cep,
-                city: searchAddress?.localidade,
-                state: searchAddress?.uf
-            });
-
-            toast.success("Novo endereço cadastrado com sucesso");
-            const cepfrete = cep;
-            /* @ts-ignore */
-            cepCustomer(cepfrete);
-
-            closenewDelivery();
-
-            setTimeout(() => {
-                router.reload();
-            }, 1500);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async function updateSelectedDelivery() {
-        const apiClient = setupAPIClient();
-        const cep = searchAddressEdit?.cep;
-        try {
-            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
-                addressee: addresseeSelected,
-                address: searchAddressEdit?.logradouro,
-                number: numeroSelected,
-                neighborhood: searchAddressEdit?.bairro ? searchAddressEdit?.bairro : "Sem bairro",
-                complement: complementSelected,
-                reference: referenceSelected,
-                cep: searchAddressEdit?.cep,
-                city: searchAddressEdit?.localidade,
-                state: searchAddressEdit?.uf
-            });
-
-            toast.success("Endereço atual alterado com sucesso");
-
-            const cepfrete = cep;
-            /* @ts-ignore */
-            cepCustomer(cepfrete);
-
-            handleDelivery();
-
-            setTimeout(() => {
-                router.reload();
-            }, 1500);
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
     useEffect(() => {
         async function loadCustomerData() {
             const apiClient = setupAPIClient();
@@ -378,26 +311,6 @@ export default function Payment() {
         }
         deliverys();
     }, [customer_id]);
-
-    async function updateCurrentDelivery(customer_id: string, id: string, cep: string) {
-        const apiClient = setupAPIClient();
-        try {
-            await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
-            searchCep();
-            const cepfrete = cep;
-            /* @ts-ignore */
-            cepCustomer(cepfrete);
-
-            toast.success('Endereço de entrega escolhido com sucesso')
-
-            setTimeout(() => {
-                router.reload();
-            }, 3000);
-
-        } catch (error) {
-            console.log(error.response.data);
-        }
-    }
 
     async function updateName() {
         try {
@@ -489,12 +402,13 @@ export default function Payment() {
                 totalCartFinish: totalCart
             });
 
-            const frete = fretePayment;
-            const frete_coupon = 0;
-            const cepfrete = cep;
             const code = null;
-            /* @ts-ignore */
-            cepCustomer(cepfrete, frete, code, frete_coupon);
+            const frete = 0;
+
+            await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+                frete_coupon: frete,
+                coupon: code
+            });
 
             toast.success("Você removeu o cupom aplicado para esse pedido");
 
@@ -559,6 +473,200 @@ export default function Payment() {
         totalLargura += dadosFrete[i].largura;
     }
 
+    async function updateCurrentDelivery(customer_id: string, id: string, cep: string) {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
+            
+            const cepfrete = cep;
+            /* @ts-ignore */
+            cepCustomer(cepfrete);
+
+            const { data } = await apiClient.post('/freteCalculo', {
+                nCdServico: "04162",
+                sCepDestino: cepfrete,
+                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
+                nCdFormato: 1,
+                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
+                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
+                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+            });
+
+            var freteFormat = data[0]?.Valor;
+            freteFormat = freteFormat + '';
+            /* @ts-ignore */
+            freteFormat = parseInt(freteFormat.replace(/[\D]+/g, ''));
+            freteFormat = freteFormat + '';
+            freteFormat = freteFormat.replace(/([0-9]{2})$/g, ",$1");
+
+            if (freteFormat.length > 6) {
+                freteFormat = freteFormat.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
+            if (freteFormat == 'NaN') freteFormat = '';
+            const formatedPrice = freteFormat.replace(".", "");
+            const formatedPricePonto = formatedPrice.replace(",", ".");
+            const formatedFrete = Number(formatedPricePonto);
+
+            const frete = formatedFrete;
+
+            const storageId = String(cartProducts[0]?.store_cart_id);
+            await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+                cep: cepfrete,
+                frete: frete,
+            });
+
+            await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                totalCartFinish: totalCart + frete
+            });
+
+            toast.success('Endereço de entrega escolhido com sucesso')
+
+            setTimeout(() => {
+                router.reload();
+            }, 3000);
+
+        } catch (error) {
+            console.log(error.response.data);
+        }
+    }
+
+    async function updateSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        const cep = searchAddressEdit?.cep;
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
+                addressee: addresseeSelected,
+                address: searchAddressEdit?.logradouro,
+                number: numeroSelected,
+                neighborhood: searchAddressEdit?.bairro ? searchAddressEdit?.bairro : "Sem bairro",
+                complement: complementSelected,
+                reference: referenceSelected,
+                cep: searchAddressEdit?.cep,
+                city: searchAddressEdit?.localidade,
+                state: searchAddressEdit?.uf
+            });
+
+            const { data } = await apiClient.post('/freteCalculo', {
+                nCdServico: "04162",
+                sCepDestino: cep,
+                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
+                nCdFormato: 1,
+                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
+                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
+                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+            });
+
+            var freteFormat = data[0]?.Valor;
+            freteFormat = freteFormat + '';
+            /* @ts-ignore */
+            freteFormat = parseInt(freteFormat.replace(/[\D]+/g, ''));
+            freteFormat = freteFormat + '';
+            freteFormat = freteFormat.replace(/([0-9]{2})$/g, ",$1");
+
+            if (freteFormat.length > 6) {
+                freteFormat = freteFormat.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
+            if (freteFormat == 'NaN') freteFormat = '';
+            const formatedPrice = freteFormat.replace(".", "");
+            const formatedPricePonto = formatedPrice.replace(",", ".");
+            const formatedFrete = Number(formatedPricePonto);
+
+            const frete = formatedFrete;
+
+            const cepfrete = cep;
+
+            const storageId = String(cartProducts[0]?.store_cart_id);
+            await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+                cep: cepfrete,
+                frete: frete,
+            });
+
+            await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                totalCartFinish: totalCart + frete
+            });
+
+            toast.success("Endereço atual alterado com sucesso");
+
+            handleDelivery();
+
+            setTimeout(() => {
+                router.reload();
+            }, 2500);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleNewDeliveryCustomer() {
+        const cep = searchAddress?.cep;
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.post(`/customer/delivery/createDeliveryAddress`, {
+                customer_id: customer_id,
+                addressee: addresseeSelected,
+                address: searchAddress?.logradouro,
+                number: numeroSelected,
+                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro",
+                complement: complementSelected,
+                reference: referenceSelected,
+                cep: searchAddress?.cep,
+                city: searchAddress?.localidade,
+                state: searchAddress?.uf
+            });
+
+            const { data } = await apiClient.post('/freteCalculo', {
+                nCdServico: "04162",
+                sCepDestino: cep,
+                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
+                nCdFormato: 1,
+                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
+                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
+                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+            });
+
+            var freteFormat = data[0]?.Valor;
+            freteFormat = freteFormat + '';
+            /* @ts-ignore */
+            freteFormat = parseInt(freteFormat.replace(/[\D]+/g, ''));
+            freteFormat = freteFormat + '';
+            freteFormat = freteFormat.replace(/([0-9]{2})$/g, ",$1");
+
+            if (freteFormat.length > 6) {
+                freteFormat = freteFormat.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
+            if (freteFormat == 'NaN') freteFormat = '';
+            const formatedPrice = freteFormat.replace(".", "");
+            const formatedPricePonto = formatedPrice.replace(",", ".");
+            const formatedFrete = Number(formatedPricePonto);
+
+            const frete = formatedFrete;
+
+            const cepfrete = cep;
+
+            const storageId = String(cartProducts[0]?.store_cart_id);
+            await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+                cep: cepfrete,
+                frete: frete,
+            });
+
+            await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                totalCartFinish: totalCart + frete
+            });
+
+            toast.success("Novo endereço cadastrado com sucesso");
+            
+            closenewDelivery();
+
+            setTimeout(() => {
+                router.reload();
+            }, 2500);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function searchCep() {
         try {
             const apiClient = setupAPIClient();
@@ -590,11 +698,13 @@ export default function Payment() {
             const formatedFrete = Number(formatedPricePonto);
 
             const frete = formatedFrete;
-            const frete_coupon = 0;
-            const cepfrete = cep;
-            const code = codePromotion
-            /* @ts-ignore */
-            cepCustomer(cepfrete, frete, code, frete_coupon);
+            const cepfrete = cepSelected;
+
+            const storageId = String(cartProducts[0]?.store_cart_id);
+            await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+                cep: cepfrete,
+                frete: frete,
+            });
 
         } catch (error) {
             console.log(error)
@@ -653,7 +763,7 @@ export default function Payment() {
 
                     const frete = formatedFrete;
                     const frete_coupon = 0;
-                    const cepfrete = cep;
+                    /* const cepfrete = cep; */
                     const code = codePromotion
                     /* @ts-ignore */
                     cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -689,7 +799,7 @@ export default function Payment() {
 
                 const frete = formatedFrete;
                 const frete_coupon = 0;
-                const cepfrete = cep;
+                /* const cepfrete = cep; */
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -710,7 +820,7 @@ export default function Payment() {
 
                 const frete = formatedFrete;
                 const frete_coupon = 0;
-                const cepfrete = cep;
+                /* const cepfrete = cep; */
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -729,7 +839,7 @@ export default function Payment() {
 
                 const frete = formatedFrete;
                 const frete_coupon = zero;
-                const cepfrete = cep;
+                /* const cepfrete = cep; */
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -748,7 +858,7 @@ export default function Payment() {
 
                 const frete = formatedFrete;
                 const frete_coupon = valueFrete;
-                const cepfrete = cep;
+                /* const cepfrete = cep; */
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -767,7 +877,7 @@ export default function Payment() {
 
                 const frete = formatedFrete;
                 const frete_coupon = percentShipping;
-                const cepfrete = cep;
+                /* const cepfrete = cep; */
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -821,7 +931,7 @@ export default function Payment() {
 
                     const frete = formatedFrete;
                     const frete_coupon = 0;
-                    const cepfrete = cep;
+                    /* const cepfrete = cep; */
                     const code = codePromotion
                     /* @ts-ignore */
                     cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -847,7 +957,7 @@ export default function Payment() {
 
                 const frete = formatedFrete;
                 const frete_coupon = 0;
-                const cepfrete = cep;
+                /* const cepfrete = cep; */
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -880,7 +990,7 @@ export default function Payment() {
 
                 const frete = formatedFrete;
                 const frete_coupon = 0;
-                const cepfrete = cep;
+                /* const cepfrete = cep; */
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -1907,7 +2017,7 @@ export default function Payment() {
                                 </BoxPricesFinal>
                                 <BoxPricesFinal>
                                     <SubTotal>FRETE</SubTotal>
-                                    <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePayment)}</ValuesMore>
+                                    <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon === 0 ? fretePayment : fretePaymentCoupon)}</ValuesMore>
                                 </BoxPricesFinal>
                                 <BoxPricesFinal>
                                     <SubTotal></SubTotal>
@@ -1986,7 +2096,7 @@ export default function Payment() {
                                                     {zero === 0 ? (
                                                         <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(zero)}</ValuesMore>
                                                     ) :
-                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
+                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete === 0 ? fretePayment : formatedFrete)}</ValuesMore>
                                                     }
                                                 </>
                                             ) :
@@ -2004,7 +2114,7 @@ export default function Payment() {
                                             <Total style={{ fontSize: '22px' }}>TOTAL</Total>
                                             {freteCupom === 0 ? (
                                                 <Total style={{ fontSize: '22px', color: 'red' }}>
-                                                    {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
+                                                    {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}
                                                 </Total>
                                             ) :
                                                 <Total style={{ fontSize: '22px', color: 'red' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + freteCupom)}</Total>
