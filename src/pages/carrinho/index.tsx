@@ -522,9 +522,11 @@ export default function Carrinho() {
         }
 
         try {
-            const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
             const storageId = String(cartProducts[0]?.store_cart_id);
             const existFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+            const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
+            const getCep = await apiClient.get(`/findCepCart?customer_id=${customer?.id}&cep=${cep}`);
+            const cepnew = getCep?.data?.cep;
 
             /*"Valor de desconto (Produto(s) selecionado(s) para essa promoção)", value: "productsValue"*/
 
@@ -536,6 +538,14 @@ export default function Carrinho() {
                         totalCartFinish: formatedCupom,
                         customer_id: customer ? customer?.id : null
                     });
+
+                    if (cep === cepnew && isAuthenticated === true) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/payment');
+                    } else {
+                        Router.push('/registerNewDelivey');
+                        return;
+                    }
 
                     if (isAuthenticated === true) {
                         Router.push('/payment');
@@ -549,6 +559,14 @@ export default function Carrinho() {
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom,
                 });
+
+                if (cep === cepnew && isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/payment');
+                } else {
+                    Router.push('/registerNewDelivey');
+                    return;
+                }
 
                 if (isAuthenticated === true) {
                     Router.push('/payment');
@@ -844,6 +862,14 @@ export default function Carrinho() {
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                 totalCartFinish: totalCart + formatedFrete
             });
+
+            if (cep === cepnew && isAuthenticated === true) {
+                await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                Router.push('/payment');
+            } else {
+                Router.push('/registerNewDelivey');
+                return;
+            }
 
             if (isAuthenticated === true) {
                 await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);

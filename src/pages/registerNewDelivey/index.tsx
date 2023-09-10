@@ -97,7 +97,7 @@ export default function registerNewDelivey() {
             Router.push('/payment');
 
         } catch (error) {
-            console.log(error);
+            console.log(error.response.data);
         }
     }
 
