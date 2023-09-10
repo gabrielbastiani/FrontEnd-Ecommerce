@@ -813,7 +813,7 @@ export default function Payment() {
 
                     let newCartValue = productsCart.reduce((acc, o) => {
                         let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
-                            o, { price: o?.product?.promotion - data?.coupomsconditionals[0]?.value}) : o
+                            o, { price: o?.product?.promotion - data?.coupomsconditionals[0]?.value }) : o
 
                         acc.push(obj);
 

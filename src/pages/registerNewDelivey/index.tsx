@@ -43,12 +43,13 @@ export default function registerNewDelivey() {
     const [searchAddress, setSearchAddress] = useState<CepProps>();
 
     const [addresseeSelected, setAddresseeSelected] = useState("");
+    const [addressSelected, setAddressSelected] = useState("");
+    const [bairroSelected, setBairroSelected] = useState("");
     const [numeroSelected, setNumeroSelected] = useState("");
     const [referenceSelected, setReferenceSelected] = useState("");
     const [complementSelected, setComplementSelected] = useState("");
 
     const [cepNew, setCepNew] = useState("");
-
 
     useEffect(() => {
         const apiClient = setupAPIClient();
@@ -83,9 +84,9 @@ export default function registerNewDelivey() {
             await apiClient.post(`/customer/delivery/createDeliveryAddress`, {
                 customer_id: customer_id,
                 addressee: addresseeSelected,
-                address: searchAddress?.logradouro,
+                address: searchAddress?.logradouro ? searchAddress?.logradouro : addressSelected,
                 number: numeroSelected,
-                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro",
+                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : bairroSelected,
                 complement: complementSelected,
                 reference: referenceSelected,
                 cep: searchAddress?.cep,
@@ -114,12 +115,10 @@ export default function registerNewDelivey() {
                         tipo="h2"
                         titulo="Cadastre esse novo CEP/Endereço"
                     />
-
-                    <Link href='/payment'>
-                        <ExitDelivery>
-                            Não cadastrar, seguir para o pagamento
-                        </ExitDelivery>
-                    </Link>
+                    <Titulos
+                        tipo="h4"
+                        titulo="Para que possa seguir para o pagamento do pedido"
+                    />
 
                     <BoxDelivery>
                         <br />
@@ -130,7 +129,13 @@ export default function registerNewDelivey() {
                         />
                         <br />
                         <BoxInputs>
-                            <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {searchAddress?.logradouro}</TextCurrentInput>
+                            <TextCurrentInput><AiOutlineCompass color="black" size={20} />
+                                <InputDelivery
+                                    value={searchAddress?.logradouro ? searchAddress?.logradouro : addressSelected}
+                                    onChange={(e) => setAddressSelected(e.target.value)}
+                                />
+                            </TextCurrentInput>
+                            <TextCurrentBold>Número: </TextCurrentBold>
                             <InputDelivery
                                 value={numeroSelected}
                                 onChange={(e) => setNumeroSelected(e.target.value)}
@@ -142,17 +147,23 @@ export default function registerNewDelivey() {
                         <BoxInputs>
                             <TextCurrentBold>Complemento: </TextCurrentBold>
                             <InputDelivery
-                                value={complementSelected}/* @ts-ignore */
+                                value={complementSelected}
                                 onChange={(e) => setComplementSelected(e.target.value)}
                             />
                         </BoxInputs>
 
-                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</TextCurrent>
+                        <BoxInputs>
+                            <TextCurrentBold>Bairro: </TextCurrentBold>
+                            <InputDelivery
+                                value={searchAddress?.bairro ? searchAddress?.bairro : bairroSelected}
+                                onChange={(e) => setBairroSelected(e.target.value)}
+                            />
+                        </BoxInputs>
 
                         <BoxInputs>
                             <TextCurrentBold>Referencia: </TextCurrentBold>
                             <InputDelivery
-                                value={referenceSelected}/* @ts-ignore */
+                                value={referenceSelected}
                                 onChange={(e) => setReferenceSelected(e.target.value)}
                             />
                         </BoxInputs>

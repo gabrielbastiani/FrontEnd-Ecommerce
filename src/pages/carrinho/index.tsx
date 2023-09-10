@@ -949,7 +949,7 @@ export default function Carrinho() {
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                 totalCartFinish: totalCart + formatedFrete
             });
-            
+
             if (cep === cepnew && isAuthenticated === false) {
                 await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                 Router.push('/loginClientPayment');
