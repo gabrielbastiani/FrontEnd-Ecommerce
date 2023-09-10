@@ -234,7 +234,7 @@ export default function Carrinho() {
 
                     let newCartValue = productsCart.reduce((acc, o) => {
                         let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
-                            o, { price: o?.product?.promotion - data?.coupomsconditionals[0]?.value}) : o
+                            o, { price: o?.product?.promotion - data?.coupomsconditionals[0]?.value }) : o
 
                         acc.push(obj);
 
@@ -583,10 +583,15 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
-                    if (isAuthenticated === true) {
+                    if (cep === cepnew && isAuthenticated === false) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/loginClientPayment');
+                    } else if (cep === cepnew && isAuthenticated === true) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                         Router.push('/payment');
                     } else {
-                        Router.push('/loginClientPayment');
+                        Router.push('/registerNewDelivey');
+                        return;
                     }
 
                     return;
@@ -596,8 +601,14 @@ export default function Carrinho() {
                     totalCartFinish: formatedCupom,
                 });
 
-                if (isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
+                } else if (cep == cepnew && isAuthenticated === true) {
+                    Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
                 }
@@ -616,10 +627,15 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
-                    if (isAuthenticated === true) {
+                    if (cep === cepnew && isAuthenticated === false) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/loginClientPayment');
+                    } else if (cep === cepnew && isAuthenticated === true) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                         Router.push('/payment');
                     } else {
-                        Router.push('/loginClientPayment');
+                        Router.push('/registerNewDelivey');
+                        return;
                     }
 
                     return;
@@ -629,8 +645,14 @@ export default function Carrinho() {
                     totalCartFinish: formatedCupom,
                 });
 
-                if (isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
+                } else if (cep == cepnew && isAuthenticated === true) {
+                    Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
                 }
@@ -649,10 +671,15 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
-                    if (isAuthenticated === true) {
+                    if (cep === cepnew && isAuthenticated === false) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/loginClientPayment');
+                    } else if (cep === cepnew && isAuthenticated === true) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                         Router.push('/payment');
                     } else {
-                        Router.push('/loginClientPayment');
+                        Router.push('/registerNewDelivey');
+                        return;
                     }
 
                     return;
@@ -662,8 +689,14 @@ export default function Carrinho() {
                     totalCartFinish: totalCart,
                 });
 
-                if (isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
+                } else if (cep == cepnew && isAuthenticated === true) {
+                    Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
                 }
@@ -682,10 +715,15 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
-                    if (isAuthenticated === true) {
+                    if (cep === cepnew && isAuthenticated === false) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/loginClientPayment');
+                    } else if (cep === cepnew && isAuthenticated === true) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                         Router.push('/payment');
                     } else {
-                        Router.push('/loginClientPayment');
+                        Router.push('/registerNewDelivey');
+                        return;
                     }
 
                     return;
@@ -695,8 +733,14 @@ export default function Carrinho() {
                     totalCartFinish: totalCart + freteCupom
                 });
 
-                if (isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
+                } else if (cep == cepnew && isAuthenticated === true) {
+                    Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
                 }
@@ -715,10 +759,15 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
-                    if (isAuthenticated === true) {
+                    if (cep === cepnew && isAuthenticated === false) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/loginClientPayment');
+                    } else if (cep === cepnew && isAuthenticated === true) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                         Router.push('/payment');
                     } else {
-                        Router.push('/loginClientPayment');
+                        Router.push('/registerNewDelivey');
+                        return;
                     }
 
                     return;
@@ -728,8 +777,14 @@ export default function Carrinho() {
                     totalCartFinish: totalCart + freteCupom
                 });
 
-                if (isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
+                } else if (cep == cepnew && isAuthenticated === true) {
+                    Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
                 }
@@ -748,10 +803,15 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
-                    if (isAuthenticated === true) {
+                    if (cep === cepnew && isAuthenticated === false) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/loginClientPayment');
+                    } else if (cep === cepnew && isAuthenticated === true) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                         Router.push('/payment');
                     } else {
-                        Router.push('/loginClientPayment');
+                        Router.push('/registerNewDelivey');
+                        return;
                     }
 
                     return;
@@ -761,8 +821,14 @@ export default function Carrinho() {
                     totalCartFinish: formatedCupom
                 });
 
-                if (isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
+                } else if (cep == cepnew && isAuthenticated === true) {
+                    Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
                 }
@@ -781,10 +847,15 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
-                    if (isAuthenticated === true) {
+                    if (cep === cepnew && isAuthenticated === false) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/loginClientPayment');
+                    } else if (cep === cepnew && isAuthenticated === true) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                         Router.push('/payment');
                     } else {
-                        Router.push('/loginClientPayment');
+                        Router.push('/registerNewDelivey');
+                        return;
                     }
 
                     return;
@@ -794,8 +865,14 @@ export default function Carrinho() {
                     totalCartFinish: formatedCupom
                 });
 
-                if (isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
+                } else if (cep == cepnew && isAuthenticated === true) {
+                    Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
                 }
@@ -814,10 +891,15 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
-                    if (isAuthenticated === true) {
+                    if (cep === cepnew && isAuthenticated === false) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/loginClientPayment');
+                    } else if (cep === cepnew && isAuthenticated === true) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                         Router.push('/payment');
                     } else {
-                        Router.push('/loginClientPayment');
+                        Router.push('/registerNewDelivey');
+                        return;
                     }
 
                     return;
@@ -827,8 +909,14 @@ export default function Carrinho() {
                     totalCartFinish: formatedCupom
                 });
 
-                if (isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
+                } else if (cep == cepnew && isAuthenticated === true) {
+                    Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
                 }
@@ -844,11 +932,15 @@ export default function Carrinho() {
                     customer_id: customer ? customer?.id : null
                 });
 
-                if (isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
                 } else {
-                    Router.push('/loginClientPayment');
+                    Router.push('/registerNewDelivey');
+                    return;
                 }
 
                 return;
@@ -858,17 +950,14 @@ export default function Carrinho() {
                 totalCartFinish: totalCart + formatedFrete
             });
 
-            if (cep === cepnew && isAuthenticated === true) {
+            if (cep === cepnew && isAuthenticated === false) {
+                await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                Router.push('/loginClientPayment');
+            } else if (cep === cepnew && isAuthenticated === true) {
                 await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                 Router.push('/payment');
-            } else {
+            } else if (cep == cepnew && isAuthenticated === true) {
                 Router.push('/registerNewDelivey');
-                return;
-            }
-
-            if (isAuthenticated === true) {
-                await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
-                Router.push('/payment');
             } else {
                 Router.push('/loginClientPayment');
             }
