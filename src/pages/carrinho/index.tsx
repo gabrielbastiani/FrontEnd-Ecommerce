@@ -563,7 +563,7 @@ export default function Carrinho() {
                 } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else if (cep == cepnew && isAuthenticated === true) {
+                } else if (cep !== cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
@@ -607,7 +607,7 @@ export default function Carrinho() {
                 } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else if (cep == cepnew && isAuthenticated === true) {
+                } else if (cep !== cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
@@ -651,7 +651,7 @@ export default function Carrinho() {
                 } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else if (cep == cepnew && isAuthenticated === true) {
+                } else if (cep !== cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
@@ -695,7 +695,7 @@ export default function Carrinho() {
                 } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else if (cep == cepnew && isAuthenticated === true) {
+                } else if (cep !== cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
@@ -739,7 +739,7 @@ export default function Carrinho() {
                 } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else if (cep == cepnew && isAuthenticated === true) {
+                } else if (cep !== cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
@@ -783,7 +783,7 @@ export default function Carrinho() {
                 } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else if (cep == cepnew && isAuthenticated === true) {
+                } else if (cep !== cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
@@ -827,7 +827,7 @@ export default function Carrinho() {
                 } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else if (cep == cepnew && isAuthenticated === true) {
+                } else if (cep !== cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
@@ -871,7 +871,7 @@ export default function Carrinho() {
                 } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else if (cep == cepnew && isAuthenticated === true) {
+                } else if (cep !== cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
@@ -915,7 +915,7 @@ export default function Carrinho() {
                 } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else if (cep == cepnew && isAuthenticated === true) {
+                } else if (cep !== cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
                 } else {
                     Router.push('/loginClientPayment');
@@ -949,14 +949,14 @@ export default function Carrinho() {
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                 totalCartFinish: totalCart + formatedFrete
             });
-
+            
             if (cep === cepnew && isAuthenticated === false) {
                 await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                 Router.push('/loginClientPayment');
             } else if (cep === cepnew && isAuthenticated === true) {
                 await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                 Router.push('/payment');
-            } else if (cep == cepnew && isAuthenticated === true) {
+            } else if (cep !== cepnew && isAuthenticated === true) {
                 Router.push('/registerNewDelivey');
             } else {
                 Router.push('/loginClientPayment');
