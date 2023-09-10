@@ -1,7 +1,7 @@
 import Modal from 'react-modal';
 import { FiX } from 'react-icons/fi';
 import { ButtonClose, ContainerContent } from './styles';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import Titulos from '../../Titulos';
 import { IMaskInput } from "react-imask";
@@ -12,12 +12,14 @@ import {
     BoxDelivery,
     BoxInputs,
     ButtonDelivery,
-    InputDelivery,
     TextCurrent,
     TextCurrentBold,
     TextCurrentInput
 } from '../../../pages/payment/styles';
 import { AiOutlineCompass } from 'react-icons/ai';
+import { InputUpdate } from '../../ui/InputUpdate';
+import { CartContext } from '../../../contexts/CartContext';
+import router from 'next/router';
 
 
 interface DeliverysRequest {
@@ -37,7 +39,7 @@ type CepProps = {
 
 export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: DeliverysRequest) {
 
-    console.log(deliverys)
+    const { cartProducts, productsCart, totalCart } = useContext(CartContext);
 
     const customStyles = {
         content: {
@@ -51,7 +53,9 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
         }
     };
 
+    const [addressSelected, setAddressSelected] = useState(deliverys.address);
     const [addresseeSelected, setAddresseeSelected] = useState(deliverys.addressee);
+    const [bairroSelected, setBairroSelected] = useState(deliverys.neighborhood);
     const [numeroSelected, setNumeroSelected] = useState(deliverys.number);
     const [referenceSelected, setReferenceSelected] = useState(deliverys.reference);
     const [complementSelected, setComplementSelected] = useState(deliverys.complement);
@@ -81,22 +85,157 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
         }
     }
 
-    async function updateDelivery() {
+    async function updateDestinySelectedDelivery() {
         const apiClient = setupAPIClient();
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
                 addressee: addresseeSelected,
-                address: searchAddress?.logradouro,
-                number: numeroSelected,
-                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro",
-                complement: complementSelected,
-                reference: referenceSelected,
+            });
+            toast.success("Destinatario do endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateAddressSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
+                address: searchAddress?.logradouro ? searchAddress?.logradouro : addressSelected
+            });
+            toast.success("Endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateNumberSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
+                number: numeroSelected
+            });
+            toast.success("Número do endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateComplementSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
+                complement: complementSelected
+            });
+            toast.success("Complemento do endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateBairroSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
+                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : bairroSelected
+            });
+            toast.success("Bairro de endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateReferenceSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
+                reference: referenceSelected
+            });
+            toast.success("Referencia do endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    let dadosFrete: any = [];
+    (productsCart || []).forEach((item) => {
+        dadosFrete.push({
+            "peso": item?.product?.weight * item?.amount,
+            "comprimento": item.product?.depth * item?.amount,
+            "altura": item?.product?.height * item?.amount,
+            "largura": item?.product?.width * item?.amount
+        });
+    });
+
+    var totalPeso = 0;
+    var totalComprimento = 0;
+    var totalAltura = 0;
+    var totalLargura = 0;
+
+    for (var i = 0; i < dadosFrete.length; i++) {
+        totalPeso += dadosFrete[i].peso;
+        totalComprimento += dadosFrete[i].comprimento;
+        totalAltura += dadosFrete[i].altura;
+        totalLargura += dadosFrete[i].largura;
+    }
+
+    async function updateDelivery() {
+        const apiClient = setupAPIClient();
+        const cep = searchAddress?.cep;
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
                 cep: searchAddress?.cep,
+                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : bairroSelected,
                 city: searchAddress?.localidade,
                 state: searchAddress?.uf
             });
 
-            toast.success("Dados(s) de entrega alterado com sucesso");
+            const { data } = await apiClient.post('/freteCalculo', {
+                nCdServico: "04162",
+                sCepDestino: cep,
+                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
+                nCdFormato: 1,
+                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
+                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
+                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+            });
+
+            var freteFormat = data[0]?.Valor;
+            freteFormat = freteFormat + '';
+            /* @ts-ignore */
+            freteFormat = parseInt(freteFormat.replace(/[\D]+/g, ''));
+            freteFormat = freteFormat + '';
+            freteFormat = freteFormat.replace(/([0-9]{2})$/g, ",$1");
+
+            if (freteFormat.length > 6) {
+                freteFormat = freteFormat.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
+            if (freteFormat == 'NaN') freteFormat = '';
+            const formatedPrice = freteFormat.replace(".", "");
+            const formatedPricePonto = formatedPrice.replace(",", ".");
+            const formatedFrete = Number(formatedPricePonto);
+
+            const frete = formatedFrete;
+            const cepfrete = cep;
+
+            const storageId = String(cartProducts[0]?.store_cart_id);
+            await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+                cep: cepfrete,
+                frete: frete,
+            });
+
+            await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                totalCartFinish: totalCart + frete
+            });
+
+            toast.success("Endereço atual alterado com sucesso");
+
 
         } catch (error) {
             console.log(error);
@@ -124,7 +263,7 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
                 <BoxDelivery>
                     <Titulos
                         tipo='h4'
-                        titulo='Insira um novo CEP abaixo se deseja mudar o endereço atual'
+                        titulo="Insira um novo CEP, ou o mesmo CEP se deseja mudar o endereço atual"
                     />
                     <br />
                     <Input
@@ -149,35 +288,49 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
                 {cepLoadEdit ?
                     <BoxDelivery>
                         <br />
-                        <InputDelivery
-                            value={addresseeSelected}
-                            onChange={(e) => setAddresseeSelected(e.target.value)}
-                        />
+                        <TextCurrent>{addresseeSelected}</TextCurrent>
 
                         <BoxInputs>
-                            <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {searchAddress?.logradouro}</TextCurrentInput>
-                            <InputDelivery
+                            <AiOutlineCompass color="black" size={20} />
+                            <InputUpdate
+                                dado={searchAddress?.logradouro ? searchAddress?.logradouro : addressSelected}
+                                type="text"
+                                placeholder={searchAddress?.logradouro ? searchAddress?.logradouro : addressSelected}
+                                value={searchAddress?.logradouro ? searchAddress?.logradouro : addressSelected}
+                                onChange={(e) => setAddressSelected(e.target.value)}
+                                handleSubmit={updateAddressSelectedDelivery}
+                            />
+
+                            <InputUpdate
+                                dado={numeroSelected}
+                                type="text"
+                                placeholder={numeroSelected}
                                 value={numeroSelected}
                                 onChange={(e) => setNumeroSelected(e.target.value)}
+                                handleSubmit={updateNumberSelectedDelivery}
                             />
                         </BoxInputs>
 
                         <BoxInputs>
                             <TextCurrentBold>Complemento: </TextCurrentBold>
-                            <InputDelivery
-                                value={complementSelected}/* @ts-ignore */
-                                onChange={(e) => setComplementSelected(e.target.value)}
+                            <TextCurrent>{complementSelected}</TextCurrent>
+                        </BoxInputs>
+
+                        <BoxInputs>
+                            <TextCurrentBold>Bairro: </TextCurrentBold>
+                            <InputUpdate
+                                dado={searchAddress?.bairro ? searchAddress?.bairro : bairroSelected}
+                                type="text"
+                                placeholder={searchAddress?.bairro ? searchAddress?.bairro : bairroSelected}
+                                value={searchAddress?.bairro ? searchAddress?.bairro : bairroSelected}
+                                onChange={(e) => setBairroSelected(e.target.value)}
+                                handleSubmit={updateBairroSelectedDelivery}
                             />
                         </BoxInputs>
 
-                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</TextCurrent>
-
                         <BoxInputs>
                             <TextCurrentBold>Referencia: </TextCurrentBold>
-                            <InputDelivery
-                                value={referenceSelected}/* @ts-ignore */
-                                onChange={(e) => setReferenceSelected(e.target.value)}
-                            />
+                            <TextCurrent>{referenceSelected}</TextCurrent>
                         </BoxInputs>
 
                         <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{searchAddress?.localidade} - {searchAddress?.uf}</TextCurrent>
@@ -185,12 +338,16 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
                         <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{searchAddress?.cep}</TextCurrent>
 
                         <BoxButtonsFunctions>
-                            <ButtonDelivery
-                                style={{ backgroundColor: 'green' }}
-                                onClick={updateDelivery}
-                            >
-                                Salvar alterações
-                            </ButtonDelivery>
+                            {searchAddress?.cep ?
+                                <ButtonDelivery
+                                    style={{ backgroundColor: 'green', color: 'white' }}
+                                    onClick={updateDelivery}
+                                >
+                                    Salvar novo CEP<br />e valor de frete
+                                </ButtonDelivery>
+                                :
+                                null
+                            }
 
                             <ButtonDelivery
                                 style={{ backgroundColor: 'red' }}
@@ -204,25 +361,37 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
                     :
                     <BoxDelivery>
                         <br />
-                        <InputDelivery
+                        <InputUpdate
+                            dado={addresseeSelected}
+                            type="text"
+                            placeholder={addresseeSelected}
                             value={addresseeSelected}
                             onChange={(e) => setAddresseeSelected(e.target.value)}
+                            handleSubmit={updateDestinySelectedDelivery}
                         />
                         <br />
                         <BoxInputs>
                             <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {deliverys.address}</TextCurrentInput>
 
-                            <InputDelivery
+                            <InputUpdate
+                                dado={numeroSelected}
+                                type="text"
+                                placeholder={numeroSelected}
                                 value={numeroSelected}
                                 onChange={(e) => setNumeroSelected(e.target.value)}
+                                handleSubmit={updateNumberSelectedDelivery}
                             />
                         </BoxInputs>
 
                         <BoxInputs>
                             <TextCurrentBold>Complemento: </TextCurrentBold>
-                            <InputDelivery
-                                value={complementSelected}/* @ts-ignore */
+                            <InputUpdate
+                                dado={complementSelected}
+                                type="text"
+                                placeholder={complementSelected}
+                                value={complementSelected}
                                 onChange={(e) => setComplementSelected(e.target.value)}
+                                handleSubmit={updateComplementSelectedDelivery}
                             />
                         </BoxInputs>
 
@@ -230,22 +399,19 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
 
                         <BoxInputs>
                             <TextCurrentBold>Referencia: </TextCurrentBold>
-                            <InputDelivery
-                                value={referenceSelected}/* @ts-ignore */
+                            <InputUpdate
+                                dado={referenceSelected}
+                                type="text"
+                                placeholder={referenceSelected}
+                                value={referenceSelected}
                                 onChange={(e) => setReferenceSelected(e.target.value)}
+                                handleSubmit={updateReferenceSelectedDelivery}
                             />
                         </BoxInputs>
 
                         <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{deliverys.city} - {deliverys.state}</TextCurrent>
 
                         <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{deliverys.cep}</TextCurrent>
-
-                        <ButtonDelivery
-                            style={{ backgroundColor: 'green', width: '100%' }}
-                            onClick={updateDelivery}
-                        >
-                            Salvar alterações
-                        </ButtonDelivery>
 
                     </BoxDelivery>
                 }

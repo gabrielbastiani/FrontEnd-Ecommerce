@@ -477,7 +477,7 @@ export default function Payment() {
         const apiClient = setupAPIClient();
         try {
             await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
-            
+
             const cepfrete = cep;
             /* @ts-ignore */
             cepCustomer(cepfrete);
@@ -530,18 +530,91 @@ export default function Payment() {
         }
     }
 
+    async function updateDestinySelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
+                addressee: addresseeSelected,
+            });
+            toast.success("Destinatario do endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateAddressSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
+                address: searchAddressEdit?.logradouro ? searchAddressEdit?.logradouro : addressSelected
+            });
+            toast.success("Endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateNumberSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
+                number: numeroSelected
+            });
+            toast.success("Número do endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateComplementSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
+                complement: complementSelected
+            });
+            toast.success("Complemento do endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateBairroSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
+                neighborhood: searchAddressEdit?.bairro ? searchAddressEdit?.bairro : bairroSelected
+            });
+            toast.success("Bairro de endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function updateReferenceSelectedDelivery() {
+        const apiClient = setupAPIClient();
+        try {
+            await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
+                reference: referenceSelected
+            });
+            toast.success("Referencia do endereço atual alterado com sucesso");
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function updateSelectedDelivery() {
         const apiClient = setupAPIClient();
         const cep = searchAddressEdit?.cep;
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
-                addressee: addresseeSelected,
-                address: searchAddressEdit?.logradouro,
-                number: numeroSelected,
-                neighborhood: searchAddressEdit?.bairro ? searchAddressEdit?.bairro : "Sem bairro",
-                complement: complementSelected,
-                reference: referenceSelected,
                 cep: searchAddressEdit?.cep,
+                neighborhood: searchAddressEdit?.bairro ? searchAddressEdit?.bairro : bairroSelected,
                 city: searchAddressEdit?.localidade,
                 state: searchAddressEdit?.uf
             });
@@ -572,7 +645,6 @@ export default function Payment() {
             const formatedFrete = Number(formatedPricePonto);
 
             const frete = formatedFrete;
-
             const cepfrete = cep;
 
             const storageId = String(cartProducts[0]?.store_cart_id);
@@ -655,7 +727,7 @@ export default function Payment() {
             });
 
             toast.success("Novo endereço cadastrado com sucesso");
-            
+
             closenewDelivery();
 
             setTimeout(() => {
@@ -1309,7 +1381,6 @@ export default function Payment() {
         }
     }
 
-    console.log("Frete feito aqui na pagina de pagamento", formatedFrete)
 
 
     return (
@@ -1724,7 +1795,7 @@ export default function Payment() {
                                             <>
                                                 <Titulos
                                                     tipo="h4"
-                                                    titulo="Insira um novo CEP se deseja mudar o endereço atual"
+                                                    titulo="Insira um novo CEP, ou o mesmo CEP se deseja mudar o endereço atual"
                                                 />
                                                 <br />
                                                 <Input
@@ -1747,36 +1818,47 @@ export default function Payment() {
                                                 {cepLoadEdit ?
                                                     <>
                                                         <br />
-                                                        <InputDelivery
-                                                            value={addresseeSelected}
-                                                            onChange={(e) => setAddresseeSelected(e.target.value)}
-                                                        />
-                                                        <br />
+                                                        <TextCurrent>{addresseeSelected}</TextCurrent>
                                                         <BoxInputs>
-                                                            <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {searchAddressEdit?.logradouro} - </TextCurrentInput>
+                                                            <AiOutlineCompass color="black" size={20} />
+                                                            <InputUpdate
+                                                                dado={searchAddressEdit?.logradouro ? searchAddressEdit?.logradouro : addressSelected}
+                                                                type="text"
+                                                                placeholder={searchAddressEdit?.logradouro ? searchAddressEdit?.logradouro : addressSelected}
+                                                                value={searchAddressEdit?.logradouro ? searchAddressEdit?.logradouro : addressSelected}
+                                                                onChange={(e) => setAddressSelected(e.target.value)}
+                                                                handleSubmit={updateAddressSelectedDelivery}
+                                                            />
 
-                                                            <InputDelivery
+                                                            <InputUpdate
+                                                                dado={numeroSelected}
+                                                                type="text"
+                                                                placeholder={numeroSelected}
                                                                 value={numeroSelected}
                                                                 onChange={(e) => setNumeroSelected(e.target.value)}
+                                                                handleSubmit={updateNumberSelectedDelivery}
                                                             />
+                                                        </BoxInputs>
+                                                        <BoxInputs>
+                                                            <TextCurrentBold>Complemento: </TextCurrentBold>
+                                                            <TextCurrent>{complementSelected}</TextCurrent>
                                                         </BoxInputs>
 
                                                         <BoxInputs>
-                                                            <TextCurrentBold>Complemento: </TextCurrentBold>
-                                                            <InputDelivery
-                                                                value={complementSelected}/* @ts-ignore */
-                                                                onChange={(e) => setComplementSelected(e.target.value)}
+                                                            <TextCurrentBold>Bairro: </TextCurrentBold>
+                                                            <InputUpdate
+                                                                dado={searchAddressEdit?.bairro ? searchAddressEdit?.bairro : bairroSelected}
+                                                                type="text"
+                                                                placeholder={searchAddressEdit?.bairro ? searchAddressEdit?.bairro : bairroSelected}
+                                                                value={searchAddressEdit?.bairro ? searchAddressEdit?.bairro : bairroSelected}
+                                                                onChange={(e) => setBairroSelected(e.target.value)}
+                                                                handleSubmit={updateBairroSelectedDelivery}
                                                             />
                                                         </BoxInputs>
-
-                                                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{searchAddressEdit?.bairro ? searchAddressEdit?.bairro : "Sem bairro"}</TextCurrent>
 
                                                         <BoxInputs>
                                                             <TextCurrentBold>Referencia: </TextCurrentBold>
-                                                            <InputDelivery
-                                                                value={referenceSelected}/* @ts-ignore */
-                                                                onChange={(e) => setReferenceSelected(e.target.value)}
-                                                            />
+                                                            <TextCurrent>{referenceSelected}</TextCurrent>
                                                         </BoxInputs>
 
                                                         <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{searchAddressEdit?.localidade} - {searchAddressEdit?.uf}</TextCurrent>
@@ -1786,26 +1868,37 @@ export default function Payment() {
                                                     :
                                                     <>
                                                         <br />
-                                                        <InputDelivery
+                                                        <InputUpdate
+                                                            dado={addresseeSelected}
+                                                            type="text"
+                                                            placeholder={addresseeSelected}
                                                             value={addresseeSelected}
                                                             onChange={(e) => setAddresseeSelected(e.target.value)}
+                                                            handleSubmit={updateDestinySelectedDelivery}
                                                         />
                                                         <br />
                                                         <BoxInputs>
                                                             <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {addressSelected} - </TextCurrentInput>
 
-                                                            <InputDelivery
+                                                            <InputUpdate
+                                                                dado={numeroSelected}
+                                                                type="text"
+                                                                placeholder={numeroSelected}
                                                                 value={numeroSelected}
-                                                                placeholder="Numero"
                                                                 onChange={(e) => setNumeroSelected(e.target.value)}
+                                                                handleSubmit={updateNumberSelectedDelivery}
                                                             />
                                                         </BoxInputs>
 
                                                         <BoxInputs>
                                                             <TextCurrentBold>Complemento: </TextCurrentBold>
-                                                            <InputDelivery
-                                                                value={complementSelected}/* @ts-ignore */
+                                                            <InputUpdate
+                                                                dado={complementSelected}
+                                                                type="text"
+                                                                placeholder={complementSelected}
+                                                                value={complementSelected}
                                                                 onChange={(e) => setComplementSelected(e.target.value)}
+                                                                handleSubmit={updateComplementSelectedDelivery}
                                                             />
                                                         </BoxInputs>
 
@@ -1813,9 +1906,13 @@ export default function Payment() {
 
                                                         <BoxInputs>
                                                             <TextCurrentBold>Referencia: </TextCurrentBold>
-                                                            <InputDelivery
-                                                                value={referenceSelected}/* @ts-ignore */
+                                                            <InputUpdate
+                                                                dado={referenceSelected}
+                                                                type="text"
+                                                                placeholder={referenceSelected}
+                                                                value={referenceSelected}
                                                                 onChange={(e) => setReferenceSelected(e.target.value)}
+                                                                handleSubmit={updateReferenceSelectedDelivery}
                                                             />
                                                         </BoxInputs>
 
@@ -1824,12 +1921,16 @@ export default function Payment() {
                                                     </>
                                                 }
                                                 <BoxButtonsFunctions>
-                                                    <ButtonDelivery
-                                                        style={{ backgroundColor: 'green', color: 'white' }}
-                                                        onClick={updateSelectedDelivery}
-                                                    >
-                                                        Salvar alterações
-                                                    </ButtonDelivery>
+                                                    {searchAddressEdit?.cep ?
+                                                        <ButtonDelivery
+                                                            style={{ backgroundColor: 'green', color: 'white' }}
+                                                            onClick={updateSelectedDelivery}
+                                                        >
+                                                            Salvar novo CEP<br />e valor de frete
+                                                        </ButtonDelivery>
+                                                        :
+                                                        null
+                                                    }
 
                                                     <ButtonDelivery
                                                         style={{ backgroundColor: 'red', color: 'white' }}
