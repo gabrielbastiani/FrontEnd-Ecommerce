@@ -234,15 +234,17 @@ export default function Carrinho() {
 
                     let newCartValue = productsCart.reduce((acc, o) => {
                         let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
-                            o, { price: o?.product?.promotion }) : o;
+                            o, { price: o?.product?.promotion - data?.coupomsconditionals[0]?.value}) : o
+
                         acc.push(obj);
+
                         return acc;
                     }, []);
 
                     let valuesProducts: any = [];
                     (newCartValue || []).forEach((item) => {
                         valuesProducts.push({
-                            "preco": item?.price ? (item?.price - data?.coupomsconditionals[0]?.value) * item?.amount : item?.product?.promotion * item?.amount
+                            "preco": item?.price ? item?.price * item?.amount : item?.product?.promotion * item?.amount
                         });
                     });
 

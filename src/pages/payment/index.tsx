@@ -399,7 +399,7 @@ export default function Payment() {
             const apiClient = setupAPIClient();
             const storageId = String(cartProducts[0]?.store_cart_id);
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
-                totalCartFinish: totalCart
+                totalCartFinish: totalCart + fretePayment
             });
 
             const code = null;
@@ -813,15 +813,17 @@ export default function Payment() {
 
                     let newCartValue = productsCart.reduce((acc, o) => {
                         let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
-                            o, { price: o?.product?.promotion }) : o;
+                            o, { price: o?.product?.promotion - data?.coupomsconditionals[0]?.value}) : o
+
                         acc.push(obj);
+
                         return acc;
                     }, []);
 
                     let valuesProducts: any = [];
                     (newCartValue || []).forEach((item) => {
                         valuesProducts.push({
-                            "preco": item?.price ? (item?.price - data?.coupomsconditionals[0]?.value) * item?.amount : item?.product?.promotion * item?.amount
+                            "preco": item?.price ? item?.price * item?.amount : item?.product?.promotion * item?.amount
                         });
                     });
 
@@ -830,12 +832,12 @@ export default function Payment() {
                         totalPriceDesconto += valuesProducts[i].preco;
                     }
 
-                    const result = formatedFrete + totalPriceDesconto;
+                    const result = fretePayment + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                    const frete = formatedFrete;
+                    const frete = fretePayment;
                     const frete_coupon = 0;
-                    /* const cepfrete = cep; */
+                    const cepfrete = cepSelected;
                     const code = codePromotion
                     /* @ts-ignore */
                     cepCustomer(cepfrete, frete, code, frete_coupon);
@@ -2017,7 +2019,7 @@ export default function Payment() {
                                     <Button
                                         onClick={loadCupomCode}
                                     >
-                                        Calcular
+                                        Aplicar cupom
                                     </Button>
                                 </BoxCupom>
                             </>
@@ -2160,7 +2162,7 @@ export default function Payment() {
                                         </BoxPricesFinal>
                                         <BoxPricesFinal>
                                             <SubTotal>FRETE</SubTotal>
-                                            <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete)}</ValuesMore>
+                                            <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePayment)}</ValuesMore>
                                         </BoxPricesFinal>
                                         <BoxPricesFinal>
                                             <SubTotal></SubTotal>
