@@ -1,7 +1,7 @@
 import { PUBLIC_KEY_TEST, URL_NOTIFICATION } from "../../utils/config";
 import { FormEvent, useContext, useEffect, useState } from "react";
+import { canSSRAuthPayment } from "../../utils/canSSRAuthPayment";
 import { setupAPIClient } from "../../services/api";
-import { canSSRAuth } from "../../utils/canSSRAuth";
 import { loadMercadoPago } from "@mercadopago/sdk-js";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../contexts/AuthContext";
@@ -2394,7 +2394,7 @@ export default function Payment() {
     )
 }
 
-export const getServerSideProps = canSSRAuth(async (ctx) => {
+export const getServerSideProps = canSSRAuthPayment(async (ctx) => {
     const apliClient = setupAPIClient(ctx)
 
     return {

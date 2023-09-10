@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { canSSRAuthPayment } from '../../utils/canSSRAuthPayment';
 import {
     ContLogin,
     ContainerCenter,
@@ -21,8 +22,6 @@ import {
 } from '../payment/styles';
 import { AiOutlineCompass } from 'react-icons/ai';
 import Router from 'next/router';
-import { canSSRAuth } from '../../utils/canSSRAuth';
-import { Button } from '../../components/ui/Button';
 import Link from 'next/link';
 
 
@@ -179,7 +178,7 @@ export default function registerNewDelivey() {
     )
 }
 
-export const getServerSideProps = canSSRAuth(async (ctx) => {
+export const getServerSideProps = canSSRAuthPayment(async (ctx) => {
     const apliClient = setupAPIClient(ctx)
 
     return {

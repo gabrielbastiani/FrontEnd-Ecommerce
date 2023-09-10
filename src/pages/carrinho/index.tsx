@@ -539,18 +539,15 @@ export default function Carrinho() {
                         customer_id: customer ? customer?.id : null
                     });
 
-                    if (cep === cepnew && isAuthenticated === true) {
+                    if (cep === cepnew && isAuthenticated === false) {
+                        await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                        Router.push('/loginClientPayment');
+                    } else if (cep === cepnew && isAuthenticated === true) {
                         await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                         Router.push('/payment');
                     } else {
                         Router.push('/registerNewDelivey');
                         return;
-                    }
-
-                    if (isAuthenticated === true) {
-                        Router.push('/payment');
-                    } else {
-                        Router.push('/loginClientPayment');
                     }
 
                     return;
@@ -560,16 +557,14 @@ export default function Carrinho() {
                     totalCartFinish: formatedCupom,
                 });
 
-                if (cep === cepnew && isAuthenticated === true) {
+                if (cep === cepnew && isAuthenticated === false) {
+                    await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
+                    Router.push('/loginClientPayment');
+                } else if (cep === cepnew && isAuthenticated === true) {
                     await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);
                     Router.push('/payment');
-                } else {
+                } else if (cep == cepnew && isAuthenticated === true) {
                     Router.push('/registerNewDelivey');
-                    return;
-                }
-
-                if (isAuthenticated === true) {
-                    Router.push('/payment');
                 } else {
                     Router.push('/loginClientPayment');
                 }

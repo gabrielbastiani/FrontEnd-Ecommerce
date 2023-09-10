@@ -1,4 +1,5 @@
 import { useContext, useState, useRef, FormEvent } from 'react';
+import { canSSRGuestPayment } from '../../utils/canSSRGuestPayment';
 import { Button } from '../../components/ui/Button/index';
 import { toast } from 'react-toastify';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -16,7 +17,6 @@ import { Input } from '../../components/ui/Input';
 import { AuthContext } from '../../contexts/AuthContext';
 import Link from 'next/link';
 import Head from 'next/head';
-import { canSSRGuest } from '../../utils/canSSRGuest';
 import FooterAccount from '../../components/FooterAccount';
 import { HeaderAccount } from '../../components/HeaderAccount';
 import Titulos from '../../components/Titulos';
@@ -163,7 +163,7 @@ export default function loginClientPayment() {
     )
 }
 
-export const getServerSideProps = canSSRGuest(async (ctx) => {
+export const getServerSideProps = canSSRGuestPayment(async (ctx) => {
     return {
         props: {}
     }
