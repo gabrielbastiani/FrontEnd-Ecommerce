@@ -70,7 +70,7 @@ export default function Carrinho() {
 
     const { isAuthenticated, customer } = useContext(AuthContext);
     /* @ts-ignore */
-    const { cepCustomer, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
+    const { cupomPayment, cepCustomer, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
 
     const [desconto, setDesconto] = useState("");
     const [totalDesconto, setTotalDesconto] = useState("");
@@ -949,6 +949,13 @@ export default function Carrinho() {
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                 totalCartFinish: totalCart + formatedFrete
             });
+
+            if (!cupomPayment) {
+                await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+                    coupon: null,
+                    frete_coupon: 0
+                });
+            }
 
             if (cep === cepnew && isAuthenticated === false) {
                 await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${customer?.id}&cep=${cep}`);

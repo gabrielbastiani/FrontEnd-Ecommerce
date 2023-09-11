@@ -82,6 +82,7 @@ import {
     ValuesMore
 } from "../carrinho/styles";
 import { Button } from "../../components/ui/Button";
+import Router from "next/router";
 
 
 type CepProps = {
@@ -841,11 +842,33 @@ export default function Payment() {
                     const code = codePromotion
                     /* @ts-ignore */
                     cepCustomer(cepfrete, frete, code, frete_coupon);
-
-                    setDesconto(data?.name);
                     setTotalDesconto(formated);
                     setNewPriceArray(newCartValue);
-                    /* handleRemoveCupom(); */
+
+                    var formatedDesconto = String(formated);
+                    formatedDesconto = formatedDesconto + '';
+                    /* @ts-ignore */
+                    formatedDesconto = parseInt(formatedDesconto.replace(/[\D]+/g, ''));
+                    formatedDesconto = formatedDesconto + '';
+                    formatedDesconto = formatedDesconto.replace(/([0-9]{2})$/g, ",$1");
+                    if (formatedDesconto.length > 6) {
+                        formatedDesconto = formatedDesconto.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+                    }
+                    if (formatedDesconto == 'NaN') formatedDesconto = '';
+                    const descontoFormated = formatedDesconto.replace(".", "");
+                    const formatedDescontoPonto = descontoFormated.replace(",", ".");
+                    const formatedCupom = Number(formatedDescontoPonto);
+
+                    const storageId = String(cartProducts[0]?.store_cart_id);
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: formatedCupom
+                    });
+
+                    toast.success("Cupom aplicado com sucesso!");
+
+                    setTimeout(() => {
+                        Router.reload();
+                    }, 2700);
 
                 }
 
@@ -868,19 +891,41 @@ export default function Payment() {
                     descontoPriceTotal += productsValue[i].preco;
                 }
 
-                const result = formatedFrete + descontoPriceTotal;
+                const result = fretePayment + descontoPriceTotal;
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                const frete = formatedFrete;
+                const frete = fretePayment;
                 const frete_coupon = 0;
-                /* const cepfrete = cep; */
+                const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
-
-                setDesconto(data?.name);
                 setTotalDesconto(formated);
-                /* handleRemoveCupom(); */
+
+                var formatedDesconto = String(formated);
+                formatedDesconto = formatedDesconto + '';
+                /* @ts-ignore */
+                formatedDesconto = parseInt(formatedDesconto.replace(/[\D]+/g, ''));
+                formatedDesconto = formatedDesconto + '';
+                formatedDesconto = formatedDesconto.replace(/([0-9]{2})$/g, ",$1");
+                if (formatedDesconto.length > 6) {
+                    formatedDesconto = formatedDesconto.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+                }
+                if (formatedDesconto == 'NaN') formatedDesconto = '';
+                const descontoFormated = formatedDesconto.replace(".", "");
+                const formatedDescontoPonto = descontoFormated.replace(",", ".");
+                const formatedCupom = Number(formatedDescontoPonto);
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: formatedCupom
+                });
+
+                toast.success("Cupom aplicado com sucesso!");
+
+                setTimeout(() => {
+                    Router.reload();
+                }, 2700);
 
                 return;
             }
@@ -889,19 +934,41 @@ export default function Payment() {
 
             if (data?.coupomsconditionals[0]?.conditional === "totalValue") {
                 const valueDescont = totalCart - data?.coupomsconditionals[0]?.value;
-                const valueMore = valueDescont + formatedFrete;
+                const valueMore = valueDescont + fretePayment;
                 const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                const frete = formatedFrete;
+                const frete = fretePayment;
                 const frete_coupon = 0;
-                /* const cepfrete = cep; */
+                const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
-
-                setDesconto(data?.name);
                 setTotalDesconto(formated);
-                /* handleRemoveCupom(); */
+                
+                var formatedDesconto = String(formated);
+                formatedDesconto = formatedDesconto + '';
+                /* @ts-ignore */
+                formatedDesconto = parseInt(formatedDesconto.replace(/[\D]+/g, ''));
+                formatedDesconto = formatedDesconto + '';
+                formatedDesconto = formatedDesconto.replace(/([0-9]{2})$/g, ",$1");
+                if (formatedDesconto.length > 6) {
+                    formatedDesconto = formatedDesconto.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+                }
+                if (formatedDesconto == 'NaN') formatedDesconto = '';
+                const descontoFormated = formatedDesconto.replace(".", "");
+                const formatedDescontoPonto = descontoFormated.replace(",", ".");
+                const formatedCupom = Number(formatedDescontoPonto);
+
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: formatedCupom
+                });
+
+                toast.success("Cupom aplicado com sucesso!");
+
+                setTimeout(() => {
+                    Router.reload();
+                }, 2700);
 
                 return;
             }
@@ -909,18 +976,26 @@ export default function Payment() {
             /*"Frete grátis total", value: "freeShipping"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
-                const zeroFrete = formatedFrete - (formatedFrete * zero / 100);
+                const zeroFrete = fretePayment - (fretePayment * zero / 100);
 
-                const frete = formatedFrete;
-                const frete_coupon = zero;
-                /* const cepfrete = cep; */
-                const code = codePromotion
+                const frete = 0;
+                const frete_coupon = 0;
+                const cepfrete = cepSelected;
+                const code = codePromotion;
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
-
-                setDesconto(data?.name);
                 setZero(zeroFrete);
-                /* handleRemoveCupom(); */
+                
+                const storageId = String(cartProducts[0]?.store_cart_id);
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: totalCart
+                });
+
+                toast.success("Cupom aplicado com sucesso!");
+
+                setTimeout(() => {
+                    Router.reload();
+                }, 2700);
 
                 return;
             }
