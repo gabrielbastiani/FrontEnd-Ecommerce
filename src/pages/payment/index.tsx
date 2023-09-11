@@ -2119,23 +2119,7 @@ export default function Payment() {
                         <Titulos tipo="h3" titulo="Cupom" />
                         <br />
                         {paymentCupom ?
-                            <>
-                                <BoxCupomPayment>
-                                    <Titulos
-                                        tipo="h3"
-                                        titulo="VOCÊ APLICOU UM CUPOM DE DESCONTO!!!"
-                                    />
-                                    <br />
-                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
-                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
-                                    <br />
-                                    <Button
-                                        onClick={removeCupomPayment}
-                                    >
-                                        Retirar o cupom
-                                    </Button>
-                                </BoxCupomPayment>
-                            </>
+                            null
                             :
                             <>
                                 <Titulos
@@ -2160,23 +2144,21 @@ export default function Payment() {
 
                         {removeCupom ?
                             <>
-                                <Titulos
-                                    tipo="h4"
-                                    titulo="Tem cupom de desconto? Aplique o código abaixo e aproveite!!!"
-                                />
-                                <br />
-                                <BoxCupom>
-                                    <Input
-                                        style={{ backgroundColor: 'white', color: 'black' }}
-                                        placeholder="CÓDIGO"
-                                        onChange={(e) => setCodePromotion(e.target.value)}
+                                <BoxCupomPayment>
+                                    <Titulos
+                                        tipo="h3"
+                                        titulo="VOCÊ APLICOU UM CUPOM DE DESCONTO!!!"
                                     />
+                                    <br />
+                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
+                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
+                                    <br />
                                     <Button
-                                        onClick={loadCupomCode}
+                                        onClick={removeCupomPayment}
                                     >
-                                        Aplicar cupom
+                                        Retirar o cupom
                                     </Button>
-                                </BoxCupom>
+                                </BoxCupomPayment>
                             </>
                             :
                             null
