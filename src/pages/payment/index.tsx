@@ -788,6 +788,7 @@ export default function Payment() {
         const apiClient = setupAPIClient();
         try {
             const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
+            const storageId = String(cartProducts[0]?.store_cart_id);
 
             if (data === null) {
                 toast.error("Não ha cupom promocional ativo, ou com esse nome.");
@@ -837,7 +838,7 @@ export default function Payment() {
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                     const frete = fretePayment;
-                    const frete_coupon = 0;
+                    const frete_coupon = fretePayment;
                     const cepfrete = cepSelected;
                     const code = codePromotion
                     /* @ts-ignore */
@@ -859,7 +860,6 @@ export default function Payment() {
                     const formatedDescontoPonto = descontoFormated.replace(",", ".");
                     const formatedCupom = Number(formatedDescontoPonto);
 
-                    const storageId = String(cartProducts[0]?.store_cart_id);
                     await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                         totalCartFinish: formatedCupom
                     });
@@ -895,7 +895,7 @@ export default function Payment() {
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = fretePayment;
-                const frete_coupon = 0;
+                const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
@@ -916,7 +916,6 @@ export default function Payment() {
                 const formatedDescontoPonto = descontoFormated.replace(",", ".");
                 const formatedCupom = Number(formatedDescontoPonto);
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom
                 });
@@ -938,13 +937,13 @@ export default function Payment() {
                 const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = fretePayment;
-                const frete_coupon = 0;
+                const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
                 setTotalDesconto(formated);
-                
+
                 var formatedDesconto = String(formated);
                 formatedDesconto = formatedDesconto + '';
                 /* @ts-ignore */
@@ -959,7 +958,6 @@ export default function Payment() {
                 const formatedDescontoPonto = descontoFormated.replace(",", ".");
                 const formatedCupom = Number(formatedDescontoPonto);
 
-                const storageId = String(cartProducts[0]?.store_cart_id);
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom
                 });
@@ -978,15 +976,14 @@ export default function Payment() {
             if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
                 const zeroFrete = fretePayment - (fretePayment * zero / 100);
 
-                const frete = 0;
+                const frete = fretePayment;
                 const frete_coupon = 0;
                 const cepfrete = cepSelected;
                 const code = codePromotion;
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
                 setZero(zeroFrete);
-                
-                const storageId = String(cartProducts[0]?.store_cart_id);
+
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: totalCart
                 });
@@ -1003,18 +1000,25 @@ export default function Payment() {
             /*"Valor de desconto no valor do frete", value: "valueShipping"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
-                const valueFrete = formatedFrete - data?.coupomsconditionals[0]?.value;
+                const valueFrete = fretePayment - data?.coupomsconditionals[0]?.value;
 
-                const frete = formatedFrete;
+                const frete = fretePayment;
                 const frete_coupon = valueFrete;
-                /* const cepfrete = cep; */
+                const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
-
-                setDesconto(data?.name);
                 setFreteCupom(valueFrete);
-                /* handleRemoveCupom(); */
+
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: totalCart + frete_coupon
+                });
+
+                toast.success("Cupom aplicado com sucesso!");
+
+                setTimeout(() => {
+                    Router.reload();
+                }, 2700);
 
                 return;
             }
@@ -1022,18 +1026,25 @@ export default function Payment() {
             /*"Percentual de desconto no valor do frete", value: "shippingPercent"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
-                const percentShipping = formatedFrete - (formatedFrete * data?.coupomsconditionals[0]?.value / 100);
+                const percentShipping = fretePayment - (fretePayment * data?.coupomsconditionals[0]?.value / 100);
 
-                const frete = formatedFrete;
+                const frete = fretePayment;
                 const frete_coupon = percentShipping;
-                /* const cepfrete = cep; */
+                const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
-
-                setDesconto(data?.name);
                 setFreteCupom(percentShipping);
-                /* handleRemoveCupom(); */
+
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: totalCart + frete_coupon
+                });
+
+                toast.success("Cupom aplicado com sucesso!");
+
+                setTimeout(() => {
+                    Router.reload();
+                }, 2700);
 
                 return;
             }
@@ -1075,21 +1086,43 @@ export default function Payment() {
                         totalPriceDesconto += valuesProducts[i].preco;
                     }
 
-                    const result = formatedFrete + totalPriceDesconto;
+                    const result = fretePayment + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                    const frete = formatedFrete;
-                    const frete_coupon = 0;
-                    /* const cepfrete = cep; */
+                    const frete = fretePayment;
+                    const frete_coupon = fretePayment;
+                    const cepfrete = cepSelected;
                     const code = codePromotion
                     /* @ts-ignore */
                     cepCustomer(cepfrete, frete, code, frete_coupon);
 
                     setNewSubTotalPrice(totalPriceDesconto);
-                    setDesconto(data?.name);
                     setTotalDesconto(formated);
                     setNewPriceArray(newCart);
-                    /* handleRemoveCupom(); */
+
+                    var formatedDesconto = String(formated);
+                    formatedDesconto = formatedDesconto + '';
+                    /* @ts-ignore */
+                    formatedDesconto = parseInt(formatedDesconto.replace(/[\D]+/g, ''));
+                    formatedDesconto = formatedDesconto + '';
+                    formatedDesconto = formatedDesconto.replace(/([0-9]{2})$/g, ",$1");
+                    if (formatedDesconto.length > 6) {
+                        formatedDesconto = formatedDesconto.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+                    }
+                    if (formatedDesconto == 'NaN') formatedDesconto = '';
+                    const descontoFormated = formatedDesconto.replace(".", "");
+                    const formatedDescontoPonto = descontoFormated.replace(",", ".");
+                    const formatedCupom = Number(formatedDescontoPonto);
+
+                    await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                        totalCartFinish: formatedCupom
+                    });
+
+                    toast.success("Cupom aplicado com sucesso!");
+
+                    setTimeout(() => {
+                        Router.reload();
+                    }, 2700);
 
                     return;
                 }
@@ -1100,20 +1133,41 @@ export default function Payment() {
 
             if (data?.coupomsconditionals[0]?.conditional === "totalPercent") {
                 const maisCart = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
-                const totalPercentStore = formatedFrete + maisCart;
+                const totalPercentStore = fretePayment + maisCart;
 
                 const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                const frete = formatedFrete;
-                const frete_coupon = 0;
-                /* const cepfrete = cep; */
+                const frete = fretePayment;
+                const frete_coupon = fretePayment;
+                const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
-
-                setDesconto(data?.name);
                 setTotalDesconto(formated);
-                /* handleRemoveCupom(); */
+
+                var formatedDesconto = String(formated);
+                formatedDesconto = formatedDesconto + '';
+                /* @ts-ignore */
+                formatedDesconto = parseInt(formatedDesconto.replace(/[\D]+/g, ''));
+                formatedDesconto = formatedDesconto + '';
+                formatedDesconto = formatedDesconto.replace(/([0-9]{2})$/g, ",$1");
+                if (formatedDesconto.length > 6) {
+                    formatedDesconto = formatedDesconto.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+                }
+                if (formatedDesconto == 'NaN') formatedDesconto = '';
+                const descontoFormated = formatedDesconto.replace(".", "");
+                const formatedDescontoPonto = descontoFormated.replace(",", ".");
+                const formatedCupom = Number(formatedDescontoPonto);
+
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: formatedCupom
+                });
+
+                toast.success("Cupom aplicado com sucesso!");
+
+                setTimeout(() => {
+                    Router.reload();
+                }, 2700);
 
                 return;
             }
@@ -1134,20 +1188,42 @@ export default function Payment() {
                     totalPriceDesconto += valuesProducts[i].preco;
                 }
 
-                const result = formatedFrete + totalPriceDesconto;
+                const result = fretePayment + totalPriceDesconto;
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-                const frete = formatedFrete;
-                const frete_coupon = 0;
-                /* const cepfrete = cep; */
+                const frete = fretePayment;
+                const frete_coupon = fretePayment;
+                const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
                 cepCustomer(cepfrete, frete, code, frete_coupon);
 
                 setNewSubTotalPrice(totalPriceDesconto);
-                setDesconto(data?.name);
                 setTotalDesconto(formated);
-                /* handleRemoveCupom(); */
+                
+                var formatedDesconto = String(formated);
+                formatedDesconto = formatedDesconto + '';
+                /* @ts-ignore */
+                formatedDesconto = parseInt(formatedDesconto.replace(/[\D]+/g, ''));
+                formatedDesconto = formatedDesconto + '';
+                formatedDesconto = formatedDesconto.replace(/([0-9]{2})$/g, ",$1");
+                if (formatedDesconto.length > 6) {
+                    formatedDesconto = formatedDesconto.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+                }
+                if (formatedDesconto == 'NaN') formatedDesconto = '';
+                const descontoFormated = formatedDesconto.replace(".", "");
+                const formatedDescontoPonto = descontoFormated.replace(",", ".");
+                const formatedCupom = Number(formatedDescontoPonto);
+
+                await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
+                    totalCartFinish: formatedCupom
+                });
+
+                toast.success("Cupom aplicado com sucesso!");
+
+                setTimeout(() => {
+                    Router.reload();
+                }, 2700);
 
                 return;
             }
@@ -1457,6 +1533,7 @@ export default function Payment() {
             console.error("Erro ao fazer a requisição:", error);
         }
     }
+
 
 
 
@@ -2195,7 +2272,11 @@ export default function Payment() {
                                 </BoxPricesFinal>
                                 <BoxPricesFinal>
                                     <SubTotal>FRETE</SubTotal>
-                                    <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon === 0 ? fretePayment : fretePaymentCoupon)}</ValuesMore>
+                                    {fretePaymentCoupon === 0 ?
+                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon)}</ValuesMore>
+                                        :
+                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon === 0 ? fretePayment : fretePaymentCoupon)}</ValuesMore>
+                                    }
                                 </BoxPricesFinal>
                                 <BoxPricesFinal>
                                     <SubTotal></SubTotal>
@@ -2272,7 +2353,7 @@ export default function Payment() {
                                             {freteCupom === 0 ? (
                                                 <>
                                                     {zero === 0 ? (
-                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(zero)}</ValuesMore>
+                                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon)}</ValuesMore>
                                                     ) :
                                                         <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedFrete === 0 ? fretePayment : formatedFrete)}</ValuesMore>
                                                     }
