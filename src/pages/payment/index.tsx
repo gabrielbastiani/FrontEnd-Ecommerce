@@ -105,6 +105,7 @@ export default function Payment() {
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
+    const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
     const [searchAddress, setSearchAddress] = useState<CepProps>();
     const [searchAddressEdit, setSearchAddressEdit] = useState<CepProps>();
 
@@ -145,7 +146,7 @@ export default function Payment() {
     const [cepLoadEdit, setCepLoadEdit] = useState(false);
     const [newDelivery, setNewDelivery] = useState(false);
     const [editCustomer, setEditCustomer] = useState(false);
-    /* const [removeCupom, setRemoveCupom] = useState(false); */
+    const [removeCupom, setRemoveCupom] = useState(false);
 
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
@@ -197,9 +198,9 @@ export default function Payment() {
         setEditCustomer(!editCustomer);
     }
 
-    /* const handleRemoveCupom = () => {
+    const handleRemoveCupom = () => {
         setRemoveCupom(!removeCupom);
-    } */
+    }
 
     const cpfCnpj = cpfs ? cpfs : cnpjs;
 
@@ -270,6 +271,8 @@ export default function Payment() {
                 setCeps(data?.cep || "");
                 setStore(data?.store?.name || "");
                 setGeneros(data?.gender || "");
+
+                setPaymentCupom(cupomPayment || "");
 
             } catch (error) {
                 console.log(error);
@@ -413,9 +416,11 @@ export default function Payment() {
 
             toast.success("Você removeu o cupom aplicado para esse pedido");
 
-            setTimeout(() => {
+            handleRemoveCupom();
+
+            /* setTimeout(() => {
                 router.reload();
-            }, 3000);
+            }, 3000); */
 
         } catch (error) {
             console.log(error);
@@ -840,9 +845,11 @@ export default function Payment() {
 
                     toast.success("Cupom aplicado com sucesso!");
 
-                    setTimeout(() => {
+                    handleRemoveCupom();
+
+                    /* setTimeout(() => {
                         Router.reload();
-                    }, 2700);
+                    }, 2700); */
 
                 }
 
@@ -2111,7 +2118,7 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Cupom" />
                         <br />
-                        {cupomPayment ?
+                        {paymentCupom ?
                             <>
                                 <BoxCupomPayment>
                                     <Titulos
@@ -2149,6 +2156,30 @@ export default function Payment() {
                                     </Button>
                                 </BoxCupom>
                             </>
+                        }
+
+                        {removeCupom ?
+                            <>
+                                <Titulos
+                                    tipo="h4"
+                                    titulo="Tem cupom de desconto? Aplique o código abaixo e aproveite!!!"
+                                />
+                                <br />
+                                <BoxCupom>
+                                    <Input
+                                        style={{ backgroundColor: 'white', color: 'black' }}
+                                        placeholder="CÓDIGO"
+                                        onChange={(e) => setCodePromotion(e.target.value)}
+                                    />
+                                    <Button
+                                        onClick={loadCupomCode}
+                                    >
+                                        Aplicar cupom
+                                    </Button>
+                                </BoxCupom>
+                            </>
+                            :
+                            null
                         }
                     </BoxPayment>
                 </ContainerFechamento>

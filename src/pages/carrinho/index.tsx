@@ -1189,7 +1189,7 @@ export default function Carrinho() {
                                             <ButtonCupom
                                                 onClick={loadCupomCode}
                                             >
-                                                Calcular
+                                                Aplicar
                                             </ButtonCupom>
                                         }
                                     </BoxCupom>
