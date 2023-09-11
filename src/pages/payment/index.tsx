@@ -475,6 +475,12 @@ export default function Payment() {
     }
 
     async function updateCurrentDelivery(customer_id: string, id: string, cep: string) {
+
+        if (cupomPayment) {
+            toast.error("Primeiramente retire o cupom que esta aplicado, e altere o endereço de entrega para o desejado, e depois insira o cupom novamente")
+            return;
+        }
+
         const apiClient = setupAPIClient();
         try {
             await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
@@ -610,6 +616,12 @@ export default function Payment() {
     }
 
     async function updateSelectedDelivery() {
+
+        if (cupomPayment) {
+            toast.error("Primeiramente retire o cupom que esta aplicado, altere o CEP conforme deseja, e depois insira o cupom novamente")
+            return;
+        }
+
         const apiClient = setupAPIClient();
         const cep = searchAddressEdit?.cep;
         try {
@@ -672,6 +684,12 @@ export default function Payment() {
     }
 
     async function handleNewDeliveryCustomer() {
+
+        if (cupomPayment) {
+            toast.error("Primeiramente retire o cupom que esta aplicado, cadastre esse novo endereço, e depois insira o cupom novamente")
+            return;
+        }
+
         const cep = searchAddress?.cep;
         const apiClient = setupAPIClient();
         try {
@@ -737,50 +755,6 @@ export default function Payment() {
 
         } catch (error) {
             console.log(error);
-        }
-    }
-
-    async function searchCep() {
-        try {
-            const apiClient = setupAPIClient();
-            const { data } = await apiClient.post('/freteCalculo', {
-                nCdServico: "04162",
-                sCepDestino: cepSelected,
-                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
-                nCdFormato: 1,
-                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
-                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
-                nVlLargura: totalLargura > 82 ? 81 : totalLargura
-            });
-
-            setDataFrete(data);
-
-            var freteFormat = data[0]?.Valor;
-            freteFormat = freteFormat + '';
-            /* @ts-ignore */
-            freteFormat = parseInt(freteFormat.replace(/[\D]+/g, ''));
-            freteFormat = freteFormat + '';
-            freteFormat = freteFormat.replace(/([0-9]{2})$/g, ",$1");
-
-            if (freteFormat.length > 6) {
-                freteFormat = freteFormat.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
-            }
-            if (freteFormat == 'NaN') freteFormat = '';
-            const formatedPrice = freteFormat.replace(".", "");
-            const formatedPricePonto = formatedPrice.replace(",", ".");
-            const formatedFrete = Number(formatedPricePonto);
-
-            const frete = formatedFrete;
-            const cepfrete = cepSelected;
-
-            const storageId = String(cartProducts[0]?.store_cart_id);
-            await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-                cep: cepfrete,
-                frete: frete,
-            });
-
-        } catch (error) {
-            console.log(error)
         }
     }
 
@@ -1200,7 +1174,7 @@ export default function Payment() {
 
                 setNewSubTotalPrice(totalPriceDesconto);
                 setTotalDesconto(formated);
-                
+
                 var formatedDesconto = String(formated);
                 formatedDesconto = formatedDesconto + '';
                 /* @ts-ignore */
@@ -2275,7 +2249,7 @@ export default function Payment() {
                                     {fretePaymentCoupon === 0 ?
                                         <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon)}</ValuesMore>
                                         :
-                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon === 0 ? fretePayment : fretePaymentCoupon)}</ValuesMore>
+                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon === fretePayment ? fretePaymentCoupon : fretePayment)}</ValuesMore>
                                     }
                                 </BoxPricesFinal>
                                 <BoxPricesFinal>

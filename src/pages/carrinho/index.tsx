@@ -257,7 +257,7 @@ export default function Carrinho() {
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                     const frete = formatedFrete;
-                    const frete_coupon = 0;
+                    const frete_coupon = formatedFrete;
                     const cepfrete = cep;
                     const code = codePromotion
                     /* @ts-ignore */
@@ -293,7 +293,7 @@ export default function Carrinho() {
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = formatedFrete;
-                const frete_coupon = 0;
+                const frete_coupon = formatedFrete;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
@@ -314,7 +314,7 @@ export default function Carrinho() {
                 const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = formatedFrete;
-                const frete_coupon = 0;
+                const frete_coupon = formatedFrete;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
@@ -333,7 +333,7 @@ export default function Carrinho() {
                 const zeroFrete = formatedFrete - (formatedFrete * zero / 100);
 
                 const frete = formatedFrete;
-                const frete_coupon = zero;
+                const frete_coupon = zeroFrete;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
@@ -425,7 +425,7 @@ export default function Carrinho() {
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                     const frete = formatedFrete;
-                    const frete_coupon = 0;
+                    const frete_coupon = formatedFrete;
                     const cepfrete = cep;
                     const code = codePromotion
                     /* @ts-ignore */
@@ -451,7 +451,7 @@ export default function Carrinho() {
                 const formated = totalPercentStore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = formatedFrete;
-                const frete_coupon = 0;
+                const frete_coupon = formatedFrete;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
@@ -484,7 +484,7 @@ export default function Carrinho() {
                 const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
                 const frete = formatedFrete;
-                const frete_coupon = 0;
+                const frete_coupon = formatedFrete;
                 const cepfrete = cep;
                 const code = codePromotion
                 /* @ts-ignore */
