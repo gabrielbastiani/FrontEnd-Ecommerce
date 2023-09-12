@@ -72,6 +72,12 @@ export function CartProviderProducts({ children }: Props) {
 
   const [cartCep, setCartCep] = useState<any>("");
 
+  const totalAmountProducts = productsCart.map(amo => amo?.amount);
+  var somaProducts: number = 0;
+  for(var i =0;i<totalAmountProducts.length;i++){
+    somaProducts+=totalAmountProducts[i];
+  }
+
   useEffect(() => {
     let dadosCart = localStorage.getItem("@cartProducts");
     let arrayCart = JSON.parse(dadosCart);
@@ -147,8 +153,11 @@ export function CartProviderProducts({ children }: Props) {
         total: total_more
       });
 
+      let somaMore: number = somaProducts + count;
+
       await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-        total: total_more
+        total: total_more,
+        amount_products: somaMore
       });
 
       setTimeout(() => {
@@ -177,10 +186,13 @@ export function CartProviderProducts({ children }: Props) {
         customer_id: customer ? customer?.id : null
       });
 
+      let firstAmount: number = somaProducts >= 1 ? somaProducts + count : count;
+
       await apiClient.post(`/createTotalCart`, {
         store_cart_id: cartItems[0].store_cart_id,
         total: prod?.product?.promotion * count,
-        customer_id: customer ? customer?.id : null
+        customer_id: customer ? customer?.id : null,
+        amount_products: firstAmount
       });
 
       setTimeout(() => {
@@ -207,10 +219,12 @@ export function CartProviderProducts({ children }: Props) {
     });
 
     const cart_total = prod?.product?.promotion * count + totalCart;
+    let sumadd: number = productsCart[0]?.amount + count;
 
     const storageId = String(cartProducts[0]?.store_cart_id);
     await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-      total: cart_total
+      total: cart_total,
+      amount_products: sumadd
     });
 
     setTimeout(() => {
@@ -234,6 +248,7 @@ export function CartProviderProducts({ children }: Props) {
 
       let more_amountadd = data?.amount + 1;
       let total_more = more_amountadd * data?.product?.promotion;
+      let sum: number = somaProducts + 1
 
       await apiClient.put(`/updateCart?store_cart_id=${storageId}&product_id=${product_id}`, {
         amount: more_amountadd,
@@ -243,7 +258,8 @@ export function CartProviderProducts({ children }: Props) {
       const cart_total = totalCart + data?.product?.promotion;
 
       await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-        total: cart_total
+        total: cart_total,
+        amount_products: sum
       });
 
       setTimeout(() => {
@@ -274,9 +290,11 @@ export function CartProviderProducts({ children }: Props) {
       });
 
       const cart_total = totalCart - data?.product?.promotion;
+      let removAmount: number = somaProducts - 1
 
       await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-        total: cart_total
+        total: cart_total,
+        amount_products: removAmount
       });
 
       setTimeout(() => {
@@ -290,11 +308,19 @@ export function CartProviderProducts({ children }: Props) {
     const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
     const cart_total = totalCart - data?.product?.promotion;
 
+    let amountRemove: number = somaProducts - 1;
+
     await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-      total: cart_total
+      total: cart_total,
+      amount_products: amountRemove
     });
 
     await apiClient.delete(`/deleteCart?store_cart_id=${storageId}&product_id=${product_id}`);
+
+    if (somaProducts === 1) {
+      await apiClient.delete(`/deleteTotalCart?store_cart_id=${storageId}`);
+      await apiClient.delete(`/deleteCartTotalFinish?store_cart_id=${storageId}`);
+    }
 
     const removeItem = cartProducts.filter(item => item?.product_id !== product_id);
     localStorage.setItem('@cartProducts', JSON.stringify(removeItem));
@@ -312,15 +338,18 @@ export function CartProviderProducts({ children }: Props) {
 
     const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
     const cart_total = totalCart - data?.total;
+    let removeTotalAmount: number = data?.amount;
 
     await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-      total: cart_total
+      total: cart_total,
+      amount_products: somaProducts - removeTotalAmount
     });
 
     const response = await apiClient.get(`/findTotalCart?store_cart_id=${storageId}`);
 
     if (response?.data?.total === 0) {
       await apiClient.delete(`/deleteTotalCart?store_cart_id=${storageId}`);
+      await apiClient.delete(`/deleteCartTotalFinish?store_cart_id=${storageId}`);
     }
 
     await apiClient.delete(`/deleteCart?store_cart_id=${storageId}&product_id=${product_id}`);

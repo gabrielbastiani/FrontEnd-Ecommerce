@@ -70,7 +70,7 @@ export default function Carrinho() {
 
     const { isAuthenticated, customer } = useContext(AuthContext);
     /* @ts-ignore */
-    const { cupomPayment, dataTotalCart, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
+    const { newSubTotalCart, newDataProducts, cupomPayment, dataTotalCart, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
     
     const [desconto, setDesconto] = useState("");
     const [totalDesconto, setTotalDesconto] = useState("");
@@ -212,7 +212,7 @@ export default function Carrinho() {
             const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
 
             if (data === null) {
-                toast.error("Não ha cupom promocional ativo, ou com esse nome.");
+                toast.error("Não há cupom promocional ativo, ou com esse código.");
                 return;
             }
 
@@ -254,6 +254,8 @@ export default function Carrinho() {
                     for (var i = 0; i < valuesProducts.length; i++) {
                         totalPriceDesconto += valuesProducts[i].preco;
                     }
+
+                    console.log(totalPriceDesconto)
 
                     const result = formatedFrete + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
