@@ -20,6 +20,8 @@ type MyContextProps = {
   fretePayment: number;
   fretePaymentCoupon: number;
   cupomPayment: string;
+  newDataProducts: any;
+  newSubTotalCart: number;
 };
 
 type AddCepProps = {
@@ -65,6 +67,8 @@ export function CartProviderProducts({ children }: Props) {
   const [fretePayment, setFretePayment] = useState(0);
   const [fretePaymentCoupon, setFretePaymentCoupon] = useState(0);
   const [cupomPayment, setCupomPayment] = useState("");
+  const [newDataProducts, setNewDataProducts] = useState<any[]>([]);
+  const [newSubTotalCart, setNewSubTotalCart] = useState(0);
 
   const [cartCep, setCartCep] = useState<any>("");
 
@@ -98,6 +102,11 @@ export function CartProviderProducts({ children }: Props) {
         setFretePayment(data?.frete || 0);
         setFretePaymentCoupon(data?.frete_coupon || 0);
         setCupomPayment(data?.coupon || "");
+        setNewDataProducts(data?.new_value_products || []);
+        setNewSubTotalCart(data?.new_subTotal || 0)
+
+        console.log(data)
+
       }
       loadCartTotal();
     } catch (error) {
@@ -363,7 +372,7 @@ export function CartProviderProducts({ children }: Props) {
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )
