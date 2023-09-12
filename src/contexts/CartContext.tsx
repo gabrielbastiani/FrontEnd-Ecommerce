@@ -74,8 +74,8 @@ export function CartProviderProducts({ children }: Props) {
 
   const totalAmountProducts = productsCart.map(amo => amo?.amount);
   var somaProducts: number = 0;
-  for(var i =0;i<totalAmountProducts.length;i++){
-    somaProducts+=totalAmountProducts[i];
+  for (var i = 0; i < totalAmountProducts.length; i++) {
+    somaProducts += totalAmountProducts[i];
   }
 
   useEffect(() => {
@@ -385,18 +385,14 @@ export function CartProviderProducts({ children }: Props) {
     const apiClient = setupAPIClient();
     const storageId = String(cartProducts[0]?.store_cart_id);
 
-    try {
-      await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-        cep: cepfrete,
-        frete: frete,
-        coupon: code,
-        frete_coupon: frete_coupon,
-        new_subTotal: subTot,
-        new_value_products: newvalue
-      });
-    } catch (error) {
-      console.log(error.data.response);
-    }
+    await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+      cep: cepfrete,
+      frete: frete,
+      coupon: code,
+      frete_coupon: frete_coupon,
+      new_subTotal: subTot,
+      new_value_products: newvalue
+    });
 
   }
 

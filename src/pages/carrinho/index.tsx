@@ -71,7 +71,7 @@ export default function Carrinho() {
     const { isAuthenticated, customer } = useContext(AuthContext);
     /* @ts-ignore */
     const { newSubTotalCart, newDataProducts, cupomPayment, dataTotalCart, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
-    
+
     const [desconto, setDesconto] = useState("");
     const [totalDesconto, setTotalDesconto] = useState("");
     const [codePromotion, setCodePromotion] = useState("");
@@ -99,7 +99,7 @@ export default function Carrinho() {
             const cepfrete = cep;
             const code = null;
             const subTot = 0;
-            const newvalue = null;
+            const newvalue = [];
             /* @ts-ignore */
             dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
             router.reload();
@@ -250,12 +250,12 @@ export default function Carrinho() {
                         });
                     });
 
+                    console.log(newCartValue)
+
                     var totalPriceDesconto = 0;
                     for (var i = 0; i < valuesProducts.length; i++) {
                         totalPriceDesconto += valuesProducts[i].preco;
                     }
-
-                    console.log(totalPriceDesconto)
 
                     const result = formatedFrete + totalPriceDesconto;
                     const formated = result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -264,12 +264,13 @@ export default function Carrinho() {
                     const frete_coupon = formatedFrete;
                     const cepfrete = cep;
                     const code = codePromotion;
-                    const subTot = 0;
+                    const subTot = totalPriceDesconto;
                     const newvalue = newCartValue;
 
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
                     setNewPriceArray(newCartValue);
+                    setNewSubTotalPrice(totalPriceDesconto);
                     /* @ts-ignore */
                     dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
@@ -284,14 +285,32 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
 
+                const cartArray = productsCart.map(item => item?.product_id);
+
+                var cupomOkValue: any = [];
+                for (var i = 0; i < cartArray.length; i++) {
+                    if (cartArray.indexOf(cartArray[i]) > -1) {
+                        cupomOkValue.push(cartArray[i]);
+                    }
+                }
+
+                let newCartValue = productsCart.reduce((acc, o) => {
+                    let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
+                        o, { price: o?.product?.promotion - data?.coupomsconditionals[0]?.value }) : o
+
+                    acc.push(obj);
+
+                    return acc;
+                }, []);
+
                 let productsValue: any = [];
-                (productsCart || []).forEach((item) => {
+                (newCartValue || []).forEach((item) => {
                     productsValue.push({
-                        "preco": (item?.product?.promotion - data?.coupomsconditionals[0]?.value) * item?.amount
+                        "preco": item?.price ? item?.price * item?.amount : item?.product?.promotion * item?.amount
                     });
                 });
 
-                var descontoPriceTotal = 0;
+                var descontoPriceTotal: number = 0;
                 for (var i = 0; i < productsValue.length; i++) {
                     descontoPriceTotal += productsValue[i].preco;
                 }
@@ -302,14 +321,16 @@ export default function Carrinho() {
                 const frete = formatedFrete;
                 const frete_coupon = formatedFrete;
                 const cepfrete = cep;
-                const code = codePromotion
-                const subTot = 0;
-                const newvalue = null;
+                const code = codePromotion;
+                const subTot = descontoPriceTotal;
+                const newvalue = newCartValue;
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
+                setNewPriceArray(newvalue);
+                setNewSubTotalPrice(subTot);
                 handleShowMenu();
 
                 return;
@@ -450,10 +471,10 @@ export default function Carrinho() {
                     /* @ts-ignore */
                     dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
-                    setNewSubTotalPrice(totalPriceDesconto);
+                    setNewSubTotalPrice(subTot);
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
-                    setNewPriceArray(newCart);
+                    setNewPriceArray(newvalue);
                     handleShowMenu();
 
                     return;
@@ -1064,7 +1085,7 @@ export default function Carrinho() {
                                                     </BoxQuantidadeCart>
 
                                                     <BoxPriceProductCart>
-                                                        <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price ? prod?.price : prod?.product?.promotion)}</PriceProduct>
+                                                        <PriceProduct style={{ color: 'red' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price ? prod?.price : prod?.product?.promotion)}</PriceProduct>
                                                     </BoxPriceProductCart>
 
                                                     <BoxPricesTotalProduct>

@@ -102,7 +102,7 @@ type CuoponProps = {
 
 export default function Payment() {
 
-    const { cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
+    const { newSubTotalCart, newDataProducts, cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
@@ -412,7 +412,9 @@ export default function Payment() {
 
             await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
                 frete_coupon: frete,
-                coupon: code
+                coupon: code,
+                new_subTotal: 0,
+                new_value_products: []
             });
 
             toast.success("Você removeu o cupom aplicado para esse pedido");
@@ -866,10 +868,28 @@ export default function Payment() {
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
 
+                const cartArray = productsCart.map(item => item?.product_id);
+
+                var cupomOkValue: any = [];
+                for (var i = 0; i < cartArray.length; i++) {
+                    if (cartArray.indexOf(cartArray[i]) > -1) {
+                        cupomOkValue.push(cartArray[i]);
+                    }
+                }
+
+                let newCartValue = productsCart.reduce((acc, o) => {
+                    let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
+                        o, { price: o?.product?.promotion - data?.coupomsconditionals[0]?.value }) : o
+
+                    acc.push(obj);
+
+                    return acc;
+                }, []);
+
                 let productsValue: any = [];
-                (productsCart || []).forEach((item) => {
+                (newCartValue || []).forEach((item) => {
                     productsValue.push({
-                        "preco": (item?.product?.promotion - data?.coupomsconditionals[0]?.value) * item?.amount
+                        "preco": item?.price ? item?.price * item?.amount : item?.product?.promotion * item?.amount
                     });
                 });
 
@@ -2196,9 +2216,9 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Resumo do Pedido" />
                         <br />
-                        {newPriceArray?.length >= 1 ? (
+                        {newDataProducts?.length >= 1 ? (
                             <>
-                                {newPriceArray.map((item, index) => {
+                                {newDataProducts.map((item, index) => {
                                     return (
                                         <BoxProductPayment key={index}>
                                             <ImageProductPayment>
@@ -2217,7 +2237,7 @@ export default function Payment() {
                                             <BoxPricesTotalProduct>
                                                 <BoxPricesPayment>
                                                     <AmountProduct>Qtd: {item?.amount}</AmountProduct>
-                                                    <PriceProduct>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price ? item?.price : item?.product?.promotion)}</PriceProduct>
+                                                    <PriceProduct style={{ color: 'red' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price ? item?.price : item?.product?.promotion)}</PriceProduct>
                                                     <PriceProductData>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price ? item?.price * item?.amount : item?.product?.promotion * item?.amount)}</PriceProductData>
                                                 </BoxPricesPayment>
                                             </BoxPricesTotalProduct>
@@ -2267,7 +2287,7 @@ export default function Payment() {
                                     <Total
                                         style={{ fontSize: '19px' }}
                                     >
-                                        {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}
+                                        {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(newSubTotalCart === 0 ? totalCart : newSubTotalCart)}
                                     </Total>
                                 </BoxPricesFinal>
                                 <BoxPricesFinal>
