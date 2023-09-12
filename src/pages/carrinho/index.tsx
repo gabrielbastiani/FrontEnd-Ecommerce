@@ -197,9 +197,11 @@ export default function Carrinho() {
             const frete = formatedFrete;
             const frete_coupon = 0;
             const cepfrete = cep;
-            const code = codePromotion
+            const code = null;
+            const subTot = 0;
+            const newvalue = [];
             /* @ts-ignore */
-            dataTotalCart(cepfrete, frete, code, frete_coupon);
+            dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
         } catch (error) {
             console.log(error)
@@ -250,8 +252,6 @@ export default function Carrinho() {
                         });
                     });
 
-                    console.log(newCartValue)
-
                     var totalPriceDesconto = 0;
                     for (var i = 0; i < valuesProducts.length; i++) {
                         totalPriceDesconto += valuesProducts[i].preco;
@@ -269,8 +269,8 @@ export default function Carrinho() {
 
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
-                    setNewPriceArray(newCartValue);
-                    setNewSubTotalPrice(totalPriceDesconto);
+                    setNewPriceArray(newvalue);
+                    setNewSubTotalPrice(subTot);
                     /* @ts-ignore */
                     dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
@@ -348,7 +348,7 @@ export default function Carrinho() {
                 const cepfrete = cep;
                 const code = codePromotion;
                 const subTot = 0;
-                const newvalue = null;
+                const newvalue = [];
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
@@ -369,7 +369,7 @@ export default function Carrinho() {
                 const cepfrete = cep;
                 const code = codePromotion;
                 const subTot = 0;
-                const newvalue = null;
+                const newvalue = [];
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
@@ -390,7 +390,7 @@ export default function Carrinho() {
                 const cepfrete = cep;
                 const code = codePromotion;
                 const subTot = 0;
-                const newvalue = null;
+                const newvalue = [];
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
@@ -411,7 +411,7 @@ export default function Carrinho() {
                 const cepfrete = cep;
                 const code = codePromotion;
                 const subTot = 0;
-                const newvalue = null;
+                const newvalue = [];
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
@@ -471,9 +471,9 @@ export default function Carrinho() {
                     /* @ts-ignore */
                     dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
-                    setNewSubTotalPrice(subTot);
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
+                    setNewSubTotalPrice(subTot);
                     setNewPriceArray(newvalue);
                     handleShowMenu();
 
@@ -495,7 +495,7 @@ export default function Carrinho() {
                 const cepfrete = cep;
                 const code = codePromotion;
                 const subTot = 0;
-                const newvalue = null;
+                const newvalue = [];
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
@@ -510,8 +510,26 @@ export default function Carrinho() {
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
 
+                const cartArray = productsCart.map(item => item?.product_id);
+
+                var cupomOkValue: any = [];
+                for (var i = 0; i < cartArray.length; i++) {
+                    if (cartArray.indexOf(cartArray[i]) > -1) {
+                        cupomOkValue.push(cartArray[i]);
+                    }
+                }
+
+                let newCartValue = productsCart.reduce((acc, o) => {
+                    let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
+                        o, { price: o?.product?.promotion - (o?.product?.promotion * data?.coupomsconditionals[0]?.value / 100) }) : o;
+
+                    acc.push(obj);
+
+                    return acc;
+                }, []);
+
                 let valuesProducts: any = [];
-                (productsCart || []).forEach((item) => {
+                (newCartValue || []).forEach((item) => {
                     valuesProducts.push({
                         "preco": item?.product?.promotion * item?.amount - (item?.product?.promotion * item?.amount * data?.coupomsconditionals[0]?.value / 100)
                     });
@@ -530,13 +548,14 @@ export default function Carrinho() {
                 const cepfrete = cep;
                 const code = codePromotion;
                 const subTot = totalPriceDesconto;
-                const newvalue = null;
+                const newvalue = newCartValue;
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
-                setNewSubTotalPrice(totalPriceDesconto);
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
+                setNewPriceArray(newvalue);
+                setNewSubTotalPrice(subTot);
                 handleShowMenu();
 
                 return;

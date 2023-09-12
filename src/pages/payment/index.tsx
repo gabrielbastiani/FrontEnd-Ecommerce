@@ -407,12 +407,9 @@ export default function Payment() {
                 totalCartFinish: totalCart + fretePayment
             });
 
-            const code = null;
-            const frete = 0;
-
             await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-                frete_coupon: frete,
-                coupon: code,
+                frete_coupon: 0,
+                coupon: null,
                 new_subTotal: 0,
                 new_value_products: []
             });
@@ -422,8 +419,6 @@ export default function Payment() {
             setTimeout(() => {
                 router.reload();
             }, 3000);
-
-            /* handleRemoveCupom(); */
 
         } catch (error) {
             console.log(error);
@@ -828,11 +823,14 @@ export default function Payment() {
                     const frete = fretePayment;
                     const frete_coupon = fretePayment;
                     const cepfrete = cepSelected;
-                    const code = codePromotion
+                    const code = codePromotion;
+                    const subTot = totalPriceDesconto;
+                    const newvalue = newCartValue;
                     /* @ts-ignore */
-                    dataTotalCart(cepfrete, frete, code, frete_coupon);
+                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
                     setTotalDesconto(formated);
-                    setNewPriceArray(newCartValue);
+                    setNewPriceArray(newvalue);
+                    setNewSubTotalPrice(subTot);
 
                     var formatedDesconto = String(formated);
                     formatedDesconto = formatedDesconto + '';
@@ -854,10 +852,9 @@ export default function Payment() {
 
                     toast.success("Cupom aplicado com sucesso!");
 
-                    handleRemoveCupom();
-
-                    await apiClient.get(`/getCouponCart?code=${cupomPayment}`);
-                    setCupomCustomer(data || []);
+                    setTimeout(() => {
+                        Router.reload()
+                    }, 2000);
 
                 }
 
@@ -904,10 +901,14 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
-                const code = codePromotion
+                const code = codePromotion;
+                const subTot = descontoPriceTotal;
+                const newvalue = newCartValue;
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
                 setTotalDesconto(formated);
+                setNewPriceArray(newvalue);
+                setNewSubTotalPrice(subTot);
 
                 var formatedDesconto = String(formated);
                 formatedDesconto = formatedDesconto + '';
@@ -946,9 +947,11 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
-                const code = codePromotion
+                const code = codePromotion;
+                const subTot = 0;
+                const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -987,8 +990,10 @@ export default function Payment() {
                 const frete_coupon = 0;
                 const cepfrete = cepSelected;
                 const code = codePromotion;
+                const subTot = 0;
+                const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
                 setZero(zeroFrete);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1012,9 +1017,11 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = valueFrete;
                 const cepfrete = cepSelected;
-                const code = codePromotion
+                const code = codePromotion;
+                const subTot = 0;
+                const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
                 setFreteCupom(valueFrete);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1038,9 +1045,11 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = percentShipping;
                 const cepfrete = cepSelected;
-                const code = codePromotion
+                const code = codePromotion;
+                const subTot = 0;
+                const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
                 setFreteCupom(percentShipping);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1099,13 +1108,15 @@ export default function Payment() {
                     const frete = fretePayment;
                     const frete_coupon = fretePayment;
                     const cepfrete = cepSelected;
-                    const code = codePromotion
+                    const code = codePromotion;
+                    const subTot = totalPriceDesconto;
+                    const newvalue = newCart;
                     /* @ts-ignore */
                     dataTotalCart(cepfrete, frete, code, frete_coupon);
 
-                    setNewSubTotalPrice(totalPriceDesconto);
                     setTotalDesconto(formated);
-                    setNewPriceArray(newCart);
+                    setNewSubTotalPrice(subTot);
+                    setNewPriceArray(newvalue);
 
                     var formatedDesconto = String(formated);
                     formatedDesconto = formatedDesconto + '';
@@ -1147,9 +1158,11 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
-                const code = codePromotion
+                const code = codePromotion;
+                const subTot = 0;
+                const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -1183,8 +1196,26 @@ export default function Payment() {
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
 
+                const cartArray = productsCart.map(item => item?.product_id);
+
+                var cupomOkValue: any = [];
+                for (var i = 0; i < cartArray.length; i++) {
+                    if (cartArray.indexOf(cartArray[i]) > -1) {
+                        cupomOkValue.push(cartArray[i]);
+                    }
+                }
+
+                let newCartValue = productsCart.reduce((acc, o) => {
+                    let obj = cupomOkValue.includes(o?.product_id) ? Object.assign(
+                        o, { price: o?.product?.promotion - (o?.product?.promotion * data?.coupomsconditionals[0]?.value / 100) }) : o;
+
+                    acc.push(obj);
+
+                    return acc;
+                }, []);
+
                 let valuesProducts: any = [];
-                (productsCart || []).forEach((item) => {
+                (newCartValue || []).forEach((item) => {
                     valuesProducts.push({
                         "preco": item?.product?.promotion * item?.amount - (item?.product?.promotion * item?.amount * data?.coupomsconditionals[0]?.value / 100)
                     });
@@ -1201,11 +1232,14 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
-                const code = codePromotion
+                const code = codePromotion;
+                const subTot = totalPriceDesconto;
+                const newvalue = newCartValue;
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
-                setNewSubTotalPrice(totalPriceDesconto);
+                setNewPriceArray(newvalue);
+                setNewSubTotalPrice(subTot);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -2145,42 +2179,21 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Cupom" />
                         <br />
-                        {removeCupom ?
-                            <>
-                                <BoxCupomPayment>
-                                    <h5>VOCÊ APLICOU UM CUPOM DE DESCONTO!!!</h5>
-                                    <br />
-                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
-                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
-                                    <br />
-                                    <ButtonRemove
-                                        onClick={removeCupomPayment}
-                                    >
-                                        Retirar o cupom
-                                    </ButtonRemove>
-                                </BoxCupomPayment>
-                                
-                            </>
+                        {cupomPayment ?
+                            <BoxCupomPayment>
+                                <h5>VOCÊ APLICOU UM CUPOM DE DESCONTO!!!</h5>
+                                <br />
+                                <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
+                                <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
+                                <br />
+                                <ButtonRemove
+                                    onClick={removeCupomPayment}
+                                >
+                                    Retirar o cupom
+                                </ButtonRemove>
+                            </BoxCupomPayment>
                             :
                             <>
-                                {cupomPayment ?
-                                    <BoxCupomPayment>
-                                    <h5>VOCÊ APLICOU UM CUPOM DE DESCONTO!!!</h5>
-                                    <br />
-                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
-                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
-                                    <br />
-                                    <ButtonRemove
-                                        onClick={removeCupomPayment}
-                                    >
-                                        Retirar o cupom
-                                    </ButtonRemove>
-                                </BoxCupomPayment>
-                                :
-                                    null
-                                }
-                                <br />
-                                <br />
                                 <Titulos
                                     tipo="h4"
                                     titulo="Tem cupom de desconto? Aplique o código abaixo e aproveite!!!"
