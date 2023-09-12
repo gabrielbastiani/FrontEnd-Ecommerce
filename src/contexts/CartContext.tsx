@@ -14,7 +14,7 @@ type MyContextProps = {
   removeItemCart: (id: AddItemsProps) => Promise<void>;
   removeProductCart: (id: AddItemsProps) => Promise<void>;
   clearAllCart(): void;
-  cepCustomer: (cepfrete: AddCepProps) => Promise<void>;
+  dataTotalCart: (cepfrete: AddCepProps) => Promise<void>;
   totalFinishCart: number;
   totalCart: number;
   fretePayment: number;
@@ -27,6 +27,8 @@ type AddCepProps = {
   frete: number;
   code: string;
   frete_coupon: number;
+  subTot: number;
+  newvalue: any;
 }
 
 type AddItemsProps = {
@@ -338,24 +340,30 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
-  async function cepCustomer(cepfrete: string, frete: number, code: string, frete_coupon: number) {
+  async function dataTotalCart(cepfrete: string, frete: number, code: string, frete_coupon: number, subTot: number, newvalue: any) {
 
     setCartCep(cepfrete);
 
     const apiClient = setupAPIClient();
     const storageId = String(cartProducts[0]?.store_cart_id);
 
-    await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-      cep: cepfrete,
-      frete: frete,
-      coupon: code,
-      frete_coupon: frete_coupon
-    });
+    try {
+      await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+        cep: cepfrete,
+        frete: frete,
+        coupon: code,
+        frete_coupon: frete_coupon,
+        new_subTotal: subTot,
+        new_value_products: newvalue
+      });
+    } catch (error) {
+      console.log(error.data.response);
+    }
 
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ cartCep, cepCustomer, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )

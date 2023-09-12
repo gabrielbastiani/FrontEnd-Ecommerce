@@ -175,18 +175,29 @@ export const BoxCupomPayment = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #e8e8e8;
-  padding: 25px;
+  padding: 15px;
   border-radius: 15px;
   box-shadow: 0 4px 8px 0 rgba(255, 215, 0), 0 6px 20px 0 rgba(255, 215, 0);
 `
 
 export const TextCupom = styled.span`
   margin-bottom: 8px;
+  font-size: 12px;
 `
 
-export const TextCupomStrong = styled.strong``
+export const TextCupomStrong = styled.strong`
+  font-size: 13px;
+`
 
 export const BoxCupom = styled.div`
   display: flex;
   flex-direction: column;
+`
+
+export const ButtonRemove = styled.button`
+  background-color: ${props => props?.theme?.colors?.warning};
+  color: ${props => props?.theme?.colors?.white};
+  border: none;
+  font-weight: 600;
+  padding: 4px;
 `

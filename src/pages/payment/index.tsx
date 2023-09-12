@@ -29,6 +29,7 @@ import {
     BoxProductPayment,
     BoxTitle,
     ButtonDelivery,
+    ButtonRemove,
     ButtonsData,
     ContainerFechamento,
     Datas,
@@ -101,7 +102,7 @@ type CuoponProps = {
 
 export default function Payment() {
 
-    const { cartProducts, productsCart, totalCart, totalFinishCart, cepCustomer, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
+    const { cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
@@ -416,11 +417,11 @@ export default function Payment() {
 
             toast.success("Você removeu o cupom aplicado para esse pedido");
 
-            handleRemoveCupom();
-
-            /* setTimeout(() => {
+            setTimeout(() => {
                 router.reload();
-            }, 3000); */
+            }, 3000);
+
+            /* handleRemoveCupom(); */
 
         } catch (error) {
             console.log(error);
@@ -492,7 +493,7 @@ export default function Payment() {
 
             const cepfrete = cep;
             /* @ts-ignore */
-            cepCustomer(cepfrete);
+            dataTotalCart(cepfrete);
 
             const { data } = await apiClient.post('/freteCalculo', {
                 nCdServico: "04162",
@@ -764,6 +765,12 @@ export default function Payment() {
     }
 
     async function loadCupomCode() {
+
+        if (cupomPayment) {
+            toast.error("Retire o cupom atual antes de aplicar um outro cupom");
+            return;
+        }
+
         const apiClient = setupAPIClient();
         try {
             const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
@@ -821,7 +828,7 @@ export default function Payment() {
                     const cepfrete = cepSelected;
                     const code = codePromotion
                     /* @ts-ignore */
-                    cepCustomer(cepfrete, frete, code, frete_coupon);
+                    dataTotalCart(cepfrete, frete, code, frete_coupon);
                     setTotalDesconto(formated);
                     setNewPriceArray(newCartValue);
 
@@ -847,9 +854,8 @@ export default function Payment() {
 
                     handleRemoveCupom();
 
-                    /* setTimeout(() => {
-                        Router.reload();
-                    }, 2700); */
+                    await apiClient.get(`/getCouponCart?code=${cupomPayment}`);
+                    setCupomCustomer(data || []);
 
                 }
 
@@ -880,7 +886,7 @@ export default function Payment() {
                 const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -922,7 +928,7 @@ export default function Payment() {
                 const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -962,7 +968,7 @@ export default function Payment() {
                 const cepfrete = cepSelected;
                 const code = codePromotion;
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon);
                 setZero(zeroFrete);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -988,7 +994,7 @@ export default function Payment() {
                 const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon);
                 setFreteCupom(valueFrete);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1014,7 +1020,7 @@ export default function Payment() {
                 const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon);
                 setFreteCupom(percentShipping);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1075,7 +1081,7 @@ export default function Payment() {
                     const cepfrete = cepSelected;
                     const code = codePromotion
                     /* @ts-ignore */
-                    cepCustomer(cepfrete, frete, code, frete_coupon);
+                    dataTotalCart(cepfrete, frete, code, frete_coupon);
 
                     setNewSubTotalPrice(totalPriceDesconto);
                     setTotalDesconto(formated);
@@ -1123,7 +1129,7 @@ export default function Payment() {
                 const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -1177,7 +1183,7 @@ export default function Payment() {
                 const cepfrete = cepSelected;
                 const code = codePromotion
                 /* @ts-ignore */
-                cepCustomer(cepfrete, frete, code, frete_coupon);
+                dataTotalCart(cepfrete, frete, code, frete_coupon);
 
                 setNewSubTotalPrice(totalPriceDesconto);
                 setTotalDesconto(formated);
@@ -1514,6 +1520,7 @@ export default function Payment() {
             console.error("Erro ao fazer a requisição:", error);
         }
     }
+
 
 
 
@@ -2118,10 +2125,42 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h3" titulo="Cupom" />
                         <br />
-                        {paymentCupom ?
-                            null
+                        {removeCupom ?
+                            <>
+                                <BoxCupomPayment>
+                                    <h5>VOCÊ APLICOU UM CUPOM DE DESCONTO!!!</h5>
+                                    <br />
+                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
+                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
+                                    <br />
+                                    <ButtonRemove
+                                        onClick={removeCupomPayment}
+                                    >
+                                        Retirar o cupom
+                                    </ButtonRemove>
+                                </BoxCupomPayment>
+                                
+                            </>
                             :
                             <>
+                                {cupomPayment ?
+                                    <BoxCupomPayment>
+                                    <h5>VOCÊ APLICOU UM CUPOM DE DESCONTO!!!</h5>
+                                    <br />
+                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
+                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
+                                    <br />
+                                    <ButtonRemove
+                                        onClick={removeCupomPayment}
+                                    >
+                                        Retirar o cupom
+                                    </ButtonRemove>
+                                </BoxCupomPayment>
+                                :
+                                    null
+                                }
+                                <br />
+                                <br />
                                 <Titulos
                                     tipo="h4"
                                     titulo="Tem cupom de desconto? Aplique o código abaixo e aproveite!!!"
@@ -2140,28 +2179,6 @@ export default function Payment() {
                                     </Button>
                                 </BoxCupom>
                             </>
-                        }
-
-                        {removeCupom ?
-                            <>
-                                <BoxCupomPayment>
-                                    <Titulos
-                                        tipo="h3"
-                                        titulo="VOCÊ APLICOU UM CUPOM DE DESCONTO!!!"
-                                    />
-                                    <br />
-                                    <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
-                                    <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
-                                    <br />
-                                    <Button
-                                        onClick={removeCupomPayment}
-                                    >
-                                        Retirar o cupom
-                                    </Button>
-                                </BoxCupomPayment>
-                            </>
-                            :
-                            null
                         }
                     </BoxPayment>
                 </ContainerFechamento>
