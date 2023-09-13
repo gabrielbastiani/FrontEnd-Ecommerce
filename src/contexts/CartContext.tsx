@@ -137,10 +137,6 @@ export function CartProviderProducts({ children }: Props) {
 
   async function saveProductCart(id: string, count: any, prod: any) {
 
-    console.log(prod)
-    console.log(id)
-    console.log(count)
-
     const apiClient = setupAPIClient();
     const findProduct = cartProducts.filter(item => item?.product_id === id);
     const mapFilter = findProduct.map(pro => pro?.product_id);

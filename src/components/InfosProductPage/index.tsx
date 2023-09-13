@@ -94,25 +94,24 @@ const InfosProductPage = ({
     };
 
     function handleAddItemCart(
-        product_id: any,
-        count: any,
-        id: any,
-        name: any,
-        image: any,
-        promotion: any,
-        relationattributeproducts: any,
-        stock: any,
+        product_id: string,
+        images: string,
+        name: string,
+        count: number,
+        promotion: number,
+        atribute: any,
+        stock: number,
         weight: any,
         width: any,
         height: any,
         depth: any
     ) {
         let prod = {
-            id: id,
+            id: product_id,
             name: name,
-            image: image,
+            image: images,
             promotion: promotion,
-            relationattributeproducts: relationattributeproducts,
+            relationattributeproducts: atribute,
             stock: stock,
             weight: weight,
             width: width,
