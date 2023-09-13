@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import Modal from 'react-modal';
 import {
     Variation,
-    AttributeNoProduct,
     BlockProductNames,
     BoxAddCart,
     BoxCart,
@@ -95,6 +94,7 @@ const InfosProductPage = ({
     };
 
     function handleAddItemCart(
+        product_id: any,
         count: any,
         id: any,
         name: any,
@@ -107,8 +107,20 @@ const InfosProductPage = ({
         height: any,
         depth: any
     ) {
+        let prod = {
+            id: id,
+            name: name,
+            image: image,
+            promotion: promotion,
+            relationattributeproducts: relationattributeproducts,
+            stock: stock,
+            weight: weight,
+            width: width,
+            height: height,
+            depth: depth
+        }
         /* @ts-ignore */
-        saveProductCart(count, id, name, image, promotion, relationattributeproducts, stock, weight, width, height, depth)
+        saveProductCart(product_id, count, prod)
         setCount(1);
     }
 

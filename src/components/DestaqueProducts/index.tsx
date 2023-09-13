@@ -58,20 +58,12 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
     };
 
     function handleAddItemCart(
+        prod: any,
         count: any,
-        id: any,
-        name: any,
-        image: any,
-        promotion: any,
-        relationattributeproducts: any,
-        stock: number,
-        weight: number,
-        width: number,
-        height: number,
-        depth: number
-        ) {
+        id: any
+    ) {
         /* @ts-ignore */
-        saveProductCart(count, id, name, image, promotion, relationattributeproducts, stock, weight, width, height, depth);
+        saveProductCart(count, id, prod);
         setCount(1);
     }
 
@@ -111,32 +103,32 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
             <SectionDestaqueProducts>
                 <Container>
                     <Carousel ref={carousel}>
-                        {productsDestaque.map((item, index) => {
+                        {productsDestaque.map((prod, index) => {
                             return (
                                 <Item key={index}>
-                                    <Link href={'/produto/' + item?.slug}>
+                                    <Link href={'/produto/' + prod?.slug}>
                                         <Images>
-                                            {item.photoproducts[0] ? (
-                                                <Image src={'http://localhost:3333/files/' + item.photoproducts[0].image} width={450} height={300} alt={item?.name} />
+                                            {prod.photoproducts[0] ? (
+                                                <Image src={'http://localhost:3333/files/' + prod.photoproducts[0].image} width={450} height={300} alt={prod?.name} />
                                             ) :
-                                                <Image src={semimagem} width={450} height={400} alt={item?.name} />
+                                                <Image src={semimagem} width={450} height={400} alt={prod?.name} />
                                             }
                                         </Images>
                                         <ImagesHover>
-                                            {item.photoproducts[1] ? (
-                                                <Image src={'http://localhost:3333/files/' + item.photoproducts[1].image} width={450} height={300} alt={item?.name} />
+                                            {prod.photoproducts[1] ? (
+                                                <Image src={'http://localhost:3333/files/' + prod.photoproducts[1].image} width={450} height={300} alt={prod?.name} />
                                             ) :
-                                                <Image src={semimagem} width={450} height={400} alt={item?.name} />
+                                                <Image src={semimagem} width={450} height={400} alt={prod?.name} />
                                             }
                                         </ImagesHover>
                                     </Link>
-                                    {item?.stock === 0 ? (
+                                    {prod?.stock === 0 ? (
                                         <Info>
-                                            <Link href={'/produto/' + item?.slug}>
-                                                <Name>{item?.name}</Name>
-                                                <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</OldPrice>
-                                                <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.promotion)}</Price>
-                                                <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price / 12)} com juros de Cartão de Crédito</TextCredit>
+                                            <Link href={'/produto/' + prod?.slug}>
+                                                <Name>{prod?.name}</Name>
+                                                <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price)}</OldPrice>
+                                                <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.promotion)}</Price>
+                                                <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price / 12)} com juros de Cartão de Crédito</TextCredit>
                                             </Link>
                                             <TextPromotion
                                                 style={{ color: 'red', fontSize: '17px', marginTop: '5px' }}
@@ -146,36 +138,28 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
                                         </Info>
                                     ) :
                                         <Info>
-                                            <Link href={'/produto/' + item?.slug}>
-                                                <Name>{item?.name}</Name>
-                                                <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price)}</OldPrice>
-                                                <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.promotion)}</Price>
-                                                <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(item?.price / 12)} com juros de Cartão de Crédito</TextCredit>
+                                            <Link href={'/produto/' + prod?.slug}>
+                                                <Name>{prod?.name}</Name>
+                                                <OldPrice>De {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price)}</OldPrice>
+                                                <Price>Por {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.promotion)}</Price>
+                                                <TextCredit>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.price / 12)} com juros de Cartão de Crédito</TextCredit>
                                             </Link>
                                             <BoxBuy>
                                                 <Quantidade>
-                                                    <Min onClick={() => handleDescrement(item?.id)}>-</Min>
-                                                    {activeTab === item?.id ?
+                                                    <Min onClick={() => handleDescrement(prod?.id)}>-</Min>
+                                                    {activeTab === prod?.id ?
                                                         <ValueQuant>{count}</ValueQuant>
                                                         :
-                                                        <ValueQuant>{item?.amount}</ValueQuant>
+                                                        <ValueQuant>{prod?.amount}</ValueQuant>
                                                     }
-                                                    <Max onClick={() => handleIncrement(item?.id)}>+</Max>
+                                                    <Max onClick={() => handleIncrement(prod?.id)}>+</Max>
                                                 </Quantidade>
                                                 <Add
                                                     /* @ts-ignore */
                                                     onClick={() => handleAddItemCart(
-                                                        item?.id,
-                                                        item?.photoproducts[0]?.image,
-                                                        item?.name,
-                                                        count,
-                                                        item?.promotion,
-                                                        item?.relationattributeproducts,
-                                                        item?.stock,
-                                                        item?.weight,
-                                                        item?.width,
-                                                        item?.height,
-                                                        item?.depth
+                                                        prod,
+                                                        prod?.id,
+                                                        count
                                                     )}
                                                 >
                                                     <AiOutlineShoppingCart

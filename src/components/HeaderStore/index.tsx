@@ -173,10 +173,10 @@ export const HeaderStore = () => {
         setCount(count + 1);
     };
 
-    const handleDescrement = (id: string) => {
+    const handleDescrement = (id: string, prod: any) => {
         setActiveTab(id);
         /* @ts-ignore */
-        removeItemCart(id)
+        removeItemCart(id, prod)
         if (count === 1) {
             return;
         }

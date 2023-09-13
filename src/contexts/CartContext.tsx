@@ -109,10 +109,7 @@ export function CartProviderProducts({ children }: Props) {
         setFretePaymentCoupon(data?.frete_coupon || 0);
         setCupomPayment(data?.coupon || "");
         setNewDataProducts(data?.new_value_products || []);
-        setNewSubTotalCart(data?.new_subTotal || 0)
-
-        console.log(data)
-
+        setNewSubTotalCart(data?.new_subTotal || 0);
       }
       loadCartTotal();
     } catch (error) {
@@ -134,7 +131,15 @@ export function CartProviderProducts({ children }: Props) {
     }
   }, [cartProducts]);
 
+
+
+  /*Gravar o produto*/
+
   async function saveProductCart(id: string, count: any, prod: any) {
+
+    console.log(prod)
+    console.log(id)
+    console.log(count)
 
     const apiClient = setupAPIClient();
     const findProduct = cartProducts.filter(item => item?.product_id === id);
@@ -146,7 +151,7 @@ export function CartProviderProducts({ children }: Props) {
       const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${id}`);
 
       let more_amount = data?.amount + count;
-      let total_more = more_amount * prod?.product?.promotion;
+      let total_more = prod?.product?.promotion ? more_amount * prod?.product?.promotion : more_amount * prod?.promotion;
 
       await apiClient.put(`/updateCart?store_cart_id=${storageId}&product_id=${id}`, {
         amount: more_amount,
@@ -154,9 +159,10 @@ export function CartProviderProducts({ children }: Props) {
       });
 
       let somaMore: number = somaProducts + count;
+      let total_cart: number = prod?.product?.promotion ? prod?.product?.promotion * count + totalCart : prod?.promotion * count + totalCart;
 
       await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
-        total: total_more,
+        total: total_cart,
         amount_products: somaMore
       });
 
@@ -178,11 +184,13 @@ export function CartProviderProducts({ children }: Props) {
 
       localStorage.setItem('@cartProducts', JSON.stringify(cartItems));
 
+      let cart_total_more: number = prod?.product?.promotion ? prod?.product?.promotion * count : prod?.promotion * count;
+
       await apiClient.post(`/createCart`, {
         store_cart_id: cartItems[0].store_cart_id,
         product_id: id,
         amount: count,
-        total: prod?.product?.promotion * count,
+        total: cart_total_more,
         customer_id: customer ? customer?.id : null
       });
 
@@ -190,7 +198,7 @@ export function CartProviderProducts({ children }: Props) {
 
       await apiClient.post(`/createTotalCart`, {
         store_cart_id: cartItems[0].store_cart_id,
-        total: prod?.product?.promotion * count,
+        total: cart_total_more,
         customer_id: customer ? customer?.id : null,
         amount_products: firstAmount
       });
@@ -210,15 +218,17 @@ export function CartProviderProducts({ children }: Props) {
 
     localStorage.setItem('@cartProducts', JSON.stringify(cartItems));
 
+    let create_total_cart: number = prod?.product?.promotion ? prod?.product?.promotion * count : prod?.promotion * count;
+
     await apiClient.post(`/createCart`, {
       store_cart_id: cartItems[0].store_cart_id,
       product_id: id,
       amount: count,
-      total: prod?.product?.promotion * count,
+      total: create_total_cart,
       customer_id: customer ? customer?.id : null
     });
 
-    const cart_total = prod?.product?.promotion * count + totalCart;
+    const cart_total: number = prod?.product?.promotion ? prod?.product?.promotion * count + totalCart : prod?.promotion * count + totalCart
     let sumadd: number = productsCart[0]?.amount + count;
 
     const storageId = String(cartProducts[0]?.store_cart_id);
@@ -234,6 +244,10 @@ export function CartProviderProducts({ children }: Props) {
     return;
 
   }
+
+
+
+  /*Gravar MAIS quantidade(s) do produto*/
 
   async function addMoreItemCart(product_id: string) {
 
@@ -271,6 +285,10 @@ export function CartProviderProducts({ children }: Props) {
     }
 
   }
+
+
+
+  /*Remover MENOS quantidade(s) do produto*/
 
   async function removeItemCart(product_id: string, prod: any) {
 
@@ -331,6 +349,10 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
+
+
+  /*Remover o produto*/
+
   async function removeProductCart(product_id: string) {
 
     const apiClient = setupAPIClient();
@@ -363,6 +385,10 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
+
+
+  /*Limpar todo carrinho*/
+
   async function clearAllCart() {
 
     const apiClient = setupAPIClient();
@@ -377,6 +403,10 @@ export function CartProviderProducts({ children }: Props) {
     }, 1500);
 
   }
+
+
+
+  /*Dados gerais do carrinho*/
 
   async function dataTotalCart(cepfrete: string, frete: number, code: string, frete_coupon: number, subTot: number, newvalue: any) {
 

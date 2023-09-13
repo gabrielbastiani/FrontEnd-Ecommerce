@@ -70,7 +70,7 @@ export default function Carrinho() {
 
     const { isAuthenticated, customer } = useContext(AuthContext);
     /* @ts-ignore */
-    const { newSubTotalCart, newDataProducts, cupomPayment, dataTotalCart, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
+    const { cupomPayment, dataTotalCart, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
 
     const [desconto, setDesconto] = useState("");
     const [totalDesconto, setTotalDesconto] = useState("");
