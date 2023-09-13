@@ -60,6 +60,8 @@ import styled from "styled-components";
 import chevronDown from "../../assets/chevron-down.svg";
 import { CartContext } from '../../contexts/CartContext';
 import { BsTrash } from 'react-icons/bs';
+import { Button } from '../ui/Button';
+import { BoxClear } from '../../pages/carrinho/styles';
 
 
 const ItemWithChevron = ({ header, ...rest }) => (
@@ -135,7 +137,7 @@ export const HeaderStore = () => {
 
     const { customer } = useContext(AuthContext);
     /* @ts-ignore */
-    const { totalCart, productsCart, cartProducts, removeItemCart, addMoreItemCart, removeProductCart } = useContext(CartContext);
+    const { clearAllCart, totalCart, productsCart, cartProducts, removeItemCart, addMoreItemCart, removeProductCart } = useContext(CartContext);
 
     const [logo, setLogo] = useState('');
     const [nameLoja, setNameLoja] = useState('');
@@ -469,49 +471,65 @@ export const HeaderStore = () => {
                                         </Link>
                                     </CartButton>
                                 </BoxCart>
-                                <DropDownContentCart>
-                                    {productsCart.map((prod, index) => {
-                                        return (
-                                            <BoxProductCart key={index}>
-                                                <ImageBoxProduct>
-                                                    <Image src={"http://localhost:3333/files/" + prod?.product?.photoproducts[0]?.image} width={60} height={60} alt={prod?.product?.name} />
-                                                </ImageBoxProduct>
+                                {productsCart.length < 1 ?
+                                    null
+                                    :
+                                    <DropDownContentCart>
+                                        {productsCart.map((prod, index) => {
+                                            return (
+                                                <BoxProductCart key={index}>
+                                                    <ImageBoxProduct>
+                                                        <Image src={"http://localhost:3333/files/" + prod?.product?.photoproducts[0]?.image} width={60} height={60} alt={prod?.product?.name} />
+                                                    </ImageBoxProduct>
 
-                                                <ContainerDataProducts>
-                                                    <ListItemsCart>{prod?.product?.name}</ListItemsCart>
-                                                    <BoxPriceProduct>
-                                                        <PriceText>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion)}</PriceText>
-                                                        <ContainerItems>
-                                                            <BoxQuantity>
-                                                                <MinText onClick={() => handleDescrement(prod?.product_id, prod)}>-</MinText>
-                                                                {activeTab === prod?.product_id ?
-                                                                    <Quantity>{count}</Quantity>
-                                                                    :
-                                                                    <Quantity>{prod?.amount}</Quantity>
-                                                                }
-                                                                <MaxText onClick={() => handleIncrement(prod?.product_id)}>+</MaxText>
-                                                            </BoxQuantity>
-                                                            <BoxDeleteProduct
-                                                                /* @ts-ignore */
-                                                                onClick={() => removeProductCart(prod?.product_id)}
-                                                            >
-                                                                <TextDelete>Excluir</TextDelete>
-                                                                <BsTrash size={20} />
-                                                            </BoxDeleteProduct>
-                                                        </ContainerItems>
-                                                    </BoxPriceProduct>
-                                                </ContainerDataProducts>
-                                            </BoxProductCart>
-                                        )
-                                    })}
-                                    <BoxTotalCart>
-                                        <TotalPriceCart>TOTAL</TotalPriceCart>
-                                        <TotalPriceCart>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</TotalPriceCart>
-                                    </BoxTotalCart>
-                                    <Link href='/carrinho' target="_blank">
-                                        <ButtonAtentimento>IR PARA O CARRINHO</ButtonAtentimento>
-                                    </Link>
-                                </DropDownContentCart>
+                                                    <ContainerDataProducts>
+                                                        <ListItemsCart>{prod?.product?.name}</ListItemsCart>
+                                                        <BoxPriceProduct>
+                                                            <PriceText>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion)}</PriceText>
+                                                            <ContainerItems>
+                                                                <BoxQuantity>
+                                                                    <MinText onClick={() => handleDescrement(prod?.product_id, prod)}>-</MinText>
+                                                                    {activeTab === prod?.product_id ?
+                                                                        <Quantity>{count}</Quantity>
+                                                                        :
+                                                                        <Quantity>{prod?.amount}</Quantity>
+                                                                    }
+                                                                    <MaxText onClick={() => handleIncrement(prod?.product_id)}>+</MaxText>
+                                                                </BoxQuantity>
+                                                                <BoxDeleteProduct
+                                                                    /* @ts-ignore */
+                                                                    onClick={() => removeProductCart(prod?.product_id)}
+                                                                >
+                                                                    <TextDelete>Excluir</TextDelete>
+                                                                    <BsTrash size={20} />
+                                                                </BoxDeleteProduct>
+                                                            </ContainerItems>
+                                                        </BoxPriceProduct>
+                                                    </ContainerDataProducts>
+                                                </BoxProductCart>
+                                            )
+                                        })}
+                                        <BoxClear>
+                                            <Button
+                                                style={{ padding: '6.5px', fontSize: '11px' }}
+                                                onClick={clearAllCart}
+                                            >
+                                                LIMPAR CARRINHO
+                                            </Button>
+                                        </BoxClear>
+                                        <br />
+                                        <br />
+                                        <hr />
+                                        <br />
+                                        <BoxTotalCart>
+                                            <TotalPriceCart>TOTAL</TotalPriceCart>
+                                            <TotalPriceCart>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart)}</TotalPriceCart>
+                                        </BoxTotalCart>
+                                        <Link href='/carrinho' target="_blank">
+                                            <ButtonAtentimento>IR PARA O CARRINHO</ButtonAtentimento>
+                                        </Link>
+                                    </DropDownContentCart>
+                                }
                             </DropDownLiCart>
                         </StyledUl>
                     </BlockItems>
@@ -527,7 +545,6 @@ export const HeaderStore = () => {
                                             {item?.categoryName}
                                         </StyledA>
                                     </LinkRoute>
-
                                     {categories.length >= 1 && (
                                         <DropDownContent>
                                             {categories.map((categ, index) => {

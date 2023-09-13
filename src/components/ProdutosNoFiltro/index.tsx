@@ -57,20 +57,12 @@ const ProdutosNoFiltro = ({ products, currentPage, setCurrentPage, pages }: Prod
     };
 
     function handleAddItemCart(
+        prod: any,
         count: any,
-        id: any,
-        name: any,
-        image: any,
-        promotion: any,
-        relationattributeproducts: any,
-        stock: number,
-        weight: number,
-        width: number,
-        height: number,
-        depth: number
+        id: any
     ) {
         /* @ts-ignore */
-        saveProductCart(count, id, name, image, promotion, relationattributeproducts, stock, weight, width, height, depth);
+        saveProductCart(count, id, prod);
         setCount(1);
     }
 
@@ -133,17 +125,9 @@ const ProdutosNoFiltro = ({ products, currentPage, setCurrentPage, pages }: Prod
                                         <Add
                                             /* @ts-ignore */
                                             onClick={() => handleAddItemCart(
+                                                prod,
                                                 prod?.id,
-                                                prod?.photoproducts[0]?.image,
-                                                prod?.name,
-                                                count,
-                                                prod?.promotion,
-                                                prod?.relationattributeproducts,
-                                                prod?.stock,
-                                                prod?.weight,
-                                                prod?.width,
-                                                prod?.height,
-                                                prod?.depth
+                                                count
                                             )}
                                         >
                                             <AiOutlineShoppingCart
