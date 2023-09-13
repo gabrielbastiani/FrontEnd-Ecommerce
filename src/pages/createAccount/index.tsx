@@ -70,7 +70,9 @@ export default function createAccount() {
     }
 
     const [addressees, setAddressees] = useState('');
+    const [address, setAddress] = useState('');
     const [numeros, setNumeros] = useState('');
+    const [bairro, setBairro] = useState('');
     const [referencias, setReferencias] = useState('');
     const [complement, setComplement] = useState('');
 
@@ -166,11 +168,11 @@ export default function createAccount() {
                 dateOfBirth: nascimento,
                 gender: generoSelected,
                 addressee: addressees,
-                address: searchAddress?.logradouro,
+                address: searchAddress?.logradouro ? searchAddress?.logradouro : address,
                 number: numeros,
                 complement: complement,
                 reference: referencias,
-                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro",
+                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : bairro,
                 cep: searchAddress?.cep,
                 city: searchAddress?.localidade,
                 state: searchAddress?.uf,
@@ -243,11 +245,11 @@ export default function createAccount() {
                 phone: phones,
                 stateRegistration: inscricao,
                 addressee: addressees,
-                address: searchAddress?.logradouro,
+                address: searchAddress?.logradouro ? searchAddress?.logradouro : address,
                 number: numeros,
                 complement: complement,
                 reference: referencias,
-                neighborhood: searchAddress?.bairro,
+                neighborhood: searchAddress?.bairro ? searchAddress?.bairro : bairro,
                 cep: searchAddress?.cep,
                 city: searchAddress?.localidade,
                 state: searchAddress?.uf,
@@ -488,10 +490,22 @@ export default function createAccount() {
                                                 />
                                             </BlockInputs>
 
-                                            <BlockInputs>
-                                                <EtiquetaInput>Endereço</EtiquetaInput>
-                                                <DataAddress>{searchAddress?.logradouro}</DataAddress>
-                                            </BlockInputs>
+                                            {searchAddress?.logradouro ?
+                                                <BlockInputs>
+                                                    <EtiquetaInput>Endereço</EtiquetaInput>
+                                                    <DataAddress>{searchAddress?.logradouro}</DataAddress>
+                                                </BlockInputs>
+                                                :
+                                                <BlockInputs>
+                                                    <EtiquetaInput>Endereço</EtiquetaInput>
+                                                    <Input
+                                                        type="text"
+                                                        placeholder="Endereço"
+                                                        value={address}
+                                                        onChange={(e) => setAddress(e.target.value)}
+                                                    />
+                                                </BlockInputs>
+                                            }
 
                                             <BlockInputs>
                                                 <EtiquetaInput>Número</EtiquetaInput>
@@ -523,10 +537,22 @@ export default function createAccount() {
                                                 />
                                             </BlockInputs>
 
-                                            <BlockInputs>
-                                                <EtiquetaInput>Bairro</EtiquetaInput>
-                                                <DataAddress>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</DataAddress>
-                                            </BlockInputs>
+                                            {searchAddress?.logradouro ?
+                                                <BlockInputs>
+                                                    <EtiquetaInput>Bairro</EtiquetaInput>
+                                                    <DataAddress>{searchAddress?.bairro}</DataAddress>
+                                                </BlockInputs>
+                                                :
+                                                <BlockInputs>
+                                                    <EtiquetaInput>Bairro</EtiquetaInput>
+                                                    <Input
+                                                        type="text"
+                                                        placeholder="Bairro"
+                                                        value={bairro}
+                                                        onChange={(e) => setBairro(e.target.value)}
+                                                    />
+                                                </BlockInputs>
+                                            }
 
                                             <BlockInputs>
                                                 <EtiquetaInput>Cidade</EtiquetaInput>
@@ -733,10 +759,22 @@ export default function createAccount() {
                                                 />
                                             </BlockInputs>
 
-                                            <BlockInputs>
-                                                <EtiquetaInput>Endereço</EtiquetaInput>
-                                                <DataAddress>{searchAddress?.logradouro}</DataAddress>
-                                            </BlockInputs>
+                                            {searchAddress?.logradouro ?
+                                                <BlockInputs>
+                                                    <EtiquetaInput>Endereço</EtiquetaInput>
+                                                    <DataAddress>{searchAddress?.logradouro}</DataAddress>
+                                                </BlockInputs>
+                                                :
+                                                <BlockInputs>
+                                                    <EtiquetaInput>Endereço</EtiquetaInput>
+                                                    <Input
+                                                        type="text"
+                                                        placeholder="Endereço"
+                                                        value={address}
+                                                        onChange={(e) => setAddress(e.target.value)}
+                                                    />
+                                                </BlockInputs>
+                                            }
 
                                             <BlockInputs>
                                                 <EtiquetaInput>Número</EtiquetaInput>
@@ -768,10 +806,22 @@ export default function createAccount() {
                                                 />
                                             </BlockInputs>
 
-                                            <BlockInputs>
-                                                <EtiquetaInput>Bairro</EtiquetaInput>
-                                                <DataAddress>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</DataAddress>
-                                            </BlockInputs>
+                                            {searchAddress?.logradouro ?
+                                                <BlockInputs>
+                                                    <EtiquetaInput>Bairro</EtiquetaInput>
+                                                    <DataAddress>{searchAddress?.bairro}</DataAddress>
+                                                </BlockInputs>
+                                                :
+                                                <BlockInputs>
+                                                    <EtiquetaInput>Bairro</EtiquetaInput>
+                                                    <Input
+                                                        type="text"
+                                                        placeholder="Bairro"
+                                                        value={bairro}
+                                                        onChange={(e) => setBairro(e.target.value)}
+                                                    />
+                                                </BlockInputs>
+                                            }
 
                                             <BlockInputs>
                                                 <EtiquetaInput>Cidade</EtiquetaInput>

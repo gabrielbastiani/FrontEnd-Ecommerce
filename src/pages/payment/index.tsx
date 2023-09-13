@@ -1112,7 +1112,7 @@ export default function Payment() {
                     const subTot = totalPriceDesconto;
                     const newvalue = newCart;
                     /* @ts-ignore */
-                    dataTotalCart(cepfrete, frete, code, frete_coupon);
+                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
                     setTotalDesconto(formated);
                     setNewSubTotalPrice(subTot);
@@ -2309,11 +2309,7 @@ export default function Payment() {
                                 </BoxPricesFinal>
                                 <BoxPricesFinal>
                                     <SubTotal>FRETE</SubTotal>
-                                    {fretePaymentCoupon === 0 ?
-                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon)}</ValuesMore>
-                                        :
-                                        <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon === fretePayment ? fretePaymentCoupon : fretePayment)}</ValuesMore>
-                                    }
+                                    <ValuesMore>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(fretePaymentCoupon === fretePayment ? fretePayment : fretePaymentCoupon)}</ValuesMore>
                                 </BoxPricesFinal>
                                 <BoxPricesFinal>
                                     <SubTotal></SubTotal>
