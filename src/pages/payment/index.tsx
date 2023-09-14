@@ -74,6 +74,7 @@ import { InputUpdate } from "../../components/ui/InputUpdate";
 import SelectUpdate from "../../components/ui/SelectUpdate";
 import {
     AtributeProduct,
+    BoxFinalCart,
     BoxPricesFinal,
     BoxPricesTotalProduct,
     More,
@@ -2246,6 +2247,7 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h2" titulo="Envio" />
                         <br />
+                        <br />
                         <Image src={logoCorreios} height={80} width={300} alt="envio-correios" />
                         <br />
                         <br />
@@ -2270,6 +2272,9 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h2" titulo="Formas de Pagamento" />
                         <br />
+
+                        
+
                     </BoxPayment>
                     <BoxPayment>
                         <Titulos tipo="h2" titulo="Resumo do Pedido" />
@@ -2373,6 +2378,14 @@ export default function Payment() {
                                         {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}
                                     </Total>
                                 </BoxPricesFinal>
+                                <BoxFinalCart>
+                                    <Button
+                                        style={{ margin: '30px', width: '80%' }}
+                                        onClick={() => alert("Clicou")}
+                                    >
+                                        FINALIZAR COMPRA
+                                    </Button>
+                                </BoxFinalCart>
                             </>
                             :
                             <>
@@ -2411,6 +2424,14 @@ export default function Payment() {
                                                 {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedCupom)}
                                             </Total>
                                         </BoxPricesFinal>
+                                        <BoxFinalCart>
+                                            <Button
+                                                style={{ margin: '30px', width: '80%' }}
+                                                onClick={() => alert("Clicou")}
+                                            >
+                                                FINALIZAR COMPRA
+                                            </Button>
+                                        </BoxFinalCart>
                                     </>
                                     :
                                     <>
@@ -2457,6 +2478,14 @@ export default function Payment() {
                                                 <Total style={{ fontSize: '22px', color: 'red' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + freteCupom)}</Total>
                                             }
                                         </BoxPricesFinal>
+                                        <BoxFinalCart>
+                                            <Button
+                                                style={{ margin: '30px', width: '80%' }}
+                                                onClick={() => alert("Clicou")}
+                                            >
+                                                FINALIZAR COMPRA
+                                            </Button>
+                                        </BoxFinalCart>
                                     </>
                                 }
                             </>
