@@ -209,3 +209,24 @@ export const DeliverySpan = styled.span`
 export const Days = styled.strong`
   color: ${props => props?.theme?.colors?.warning};
 `
+
+export const BoxIconsPayment = styled.div`
+  display: flex;
+  justify-content: space-around;
+`
+
+export const PayIcon = styled.button`
+  background: none;
+  border: none;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  font-size: 17px;
+  font-weight: 700;
+  padding: 10px;
+  border-radius: 20%;
+
+  img {
+    cursor: pointer;
+  }
+`

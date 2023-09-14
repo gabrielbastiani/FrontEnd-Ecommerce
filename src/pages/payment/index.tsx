@@ -10,6 +10,9 @@ import { HeaderCart } from "../../components/HeaderCart";
 import Head from "next/head";
 import FooterAccount from "../../components/FooterAccount";
 import logoCorreios from "../../assets/correios-logo.png";
+import boleto from "../../assets/pagamento-boleto.png";
+import cartao from "../../assets/pagamento-cartao.png";
+import pix from "../../assets/pagamento-pix.png";
 import {
     AddressTextIcon,
     AmountProduct,
@@ -23,6 +26,7 @@ import {
     BoxDataProductPayment,
     BoxDelivery,
     BoxDeliverySelected,
+    BoxIconsPayment,
     BoxInputs,
     BoxPayment,
     BoxPricesPayment,
@@ -39,6 +43,7 @@ import {
     EditDelivery,
     ImageProductPayment,
     InputDelivery,
+    PayIcon,
     SectionPayment,
     TextCupom,
     TextCupomStrong,
@@ -170,6 +175,33 @@ export default function Payment() {
     const [freteCupom, setFreteCupom] = useState(Number);
     const [newSubTotalPrice, setNewSubTotalPrice] = useState(Number);
     const [codePromotion, setCodePromotion] = useState("");
+
+    const [activePayment, setActivePayment] = useState("");
+    const [colorPay, setColorPay] = useState("");
+
+    let typesPayment = [
+        {
+            id: "1",
+            icon_pay: boleto,
+            pay_name: "Boleto"
+        },
+        {
+            id: "2",
+            icon_pay: cartao,
+            pay_name: "Cartão de Crédito"
+        },
+        {
+            id: "3",
+            icon_pay: pix,
+            pay_name: "PIX"
+        }
+    ];
+
+    const handleChosePayment = (id: string) => {
+        setActivePayment(id);
+        setColorPay(id);
+        loadMercadoPago();
+    };
 
     function isEmail(emails: string) {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(emails)
@@ -1314,6 +1346,10 @@ export default function Payment() {
 
     Modal.setAppElement('#__next');
 
+
+
+    /* CARTÃO DE CRÉDITO */
+
     useEffect(() => {
         const initializeMercadoPago = async () => {
             await loadMercadoPago();
@@ -1432,6 +1468,10 @@ export default function Payment() {
 
     }, []);
 
+
+
+    /* BOLETO BANCÁRIO */
+
     useEffect(() => {
 
         const initializeBoleto = async () => {
@@ -1477,6 +1517,10 @@ export default function Payment() {
         initializeBoleto();
 
     }, []);
+
+
+
+    /* PIX */
 
     useEffect(() => {
 
@@ -2272,9 +2316,193 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h2" titulo="Formas de Pagamento" />
                         <br />
+                        <br />
+                        <BoxIconsPayment>
+                            {typesPayment.map((item, index) => {
+                                return (
+                                    <>
+                                        <PayIcon
+                                            key={index}
+                                            style={{
+                                                backgroundColor: colorPay === item.id ? "orange" : "white"
+                                            }}
+                                            onClick={() => handleChosePayment(item.id)}
+                                        >
+                                            <br />
+                                            {item.pay_name}
+                                            <Image src={item.icon_pay} height={65} width={85} alt="pagar" />
+                                        </PayIcon>
+                                    </>
+                                )
+                            })}
+                        </BoxIconsPayment>
+                        <br />
+                        <br />
+                        {activePayment === "1" ?
+                            <div>
+                                <form id="form-checkoutBoleto" onSubmit={handleRegisterBoleto}>
+                                    <div>
+                                        <div>
+                                            <label htmlFor="payerFirstName">Nome</label>
+                                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="payerLastName">Sobrenome</label>
+                                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="email">E-mail</label>
+                                            <input id="form-checkout__email" name="email" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="identificationType">Tipo de documento</label>
+                                            <select id="form-checkout__identificationTypeBoleto" name="identificationType"></select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="identificationNumber">Número do documento</label>
+                                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
+                                        </div>
+                                    </div>
 
-                        
+                                    <div>
+                                        <div>
+                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value="100" />
+                                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
+                                            <br />
+                                            <BoxFinalCart>
+                                                <Button
+                                                    style={{ margin: '30px', width: '80%' }}
+                                                    id="form-checkoutBoleto"
+                                                    type="submit"
+                                                >
+                                                    FINALIZAR COMPRA
+                                                </Button>
+                                            </BoxFinalCart>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            :
+                            null
+                        }
 
+                        {activePayment === "2" ?
+                            <div>
+                                <form id="form-checkout">
+
+                                    <div
+                                        id="form-checkout__cardNumber"
+                                        className="container mpFormInput"
+                                    ></div>
+
+                                    <div
+                                        id="form-checkout__expirationDate"
+                                        className="container mpFormInput"
+                                    ></div>
+
+                                    <div
+                                        id="form-checkout__securityCode"
+                                        className="container mpFormInput"
+                                    ></div>
+
+                                    <input
+                                        type="text"
+                                        id="form-checkout__cardholderName"
+                                        className="cardHolderName mpFormInput"
+                                    />
+
+                                    <select
+                                        id="form-checkout__issuer"
+                                        className="container mpFormInput"
+                                    ></select>
+
+                                    <select
+                                        id="form-checkout__installments"
+                                        className="container mpFormInput"
+                                    ></select>
+
+                                    <select
+                                        id="form-checkout__identificationType"
+                                        className="container mpFormInput"
+                                    ></select>
+
+                                    <input
+                                        type="text"
+                                        id="form-checkout__identificationNumber"
+                                        className="container mpFormInput"
+                                    />
+
+                                    <input
+                                        type="email"
+                                        id="form-checkout__cardholderEmail"
+                                        className="container mpFormInput"
+                                    />
+
+                                    <BoxFinalCart>
+                                        <Button
+                                            style={{ margin: '30px', width: '80%' }}
+                                            type="submit"
+                                            id="form-checkout__submit"
+                                            className="container"
+                                        >
+                                            FINALIZAR COMPRA
+                                        </Button>
+                                    </BoxFinalCart>
+                                    <progress value="0" className="progress-bar">
+                                        Carregando...
+                                    </progress>
+                                </form>
+                            </div>
+                            :
+                            null
+                        }
+
+                        {activePayment === "3" ?
+                            <div>
+                                <form id="form-checkoutPix" onSubmit={handleRegisterPix}>
+                                    <div>
+                                        <div>
+                                            <label htmlFor="payerFirstName">Nome</label>
+                                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="payerLastName">Sobrenome</label>
+                                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="email">E-mail</label>
+                                            <input id="form-checkout__email" name="email" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="identificationType">Tipo de documento</label>
+                                            <select id="form-checkout__identificationTypePix" name="identificationType"></select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="identificationNumber">Número do documento</label>
+                                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div>
+                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value="100" />
+                                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
+                                            <br />
+                                            <BoxFinalCart>
+                                                <Button
+                                                    style={{ margin: '30px', width: '80%' }}
+                                                    id="form-checkoutPix" type="submit"
+                                                >
+                                                    FINALIZAR COMPRA
+                                                </Button>
+                                            </BoxFinalCart>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            :
+                            null
+                        }
                     </BoxPayment>
                     <BoxPayment>
                         <Titulos tipo="h2" titulo="Resumo do Pedido" />
@@ -2378,14 +2606,6 @@ export default function Payment() {
                                         {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}
                                     </Total>
                                 </BoxPricesFinal>
-                                <BoxFinalCart>
-                                    <Button
-                                        style={{ margin: '30px', width: '80%' }}
-                                        onClick={() => alert("Clicou")}
-                                    >
-                                        FINALIZAR COMPRA
-                                    </Button>
-                                </BoxFinalCart>
                             </>
                             :
                             <>
@@ -2424,14 +2644,6 @@ export default function Payment() {
                                                 {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedCupom)}
                                             </Total>
                                         </BoxPricesFinal>
-                                        <BoxFinalCart>
-                                            <Button
-                                                style={{ margin: '30px', width: '80%' }}
-                                                onClick={() => alert("Clicou")}
-                                            >
-                                                FINALIZAR COMPRA
-                                            </Button>
-                                        </BoxFinalCart>
                                     </>
                                     :
                                     <>
@@ -2478,14 +2690,6 @@ export default function Payment() {
                                                 <Total style={{ fontSize: '22px', color: 'red' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + freteCupom)}</Total>
                                             }
                                         </BoxPricesFinal>
-                                        <BoxFinalCart>
-                                            <Button
-                                                style={{ margin: '30px', width: '80%' }}
-                                                onClick={() => alert("Clicou")}
-                                            >
-                                                FINALIZAR COMPRA
-                                            </Button>
-                                        </BoxFinalCart>
                                     </>
                                 }
                             </>
@@ -2494,155 +2698,6 @@ export default function Payment() {
                 </ContainerFechamento>
             </SectionPayment>
 
-
-            <div>
-                <form id="form-checkout">
-
-                    <div
-                        id="form-checkout__cardNumber"
-                        className="container mpFormInput"
-                    ></div>
-
-                    <div
-                        id="form-checkout__expirationDate"
-                        className="container mpFormInput"
-                    ></div>
-
-                    <div
-                        id="form-checkout__securityCode"
-                        className="container mpFormInput"
-                    ></div>
-
-                    <input
-                        type="text"
-                        id="form-checkout__cardholderName"
-                        className="cardHolderName mpFormInput"
-                    />
-
-                    <select
-                        id="form-checkout__issuer"
-                        className="container mpFormInput"
-                    ></select>
-
-                    <select
-                        id="form-checkout__installments"
-                        className="container mpFormInput"
-                    ></select>
-
-                    <select
-                        id="form-checkout__identificationType"
-                        className="container mpFormInput"
-                    ></select>
-
-                    <input
-                        type="text"
-                        id="form-checkout__identificationNumber"
-                        className="container mpFormInput"
-                    />
-
-                    <input
-                        type="email"
-                        id="form-checkout__cardholderEmail"
-                        className="container mpFormInput"
-                    />
-
-                    <button
-                        type="submit"
-                        id="form-checkout__submit"
-                        className="container"
-                    >
-                        Pagar
-                    </button>
-                    <progress value="0" className="progress-bar">
-                        Carregando...
-                    </progress>
-                </form>
-            </div>
-
-            <br />
-
-            <h2>Boleto Bancario</h2>
-
-            <div>
-
-                <form id="form-checkoutBoleto" onSubmit={handleRegisterBoleto}>
-                    <div>
-                        <div>
-                            <label htmlFor="payerFirstName">Nome</label>
-                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
-                        </div>
-                        <div>
-                            <label htmlFor="payerLastName">Sobrenome</label>
-                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
-                        </div>
-                        <div>
-                            <label htmlFor="email">E-mail</label>
-                            <input id="form-checkout__email" name="email" type="text" />
-                        </div>
-                        <div>
-                            <label htmlFor="identificationType">Tipo de documento</label>
-                            <select id="form-checkout__identificationTypeBoleto" name="identificationType"></select>
-                        </div>
-                        <div>
-                            <label htmlFor="identificationNumber">Número do documento</label>
-                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
-                        </div>
-                    </div>
-
-                    <div>
-                        <div>
-                            <input type="hidden" name="transactionAmount" id="transactionAmount" value="100" />
-                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
-                            <br />
-                            <button id="form-checkoutBoleto" type="submit">Pagar</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-
-            <h2>PIX</h2>
-
-            <div>
-
-                <form id="form-checkoutPix" onSubmit={handleRegisterPix}>
-                    <div>
-                        <div>
-                            <label htmlFor="payerFirstName">Nome</label>
-                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
-                        </div>
-                        <div>
-                            <label htmlFor="payerLastName">Sobrenome</label>
-                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
-                        </div>
-                        <div>
-                            <label htmlFor="email">E-mail</label>
-                            <input id="form-checkout__email" name="email" type="text" />
-                        </div>
-                        <div>
-                            <label htmlFor="identificationType">Tipo de documento</label>
-                            <select id="form-checkout__identificationTypePix" name="identificationType"></select>
-                        </div>
-                        <div>
-                            <label htmlFor="identificationNumber">Número do documento</label>
-                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
-                        </div>
-                    </div>
-
-                    <div>
-                        <div>
-                            <input type="hidden" name="transactionAmount" id="transactionAmount" value="100" />
-                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
-                            <br />
-                            <button id="form-checkoutPix" type="submit">Pagar</button>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-
-            <br />
-            <br />
             <FooterAccount />
 
             {modalVisible && (
