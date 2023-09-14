@@ -33,6 +33,8 @@ import {
     ButtonsData,
     ContainerFechamento,
     Datas,
+    Days,
+    DeliverySpan,
     DestinyName,
     EditDelivery,
     ImageProductPayment,
@@ -101,7 +103,7 @@ type CuoponProps = {
 }
 
 export default function Payment() {
-
+    /* @ts-ignore */
     const { newSubTotalCart, newDataProducts, cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
@@ -109,6 +111,7 @@ export default function Payment() {
     const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
     const [searchAddress, setSearchAddress] = useState<CepProps>();
     const [searchAddressEdit, setSearchAddressEdit] = useState<CepProps>();
+    const [daysDelivery, setDaysDelivery] = useState('');
 
     const [nameCompletes, setNameCompletes] = useState('');
     const [cpfs, setCpfs] = useState('');
@@ -476,6 +479,29 @@ export default function Payment() {
         totalAltura += dadosFrete[i].altura;
         totalLargura += dadosFrete[i].largura;
     }
+
+    useEffect(() => {
+        async function deliveryDays() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.post('/freteCalculo', {
+                    nCdServico: "04162",
+                    sCepDestino: String(cepSelected),
+                    nVlPeso: totalPeso > 30 ? 28 : totalPeso,
+                    nCdFormato: 1,
+                    nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
+                    nVlAltura: totalAltura > 37 ? 36 : totalAltura,
+                    nVlLargura: totalLargura > 82 ? 81 : totalLargura
+                });
+
+                setDaysDelivery(data[0]?.PrazoEntrega);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        deliveryDays()
+    }, [cepSelected]);
 
     async function updateCurrentDelivery(customer_id: string, id: string, cep: string) {
 
@@ -1592,7 +1618,7 @@ export default function Payment() {
                     <BoxPayment>
                         {editCustomer ?
                             <>
-                                <Titulos tipo="h3" titulo="Editar Informações Pessoais" />
+                                <Titulos tipo="h2" titulo="Editar Informações Pessoais" />
                                 <br />
                                 <BoxData>
                                     <BsFillPersonFill color="black" size={20} />
@@ -1775,7 +1801,7 @@ export default function Payment() {
                             </>
                             :
                             <>
-                                <Titulos tipo="h3" titulo="Informações Pessoais" />
+                                <Titulos tipo="h2" titulo="Informações Pessoais" />
                                 <br />
                                 <BoxTitle>Olá {nameCompletes}</BoxTitle>
                                 <BoxData>
@@ -1839,7 +1865,7 @@ export default function Payment() {
                     </BoxPayment>
 
                     <BoxPayment>
-                        <Titulos tipo="h3" titulo="Endereço de Entrega" />
+                        <Titulos tipo="h2" titulo="Endereço de Entrega" />
                         <br />
                         {newDelivery ?
                             <BoxDelivery>
@@ -2177,7 +2203,7 @@ export default function Payment() {
                     </BoxPayment>
 
                     <BoxPayment>
-                        <Titulos tipo="h3" titulo="Cupom" />
+                        <Titulos tipo="h2" titulo="Cupom" />
                         <br />
                         {cupomPayment ?
                             <BoxCupomPayment>
@@ -2218,20 +2244,39 @@ export default function Payment() {
 
                 <ContainerFechamento>
                     <BoxPayment>
-                        <Titulos tipo="h3" titulo="Envio" />
+                        <Titulos tipo="h2" titulo="Envio" />
                         <br />
                         <Image src={logoCorreios} height={80} width={300} alt="envio-correios" />
+                        <br />
+                        <br />
+                        <br />
+                        <BoxPricesFinal>
+                            <Total
+                                style={{ fontSize: '22px' }}
+                            >
+                                ENTREGA EM:
+                            </Total>
+                            <Total
+                                style={{ fontSize: '20px' }}
+                            >
+                                {daysDelivery === "0" ?
+                                    <DeliverySpan>Estimativa de <Days>10</Days> dia(s) úteis</DeliverySpan>
+                                    :
+                                    <DeliverySpan><Days>{daysDelivery}</Days> Dia(s) úteis</DeliverySpan>
+                                }
+                            </Total>
+                        </BoxPricesFinal>
                     </BoxPayment>
                     <BoxPayment>
-                        <Titulos tipo="h3" titulo="Formas de Pagamento" />
+                        <Titulos tipo="h2" titulo="Formas de Pagamento" />
                         <br />
                     </BoxPayment>
                     <BoxPayment>
-                        <Titulos tipo="h3" titulo="Resumo do Pedido" />
+                        <Titulos tipo="h2" titulo="Resumo do Pedido" />
                         <br />
                         {newDataProducts?.length >= 1 ? (
                             <>
-                                {newDataProducts.map((item, index) => {
+                                {newDataProducts.map((item: any, index: any) => {
                                     return (
                                         <BoxProductPayment key={index}>
                                             <ImageProductPayment>

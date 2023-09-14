@@ -201,3 +201,11 @@ export const ButtonRemove = styled.button`
   font-weight: 600;
   padding: 4px;
 `
+
+export const DeliverySpan = styled.span`
+  color: ${props => props?.theme?.colors?.black};
+`
+
+export const Days = styled.strong`
+  color: ${props => props?.theme?.colors?.warning};
+`
