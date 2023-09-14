@@ -181,17 +181,17 @@ export default function Payment() {
 
     let typesPayment = [
         {
-            id: "1",
+            id: "boleto",
             icon_pay: boleto,
             pay_name: "Boleto"
         },
         {
-            id: "2",
+            id: "cartao_de_credito",
             icon_pay: cartao,
             pay_name: "Cartão de Crédito"
         },
         {
-            id: "3",
+            id: "pix",
             icon_pay: pix,
             pay_name: "PIX"
         }
@@ -1359,7 +1359,7 @@ export default function Payment() {
             );
 
             const cardForm = mp.cardForm({
-                amount: String(totalFinishCart),
+                amount: String(totalFinishCart.toFixed(2)),
                 iframe: true,
                 form: {
                     id: "form-checkout",
@@ -1578,7 +1578,7 @@ export default function Payment() {
                     "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
                 },
                 body: JSON.stringify({
-                    transaction_amount: totalFinishCart,
+                    transaction_amount: Number(totalFinishCart.toFixed(2)),
                     description: store,
                     payment_method_id: 'bolbradesco',
                     payer: {
@@ -1617,7 +1617,7 @@ export default function Payment() {
                     "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
                 },
                 body: JSON.stringify({
-                    transaction_amount: totalFinishCart,
+                    transaction_amount: Number(totalFinishCart.toFixed(2)),
                     description: store,
                     payment_method_id: 'pix',
                     payer: {
@@ -1645,9 +1645,6 @@ export default function Payment() {
             console.error("Erro ao fazer a requisição:", error);
         }
     }
-
-
-
 
 
     return (
@@ -2330,7 +2327,7 @@ export default function Payment() {
                                         >
                                             <br />
                                             {item.pay_name}
-                                            <Image src={item.icon_pay} height={65} width={85} alt="pagar" />
+                                            <Image src={item.icon_pay} height={70} width={85} alt="pagar" />
                                         </PayIcon>
                                     </>
                                 )
@@ -2338,7 +2335,7 @@ export default function Payment() {
                         </BoxIconsPayment>
                         <br />
                         <br />
-                        {activePayment === "1" ?
+                        {activePayment === "boleto" ?
                             <div>
                                 <form id="form-checkoutBoleto" onSubmit={handleRegisterBoleto}>
                                     <div>
@@ -2366,7 +2363,7 @@ export default function Payment() {
 
                                     <div>
                                         <div>
-                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value="100" />
+                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart)} />
                                             <input type="hidden" name="description" id="description" value="Nome do Produto" />
                                             <br />
                                             <BoxFinalCart>
@@ -2383,10 +2380,54 @@ export default function Payment() {
                                 </form>
                             </div>
                             :
-                            null
+                            <div
+                                style={{ display: 'none' }}
+                            >
+                                <form id="form-checkoutBoleto" onSubmit={handleRegisterBoleto}>
+                                    <div>
+                                        <div>
+                                            <label htmlFor="payerFirstName">Nome</label>
+                                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="payerLastName">Sobrenome</label>
+                                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="email">E-mail</label>
+                                            <input id="form-checkout__email" name="email" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="identificationType">Tipo de documento</label>
+                                            <select id="form-checkout__identificationTypeBoleto" name="identificationType"></select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="identificationNumber">Número do documento</label>
+                                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div>
+                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart.toFixed(2))} />
+                                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
+                                            <br />
+                                            <BoxFinalCart>
+                                                <Button
+                                                    style={{ margin: '30px', width: '80%' }}
+                                                    id="form-checkoutBoleto"
+                                                    type="submit"
+                                                >
+                                                    FINALIZAR COMPRA
+                                                </Button>
+                                            </BoxFinalCart>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         }
 
-                        {activePayment === "2" ?
+                        {activePayment === "cartao_de_credito" ?
                             <div>
                                 <form id="form-checkout">
 
@@ -2454,10 +2495,77 @@ export default function Payment() {
                                 </form>
                             </div>
                             :
-                            null
+                            <div
+                                style={{ display: 'none' }}
+                            >
+                                <form id="form-checkout">
+
+                                    <div
+                                        id="form-checkout__cardNumber"
+                                        className="container mpFormInput"
+                                    ></div>
+
+                                    <div
+                                        id="form-checkout__expirationDate"
+                                        className="container mpFormInput"
+                                    ></div>
+
+                                    <div
+                                        id="form-checkout__securityCode"
+                                        className="container mpFormInput"
+                                    ></div>
+
+                                    <input
+                                        type="text"
+                                        id="form-checkout__cardholderName"
+                                        className="cardHolderName mpFormInput"
+                                    />
+
+                                    <select
+                                        id="form-checkout__issuer"
+                                        className="container mpFormInput"
+                                    ></select>
+
+                                    <select
+                                        id="form-checkout__installments"
+                                        className="container mpFormInput"
+                                    ></select>
+
+                                    <select
+                                        id="form-checkout__identificationType"
+                                        className="container mpFormInput"
+                                    ></select>
+
+                                    <input
+                                        type="text"
+                                        id="form-checkout__identificationNumber"
+                                        className="container mpFormInput"
+                                    />
+
+                                    <input
+                                        type="email"
+                                        id="form-checkout__cardholderEmail"
+                                        className="container mpFormInput"
+                                    />
+
+                                    <BoxFinalCart>
+                                        <Button
+                                            style={{ margin: '30px', width: '80%' }}
+                                            type="submit"
+                                            id="form-checkout__submit"
+                                            className="container"
+                                        >
+                                            FINALIZAR COMPRA
+                                        </Button>
+                                    </BoxFinalCart>
+                                    <progress value="0" className="progress-bar">
+                                        Carregando...
+                                    </progress>
+                                </form>
+                            </div>
                         }
 
-                        {activePayment === "3" ?
+                        {activePayment === "pix" ?
                             <div>
                                 <form id="form-checkoutPix" onSubmit={handleRegisterPix}>
                                     <div>
@@ -2485,7 +2593,7 @@ export default function Payment() {
 
                                     <div>
                                         <div>
-                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value="100" />
+                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart.toFixed(2))} />
                                             <input type="hidden" name="description" id="description" value="Nome do Produto" />
                                             <br />
                                             <BoxFinalCart>
@@ -2501,7 +2609,50 @@ export default function Payment() {
                                 </form>
                             </div>
                             :
-                            null
+                            <div
+                                style={{ display: 'none' }}
+                            >
+                                <form id="form-checkoutPix" onSubmit={handleRegisterPix}>
+                                    <div>
+                                        <div>
+                                            <label htmlFor="payerFirstName">Nome</label>
+                                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="payerLastName">Sobrenome</label>
+                                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="email">E-mail</label>
+                                            <input id="form-checkout__email" name="email" type="text" />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="identificationType">Tipo de documento</label>
+                                            <select id="form-checkout__identificationTypePix" name="identificationType"></select>
+                                        </div>
+                                        <div>
+                                            <label htmlFor="identificationNumber">Número do documento</label>
+                                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div>
+                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart.toFixed(2))} />
+                                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
+                                            <br />
+                                            <BoxFinalCart>
+                                                <Button
+                                                    style={{ margin: '30px', width: '80%' }}
+                                                    id="form-checkoutPix" type="submit"
+                                                >
+                                                    FINALIZAR COMPRA
+                                                </Button>
+                                            </BoxFinalCart>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         }
                     </BoxPayment>
                     <BoxPayment>
