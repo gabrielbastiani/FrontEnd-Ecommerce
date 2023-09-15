@@ -1469,9 +1469,10 @@ export default function Payment() {
 
     }, []);
 
-
+    console.log(productsCart.map(item => item))
 
     /* BOLETO BANCÁRIO */
+
 
     async function handleRegisterBoleto(event: FormEvent) {
         event.preventDefault();
@@ -1487,12 +1488,12 @@ export default function Payment() {
                     description: store,
                     payment_method_id: 'bolbradesco',
                     payer: {
-                        email: emails,
                         first_name: nameCompletes,
                         last_name: nameCompletes,
+                        email: emails,
                         identification: {
-                            type: tipo,
-                            number: removerAcentos(cpfCnpj)
+                            number: removerAcentos(cpfCnpj),
+                            type: tipo
                         },
                         address: {
                             zip_code: removerAcentos(ceps),
@@ -1503,11 +1504,16 @@ export default function Payment() {
                             federal_unit: estados
                         }
                     },
+                    metadata: {
+                        customer_id: customer_id,
+                        delivery_id: idSelected,
+                        order_data_delivery: daysDelivery,
+                        cupom: cupomPayment,
+                        store_cart_id: cartProducts[0]?.store_cart_id
+                    },
                     notification_url: URL_NOTIFICATION
                 }),
             });
-
-            
 
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);
