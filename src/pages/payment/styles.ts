@@ -242,3 +242,7 @@ export const LabelForm = styled.label`
 export const SelectFormPay = styled.select`
   padding: 5px;
 `
+
+export const FormPayBoletPix = styled.form`
+  
+`

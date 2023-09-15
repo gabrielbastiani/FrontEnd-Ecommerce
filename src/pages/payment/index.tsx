@@ -41,6 +41,7 @@ import {
     DeliverySpan,
     DestinyName,
     EditDelivery,
+    FormPayBoletPix,
     ImageProductPayment,
     InputDelivery,
     PayIcon,
@@ -1359,7 +1360,7 @@ export default function Payment() {
             );
 
             const cardForm = mp.cardForm({
-                amount: String(totalFinishCart),
+                amount: String(totalFinishCart.toFixed(2)),
                 iframe: true,
                 form: {
                     id: "form-checkout",
@@ -1432,7 +1433,7 @@ export default function Payment() {
                                     payment_method_id,
                                     transaction_amount: Number(amount),
                                     installments: Number(installments),
-                                    description: "Descrição do produto",
+                                    description: store,
                                     payer: {
                                         email,
                                         identification: {
@@ -1472,52 +1473,6 @@ export default function Payment() {
 
     /* BOLETO BANCÁRIO */
 
-    useEffect(() => {
-
-        const initializeBoleto = async () => {
-
-            await loadMercadoPago();
-            /* @ts-ignore */
-            const mp = new window.MercadoPago(
-                PUBLIC_KEY_TEST
-            );
-
-            try {
-                const identificationTypes = await mp.getIdentificationTypes();
-                const identificationTypeElement = document.getElementById('form-checkout__identificationTypeBoleto');
-
-                createSelectOptions(identificationTypeElement, identificationTypes);
-
-            } catch (e) {
-                return console.error('Error getting identificationTypes: ', e);
-            }
-
-            function createSelectOptions(elem, options, labelsAndKeys = { label: "name", value: "id" }) {
-                const { label, value } = labelsAndKeys;
-
-                elem.options.length = 0;
-
-                const tempOptions = document.createDocumentFragment();
-
-                options.forEach(option => {
-                    const optValue = option[value];
-                    const optLabel = option[label];
-
-                    const opt = document.createElement('option');
-                    opt.value = optValue;
-                    opt.textContent = optLabel;
-
-                    tempOptions.appendChild(opt);
-                });
-
-                elem.appendChild(tempOptions);
-            }
-        }
-
-        initializeBoleto();
-
-    }, []);
-
     async function handleRegisterBoleto(event: FormEvent) {
         event.preventDefault();
         try {
@@ -1528,7 +1483,7 @@ export default function Payment() {
                     "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
                 },
                 body: JSON.stringify({
-                    transaction_amount: Number(totalFinishCart),
+                    transaction_amount: Number(totalFinishCart.toFixed(2)),
                     description: store,
                     payment_method_id: 'bolbradesco',
                     payer: {
@@ -1552,60 +1507,15 @@ export default function Payment() {
                 }),
             });
 
+            
+
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);
         }
     }
 
 
-
     /* PIX */
-
-    useEffect(() => {
-
-        const initializePix = async () => {
-
-            await loadMercadoPago();
-            /* @ts-ignore */
-            const mp = new window.MercadoPago(
-                PUBLIC_KEY_TEST
-            );
-
-            try {
-                const identificationTypes = await mp.getIdentificationTypes();
-                const identificationTypeElement = document.getElementById('form-checkout__identificationTypePix');
-
-                createSelectOptions(identificationTypeElement, identificationTypes);
-            } catch (e) {
-                return console.error('Error getting identificationTypes: ', e);
-            }
-
-            function createSelectOptions(elem, options, labelsAndKeys = { label: "name", value: "id" }) {
-                const { label, value } = labelsAndKeys;
-
-                elem.options.length = 0;
-
-                const tempOptions = document.createDocumentFragment();
-
-                options.forEach(option => {
-                    const optValue = option[value];
-                    const optLabel = option[label];
-
-                    const opt = document.createElement('option');
-                    opt.value = optValue;
-                    opt.textContent = optLabel;
-
-                    tempOptions.appendChild(opt);
-                });
-
-                elem.appendChild(tempOptions);
-            }
-
-        }
-
-        initializePix();
-
-    }, []);
 
     async function handleRegisterPix(event: FormEvent) {
         event.preventDefault();
@@ -1617,7 +1527,7 @@ export default function Payment() {
                     "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
                 },
                 body: JSON.stringify({
-                    transaction_amount: Number(totalFinishCart),
+                    transaction_amount: Number(totalFinishCart.toFixed(2)),
                     description: store,
                     payment_method_id: 'pix',
                     payer: {
@@ -2336,93 +2246,21 @@ export default function Payment() {
                         <br />
                         <br />
                         {activePayment === "boleto" ?
-                                <form id="form-checkoutBoleto" onSubmit={handleRegisterBoleto}>
-                                    <div>
-                                        <div>
-                                            <label htmlFor="payerFirstName">Nome</label>
-                                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="payerLastName">Sobrenome</label>
-                                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="email">E-mail</label>
-                                            <input id="form-checkout__email" name="email" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="identificationType">Tipo de documento</label>
-                                            <select id="form-checkout__identificationTypeBoleto" name="identificationType"></select>
-                                        </div>
-                                        <div>
-                                            <label htmlFor="identificationNumber">Número do documento</label>
-                                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div>
-                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart)} />
-                                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
-                                            <br />
-                                            <BoxFinalCart>
-                                                <Button
-                                                    style={{ margin: '30px', width: '80%' }}
-                                                    id="form-checkoutBoleto"
-                                                    type="submit"
-                                                >
-                                                    FINALIZAR COMPRA
-                                                </Button>
-                                            </BoxFinalCart>
-                                        </div>
-                                    </div>
-                                </form>
+                            <FormPayBoletPix id="form-checkoutBoleto" onSubmit={handleRegisterBoleto}>
+                                <BoxFinalCart>
+                                    <TextCurrentBold style={{ fontSize: '19px', marginBottom: '10px' }}>Total a pagar: </TextCurrentBold>
+                                    <TextCurrent style={{ color: 'red', fontSize: '19px' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}</TextCurrent>
+                                    <Button
+                                        style={{ margin: '30px', width: '80%' }}
+                                        id="form-checkoutBoleto"
+                                        type="submit"
+                                    >
+                                        FINALIZAR COMPRA<br />E GERAR BOLETO
+                                    </Button>
+                                </BoxFinalCart>
+                            </FormPayBoletPix>
                             :
-                            <div
-                                style={{ display: 'none' }}
-                            >
-                                <form id="form-checkoutBoleto" onSubmit={handleRegisterBoleto}>
-                                    <div>
-                                        <div>
-                                            <label htmlFor="payerFirstName">Nome</label>
-                                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="payerLastName">Sobrenome</label>
-                                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="email">E-mail</label>
-                                            <input id="form-checkout__email" name="email" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="identificationType">Tipo de documento</label>
-                                            <select id="form-checkout__identificationTypeBoleto" name="identificationType"></select>
-                                        </div>
-                                        <div>
-                                            <label htmlFor="identificationNumber">Número do documento</label>
-                                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div>
-                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart)} />
-                                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
-                                            <br />
-                                            <BoxFinalCart>
-                                                <Button
-                                                    style={{ margin: '30px', width: '80%' }}
-                                                    id="form-checkoutBoleto"
-                                                    type="submit"
-                                                >
-                                                    FINALIZAR COMPRA
-                                                </Button>
-                                            </BoxFinalCart>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                            null
                         }
 
                         {activePayment === "cartao_de_credito" ?
@@ -2564,93 +2402,20 @@ export default function Payment() {
                         }
 
                         {activePayment === "pix" ?
-                            <div>
-                                <form id="form-checkoutPix" onSubmit={handleRegisterPix}>
-                                    <div>
-                                        <div>
-                                            <label htmlFor="payerFirstName">Nome</label>
-                                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="payerLastName">Sobrenome</label>
-                                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="email">E-mail</label>
-                                            <input id="form-checkout__email" name="email" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="identificationType">Tipo de documento</label>
-                                            <select id="form-checkout__identificationTypePix" name="identificationType"></select>
-                                        </div>
-                                        <div>
-                                            <label htmlFor="identificationNumber">Número do documento</label>
-                                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div>
-                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart)} />
-                                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
-                                            <br />
-                                            <BoxFinalCart>
-                                                <Button
-                                                    style={{ margin: '30px', width: '80%' }}
-                                                    id="form-checkoutPix" type="submit"
-                                                >
-                                                    FINALIZAR COMPRA
-                                                </Button>
-                                            </BoxFinalCart>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                            <FormPayBoletPix id="form-checkoutPix" onSubmit={handleRegisterPix}>
+                                <BoxFinalCart>
+                                    <TextCurrentBold style={{ fontSize: '19px', marginBottom: '10px' }}>Total a pagar: </TextCurrentBold>
+                                    <TextCurrent style={{ color: 'red', fontSize: '19px' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}</TextCurrent>
+                                    <Button
+                                        style={{ margin: '30px', width: '80%' }}
+                                        id="form-checkoutPix" type="submit"
+                                    >
+                                        FINALIZAR COMPRA<br />E GERAR CHAVE PIX
+                                    </Button>
+                                </BoxFinalCart>
+                            </FormPayBoletPix>
                             :
-                            <div
-                                style={{ display: 'none' }}
-                            >
-                                <form id="form-checkoutPix" onSubmit={handleRegisterPix}>
-                                    <div>
-                                        <div>
-                                            <label htmlFor="payerFirstName">Nome</label>
-                                            <input id="form-checkout__payerFirstName" name="payerFirstName" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="payerLastName">Sobrenome</label>
-                                            <input id="form-checkout__payerLastName" name="payerLastName" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="email">E-mail</label>
-                                            <input id="form-checkout__email" name="email" type="text" />
-                                        </div>
-                                        <div>
-                                            <label htmlFor="identificationType">Tipo de documento</label>
-                                            <select id="form-checkout__identificationTypePix" name="identificationType"></select>
-                                        </div>
-                                        <div>
-                                            <label htmlFor="identificationNumber">Número do documento</label>
-                                            <input id="form-checkout__identificationNumber" name="identificationNumber" type="text" />
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <div>
-                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart)} />
-                                            <input type="hidden" name="description" id="description" value="Nome do Produto" />
-                                            <br />
-                                            <BoxFinalCart>
-                                                <Button
-                                                    style={{ margin: '30px', width: '80%' }}
-                                                    id="form-checkoutPix" type="submit"
-                                                >
-                                                    FINALIZAR COMPRA
-                                                </Button>
-                                            </BoxFinalCart>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                            null
                         }
                     </BoxPayment>
                     <BoxPayment>
