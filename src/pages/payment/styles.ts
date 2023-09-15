@@ -230,3 +230,15 @@ export const PayIcon = styled.button`
     cursor: pointer;
   }
 `
+
+export const FormPayment = styled.form`
+  
+`
+
+export const LabelForm = styled.label`
+  font-weight: bold;
+`
+
+export const SelectFormPay = styled.select`
+  padding: 5px;
+`

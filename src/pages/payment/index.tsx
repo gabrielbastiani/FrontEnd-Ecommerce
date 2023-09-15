@@ -1359,7 +1359,7 @@ export default function Payment() {
             );
 
             const cardForm = mp.cardForm({
-                amount: String(totalFinishCart.toFixed(2)),
+                amount: String(totalFinishCart),
                 iframe: true,
                 form: {
                     id: "form-checkout",
@@ -1518,6 +1518,45 @@ export default function Payment() {
 
     }, []);
 
+    async function handleRegisterBoleto(event: FormEvent) {
+        event.preventDefault();
+        try {
+            fetch("http://localhost:3333/paymentBoletoResult", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
+                },
+                body: JSON.stringify({
+                    transaction_amount: Number(totalFinishCart),
+                    description: store,
+                    payment_method_id: 'bolbradesco',
+                    payer: {
+                        email: emails,
+                        first_name: nameCompletes,
+                        last_name: nameCompletes,
+                        identification: {
+                            type: tipo,
+                            number: removerAcentos(cpfCnpj)
+                        },
+                        address: {
+                            zip_code: removerAcentos(ceps),
+                            street_name: locals,
+                            street_number: numeros,
+                            neighborhood: bairros,
+                            city: cidades,
+                            federal_unit: estados
+                        }
+                    },
+                    notification_url: URL_NOTIFICATION
+                }),
+            });
+
+        } catch (error) {
+            console.error("Erro ao fazer a requisição:", error);
+        }
+    }
+
 
 
     /* PIX */
@@ -1568,45 +1607,6 @@ export default function Payment() {
 
     }, []);
 
-    async function handleRegisterBoleto(event: FormEvent) {
-        event.preventDefault();
-        try {
-            fetch("http://localhost:3333/paymentBoletoResult", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
-                },
-                body: JSON.stringify({
-                    transaction_amount: Number(totalFinishCart.toFixed(2)),
-                    description: store,
-                    payment_method_id: 'bolbradesco',
-                    payer: {
-                        email: emails,
-                        first_name: nameCompletes,
-                        last_name: nameCompletes,
-                        identification: {
-                            type: tipo,
-                            number: removerAcentos(cpfCnpj)
-                        },
-                        address: {
-                            zip_code: removerAcentos(ceps),
-                            street_name: locals,
-                            street_number: numeros,
-                            neighborhood: bairros,
-                            city: cidades,
-                            federal_unit: estados
-                        }
-                    },
-                    notification_url: URL_NOTIFICATION
-                }),
-            });
-
-        } catch (error) {
-            console.error("Erro ao fazer a requisição:", error);
-        }
-    }
-
     async function handleRegisterPix(event: FormEvent) {
         event.preventDefault();
         try {
@@ -1617,7 +1617,7 @@ export default function Payment() {
                     "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
                 },
                 body: JSON.stringify({
-                    transaction_amount: Number(totalFinishCart.toFixed(2)),
+                    transaction_amount: Number(totalFinishCart),
                     description: store,
                     payment_method_id: 'pix',
                     payer: {
@@ -2336,7 +2336,6 @@ export default function Payment() {
                         <br />
                         <br />
                         {activePayment === "boleto" ?
-                            <div>
                                 <form id="form-checkoutBoleto" onSubmit={handleRegisterBoleto}>
                                     <div>
                                         <div>
@@ -2378,7 +2377,6 @@ export default function Payment() {
                                         </div>
                                     </div>
                                 </form>
-                            </div>
                             :
                             <div
                                 style={{ display: 'none' }}
@@ -2409,7 +2407,7 @@ export default function Payment() {
 
                                     <div>
                                         <div>
-                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart.toFixed(2))} />
+                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart)} />
                                             <input type="hidden" name="description" id="description" value="Nome do Produto" />
                                             <br />
                                             <BoxFinalCart>
@@ -2593,7 +2591,7 @@ export default function Payment() {
 
                                     <div>
                                         <div>
-                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart.toFixed(2))} />
+                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart)} />
                                             <input type="hidden" name="description" id="description" value="Nome do Produto" />
                                             <br />
                                             <BoxFinalCart>
@@ -2638,7 +2636,7 @@ export default function Payment() {
 
                                     <div>
                                         <div>
-                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart.toFixed(2))} />
+                                            <input type="hidden" name="transactionAmount" id="transactionAmount" value={String(totalFinishCart)} />
                                             <input type="hidden" name="description" id="description" value="Nome do Produto" />
                                             <br />
                                             <BoxFinalCart>
