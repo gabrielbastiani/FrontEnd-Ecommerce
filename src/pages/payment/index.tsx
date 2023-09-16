@@ -112,7 +112,7 @@ type CuoponProps = {
 export default function Payment() {
     /* @ts-ignore */
     const { newSubTotalCart, newDataProducts, cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
-    const { customer, signOutPayment } = useContext(AuthContext);
+    const { customer, signOutPayment, isAuthenticated } = useContext(AuthContext);
     let customer_id = customer?.id;
 
     const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
@@ -1571,6 +1571,8 @@ export default function Payment() {
                     notification_url: URL_NOTIFICATION
                 }),
             });
+
+            Router.push('/thanks');
 
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);
