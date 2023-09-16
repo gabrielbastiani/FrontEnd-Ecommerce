@@ -111,7 +111,6 @@ export const BoxAdd = styled.div`
   display: flex;
   flex-direction: row-reverse;
   justify-content: flex-end;
-  margin-top: 30px;
   margin-bottom: 50px;
 `
 
@@ -159,4 +158,17 @@ export const BoxDatas = styled.div`
   a {
     margin-bottom: 15px;
   }
+`
+
+export const BoxAmount = styled.div`
+  display: flex;
+  background-color: lightgray;
+  margin: 15px 0;
+`
+
+export const ButtomAddTogheter = styled.button`
+  background: none;
+  border: none;
+  color: ${props => props?.theme?.colors?.warning};
+  font-weight: 700;
 `

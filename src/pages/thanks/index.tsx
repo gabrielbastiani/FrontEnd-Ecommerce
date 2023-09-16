@@ -81,7 +81,7 @@ export default function thanks() {
                             <TextThanks>A confirmação foi enviada para o e-mail:</TextThanks>
                             <StrongThanks>{customer?.email}</StrongThanks>
                             <br />
-                            <TextThanks>Vencimento da chave PIX para esse pagamento: {moment(dataExpirationBoleto).format('DD/MM/YYYY - HH:mm')}</TextThanks>
+                            <TextThanks>Vencimento do boleto para esse pagamento: {moment(dataExpirationBoleto).format('DD/MM/YYYY - HH:mm')}</TextThanks>
                             <br />
                             <Link href={`${boleto}`} target="_blank">
                                 <ButtonThanks>

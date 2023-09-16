@@ -123,7 +123,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       Router.push('/myAccount/meusdados');
 
     } catch (error) {
-      console.log(error.data.response);
+      console.log(error.response.data);
+      toast.error("Usuario ou senha errado!!!")
     }
   }
   /* @ts-ignore */
@@ -175,6 +176,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     } catch (error) {
       console.log(error.response.data);
+      toast.error("Usuario ou senha errado!!!")
     }
   }
 
@@ -203,7 +205,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
     } catch (error) {
-      console.log(error.data.response);
+      console.log(error.response.data);
+      toast.error("Usuario ou senha errado!!!")
     }
   }
 

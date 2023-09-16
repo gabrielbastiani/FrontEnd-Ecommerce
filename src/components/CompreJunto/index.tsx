@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa'
 import Link from 'next/link'
 import { setupAPIClient } from '../../services/api'
 import {
     BoxAdd,
+    BoxAmount,
     BoxDatas,
     BoxImage,
+    ButtomAddTogheter,
     Container,
     ContainerBuy,
     DatasProductTogheter,
@@ -19,6 +21,8 @@ import {
 } from './styles'
 import Titulos from '../Titulos';
 import Image from 'next/image';
+import { TextMax, TextMin, TextQuantidade } from '../InfosProductPage/styles'
+import { CartContext } from '../../contexts/CartContext'
 
 
 interface CompreJuntoRequest {
@@ -27,10 +31,12 @@ interface CompreJuntoRequest {
 
 const CompreJunto = ({ buyTogether }: CompreJuntoRequest) => {
 
+    const { saveProductCart } = useContext(CartContext);
+
     const [loadTogheter, setLoadTogheter] = useState<any[]>([]);
 
-    const [check, setCheck] = useState(false);
-    const [add, setAdd] = useState('Nao');
+    const [count, setCount] = useState(1);
+    const [activeTab, setActiveTab] = useState("");
 
     useEffect(() => {
         async function findLoadIDMenu() {
@@ -60,6 +66,51 @@ const CompreJunto = ({ buyTogether }: CompreJuntoRequest) => {
         if (imageIndex === 0) setImageIndex(loadTogheter.length - 1)
     }
 
+    const handleIncrement = (id: string) => {
+        setActiveTab(id);
+        setCount(count + 1);
+    };
+
+    const handleDescrement = (id: string) => {
+        setActiveTab(id);
+        if (count === 1) {
+            return;
+        }
+        setCount(count - 1);
+    };
+
+    function handleAddItemCart(
+        id: string,
+        image: string,
+        name: string,
+        count: number,
+        promotion: number,
+        relationattributeproducts: any,
+        stock: number,
+        weight: any,
+        width: any,
+        height: any,
+        depth: any
+    ) {
+        let prod = {
+            id: id,
+            name: name,
+            image: image,
+            promotion: promotion,
+            relationattributeproducts: relationattributeproducts,
+            stock: stock,
+            weight: weight,
+            width: width,
+            height: height,
+            depth: depth
+        }
+        /* @ts-ignore */
+        saveProductCart(id, count, prod)
+        setCount(1);
+    }
+
+
+
     return (
         <ContainerBuy>
             <TogheterTitulo>
@@ -88,15 +139,34 @@ const CompreJunto = ({ buyTogether }: CompreJuntoRequest) => {
                         </Link>
                         <OldPrice>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(loadTogheter[imageIndex]?.product?.promotion)}</OldPrice>
                         <Price>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(loadTogheter[imageIndex]?.product?.price)}</Price>
+                        <BoxAmount>
+                            <TextMin onClick={() => handleDescrement(loadTogheter[imageIndex]?.product?.id)}>-</TextMin>
+                            {activeTab === loadTogheter[imageIndex]?.product?.id ?
+                                <TextQuantidade style={{ color: 'black' }}>{count}</TextQuantidade>
+                                :
+                                <TextQuantidade style={{ color: 'black' }}>{loadTogheter[imageIndex]?.product?.amount}</TextQuantidade>
+                            }
+                            <TextMax onClick={() => handleIncrement(loadTogheter[imageIndex]?.product?.id)}>+</TextMax>
+                        </BoxAmount>
                         <BoxAdd>
-                            <EtiquetaInput>ADICIONAR</EtiquetaInput>
-                            <RadioBotton
-                                type="checkbox"
-                                value={''}
-                                onClick={() => alert('clicou')}
-                                onChange={(e) => setAdd(check ? "Nao" : "Sim")}
-                                checked={check}
-                            />
+                            <ButtomAddTogheter
+                                /* @ts-ignore */
+                                onClick={() => handleAddItemCart(
+                                    loadTogheter[imageIndex]?.product?.id,
+                                    loadTogheter[imageIndex]?.product?.photoproducts[0]?.image,
+                                    loadTogheter[imageIndex]?.product?.name,
+                                    count,
+                                    loadTogheter[imageIndex]?.product?.promotion,
+                                    loadTogheter[imageIndex]?.product?.relationattributeproducts,
+                                    loadTogheter[imageIndex]?.product?.stock,
+                                    loadTogheter[imageIndex]?.product?.weight,
+                                    loadTogheter[imageIndex]?.product?.width,
+                                    loadTogheter[imageIndex]?.product?.height,
+                                    loadTogheter[imageIndex]?.product?.depth
+                                )}
+                            >
+                                ADICIONAR
+                            </ButtomAddTogheter>
                         </BoxAdd>
                     </BoxDatas>
                 </DatasProductTogheter>

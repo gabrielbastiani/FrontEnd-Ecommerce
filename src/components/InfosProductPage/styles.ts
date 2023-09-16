@@ -207,6 +207,8 @@ export const BoxContentFrete = styled.div`
 
   svg {
     cursor: pointer;
+    margin-bottom: 15px;
+    margin-right: 10px;
 
     @media (max-width: 460px) {
       margin-top: 17px;
@@ -222,11 +224,9 @@ export const TextStock = styled.span`
   color: ${props => props?.theme?.colors?.warning};
 `
 
-export const TextFrete = styled.span``
-
-export const InputCalculoFrete = styled.input`
-  padding: 10px;
-  margin-left: 10px;
+export const TextFrete = styled.span`
+  margin-bottom: 15px;
+  margin-right: 10px;
 `
 
 export const TextIndisponivel = styled.span`

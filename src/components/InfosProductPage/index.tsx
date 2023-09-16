@@ -15,7 +15,6 @@ import {
     ButtonEmailStock,
     ContainerVariations,
     ContatinerInfosProduct,
-    InputCalculoFrete,
     InputStockEmail,
     TextAvalie,
     TextCredit,
@@ -39,6 +38,9 @@ import router from "next/router";
 import { toast } from "react-toastify";
 import { setupAPIClient } from "../../services/api";
 import { CartContext } from "../../contexts/CartContext";
+import { IMaskInput } from "react-imask";
+import { Input } from "../ui/Input";
+import { BoxFrete, ContainerFrete, ErrorText, TextStrong } from "../../pages/carrinho/styles";
 
 
 interface InfosRequest {
@@ -79,6 +81,9 @@ const InfosProductPage = ({
 
     const [count, setCount] = useState(1);
     const [activeTab, setActiveTab] = useState("");
+
+    const [cep, setCep] = useState("");
+    const [dataFrete, setDataFrete] = useState<any[]>([]);
 
     const handleIncrement = (id: string) => {
         setActiveTab(id);
@@ -151,18 +156,6 @@ const InfosProductPage = ({
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleProposta, setModalVisibleProposta] = useState(false);
-
-    const handleZipCode = (event: any) => {
-        let input = event.target
-        input.value = zipCodeMask(input.value)
-    }
-
-    const zipCodeMask = (value: any) => {
-        if (!value) return ""
-        value = value.replace(/\D/g, '')
-        value = value.replace(/(\d{5})(\d)/, '$1-$2')
-        return value
-    }
 
     function handleCloseModalLoginAvalie() {
         setModalVisible(false);
@@ -239,6 +232,26 @@ const InfosProductPage = ({
             .replace(/ +/g, "-")
             .replace(/-{2,}/g, "-")
             .replace(/[/]/g, "-");
+    }
+
+    async function searchCep() {
+        try {
+            const apiClient = setupAPIClient();
+            const { data } = await apiClient.post('/freteCalculo', {
+                nCdServico: "04162",
+                sCepDestino: cep,
+                nVlPeso: weight > 30 ? 28 : weight,
+                nCdFormato: 1,
+                nVlComprimento: depth > 82 ? 81 : depth,
+                nVlAltura: height > 37 ? 36 : height,
+                nVlLargura: width > 82 ? 81 : width
+            });
+
+            setDataFrete(data);
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 
@@ -391,17 +404,38 @@ const InfosProductPage = ({
 
                     <BoxContentFrete>
                         <TextFrete>Calcule o frete e o prazo: </TextFrete>
-                        <InputCalculoFrete
-                            placeholder="Digite seu CEP"
+                        <Input
+                            style={{ backgroundColor: 'white', color: 'black', borderColor: 'black' }}
+                            /* @ts-ignore */
+                            as={IMaskInput}
+                            /* @ts-ignore */
+                            mask="00000-000"
                             type="text"
-                            maxLength={9}
-                            onKeyUp={(event) => handleZipCode(event)}
+                            placeholder="CEP"
+                            onChange={(e) => setCep(e.target.value)}
                         />
                         <AiOutlineArrowRight
                             size={23}
-                            onClick={() => alert('clicou')}
+                            onClick={searchCep}
                         />
                     </BoxContentFrete>
+
+                    {dataFrete.map((item, index) => {
+                        return (
+                            <ContainerFrete key={index}>
+                                <BoxFrete>
+                                    {item?.Valor === "0,00" || item?.Valor === "" || item?.Valor === "0" ? (
+                                        <ErrorText>Erro ao calcular o frete.</ErrorText>
+                                    ) :
+                                        <>
+                                            <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
+                                            <TextFrete>Prazo de entrega em dia(s) úteis: <TextStrong>{item?.PrazoEntrega} dia(s)</TextStrong></TextFrete>
+                                        </>
+                                    }
+                                </BoxFrete>
+                            </ContainerFrete>
+                        )
+                    })}
 
                     <Link href={'https://buscacepinter.correios.com.br/app/endereco/index.php'} target="_blank">NÃO SABE O CEP?</Link>
 

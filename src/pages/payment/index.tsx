@@ -1351,6 +1351,8 @@ export default function Payment() {
 
     /* CARTÃO DE CRÉDITO */
 
+    let valuePay = String(totalFinishCart.toFixed(2));
+
     useEffect(() => {
         const initializeMercadoPago = async () => {
             await loadMercadoPago();
@@ -1359,8 +1361,10 @@ export default function Payment() {
                 PUBLIC_KEY_TEST
             );
 
+            console.log(valuePay)
+
             const cardForm = mp.cardForm({
-                amount: String(totalFinishCart.toFixed(2)),
+                amount: valuePay,
                 iframe: true,
                 form: {
                     id: "form-checkout",
@@ -1417,7 +1421,7 @@ export default function Payment() {
                             token,
                             installments,
                             identificationNumber,
-                            identificationType,
+                            identificationType
                         } = cardForm.getCardFormData();
 
                         try {
@@ -1474,9 +1478,9 @@ export default function Payment() {
 
         initializeMercadoPago();
 
-    }, []);
+    }, [valuePay]);
 
-    
+
 
     /* BOLETO BANCÁRIO */
 
@@ -2286,7 +2290,12 @@ export default function Payment() {
                             null
                         }
 
-                        {activePayment === "cartao_de_credito" ?
+                        {/* {activePayment === "cartao_de_credito" ?
+                            
+                            :
+                            null
+                        } */}
+
                             <div>
                                 <form id="form-checkout">
 
@@ -2353,76 +2362,6 @@ export default function Payment() {
                                     </progress>
                                 </form>
                             </div>
-                            :
-                            <div
-                                style={{ display: 'none' }}
-                            >
-                                <form id="form-checkout">
-
-                                    <div
-                                        id="form-checkout__cardNumber"
-                                        className="container mpFormInput"
-                                    ></div>
-
-                                    <div
-                                        id="form-checkout__expirationDate"
-                                        className="container mpFormInput"
-                                    ></div>
-
-                                    <div
-                                        id="form-checkout__securityCode"
-                                        className="container mpFormInput"
-                                    ></div>
-
-                                    <input
-                                        type="text"
-                                        id="form-checkout__cardholderName"
-                                        className="cardHolderName mpFormInput"
-                                    />
-
-                                    <select
-                                        id="form-checkout__issuer"
-                                        className="container mpFormInput"
-                                    ></select>
-
-                                    <select
-                                        id="form-checkout__installments"
-                                        className="container mpFormInput"
-                                    ></select>
-
-                                    <select
-                                        id="form-checkout__identificationType"
-                                        className="container mpFormInput"
-                                    ></select>
-
-                                    <input
-                                        type="text"
-                                        id="form-checkout__identificationNumber"
-                                        className="container mpFormInput"
-                                    />
-
-                                    <input
-                                        type="email"
-                                        id="form-checkout__cardholderEmail"
-                                        className="container mpFormInput"
-                                    />
-
-                                    <BoxFinalCart>
-                                        <Button
-                                            style={{ margin: '30px', width: '80%' }}
-                                            type="submit"
-                                            id="form-checkout__submit"
-                                            className="container"
-                                        >
-                                            FINALIZAR COMPRA
-                                        </Button>
-                                    </BoxFinalCart>
-                                    <progress value="0" className="progress-bar">
-                                        Carregando...
-                                    </progress>
-                                </form>
-                            </div>
-                        }
 
                         {activePayment === "pix" ?
                             <FormPayBoletPix id="form-checkoutPix" onSubmit={handleRegisterPix}>
