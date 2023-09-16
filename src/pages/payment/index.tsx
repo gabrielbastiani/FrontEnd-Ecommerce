@@ -1441,6 +1441,13 @@ export default function Payment() {
                                             number: identificationNumber,
                                         },
                                     },
+                                    metadata: {
+                                        customer_id: customer_id,
+                                        delivery_id: idSelected,
+                                        order_data_delivery: daysDelivery,
+                                        cupom: cupomPayment,
+                                        store_cart_id: cartProducts[0]?.store_cart_id
+                                    },
                                     notification_url: URL_NOTIFICATION
                                 }),
                             });
@@ -1469,10 +1476,9 @@ export default function Payment() {
 
     }, []);
 
-    console.log(productsCart.map(item => item))
+    
 
     /* BOLETO BANCÁRIO */
-
 
     async function handleRegisterBoleto(event: FormEvent) {
         event.preventDefault();
@@ -1515,6 +1521,8 @@ export default function Payment() {
                 }),
             });
 
+            Router.push('/thanks');
+
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);
         }
@@ -1552,6 +1560,13 @@ export default function Payment() {
                             city: cidades,
                             federal_unit: estados
                         }
+                    },
+                    metadata: {
+                        customer_id: customer_id,
+                        delivery_id: idSelected,
+                        order_data_delivery: daysDelivery,
+                        cupom: cupomPayment,
+                        store_cart_id: cartProducts[0]?.store_cart_id
                     },
                     notification_url: URL_NOTIFICATION
                 }),
