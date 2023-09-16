@@ -29,6 +29,7 @@ import {
     BoxIconsPayment,
     BoxInputs,
     BoxPayment,
+    BoxPaymentEnvio,
     BoxPricesPayment,
     BoxProductPayment,
     BoxTitle,
@@ -2222,7 +2223,7 @@ export default function Payment() {
                 </ContainerFechamento>
 
                 <ContainerFechamento>
-                    <BoxPayment>
+                    <BoxPaymentEnvio>
                         <Titulos tipo="h2" titulo="Envio" />
                         <br />
                         <br />
@@ -2246,7 +2247,7 @@ export default function Payment() {
                                 }
                             </Total>
                         </BoxPricesFinal>
-                    </BoxPayment>
+                    </BoxPaymentEnvio>
                     <BoxPayment>
                         <Titulos tipo="h2" titulo="Formas de Pagamento" />
                         <br />

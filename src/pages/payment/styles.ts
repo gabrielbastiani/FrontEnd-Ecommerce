@@ -8,12 +8,36 @@ export const ContainerFechamento = styled.div`
   display: grid;
   grid-template-columns: 30% 30% 30%;
   justify-content: center;
+
+  @media (max-width: 985px) {
+    grid-template-columns: 80%;
+  }
 `
 
 export const BoxPayment = styled.div`
   padding: 18px;
   margin: 8px 15px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`
+
+export const BoxPaymentEnvio = styled.div`
+  padding: 18px;
+  margin: 8px 15px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  @media (max-width: 1205px) {
+    img {
+      width: 52%;
+      height: 8%;
+    }
+  }
+
+  @media (max-width: 985px) {
+    img {
+      width: 50%;
+      height: 23%;
+    }
+  }
 `
 
 export const BoxTitle = styled.h3`
@@ -149,6 +173,10 @@ export const BoxProductPayment = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+  }
 `
 
 export const BoxDataProductPayment = styled.div`
@@ -213,6 +241,18 @@ export const Days = styled.strong`
 export const BoxIconsPayment = styled.div`
   display: flex;
   justify-content: space-around;
+
+  @media (max-width: 1205px) {
+    flex-direction: column;
+  }
+
+  @media (max-width: 985px) {
+    flex-direction: unset;
+  }
+
+  @media (max-width: 450px) {
+    flex-direction: column;
+  }
 `
 
 export const PayIcon = styled.button`
@@ -231,9 +271,7 @@ export const PayIcon = styled.button`
   }
 `
 
-export const FormPayment = styled.form`
-  
-`
+export const FormPayment = styled.form``
 
 export const LabelForm = styled.label`
   font-weight: bold;
@@ -243,6 +281,4 @@ export const SelectFormPay = styled.select`
   padding: 5px;
 `
 
-export const FormPayBoletPix = styled.form`
-  
-`
+export const FormPayBoletPix = styled.form``
