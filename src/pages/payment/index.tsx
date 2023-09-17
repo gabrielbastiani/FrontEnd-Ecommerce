@@ -1362,118 +1362,120 @@ export default function Payment() {
                 PUBLIC_KEY_TEST
             );
 
-            console.log(valuePay)
+            if (valuePay != '0.00') {
 
-            const cardForm = mp.cardForm({
-                amount: valuePay,
-                iframe: true,
-                form: {
-                    id: "form-checkout",
-                    cardNumber: {
-                        id: "form-checkout__cardNumber",
-                        placeholder: "Número do cartão",
+                const cardForm = mp.cardForm({
+                    amount: valuePay,
+                    iframe: true,
+                    form: {
+                        id: "form-checkout",
+                        cardNumber: {
+                            id: "form-checkout__cardNumber",
+                            placeholder: "Número do cartão",
+                        },
+                        expirationDate: {
+                            id: "form-checkout__expirationDate",
+                            placeholder: "MM/YY",
+                        },
+                        securityCode: {
+                            id: "form-checkout__securityCode",
+                            placeholder: "Código de segurança",
+                        },
+                        cardholderName: {
+                            id: "form-checkout__cardholderName",
+                            placeholder: "Titular do cartão",
+                        },
+                        issuer: {
+                            id: "form-checkout__issuer",
+                            placeholder: "Banco emissor",
+                        },
+                        installments: {
+                            id: "form-checkout__installments",
+                            placeholder: "Parcelas",
+                        },
+                        identificationType: {
+                            id: "form-checkout__identificationType",
+                            placeholder: "Tipo de documento",
+                        },
+                        identificationNumber: {
+                            id: "form-checkout__identificationNumber",
+                            placeholder: "Número do documento",
+                        },
+                        cardholderEmail: {
+                            id: "form-checkout__cardholderEmail",
+                            placeholder: "E-mail",
+                        },
                     },
-                    expirationDate: {
-                        id: "form-checkout__expirationDate",
-                        placeholder: "MM/YY",
-                    },
-                    securityCode: {
-                        id: "form-checkout__securityCode",
-                        placeholder: "Código de segurança",
-                    },
-                    cardholderName: {
-                        id: "form-checkout__cardholderName",
-                        placeholder: "Titular do cartão",
-                    },
-                    issuer: {
-                        id: "form-checkout__issuer",
-                        placeholder: "Banco emissor",
-                    },
-                    installments: {
-                        id: "form-checkout__installments",
-                        placeholder: "Parcelas",
-                    },
-                    identificationType: {
-                        id: "form-checkout__identificationType",
-                        placeholder: "Tipo de documento",
-                    },
-                    identificationNumber: {
-                        id: "form-checkout__identificationNumber",
-                        placeholder: "Número do documento",
-                    },
-                    cardholderEmail: {
-                        id: "form-checkout__cardholderEmail",
-                        placeholder: "E-mail",
-                    },
-                },
-                callbacks: {
-                    onFormMounted: error => {
-                        if (error) return console.warn("Form Mounted handling error: ", error);
-                        console.log("Form mounted");
-                    },
-                    onSubmit: event => {
-                        event.preventDefault();
+                    callbacks: {
+                        onFormMounted: error => {
+                            if (error) return console.warn("Form Mounted handling error: ", error);
+                            console.log("Form mounted");
+                        },
+                        onSubmit: event => {
+                            event.preventDefault();
 
-                        const {
-                            paymentMethodId: payment_method_id,
-                            issuerId: issuer_id,
-                            cardholderEmail: email,
-                            amount,
-                            token,
-                            installments,
-                            identificationNumber,
-                            identificationType
-                        } = cardForm.getCardFormData();
+                            const {
+                                paymentMethodId: payment_method_id,
+                                issuerId: issuer_id,
+                                cardholderEmail: email,
+                                amount,
+                                token,
+                                installments,
+                                identificationNumber,
+                                identificationType
+                            } = cardForm.getCardFormData();
 
-                        try {
-                            fetch("http://localhost:3333/paymentCardResult", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
-                                },
-                                body: JSON.stringify({
-                                    token,
-                                    issuer_id,
-                                    payment_method_id,
-                                    transaction_amount: Number(amount),
-                                    installments: Number(installments),
-                                    description: store,
-                                    payer: {
-                                        email,
-                                        identification: {
-                                            type: identificationType,
-                                            number: identificationNumber,
+                            try {
+                                fetch("http://localhost:3333/paymentCardResult", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
+                                    },
+                                    body: JSON.stringify({
+                                        token,
+                                        issuer_id,
+                                        payment_method_id,
+                                        transaction_amount: Number(amount),
+                                        installments: Number(installments),
+                                        description: store,
+                                        payer: {
+                                            email,
+                                            identification: {
+                                                type: identificationType,
+                                                number: identificationNumber,
+                                            },
                                         },
-                                    },
-                                    metadata: {
-                                        customer_id: customer_id,
-                                        delivery_id: idSelected,
-                                        order_data_delivery: daysDelivery,
-                                        cupom: cupomPayment,
-                                        store_cart_id: cartProducts[0]?.store_cart_id
-                                    },
-                                    notification_url: URL_NOTIFICATION
-                                }),
-                            });
+                                        metadata: {
+                                            customer_id: customer_id,
+                                            delivery_id: idSelected,
+                                            order_data_delivery: daysDelivery,
+                                            cupom: cupomPayment,
+                                            store_cart_id: cartProducts[0]?.store_cart_id
+                                        },
+                                        notification_url: URL_NOTIFICATION
+                                    }),
+                                });
 
-                        } catch (error) {
-                            console.error("Erro ao fazer a requisição:", error);
+                            } catch (error) {
+                                console.error("Erro ao fazer a requisição:", error);
+                            }
+                        },
+                        onFetching: (resource) => {
+                            console.log("Fetching resource: ", resource);
+
+                            // Animate progress bar
+                            const progressBar = document.querySelector(".progress-bar");
+                            progressBar.removeAttribute("value");
+
+                            return () => {
+                                progressBar.setAttribute("value", "0");
+                            };
                         }
                     },
-                    onFetching: (resource) => {
-                        console.log("Fetching resource: ", resource);
+                });
 
-                        // Animate progress bar
-                        const progressBar = document.querySelector(".progress-bar");
-                        progressBar.removeAttribute("value");
-
-                        return () => {
-                            progressBar.setAttribute("value", "0");
-                        };
-                    }
-                },
-            });
+            }
 
         };
 
@@ -2291,12 +2293,7 @@ export default function Payment() {
                             null
                         }
 
-                        {/* {activePayment === "cartao_de_credito" ?
-                            
-                            :
-                            null
-                        } */}
-
+                        {activePayment === "cartao_de_credito" ?
                             <div>
                                 <form id="form-checkout">
 
@@ -2363,6 +2360,76 @@ export default function Payment() {
                                     </progress>
                                 </form>
                             </div>
+                            :
+                            <div
+                                style={{ display: 'none' }}
+                            >
+                                <form id="form-checkout">
+
+                                    <div
+                                        id="form-checkout__cardNumber"
+                                        className="container mpFormInput"
+                                    ></div>
+
+                                    <div
+                                        id="form-checkout__expirationDate"
+                                        className="container mpFormInput"
+                                    ></div>
+
+                                    <div
+                                        id="form-checkout__securityCode"
+                                        className="container mpFormInput"
+                                    ></div>
+
+                                    <input
+                                        type="text"
+                                        id="form-checkout__cardholderName"
+                                        className="cardHolderName mpFormInput"
+                                    />
+
+                                    <select
+                                        id="form-checkout__issuer"
+                                        className="container mpFormInput"
+                                    ></select>
+
+                                    <select
+                                        id="form-checkout__installments"
+                                        className="container mpFormInput"
+                                    ></select>
+
+                                    <select
+                                        id="form-checkout__identificationType"
+                                        className="container mpFormInput"
+                                    ></select>
+
+                                    <input
+                                        type="text"
+                                        id="form-checkout__identificationNumber"
+                                        className="container mpFormInput"
+                                    />
+
+                                    <input
+                                        type="email"
+                                        id="form-checkout__cardholderEmail"
+                                        className="container mpFormInput"
+                                    />
+
+                                    <BoxFinalCart>
+                                        <Button
+                                            style={{ margin: '30px', width: '80%' }}
+                                            type="submit"
+                                            id="form-checkout__submit"
+                                            className="container"
+                                        >
+                                            FINALIZAR COMPRA
+                                        </Button>
+                                    </BoxFinalCart>
+                                    <progress value="0" className="progress-bar">
+                                        Carregando...
+                                    </progress>
+                                </form>
+                            </div>
+                        }
 
                         {activePayment === "pix" ?
                             <FormPayBoletPix id="form-checkoutPix" onSubmit={handleRegisterPix}>
