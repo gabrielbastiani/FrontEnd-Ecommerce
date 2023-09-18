@@ -282,3 +282,90 @@ export const SelectFormPay = styled.select`
 `
 
 export const FormPayBoletPix = styled.form``
+
+
+export const FormCard = styled.form`
+  width: 100%;
+`
+
+export const BoxDataCard = styled.div`
+  width: 100%;
+  padding: 11px;
+
+  iframe {
+    border: 2px solid;
+    height: 39px;
+    padding: 10px;
+    width: 100%;
+  }
+`
+
+export const BoxCard = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 10px;
+`
+
+export const BoxDataCardExpiratio = styled.div`
+  width: 100%;
+
+  iframe {
+    border: 2px solid;
+    height: 39px;
+    width: 80%;
+    padding: 10px;
+  }
+`
+
+export const BoxDataCardCode = styled.div`
+  width: 100%;
+
+  iframe {
+    border: 2px solid;
+    height: 39px;
+    width: 100%;
+    padding: 10px;
+  }
+`
+
+export const BoxCardCustomer = styled.div`
+  padding: 10px;
+`
+
+export const InputPropetyNameCard = styled.input`
+  border: 2px solid;
+  height: 39px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+`
+
+export const InputEmail = styled.input`
+  border: 2px solid;
+  height: 39px;
+  width: 100%;
+  padding: 10px;
+`
+
+export const SelectCardData = styled.select`
+  border: 2px solid;
+  height: 39px;
+  width: 80%;
+  padding: 10px;
+  margin: 12px;
+`
+
+export const InputDataIndentification = styled.input`
+  border: 2px solid;
+  height: 39px;
+  width: 80%;
+  padding: 10px;
+  margin: 12px;
+`
+
+export const BoxButtonPayment = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const ProgressPaymentCard = styled.progress``

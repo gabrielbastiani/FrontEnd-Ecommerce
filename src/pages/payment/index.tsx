@@ -13,16 +13,25 @@ import logoCorreios from "../../assets/correios-logo.png";
 import boleto from "../../assets/pagamento-boleto.png";
 import cartao from "../../assets/pagamento-cartao.png";
 import pix from "../../assets/pagamento-pix.png";
+import master from "../../assets/cartao-master.png";
+import visa from "../../assets/cartao-visa.jpg";
+import american from "../../assets/cartao-american-express.png";
 import {
     AddressTextIcon,
     AmountProduct,
     BackButton,
+    BoxButtonPayment,
     BoxButtons,
     BoxButtonsData,
     BoxButtonsFunctions,
+    BoxCard,
+    BoxCardCustomer,
     BoxCupom,
     BoxCupomPayment,
     BoxData,
+    BoxDataCard,
+    BoxDataCardCode,
+    BoxDataCardExpiratio,
     BoxDataProductPayment,
     BoxDelivery,
     BoxDeliverySelected,
@@ -42,11 +51,17 @@ import {
     DeliverySpan,
     DestinyName,
     EditDelivery,
+    FormCard,
     FormPayBoletPix,
     ImageProductPayment,
+    InputDataIndentification,
     InputDelivery,
+    InputEmail,
+    InputPropetyNameCard,
     PayIcon,
+    ProgressPaymentCard,
     SectionPayment,
+    SelectCardData,
     TextCupom,
     TextCupomStrong,
     TextCurrent,
@@ -180,6 +195,10 @@ export default function Payment() {
 
     const [activePayment, setActivePayment] = useState("");
     const [colorPay, setColorPay] = useState("");
+
+    const [cardBrand, setCardBrand] = useState("");
+
+
 
     let typesPayment = [
         {
@@ -1411,7 +1430,7 @@ export default function Payment() {
                             if (error) return console.warn("Form Mounted handling error: ", error);
                             console.log("Form mounted");
                         },
-                        onSubmit: event => {
+                        onSubmit: (event: { preventDefault: () => void; }) => {
                             event.preventDefault();
 
                             const {
@@ -1461,22 +1480,19 @@ export default function Payment() {
                                 console.error("Erro ao fazer a requisição:", error);
                             }
                         },
-                        onFetching: (resource) => {
+                        onFetching: (resource: any) => {
+                            setCardBrand(cardForm.getCardFormData());
                             console.log("Fetching resource: ", resource);
-
                             // Animate progress bar
                             const progressBar = document.querySelector(".progress-bar");
                             progressBar.removeAttribute("value");
-
                             return () => {
                                 progressBar.setAttribute("value", "0");
                             };
                         }
-                    },
+                    }
                 });
-
             }
-
         };
 
         initializeMercadoPago();
@@ -2294,141 +2310,85 @@ export default function Payment() {
                         }
 
                         {activePayment === "cartao_de_credito" ?
-                            <div>
-                                <form id="form-checkout">
+                            <FormCard id="form-checkout">
+                                {cardBrand.paymentMethodId === "master" ?
+                                    <Image src={master} height={100} width={180} alt="cartao-credito" />
+                                    :
+                                    null
+                                }
+                                {cardBrand.paymentMethodId === "visa" ?
+                                    <Image src={visa} height={100} width={180} alt="cartao-credito" />
+                                    :
+                                    null
+                                }
+                                {cardBrand.paymentMethodId === "amex" ?
+                                    <Image src={american} height={100} width={180} alt="cartao-credito" />
+                                    :
+                                    null
+                                }
+                                <BoxDataCard id="form-checkout__cardNumber" className="container"></BoxDataCard>
 
-                                    <div
-                                        id="form-checkout__cardNumber"
-                                        className="container mpFormInput"
-                                    ></div>
-
-                                    <div
-                                        id="form-checkout__expirationDate"
-                                        className="container mpFormInput"
-                                    ></div>
-
-                                    <div
-                                        id="form-checkout__securityCode"
-                                        className="container mpFormInput"
-                                    ></div>
-
-                                    <input
-                                        type="text"
-                                        id="form-checkout__cardholderName"
-                                        className="cardHolderName mpFormInput"
-                                    />
-
-                                    <select
-                                        id="form-checkout__issuer"
-                                        className="container mpFormInput"
-                                    ></select>
-
-                                    <select
-                                        id="form-checkout__installments"
-                                        className="container mpFormInput"
-                                    ></select>
-
-                                    <select
-                                        id="form-checkout__identificationType"
-                                        className="container mpFormInput"
-                                    ></select>
-
-                                    <input
-                                        type="text"
-                                        id="form-checkout__identificationNumber"
-                                        className="container mpFormInput"
-                                    />
-
-                                    <input
-                                        type="email"
-                                        id="form-checkout__cardholderEmail"
-                                        className="container mpFormInput"
-                                    />
-
-                                    <BoxFinalCart>
-                                        <Button
-                                            style={{ margin: '30px', width: '80%' }}
-                                            type="submit"
-                                            id="form-checkout__submit"
-                                            className="container"
-                                        >
-                                            FINALIZAR COMPRA
-                                        </Button>
-                                    </BoxFinalCart>
-                                    <progress value="0" className="progress-bar">
-                                        Carregando...
-                                    </progress>
-                                </form>
-                            </div>
+                                <BoxCard>
+                                    <BoxDataCardExpiratio id="form-checkout__expirationDate" className="container"></BoxDataCardExpiratio>
+                                    <BoxDataCardCode id="form-checkout__securityCode" className="container"></BoxDataCardCode>
+                                </BoxCard>
+                                <BoxCardCustomer>
+                                    <InputPropetyNameCard type="text" id="form-checkout__cardholderName" />
+                                    <InputEmail type="email" id="form-checkout__cardholderEmail" />
+                                </BoxCardCustomer>
+                                <BoxCard>
+                                    <SelectCardData id="form-checkout__identificationType"></SelectCardData>
+                                    <InputDataIndentification type="text" id="form-checkout__identificationNumber" />
+                                </BoxCard>
+                                <BoxCard>
+                                    <SelectCardData id="form-checkout__issuer"></SelectCardData>
+                                    <SelectCardData id="form-checkout__installments"></SelectCardData>
+                                </BoxCard>
+                                <BoxButtonPayment>
+                                    <Button type="submit" id="form-checkout__submit">Pagar</Button>
+                                    <ProgressPaymentCard value="0" className="progress-bar" style={{ display: 'none' }}>Carregando...</ProgressPaymentCard>
+                                </BoxButtonPayment>
+                            </FormCard>
                             :
-                            <div
-                                style={{ display: 'none' }}
-                            >
-                                <form id="form-checkout">
+                            <FormCard id="form-checkout" style={{ display: 'none' }}>
+                                {cardBrand.paymentMethodId === "master" ?
+                                    <Image src={master} height={100} width={180} alt="cartao-credito" />
+                                    :
+                                    null
+                                }
+                                {cardBrand.paymentMethodId === "visa" ?
+                                    <Image src={visa} height={100} width={180} alt="cartao-credito" />
+                                    :
+                                    null
+                                }
+                                {cardBrand.paymentMethodId === "amex" ?
+                                    <Image src={american} height={100} width={180} alt="cartao-credito" />
+                                    :
+                                    null
+                                }
+                                <BoxDataCard id="form-checkout__cardNumber" className="container"></BoxDataCard>
 
-                                    <div
-                                        id="form-checkout__cardNumber"
-                                        className="container mpFormInput"
-                                    ></div>
-
-                                    <div
-                                        id="form-checkout__expirationDate"
-                                        className="container mpFormInput"
-                                    ></div>
-
-                                    <div
-                                        id="form-checkout__securityCode"
-                                        className="container mpFormInput"
-                                    ></div>
-
-                                    <input
-                                        type="text"
-                                        id="form-checkout__cardholderName"
-                                        className="cardHolderName mpFormInput"
-                                    />
-
-                                    <select
-                                        id="form-checkout__issuer"
-                                        className="container mpFormInput"
-                                    ></select>
-
-                                    <select
-                                        id="form-checkout__installments"
-                                        className="container mpFormInput"
-                                    ></select>
-
-                                    <select
-                                        id="form-checkout__identificationType"
-                                        className="container mpFormInput"
-                                    ></select>
-
-                                    <input
-                                        type="text"
-                                        id="form-checkout__identificationNumber"
-                                        className="container mpFormInput"
-                                    />
-
-                                    <input
-                                        type="email"
-                                        id="form-checkout__cardholderEmail"
-                                        className="container mpFormInput"
-                                    />
-
-                                    <BoxFinalCart>
-                                        <Button
-                                            style={{ margin: '30px', width: '80%' }}
-                                            type="submit"
-                                            id="form-checkout__submit"
-                                            className="container"
-                                        >
-                                            FINALIZAR COMPRA
-                                        </Button>
-                                    </BoxFinalCart>
-                                    <progress value="0" className="progress-bar">
-                                        Carregando...
-                                    </progress>
-                                </form>
-                            </div>
+                                <BoxCard>
+                                    <BoxDataCardExpiratio id="form-checkout__expirationDate" className="container"></BoxDataCardExpiratio>
+                                    <BoxDataCardCode id="form-checkout__securityCode" className="container"></BoxDataCardCode>
+                                </BoxCard>
+                                <BoxCardCustomer>
+                                    <InputPropetyNameCard type="text" id="form-checkout__cardholderName" />
+                                    <InputEmail type="email" id="form-checkout__cardholderEmail" />
+                                </BoxCardCustomer>
+                                <BoxCard>
+                                    <SelectCardData id="form-checkout__identificationType"></SelectCardData>
+                                    <InputDataIndentification type="text" id="form-checkout__identificationNumber" />
+                                </BoxCard>
+                                <BoxCard>
+                                    <SelectCardData id="form-checkout__issuer"></SelectCardData>
+                                    <SelectCardData id="form-checkout__installments"></SelectCardData>
+                                </BoxCard>
+                                <BoxButtonPayment>
+                                    <Button type="submit" id="form-checkout__submit">Pagar</Button>
+                                    <ProgressPaymentCard value="0" className="progress-bar" style={{ display: 'none' }}>Carregando...</ProgressPaymentCard>
+                                </BoxButtonPayment>
+                            </FormCard>
                         }
 
                         {activePayment === "pix" ?
