@@ -82,7 +82,6 @@ export default function Carrinho() {
     const [freteCupom, setFreteCupom] = useState(Number);
     const [zero, setZero] = useState(100);
 
-
     const [cupomButton, setCupomButton] = useState(false);
 
     const handleShowMenu = () => {
