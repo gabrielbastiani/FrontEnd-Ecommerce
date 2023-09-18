@@ -60,6 +60,7 @@ import { Input } from "../../components/ui/Input";
 import { GiCancel } from "react-icons/gi";
 import router from "next/router";
 import { AuthContext } from "../../contexts/AuthContext";
+import Link from "next/link";
 
 
 export interface DataCart {
@@ -1043,7 +1044,7 @@ export default function Carrinho() {
         }
     }
 
-    
+
 
     return (
         <>
@@ -1068,12 +1069,16 @@ export default function Carrinho() {
                                             return (
                                                 <BoxProductCart key={index}>
                                                     <ImageProductCart>
-                                                        <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.image} width={80} height={80} alt={prod?.product?.name} />
+                                                        <Link href={`/produto/${prod?.product?.slug}`}>
+                                                            <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.image} width={80} height={80} alt={prod?.product?.name} />
+                                                        </Link>
                                                     </ImageProductCart>
 
                                                     <BoxDataProduct>
                                                         <BoxData>
-                                                            <NameProduct>{prod?.product?.name}</NameProduct>
+                                                            <Link href={`/produto/${prod?.product?.slug}`}>
+                                                                <NameProduct>{prod?.product?.name}</NameProduct>
+                                                            </Link>
                                                             {prod?.product?.relationattributeproducts.map((atr: any, index) => {
                                                                 return (
                                                                     <AtributeProduct key={index}>{atr?.valueAttribute?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
@@ -1127,12 +1132,16 @@ export default function Carrinho() {
                                             return (
                                                 <BoxProductCart key={index}>
                                                     <ImageProductCart>
-                                                        <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.image} width={80} height={80} alt={prod?.product?.name} />
+                                                        <Link href={`/produto/${prod?.product?.slug}`}>
+                                                            <Image src={'http://localhost:3333/files/' + prod?.product?.photoproducts[0]?.image} width={80} height={80} alt={prod?.product?.name} />
+                                                        </Link>
                                                     </ImageProductCart>
 
                                                     <BoxDataProduct>
                                                         <BoxData>
-                                                            <NameProduct>{prod?.product?.name}</NameProduct>
+                                                            <Link href={`/produto/${prod?.product?.slug}`}>
+                                                                <NameProduct>{prod?.product?.name}</NameProduct>
+                                                            </Link>
                                                             {prod?.product?.relationattributeproducts.map((atr: any, index) => {
                                                                 return (
                                                                     <AtributeProduct key={index}>{atr?.valueAttribute?.type}: {atr?.valueAttribute?.value}</AtributeProduct>
