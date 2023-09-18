@@ -250,7 +250,10 @@ const InfosProductPage = ({
             setDataFrete(data);
 
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            if (error.response.data.error === "connect ECONNREFUSED 201.48.199.53:80") {
+                toast.error("OPS!... Algum erro de comunicação por parte dos correios aqui com a loja, tente novamente por favor.")
+            }
         }
     }
 

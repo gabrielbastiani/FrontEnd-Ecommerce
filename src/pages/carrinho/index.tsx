@@ -206,7 +206,7 @@ export default function Carrinho() {
             dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
         } catch (error) {
-            console.log(error.response.data.error);
+            console.log(error);
             if (error.response.data.error === "connect ECONNREFUSED 201.48.199.53:80") {
                 toast.error("OPS!... Algum erro de comunicação por parte dos correios aqui com a loja, tente novamente por favor.")
             }
