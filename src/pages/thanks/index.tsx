@@ -47,9 +47,7 @@ export default function thanks() {
                 setKeyPix(data?.key_payment_pix || "");
                 setQrCodePix(data?.qr_code_pix || "");
                 setDataExpirationPix(data?.key_valid_pix || "");
-
-                console.log(data)
-
+                
             } catch (error) {
                 console.log(error);
             }
@@ -138,6 +136,28 @@ export default function thanks() {
                                 <TextInstruction>2 - Escaneie o código QR ou copie e cole o código de pagamento.</TextInstruction>
                                 <TextInstruction>3 - Pronto! O pagamento será creditado na hora e você receberá um e-mail de confirmação.</TextInstruction>
                             </BoxInstructions>
+                            <br />
+                            <hr />
+                            <TextThanks>Acesse seus pedidos clicando abaixo, ou volte para loja</TextThanks>
+                            <br />
+                            <Link style={{ marginBottom: '10px' }} href='/myAccount/meuspedidos'>
+                                Meus Pedidos
+                            </Link>
+                            <Link href='/'>
+                                Volte para loja
+                            </Link>
+                        </>
+                        :
+                        null
+                    }
+
+                    {typePayment === "Cartão de Crédito" ?
+                        <>
+                            <TextThanks>Número do Pedido</TextThanks>
+                            <NumberOrder>{idOrderStore[0]?.id_order_store}</NumberOrder>
+                            <br />
+                            <TextThanks>A confirmação foi enviada para o e-mail:</TextThanks>
+                            <StrongThanks>{customer?.email}</StrongThanks>
                             <br />
                             <hr />
                             <TextThanks>Acesse seus pedidos clicando abaixo, ou volte para loja</TextThanks>

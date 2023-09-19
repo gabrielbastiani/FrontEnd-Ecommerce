@@ -1372,6 +1372,7 @@ export default function Payment() {
     /* CARTÃO DE CRÉDITO */
 
     let valuePay = String(totalFinishCart.toFixed(2));
+    let deliveyID = idSelected;
 
     useEffect(() => {
         const initializeMercadoPago = async () => {
@@ -1467,7 +1468,7 @@ export default function Payment() {
                                         },
                                         metadata: {
                                             customer_id: customer_id,
-                                            delivery_id: idSelected,
+                                            delivery_id: 'deliveyID',
                                             order_data_delivery: daysDelivery,
                                             cupom: cupomPayment,
                                             store_cart_id: cartProducts[0]?.store_cart_id
@@ -1475,6 +1476,8 @@ export default function Payment() {
                                         notification_url: URL_NOTIFICATION
                                     }),
                                 });
+
+                                Router.push('/thanks');
 
                             } catch (error) {
                                 console.error("Erro ao fazer a requisição:", error);
@@ -1497,9 +1500,7 @@ export default function Payment() {
 
         initializeMercadoPago();
 
-    }, [valuePay]);
-
-
+    }, [valuePay, deliveyID]);
 
     /* BOLETO BANCÁRIO */
 
