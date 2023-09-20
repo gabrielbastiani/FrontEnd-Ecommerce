@@ -83,6 +83,8 @@ export default function Carrinho() {
     const [freteCupom, setFreteCupom] = useState(Number);
     const [zero, setZero] = useState(100);
 
+    const [loading, setLoading] = useState(false);
+
     const [errorCorreios, setErrorCorreios] = useState("");
 
     const [cupomButton, setCupomButton] = useState(false);
@@ -166,18 +168,28 @@ export default function Carrinho() {
         totalLargura += dadosFrete[i].largura;
     }
 
+    const peso = Math.round(totalPeso > 30 ? 28 : totalPeso);
+    const comprimento = Math.round(totalComprimento > 82 ? 81 : totalComprimento);
+    const altura = Math.round(totalAltura > 37 ? 36 : totalAltura);
+    const largura = Math.round(totalLargura > 82 ? 81 : totalLargura);
+
     async function searchCep() {
         try {
             const apiClient = setupAPIClient();
+
+            setLoading(true);
+
             const { data } = await apiClient.post('/freteCalculo', {
-                nCdServico: "04162",
+                /* nCdServico: "04162", */
                 sCepDestino: cep,
-                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
-                nCdFormato: 1,
-                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
-                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
-                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+                nVlPeso: String(peso),
+                /* nCdFormato: 1, */
+                nVlComprimento: String(comprimento),
+                nVlAltura: String(altura),
+                nVlLargura: String(largura)
             });
+
+            setLoading(false);
 
             setDataFrete(data);
 
@@ -1223,23 +1235,33 @@ export default function Carrinho() {
                                 >
                                     Calcular
                                 </ButtonCep>
-
-                                {dataFrete.map((item, index) => {
-                                    return (
-                                        <ContainerFrete key={index}>
-                                            <BoxFrete>
-                                                {item?.Valor === "0,00" || item?.Valor === "" || item?.Valor === "0" ? (
-                                                    <ErrorText>Erro ao calcular o frete.</ErrorText>
-                                                ) :
-                                                    <>
-                                                        <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
-                                                        <TextFrete>Prazo de entrega em dia(s) úteis: <TextStrong>{item?.PrazoEntrega} dia(s)</TextStrong></TextFrete>
-                                                    </>
-                                                }
-                                            </BoxFrete>
-                                        </ContainerFrete>
-                                    )
-                                })}
+                                <br />
+                                {loading ? (
+                                    <>
+                                        <ErrorText>Espere um momento estamos calculando o frete para você se esse processo demorar muito,<br />recarregue a pagina e digite manualmente o frete no campo acima...</ErrorText>
+                                        <br />
+                                        <br />
+                                    </>
+                                ) :
+                                    <>
+                                        {dataFrete.map((item, index) => {
+                                            return (
+                                                <ContainerFrete key={index}>
+                                                    <BoxFrete>
+                                                        {item?.Valor === '' || item?.PrazoEntrega === '' ? (
+                                                            <ErrorText>Erro ao calcular o frete.</ErrorText>
+                                                        ) :
+                                                            <>
+                                                                <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
+                                                                <TextFrete><TextStrong>{item?.PrazoEntrega}</TextStrong></TextFrete>
+                                                            </>
+                                                        }
+                                                    </BoxFrete>
+                                                </ContainerFrete>
+                                            )
+                                        })}
+                                    </>
+                                }
                             </BoxCep>
 
                             {formatedFrete ? (

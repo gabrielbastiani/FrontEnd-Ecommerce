@@ -85,6 +85,8 @@ const InfosProductPage = ({
     const [cep, setCep] = useState("");
     const [dataFrete, setDataFrete] = useState<any[]>([]);
 
+    const [loading, setLoading] = useState(false);
+
     const handleIncrement = (id: string) => {
         setActiveTab(id);
         setCount(count + 1);
@@ -234,27 +236,36 @@ const InfosProductPage = ({
             .replace(/[/]/g, "-");
     }
 
+    const peso = Math.round(weight > 30 ? 28 : weight);
+    const comprimento = Math.round(depth > 82 ? 81 : depth);
+    const altura = Math.round(height > 37 ? 36 : height);
+    const largura = Math.round(width > 82 ? 81 : width);
+
     async function searchCep() {
         try {
             const apiClient = setupAPIClient();
+
+            setLoading(true);
+
             const { data } = await apiClient.post('/freteCalculo', {
-                nCdServico: "04162",
+                /* nCdServico: "04162", */
                 sCepDestino: cep,
-                nVlPeso: weight > 30 ? 28 : weight,
-                nCdFormato: 1,
-                nVlComprimento: depth > 82 ? 81 : depth,
-                nVlAltura: height > 37 ? 36 : height,
-                nVlLargura: width > 82 ? 81 : width
+                nVlPeso: String(peso),
+                /* nCdFormato: 1, */
+                nVlComprimento: String(comprimento),
+                nVlAltura: String(altura),
+                nVlLargura: String(largura)
             });
+
+            setLoading(false);
 
             setDataFrete(data);
 
         } catch (error) {
             console.log(error);
-            if (error.response.data.error === "connect ECONNREFUSED 201.48.199.53:80") {
-                toast.error("OPS!... Algum erro de comunicação por parte dos correios aqui com a loja, tente novamente por favor.")
-            }
+            toast.error("OPS!... Algum erro de comunicação por parte dos correios aqui com a loja, tente novamente por favor.");
         }
+
     }
 
 
@@ -423,22 +434,32 @@ const InfosProductPage = ({
                         />
                     </BoxContentFrete>
 
-                    {dataFrete.map((item, index) => {
-                        return (
-                            <ContainerFrete key={index}>
-                                <BoxFrete>
-                                    {item?.Valor === "0,00" || item?.Valor === "" || item?.Valor === "0" ? (
-                                        <ErrorText>Erro ao calcular o frete.</ErrorText>
-                                    ) :
-                                        <>
-                                            <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
-                                            <TextFrete>Prazo de entrega em dia(s) úteis: <TextStrong>{item?.PrazoEntrega} dia(s)</TextStrong></TextFrete>
-                                        </>
-                                    }
-                                </BoxFrete>
-                            </ContainerFrete>
-                        )
-                    })}
+                    {loading ? (
+                        <>
+                            <ErrorText>Espere um momento estamos calculando o frete para você se esse processo demorar muito,<br />recarregue a pagina e digite manualmente o frete no campo acima...</ErrorText>
+                            <br />
+                            <br />
+                        </>
+                    ) :
+                        <>
+                            {dataFrete.map((item, index) => {
+                                return (
+                                    <ContainerFrete key={index}>
+                                        <BoxFrete>
+                                            {item?.Valor === '' || item?.PrazoEntrega === '' ? (
+                                                <ErrorText>Erro ao calcular o frete.</ErrorText>
+                                            ) :
+                                                <>
+                                                    <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
+                                                    <TextFrete><TextStrong>{item?.PrazoEntrega}</TextStrong></TextFrete>
+                                                </>
+                                            }
+                                        </BoxFrete>
+                                    </ContainerFrete>
+                                )
+                            })}
+                        </>
+                    }
 
                     <Link href={'https://buscacepinter.correios.com.br/app/endereco/index.php'} target="_blank">NÃO SABE O CEP?</Link>
 

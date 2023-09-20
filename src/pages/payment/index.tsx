@@ -99,6 +99,7 @@ import {
     BoxFinalCart,
     BoxPricesFinal,
     BoxPricesTotalProduct,
+    ErrorText,
     More,
     NameProduct,
     PriceProduct,
@@ -197,7 +198,7 @@ export default function Payment() {
     const [colorPay, setColorPay] = useState("");
 
     const [cardBrand, setCardBrand] = useState("");
-
+    const [loading, setLoading] = useState(false);
 
 
     let typesPayment = [
@@ -534,21 +535,31 @@ export default function Payment() {
         totalLargura += dadosFrete[i].largura;
     }
 
+    const peso = Math.round(totalPeso > 30 ? 28 : totalPeso);
+    const comprimento = Math.round(totalComprimento > 82 ? 81 : totalComprimento);
+    const altura = Math.round(totalAltura > 37 ? 36 : totalAltura);
+    const largura = Math.round(totalLargura > 82 ? 81 : totalLargura);
+
     useEffect(() => {
         async function deliveryDays() {
             const apiClient = setupAPIClient();
             try {
+
+                setLoading(true);
+
                 const { data } = await apiClient.post('/freteCalculo', {
-                    nCdServico: "04162",
+                    /* nCdServico: "04162", */
                     sCepDestino: String(cepSelected),
-                    nVlPeso: totalPeso > 30 ? 28 : totalPeso,
-                    nCdFormato: 1,
-                    nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
-                    nVlAltura: totalAltura > 37 ? 36 : totalAltura,
-                    nVlLargura: totalLargura > 82 ? 81 : totalLargura
+                    nVlPeso: String(peso),
+                    /* nCdFormato: 1, */
+                    nVlComprimento: String(comprimento),
+                    nVlAltura: String(altura),
+                    nVlLargura: String(largura)
                 });
 
-                setDaysDelivery(data[0]?.PrazoEntrega);
+                setLoading(false);
+
+                setDaysDelivery(data[0].PrazoEntrega);
 
             } catch (error) {
                 console.log(error);
@@ -2256,15 +2267,25 @@ export default function Payment() {
                             >
                                 ENTREGA EM:
                             </Total>
-                            <Total
-                                style={{ fontSize: '20px' }}
-                            >
-                                {daysDelivery === "0" ?
-                                    <DeliverySpan>Estimativa de <Days>10</Days> dia(s) úteis</DeliverySpan>
-                                    :
-                                    <DeliverySpan><Days>{daysDelivery}</Days> Dia(s) úteis</DeliverySpan>
-                                }
-                            </Total>
+
+                            {loading ? (
+                                <>
+                                    <ErrorText>Espere um momento estamos calculando o frete para você se esse processo demorar muito, recarregue a página...</ErrorText>
+                                    <br />
+                                    <br />
+                                </>
+                            ) :
+                                <Total
+                                    style={{ fontSize: '20px' }}
+                                >
+                                    {daysDelivery === '' ?
+                                        <DeliverySpan>Estimativa de <Days>10</Days> dia(s) úteis</DeliverySpan>
+                                        :
+                                        <DeliverySpan><Days>{daysDelivery}</Days></DeliverySpan>
+                                    }
+                                </Total>
+                            }
+
                         </BoxPricesFinal>
                     </BoxPaymentEnvio>
                     <BoxPayment>
