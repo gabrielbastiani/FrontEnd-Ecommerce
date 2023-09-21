@@ -128,7 +128,7 @@ type CuoponProps = {
 
 export default function Payment() {
     /* @ts-ignore */
-    const { prazoEntrega, newSubTotalCart, newDataProducts, cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
+    const { clearAllCart, prazoEntrega, newSubTotalCart, newDataProducts, cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
@@ -544,6 +544,7 @@ export default function Payment() {
         async function deliveryDays() {
             const apiClient = setupAPIClient();
             try {
+                setLoading(true);
                 const { data } = await apiClient.post('/freteCalculo', {
                     /* nCdServico: "04162", */
                     sCepDestino: String(cepSelected),
@@ -553,6 +554,8 @@ export default function Payment() {
                     nVlAltura: String(altura),
                     nVlLargura: String(largura)
                 });
+
+                setLoading(false);
 
                 setDaysDelivery(data[0].PrazoEntrega);
 
@@ -1496,6 +1499,10 @@ export default function Payment() {
                                     }),
                                 });
 
+                                setTimeout(() => {
+                                    clearAllCart();
+                                }, 2500);
+                    
                                 Router.push('/thanks');
 
                             } catch (error) {
@@ -1520,6 +1527,8 @@ export default function Payment() {
         initializeMercadoPago();
 
     }, [valuePay, days]);
+
+    
 
     /* BOLETO BANCÁRIO */
 
@@ -1564,7 +1573,11 @@ export default function Payment() {
                 }),
             });
 
-            Router.push('/thanks');
+            /* setTimeout(() => {
+                clearAllCart();
+            }, 2500);
+
+            Router.push('/thanks'); */
 
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);
@@ -1615,7 +1628,12 @@ export default function Payment() {
                 }),
             });
 
+            setTimeout(() => {
+                clearAllCart();
+            }, 2500);
+
             Router.push('/thanks');
+
 
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);
@@ -2292,11 +2310,7 @@ export default function Payment() {
                                 <Total
                                     style={{ fontSize: '20px' }}
                                 >
-                                    {daysDelivery === '' ?
-                                        <DeliverySpan>Estimativa de <Days>10</Days> dia(s) úteis</DeliverySpan>
-                                        :
-                                        <DeliverySpan><Days>{daysDelivery}</Days></DeliverySpan>
-                                    }
+                                    <DeliverySpan><Days>{daysDelivery}</Days></DeliverySpan>
                                 </Total>
                             }
 
