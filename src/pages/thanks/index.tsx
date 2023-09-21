@@ -28,6 +28,7 @@ export default function thanks() {
     const [keyPix, setKeyPix] = useState("");
     const [qrCodePix, setQrCodePix] = useState("");
     const [dataExpirationPix, setDataExpirationPix] = useState("");
+    const [daysDelivery, setDaysDelivery] = useState("");
 
     const copyToClipboard = () => {
         copy(keyPix);
@@ -47,6 +48,7 @@ export default function thanks() {
                 setKeyPix(data?.key_payment_pix || "");
                 setQrCodePix(data?.qr_code_pix || "");
                 setDataExpirationPix(data?.key_valid_pix || "");
+                setDaysDelivery(data?.orders[0]?.data_delivery || '');
                 
             } catch (error) {
                 console.log(error);
@@ -79,6 +81,8 @@ export default function thanks() {
                             <TextThanks>A confirmação foi enviada para o e-mail:</TextThanks>
                             <StrongThanks>{customer?.email}</StrongThanks>
                             <br />
+                            <TextThanks>Não esqueça do prazo!!! - <StrongThanks>{daysDelivery}</StrongThanks></TextThanks>
+                            <br />
                             <TextThanks>Vencimento do boleto para esse pagamento: {moment(dataExpirationBoleto).format('DD/MM/YYYY - HH:mm')}</TextThanks>
                             <br />
                             <Link href={`${boleto}`} target="_blank">
@@ -108,6 +112,8 @@ export default function thanks() {
                             <br />
                             <TextThanks>A confirmação foi enviada para o e-mail:</TextThanks>
                             <StrongThanks>{customer?.email}</StrongThanks>
+                            <br />
+                            <TextThanks>Não esqueça do prazo!!! - <StrongThanks>{daysDelivery}</StrongThanks></TextThanks>
                             <br />
                             <StrongThanks>Para pagar, escolha uma destas opções:</StrongThanks>
                             <br />
@@ -158,6 +164,8 @@ export default function thanks() {
                             <br />
                             <TextThanks>A confirmação foi enviada para o e-mail:</TextThanks>
                             <StrongThanks>{customer?.email}</StrongThanks>
+                            <br />
+                            <TextThanks>Não esqueça do prazo!!! - <StrongThanks>{daysDelivery}</StrongThanks></TextThanks>
                             <br />
                             <hr />
                             <TextThanks>Acesse seus pedidos clicando abaixo, ou volte para loja</TextThanks>

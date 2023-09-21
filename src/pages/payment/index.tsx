@@ -128,8 +128,8 @@ type CuoponProps = {
 
 export default function Payment() {
     /* @ts-ignore */
-    const { newSubTotalCart, newDataProducts, cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
-    const { customer, signOutPayment, isAuthenticated } = useContext(AuthContext);
+    const { prazoEntrega, newSubTotalCart, newDataProducts, cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
+    const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
     const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
@@ -469,7 +469,7 @@ export default function Payment() {
                 frete_coupon: 0,
                 coupon: null,
                 new_subTotal: 0,
-                new_value_products: []
+                new_value_products: [],
             });
 
             toast.success("Você removeu o cupom aplicado para esse pedido");
@@ -544,9 +544,6 @@ export default function Payment() {
         async function deliveryDays() {
             const apiClient = setupAPIClient();
             try {
-
-                setLoading(true);
-
                 const { data } = await apiClient.post('/freteCalculo', {
                     /* nCdServico: "04162", */
                     sCepDestino: String(cepSelected),
@@ -556,8 +553,6 @@ export default function Payment() {
                     nVlAltura: String(altura),
                     nVlLargura: String(largura)
                 });
-
-                setLoading(false);
 
                 setDaysDelivery(data[0].PrazoEntrega);
 
@@ -577,6 +572,9 @@ export default function Payment() {
 
         const apiClient = setupAPIClient();
         try {
+
+            setLoading(true);
+
             await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
 
             const cepfrete = cep;
@@ -584,13 +582,13 @@ export default function Payment() {
             dataTotalCart(cepfrete);
 
             const { data } = await apiClient.post('/freteCalculo', {
-                nCdServico: "04162",
-                sCepDestino: cepfrete,
-                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
-                nCdFormato: 1,
-                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
-                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
-                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+                /* nCdServico: "04162", */
+                sCepDestino: String(cepfrete),
+                nVlPeso: String(peso),
+                /* nCdFormato: 1, */
+                nVlComprimento: String(comprimento),
+                nVlAltura: String(altura),
+                nVlLargura: String(largura)
             });
 
             var freteFormat = data[0]?.Valor;
@@ -609,16 +607,20 @@ export default function Payment() {
             const formatedFrete = Number(formatedPricePonto);
 
             const frete = formatedFrete;
+            const daysDelivery = String(data[0]?.PrazoEntrega);
 
             const storageId = String(cartProducts[0]?.store_cart_id);
             await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
                 cep: cepfrete,
                 frete: frete,
+                days_delivery: daysDelivery
             });
 
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                 totalCartFinish: totalCart + frete
             });
+
+            setLoading(false);
 
             toast.success('Endereço de entrega escolhido com sucesso')
 
@@ -726,15 +728,19 @@ export default function Payment() {
                 state: searchAddressEdit?.uf
             });
 
+            setLoading(true);
+
             const { data } = await apiClient.post('/freteCalculo', {
-                nCdServico: "04162",
+                /* nCdServico: "04162", */
                 sCepDestino: cep,
-                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
-                nCdFormato: 1,
-                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
-                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
-                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+                nVlPeso: String(peso),
+                /* nCdFormato: 1, */
+                nVlComprimento: String(comprimento),
+                nVlAltura: String(altura),
+                nVlLargura: String(largura)
             });
+
+            setLoading(false);
 
             var freteFormat = data[0]?.Valor;
             freteFormat = freteFormat + '';
@@ -753,11 +759,13 @@ export default function Payment() {
 
             const frete = formatedFrete;
             const cepfrete = cep;
+            const daysDelivery = String(data[0]?.PrazoEntrega);
 
             const storageId = String(cartProducts[0]?.store_cart_id);
             await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
                 cep: cepfrete,
                 frete: frete,
+                days_delivery: daysDelivery
             });
 
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -801,13 +809,13 @@ export default function Payment() {
             });
 
             const { data } = await apiClient.post('/freteCalculo', {
-                nCdServico: "04162",
+                /* nCdServico: "04162", */
                 sCepDestino: cep,
-                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
-                nCdFormato: 1,
-                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
-                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
-                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+                nVlPeso: String(peso),
+                /* nCdFormato: 1, */
+                nVlComprimento: String(comprimento),
+                nVlAltura: String(altura),
+                nVlLargura: String(largura)
             });
 
             var freteFormat = data[0]?.Valor;
@@ -826,13 +834,14 @@ export default function Payment() {
             const formatedFrete = Number(formatedPricePonto);
 
             const frete = formatedFrete;
-
             const cepfrete = cep;
+            const daysDelivery = String(data[0]?.PrazoEntrega);
 
             const storageId = String(cartProducts[0]?.store_cart_id);
             await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
                 cep: cepfrete,
                 frete: frete,
+                days_delivery: daysDelivery
             });
 
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -918,7 +927,7 @@ export default function Payment() {
                     const subTot = totalPriceDesconto;
                     const newvalue = newCartValue;
                     /* @ts-ignore */
-                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
                     setTotalDesconto(formated);
                     setNewPriceArray(newvalue);
                     setNewSubTotalPrice(subTot);
@@ -996,7 +1005,7 @@ export default function Payment() {
                 const subTot = descontoPriceTotal;
                 const newvalue = newCartValue;
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setTotalDesconto(formated);
                 setNewPriceArray(newvalue);
                 setNewSubTotalPrice(subTot);
@@ -1042,7 +1051,7 @@ export default function Payment() {
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -1084,7 +1093,7 @@ export default function Payment() {
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setZero(zeroFrete);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1112,7 +1121,7 @@ export default function Payment() {
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setFreteCupom(valueFrete);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1140,7 +1149,7 @@ export default function Payment() {
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setFreteCupom(percentShipping);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1203,7 +1212,7 @@ export default function Payment() {
                     const subTot = totalPriceDesconto;
                     const newvalue = newCart;
                     /* @ts-ignore */
-                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
                     setTotalDesconto(formated);
                     setNewSubTotalPrice(subTot);
@@ -1253,7 +1262,7 @@ export default function Payment() {
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -1327,7 +1336,7 @@ export default function Payment() {
                 const subTot = totalPriceDesconto;
                 const newvalue = newCartValue;
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
                 setNewPriceArray(newvalue);
                 setNewSubTotalPrice(subTot);
@@ -1383,7 +1392,7 @@ export default function Payment() {
     /* CARTÃO DE CRÉDITO */
 
     let valuePay = String(totalFinishCart.toFixed(2));
-    let deliveyID = idSelected;
+    let days = prazoEntrega;
 
     useEffect(() => {
         const initializeMercadoPago = async () => {
@@ -1479,8 +1488,7 @@ export default function Payment() {
                                         },
                                         metadata: {
                                             customer_id: customer_id,
-                                            delivery_id: 'deliveyID',
-                                            order_data_delivery: daysDelivery,
+                                            order_data_delivery: days,
                                             cupom: cupomPayment,
                                             store_cart_id: cartProducts[0]?.store_cart_id
                                         },
@@ -1511,7 +1519,7 @@ export default function Payment() {
 
         initializeMercadoPago();
 
-    }, [valuePay, deliveyID]);
+    }, [valuePay, days]);
 
     /* BOLETO BANCÁRIO */
 
@@ -1548,7 +1556,7 @@ export default function Payment() {
                     metadata: {
                         customer_id: customer_id,
                         delivery_id: idSelected,
-                        order_data_delivery: daysDelivery,
+                        order_data_delivery: days,
                         cupom: cupomPayment,
                         store_cart_id: cartProducts[0]?.store_cart_id
                     },
@@ -1599,7 +1607,7 @@ export default function Payment() {
                     metadata: {
                         customer_id: customer_id,
                         delivery_id: idSelected,
-                        order_data_delivery: daysDelivery,
+                        order_data_delivery: days,
                         cupom: cupomPayment,
                         store_cart_id: cartProducts[0]?.store_cart_id
                     },
@@ -1978,48 +1986,54 @@ export default function Payment() {
                                             Voltar
                                         </BackButton>
 
-                                        {deliverysCustomer.map((item, index) => {
-                                            return (
-                                                <>
-                                                    <BoxDeliverySelected key={index}>
-                                                        <DestinyName>{item?.addressee}</DestinyName>
-                                                        <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {item?.address} - {item?.number}</TextCurrentInput>
-                                                        <TextCurrent><TextCurrentBold>Complemento: </TextCurrentBold>{item?.complement}</TextCurrent>
-                                                        <TextCurrent><TextCurrentBold>Referencia: </TextCurrentBold>{item?.reference}</TextCurrent>
-                                                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{item?.neighborhood}</TextCurrent>
-                                                        <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{item?.city} - {estadosSelected}</TextCurrent>
-                                                        <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{item?.cep}</TextCurrent>
+                                        {loading ? (
+                                            <TextCurrentBold style={{ color: 'red' }}>AGUARDE UM MOMENTO POR FAVOR...</TextCurrentBold>
+                                        ) :
+                                            <>
+                                                {deliverysCustomer.map((item, index) => {
+                                                    return (
+                                                        <>
+                                                            <BoxDeliverySelected key={index}>
+                                                                <DestinyName>{item?.addressee}</DestinyName>
+                                                                <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {item?.address} - {item?.number}</TextCurrentInput>
+                                                                <TextCurrent><TextCurrentBold>Complemento: </TextCurrentBold>{item?.complement}</TextCurrent>
+                                                                <TextCurrent><TextCurrentBold>Referencia: </TextCurrentBold>{item?.reference}</TextCurrent>
+                                                                <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{item?.neighborhood}</TextCurrent>
+                                                                <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{item?.city} - {estadosSelected}</TextCurrent>
+                                                                <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{item?.cep}</TextCurrent>
 
-                                                        <BoxButtons>
-                                                            <EditDelivery
-                                                                onClick={() => handleOpenModal(item.id)}
-                                                            >
-                                                                <AiFillEdit
-                                                                    color="orange"
-                                                                    size={18}
-                                                                />
-                                                                EDITAR
-                                                            </EditDelivery>
+                                                                <BoxButtons>
+                                                                    <EditDelivery
+                                                                        onClick={() => handleOpenModal(item.id)}
+                                                                    >
+                                                                        <AiFillEdit
+                                                                            color="orange"
+                                                                            size={18}
+                                                                        />
+                                                                        EDITAR
+                                                                    </EditDelivery>
 
-                                                            {item?.deliverySelected === "Nao" ? (
-                                                                <BiCircle
-                                                                    color="red"
-                                                                    size={23}
-                                                                    cursor="pointer"
-                                                                    onClick={() => updateCurrentDelivery(item?.customer_id, item?.id, item?.cep)}
-                                                                />
-                                                            ) :
-                                                                <BsFillCheckCircleFill
-                                                                    color="green"
-                                                                    size={20}
-                                                                    cursor="pointer"
-                                                                />
-                                                            }
-                                                        </BoxButtons>
-                                                    </BoxDeliverySelected>
-                                                </>
-                                            )
-                                        })}
+                                                                    {item?.deliverySelected === "Nao" ? (
+                                                                        <BiCircle
+                                                                            color="red"
+                                                                            size={23}
+                                                                            cursor="pointer"
+                                                                            onClick={() => updateCurrentDelivery(item?.customer_id, item?.id, item?.cep)}
+                                                                        />
+                                                                    ) :
+                                                                        <BsFillCheckCircleFill
+                                                                            color="green"
+                                                                            size={20}
+                                                                            cursor="pointer"
+                                                                        />
+                                                                    }
+                                                                </BoxButtons>
+                                                            </BoxDeliverySelected>
+                                                        </>
+                                                    )
+                                                })}
+                                            </>
+                                        }
                                     </>
                                     :
                                     <BoxDelivery>

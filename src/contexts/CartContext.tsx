@@ -22,6 +22,7 @@ type MyContextProps = {
   cupomPayment: string;
   newDataProducts: any;
   newSubTotalCart: number;
+  prazoEntrega: string;
 };
 
 type AddCepProps = {
@@ -69,6 +70,7 @@ export function CartProviderProducts({ children }: Props) {
   const [cupomPayment, setCupomPayment] = useState("");
   const [newDataProducts, setNewDataProducts] = useState<any[]>([]);
   const [newSubTotalCart, setNewSubTotalCart] = useState(0);
+  const [prazoEntrega, setPrazoEntrega] = useState("");
 
   const [cartCep, setCartCep] = useState<any>("");
 
@@ -110,6 +112,7 @@ export function CartProviderProducts({ children }: Props) {
         setCupomPayment(data?.coupon || "");
         setNewDataProducts(data?.new_value_products || []);
         setNewSubTotalCart(data?.new_subTotal || 0);
+        setPrazoEntrega(data?.days_delivery || '');
       }
       loadCartTotal();
     } catch (error) {
@@ -404,7 +407,7 @@ export function CartProviderProducts({ children }: Props) {
 
   /*Dados gerais do carrinho*/
 
-  async function dataTotalCart(cepfrete: string, frete: number, code: string, frete_coupon: number, subTot: number, newvalue: any) {
+  async function dataTotalCart(cepfrete: string, frete: number, code: string, frete_coupon: number, subTot: number, newvalue: any, prazoEntrega: string) {
 
     setCartCep(cepfrete);
 
@@ -417,13 +420,14 @@ export function CartProviderProducts({ children }: Props) {
       coupon: code,
       frete_coupon: frete_coupon,
       new_subTotal: subTot,
-      new_value_products: newvalue
+      new_value_products: newvalue,
+      days_delivery: prazoEntrega
     });
 
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ prazoEntrega, newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )

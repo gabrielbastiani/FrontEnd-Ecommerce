@@ -82,10 +82,9 @@ export default function Carrinho() {
     const [newSubTotalPrice, setNewSubTotalPrice] = useState(Number);
     const [freteCupom, setFreteCupom] = useState(Number);
     const [zero, setZero] = useState(100);
+    const [prazoEntrega, setPrazoEntrega] = useState("");
 
     const [loading, setLoading] = useState(false);
-
-    const [errorCorreios, setErrorCorreios] = useState("");
 
     const [cupomButton, setCupomButton] = useState(false);
 
@@ -104,8 +103,9 @@ export default function Carrinho() {
             const code = null;
             const subTot = 0;
             const newvalue = [];
+            const prazoEntrega = null;
             /* @ts-ignore */
-            dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+            dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
             router.reload();
         } catch (error) {
             console.log(error);
@@ -193,6 +193,8 @@ export default function Carrinho() {
 
             setDataFrete(data);
 
+            setPrazoEntrega(data[0]?.PrazoEntrega);
+
             var freteFormat = data[0]?.Valor;
             freteFormat = freteFormat + '';
             /* @ts-ignore */
@@ -214,14 +216,13 @@ export default function Carrinho() {
             const code = null;
             const subTot = 0;
             const newvalue = [];
+            const prazoEntrega = data[0]?.PrazoEntrega;
             /* @ts-ignore */
-            dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+            dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
         } catch (error) {
             console.log(error);
-            if (error.response.data.error === "connect ECONNREFUSED 201.48.199.53:80") {
-                toast.error("OPS!... Algum erro de comunicação por parte dos correios aqui com a loja, tente novamente por favor.")
-            }
+            toast.error("OPS!... Algum erro de comunicação por parte dos correios aqui com a loja, tente novamente por favor.");
         }
     }
 
