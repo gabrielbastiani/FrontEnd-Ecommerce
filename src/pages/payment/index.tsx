@@ -132,6 +132,8 @@ export default function Payment() {
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
+    console.log(prazoEntrega)
+
     const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
     const [searchAddress, setSearchAddress] = useState<CepProps>();
     const [searchAddressEdit, setSearchAddressEdit] = useState<CepProps>();
@@ -1633,7 +1635,6 @@ export default function Payment() {
             }, 2500);
 
             Router.push('/thanks');
-
 
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);

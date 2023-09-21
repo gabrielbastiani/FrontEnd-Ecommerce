@@ -23,6 +23,7 @@ type MyContextProps = {
   newDataProducts: any;
   newSubTotalCart: number;
   prazoEntrega: string;
+  loadingCart: boolean;
 };
 
 type AddCepProps = {
@@ -71,6 +72,7 @@ export function CartProviderProducts({ children }: Props) {
   const [newDataProducts, setNewDataProducts] = useState<any[]>([]);
   const [newSubTotalCart, setNewSubTotalCart] = useState(0);
   const [prazoEntrega, setPrazoEntrega] = useState("");
+  const [loadingCart, setLoadingCart] = useState(false);
 
   const [cartCep, setCartCep] = useState<any>("");
 
@@ -427,7 +429,7 @@ export function CartProviderProducts({ children }: Props) {
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ prazoEntrega, newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ loadingCart, prazoEntrega, newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )
