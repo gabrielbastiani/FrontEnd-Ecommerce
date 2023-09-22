@@ -146,6 +146,8 @@ export default function Payment() {
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
+    console.log(productsCart)
+
     const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
     const [searchAddress, setSearchAddress] = useState<CepProps>();
     const [searchAddressEdit, setSearchAddressEdit] = useState<CepProps>();
