@@ -127,12 +127,24 @@ type CuoponProps = {
 }
 
 export default function Payment() {
-    /* @ts-ignore */
-    const { clearAllCart, prazoEntrega, newSubTotalCart, newDataProducts, cartProducts, productsCart, totalCart, totalFinishCart, dataTotalCart, cupomPayment, fretePayment, fretePaymentCoupon } = useContext(CartContext);
+    
+    const {
+        clearAllCart,
+        prazoEntrega,
+        newSubTotalCart,
+        newDataProducts,
+        cartProducts,
+        productsCart,
+        totalCart,
+        totalFinishCart,
+        dataTotalCart,
+        cupomPayment,
+        fretePayment,
+        fretePaymentCoupon
+    } = useContext(CartContext);
+
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
-
-    console.log(prazoEntrega)
 
     const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
     const [searchAddress, setSearchAddress] = useState<CepProps>();
@@ -184,11 +196,10 @@ export default function Payment() {
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
 
-    const [dataFrete, setDataFrete] = useState<any[]>([]);
+    const [dataFrete] = useState<any[]>([]);
 
     const [cupomCustomer, setCupomCustomer] = useState<CuoponProps>();
 
-    const [desconto, setDesconto] = useState("");
     const [totalDesconto, setTotalDesconto] = useState("");
     const [newPriceArray, setNewPriceArray] = useState<any[]>([]);
     const [zero, setZero] = useState(100);
@@ -199,7 +210,7 @@ export default function Payment() {
     const [activePayment, setActivePayment] = useState("");
     const [colorPay, setColorPay] = useState("");
 
-    const [cardBrand, setCardBrand] = useState("");
+    const [cardBrand, setCardBrand] = useState<any>({});
     const [loading, setLoading] = useState(false);
 
 
@@ -1575,11 +1586,11 @@ export default function Payment() {
                 }),
             });
 
-            /* setTimeout(() => {
+            setTimeout(() => {
                 clearAllCart();
             }, 2500);
 
-            Router.push('/thanks'); */
+            Router.push('/thanks');
 
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);
