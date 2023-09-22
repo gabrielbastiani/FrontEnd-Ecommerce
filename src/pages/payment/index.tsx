@@ -127,7 +127,7 @@ type CuoponProps = {
 }
 
 export default function Payment() {
-    
+
     const {
         clearAllCart,
         prazoEntrega,
@@ -474,6 +474,9 @@ export default function Payment() {
 
     async function removeCupomPayment() {
         try {
+
+            setLoading(false);
+
             const apiClient = setupAPIClient();
             const storageId = String(cartProducts[0]?.store_cart_id);
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -486,6 +489,8 @@ export default function Payment() {
                 new_subTotal: 0,
                 new_value_products: [],
             });
+
+            setLoading(true);
 
             toast.success("Você removeu o cupom aplicado para esse pedido");
 
@@ -813,6 +818,9 @@ export default function Payment() {
         const cep = searchAddress?.cep;
         const apiClient = setupAPIClient();
         try {
+
+            setLoading(true);
+
             await apiClient.post(`/customer/delivery/createDeliveryAddress`, {
                 customer_id: customer_id,
                 addressee: addresseeSelected,
@@ -866,6 +874,8 @@ export default function Payment() {
                 totalCartFinish: totalCart + frete
             });
 
+            setLoading(false);
+
             toast.success("Novo endereço cadastrado com sucesso");
 
             closenewDelivery();
@@ -899,6 +909,8 @@ export default function Payment() {
             /*"Valor de desconto (Produto(s) selecionado(s) para essa promoção)", value: "productsValue"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
+
+                setLoading(false);
 
                 const cartArray = productsCart.map(item => item?.product_id);
                 const productId = data?.cupomsproducts.map((item: { product_id: any; }) => item?.product_id);
@@ -968,6 +980,8 @@ export default function Payment() {
                         totalCartFinish: formatedCupom
                     });
 
+                    setLoading(true);
+
                     toast.success("Cupom aplicado com sucesso!");
 
                     setTimeout(() => {
@@ -982,6 +996,8 @@ export default function Payment() {
             /*"Valor de desconto em todos os produtos da loja", value: "allProductsValue"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValue") {
+
+                setLoading(false);
 
                 const cartArray = productsCart.map(item => item?.product_id);
 
@@ -1046,6 +1062,8 @@ export default function Payment() {
                     totalCartFinish: formatedCupom
                 });
 
+                setLoading(true);
+
                 toast.success("Cupom aplicado com sucesso!");
 
                 setTimeout(() => {
@@ -1058,6 +1076,9 @@ export default function Payment() {
             /*"Valor de desconto no valor total", value: "totalValue"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "totalValue") {
+
+                setLoading(false);
+
                 const valueDescont = totalCart - data?.coupomsconditionals[0]?.value;
                 const valueMore = valueDescont + fretePayment;
                 const formated = valueMore.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -1090,6 +1111,8 @@ export default function Payment() {
                     totalCartFinish: formatedCupom
                 });
 
+                setLoading(true);
+
                 toast.success("Cupom aplicado com sucesso!");
 
                 setTimeout(() => {
@@ -1102,6 +1125,9 @@ export default function Payment() {
             /*"Frete grátis total", value: "freeShipping"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "freeShipping") {
+
+                setLoading(false);
+
                 const zeroFrete = fretePayment - (fretePayment * zero / 100);
 
                 const frete = fretePayment;
@@ -1118,6 +1144,8 @@ export default function Payment() {
                     totalCartFinish: totalCart
                 });
 
+                setLoading(true);
+
                 toast.success("Cupom aplicado com sucesso!");
 
                 setTimeout(() => {
@@ -1130,6 +1158,9 @@ export default function Payment() {
             /*"Valor de desconto no valor do frete", value: "valueShipping"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "valueShipping") {
+
+                setLoading(false);
+
                 const valueFrete = fretePayment - data?.coupomsconditionals[0]?.value;
 
                 const frete = fretePayment;
@@ -1146,6 +1177,8 @@ export default function Payment() {
                     totalCartFinish: totalCart + frete_coupon
                 });
 
+                setLoading(true);
+
                 toast.success("Cupom aplicado com sucesso!");
 
                 setTimeout(() => {
@@ -1158,6 +1191,9 @@ export default function Payment() {
             /*"Percentual de desconto no valor do frete", value: "shippingPercent"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "shippingPercent") {
+
+                setLoading(false);
+
                 const percentShipping = fretePayment - (fretePayment * data?.coupomsconditionals[0]?.value / 100);
 
                 const frete = fretePayment;
@@ -1174,6 +1210,8 @@ export default function Payment() {
                     totalCartFinish: totalCart + frete_coupon
                 });
 
+                setLoading(true);
+
                 toast.success("Cupom aplicado com sucesso!");
 
                 setTimeout(() => {
@@ -1186,6 +1224,8 @@ export default function Payment() {
             /*"Percentual de desconto (Produto(s) selecionado(s) para essa promoção)", value: "percentProduct"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "percentProduct") {
+
+                setLoading(false);
 
                 const cartArray = productsCart.map(item => item?.product_id);
                 const productId = data?.cupomsproducts.map((item: { product_id: any; }) => item?.product_id);
@@ -1254,6 +1294,8 @@ export default function Payment() {
                         totalCartFinish: formatedCupom
                     });
 
+                    setLoading(true);
+
                     toast.success("Cupom aplicado com sucesso!");
 
                     setTimeout(() => {
@@ -1268,6 +1310,9 @@ export default function Payment() {
             /*"Percentual de desconto no valor total", value: "totalPercent"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "totalPercent") {
+
+                setLoading(false);
+
                 const maisCart = totalCart - (totalCart * data?.coupomsconditionals[0]?.value / 100);
                 const totalPercentStore = fretePayment + maisCart;
 
@@ -1301,6 +1346,8 @@ export default function Payment() {
                     totalCartFinish: formatedCupom
                 });
 
+                setLoading(true);
+
                 toast.success("Cupom aplicado com sucesso!");
 
                 setTimeout(() => {
@@ -1313,6 +1360,8 @@ export default function Payment() {
             /*"Percentual de desconto em todos os produtos da loja", value: "allProductsValuePercent"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "allProductsValuePercent") {
+
+                setLoading(false);
 
                 const cartArray = productsCart.map(item => item?.product_id);
 
@@ -1377,6 +1426,8 @@ export default function Payment() {
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                     totalCartFinish: formatedCupom
                 });
+
+                setLoading(true);
 
                 toast.success("Cupom aplicado com sucesso!");
 
@@ -1517,7 +1568,7 @@ export default function Payment() {
                                 setTimeout(() => {
                                     clearAllCart();
                                 }, 2500);
-                    
+
                                 Router.push('/thanks');
 
                             } catch (error) {
@@ -1543,7 +1594,7 @@ export default function Payment() {
 
     }, [valuePay, days]);
 
-    
+
 
     /* BOLETO BANCÁRIO */
 
@@ -1918,95 +1969,109 @@ export default function Payment() {
                         <Titulos tipo="h2" titulo="Endereço de Entrega" />
                         <br />
                         {newDelivery ?
-                            <BoxDelivery>
-                                <BackButton
-                                    onClick={closenewDelivery}
-                                >
-                                    <BsFillArrowLeftSquareFill color="red" size={25} />
-                                    Voltar
-                                </BackButton>
-
-                                <Titulos
-                                    tipo="h4"
-                                    titulo="Insira um CEP abaixo para buscar o novo endereço"
-                                />
-                                <br />
-                                <Input
-                                    style={{ backgroundColor: 'white', color: 'black' }}
-                                    /* @ts-ignore */
-                                    as={IMaskInput}
-                                    /* @ts-ignore */
-                                    mask="00000-000"
-                                    type="text"
-                                    placeholder="CEP"
-                                    onChange={(e) => setCepBusca(e.target.value)}
-                                />
-
-                                <ButtonDelivery
-                                    style={{ width: '100%' }}
-                                    onClick={loadCep}
-                                >
-                                    Buscar
-                                </ButtonDelivery>
-
-                                {cepLoad ?
+                            <>
+                                {loading ? (
+                                    <TextCurrentBold style={{ color: 'red' }}>ESPERE UM MOMENTO POR FAVOR...</TextCurrentBold>
+                                ) :
                                     <>
-                                        <br />
-                                        <InputDelivery
-                                            value={addresseeSelected}
-                                            onChange={(e) => setAddresseeSelected(e.target.value)}
-                                        />
-                                        <br />
-                                        <BoxInputs>
-                                            <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {searchAddress?.logradouro}</TextCurrentInput>
-                                            <InputDelivery
-                                                value={numeroSelected}
-                                                onChange={(e) => setNumeroSelected(e.target.value)}
-                                            />
-                                        </BoxInputs>
-
-                                        <BoxInputs>
-                                            <TextCurrentBold>Complemento: </TextCurrentBold>
-                                            <InputDelivery
-                                                value={complementSelected}
-                                                onChange={(e) => setComplementSelected(e.target.value)}
-                                            />
-                                        </BoxInputs>
-
-                                        <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</TextCurrent>
-
-                                        <BoxInputs>
-                                            <TextCurrentBold>Referencia: </TextCurrentBold>
-                                            <InputDelivery
-                                                value={referenceSelected}
-                                                onChange={(e) => setReferenceSelected(e.target.value)}
-                                            />
-                                        </BoxInputs>
-
-                                        <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{searchAddress?.localidade} - {searchAddress?.uf}</TextCurrent>
-
-                                        <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{searchAddress?.cep}</TextCurrent>
-
-                                        <BoxButtonsFunctions>
-                                            <ButtonDelivery
-                                                style={{ backgroundColor: 'green', color: 'white' }}
-                                                onClick={handleNewDeliveryCustomer}
-                                            >
-                                                Cadastrar endereço
-                                            </ButtonDelivery>
-
-                                            <ButtonDelivery
-                                                style={{ backgroundColor: 'red', color: 'white' }}
+                                        <BoxDelivery>
+                                            <BackButton
                                                 onClick={closenewDelivery}
                                             >
-                                                Cancelar
+                                                <BsFillArrowLeftSquareFill color="red" size={25} />
+                                                Voltar
+                                            </BackButton>
+
+                                            <Titulos
+                                                tipo="h4"
+                                                titulo="Insira um CEP abaixo para buscar o novo endereço"
+                                            />
+                                            <br />
+                                            <Input
+                                                style={{ backgroundColor: 'white', color: 'black' }}
+                                                /* @ts-ignore */
+                                                as={IMaskInput}
+                                                /* @ts-ignore */
+                                                mask="00000-000"
+                                                type="text"
+                                                placeholder="CEP"
+                                                onChange={(e) => setCepBusca(e.target.value)}
+                                            />
+
+                                            <ButtonDelivery
+                                                style={{ width: '100%' }}
+                                                onClick={loadCep}
+                                            >
+                                                Buscar
                                             </ButtonDelivery>
-                                        </BoxButtonsFunctions>
+
+                                            {cepLoad ?
+                                                <>
+                                                    {loading ? (
+                                                        null
+                                                    ) :
+                                                        <>
+                                                            <br />
+                                                            <InputDelivery
+                                                                value={addresseeSelected}
+                                                                onChange={(e) => setAddresseeSelected(e.target.value)}
+                                                            />
+                                                            <br />
+                                                            <BoxInputs>
+                                                                <TextCurrentInput><AiOutlineCompass color="black" size={20} /> {searchAddress?.logradouro}</TextCurrentInput>
+                                                                <InputDelivery
+                                                                    value={numeroSelected}
+                                                                    onChange={(e) => setNumeroSelected(e.target.value)}
+                                                                />
+                                                            </BoxInputs>
+
+                                                            <BoxInputs>
+                                                                <TextCurrentBold>Complemento: </TextCurrentBold>
+                                                                <InputDelivery
+                                                                    value={complementSelected}
+                                                                    onChange={(e) => setComplementSelected(e.target.value)}
+                                                                />
+                                                            </BoxInputs>
+
+                                                            <TextCurrent><TextCurrentBold>Bairro: </TextCurrentBold>{searchAddress?.bairro ? searchAddress?.bairro : "Sem bairro"}</TextCurrent>
+
+                                                            <BoxInputs>
+                                                                <TextCurrentBold>Referencia: </TextCurrentBold>
+                                                                <InputDelivery
+                                                                    value={referenceSelected}
+                                                                    onChange={(e) => setReferenceSelected(e.target.value)}
+                                                                />
+                                                            </BoxInputs>
+
+                                                            <TextCurrent><TextCurrentBold>Cidade: </TextCurrentBold>{searchAddress?.localidade} - {searchAddress?.uf}</TextCurrent>
+
+                                                            <TextCurrent><TextCurrentBold>CEP: </TextCurrentBold>{searchAddress?.cep}</TextCurrent>
+
+                                                            <BoxButtonsFunctions>
+                                                                <ButtonDelivery
+                                                                    style={{ backgroundColor: 'green', color: 'white' }}
+                                                                    onClick={handleNewDeliveryCustomer}
+                                                                >
+                                                                    Cadastrar endereço
+                                                                </ButtonDelivery>
+
+                                                                <ButtonDelivery
+                                                                    style={{ backgroundColor: 'red', color: 'white' }}
+                                                                    onClick={closenewDelivery}
+                                                                >
+                                                                    Cancelar
+                                                                </ButtonDelivery>
+                                                            </BoxButtonsFunctions>
+                                                        </>
+                                                    }
+                                                </>
+                                                :
+                                                null
+                                            }
+                                        </BoxDelivery>
                                     </>
-                                    :
-                                    null
                                 }
-                            </BoxDelivery>
+                            </>
                             :
                             <>
                                 {allDeliverys ?
@@ -2261,40 +2326,47 @@ export default function Payment() {
                     <BoxPayment>
                         <Titulos tipo="h2" titulo="Cupom" />
                         <br />
-                        {cupomPayment ?
-                            <BoxCupomPayment>
-                                <h5>VOCÊ APLICOU UM CUPOM DE DESCONTO!!!</h5>
-                                <br />
-                                <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
-                                <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
-                                <br />
-                                <ButtonRemove
-                                    onClick={removeCupomPayment}
-                                >
-                                    Retirar o cupom
-                                </ButtonRemove>
-                            </BoxCupomPayment>
-                            :
+                        {loading ? (
+                            <TextCurrentBold style={{ color: 'red' }}>AGUARDE UM MOMENTO POR FAVOR...</TextCurrentBold>
+                        ) :
                             <>
-                                <Titulos
-                                    tipo="h4"
-                                    titulo="Tem cupom de desconto? Aplique o código abaixo e aproveite!!!"
-                                />
-                                <br />
-                                <BoxCupom>
-                                    <Input
-                                        style={{ backgroundColor: 'white', color: 'black' }}
-                                        placeholder="CÓDIGO"
-                                        onChange={(e) => setCodePromotion(e.target.value)}
-                                    />
-                                    <Button
-                                        onClick={loadCupomCode}
-                                    >
-                                        Aplicar cupom
-                                    </Button>
-                                </BoxCupom>
+                                {cupomPayment ?
+                                    <BoxCupomPayment>
+                                        <h5>VOCÊ APLICOU UM CUPOM DE DESCONTO!!!</h5>
+                                        <br />
+                                        <TextCupom><TextCupomStrong>Código = </TextCupomStrong>{cupomCustomer?.code}</TextCupom>
+                                        <TextCupom><TextCupomStrong>Descrição = </TextCupomStrong>{cupomCustomer?.name}</TextCupom>
+                                        <br />
+                                        <ButtonRemove
+                                            onClick={removeCupomPayment}
+                                        >
+                                            Retirar o cupom
+                                        </ButtonRemove>
+                                    </BoxCupomPayment>
+                                    :
+                                    <>
+                                        <Titulos
+                                            tipo="h4"
+                                            titulo="Tem cupom de desconto? Aplique o código abaixo e aproveite!!!"
+                                        />
+                                        <br />
+                                        <BoxCupom>
+                                            <Input
+                                                style={{ backgroundColor: 'white', color: 'black' }}
+                                                placeholder="CÓDIGO"
+                                                onChange={(e) => setCodePromotion(e.target.value)}
+                                            />
+                                            <Button
+                                                onClick={loadCupomCode}
+                                            >
+                                                Aplicar cupom
+                                            </Button>
+                                        </BoxCupom>
+                                    </>
+                                }
                             </>
                         }
+
                     </BoxPayment>
                 </ContainerFechamento>
 
