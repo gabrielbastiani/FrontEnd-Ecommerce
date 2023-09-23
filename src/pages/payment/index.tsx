@@ -89,7 +89,6 @@ import { FiEdit } from "react-icons/fi";
 import Modal from 'react-modal';
 import { ModalDeliveryEdit } from "../../components/popups/ModalDeliveryEdit";
 import { BiCircle } from "react-icons/bi";
-import router from "next/router";
 import Image from "next/image";
 import { TextoDados } from "../../components/TextoDados";
 import { InputUpdate } from "../../components/ui/InputUpdate";
