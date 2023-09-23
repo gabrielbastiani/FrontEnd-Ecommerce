@@ -146,8 +146,6 @@ export default function Payment() {
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
-    console.log(productsCart)
-
     const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
     const [searchAddress, setSearchAddress] = useState<CepProps>();
     const [searchAddressEdit, setSearchAddressEdit] = useState<CepProps>();
@@ -1456,6 +1454,17 @@ export default function Payment() {
 
     Modal.setAppElement('#__next');
 
+    const WEB_URL = 'http://localhost:3001';
+    let param = '';
+    productsCart && productsCart.map((ele) => {
+        param = param + 'product_id=' + ele.product_id + '&'
+    });
+    const NEW_URL = WEB_URL + '?' + param;
+    let url = new URL(NEW_URL);
+
+    let productsId: string = url?.search;
+
+
 
 
     /* CARTÃO DE CRÉDITO */
@@ -1516,11 +1525,11 @@ export default function Payment() {
                         },
                     },
                     callbacks: {
-                        onFormMounted: error => {
+                        onFormMounted: (error: any) => {
                             if (error) return console.warn("Form Mounted handling error: ", error);
                             console.log("Form mounted");
                         },
-                        onSubmit: (event: { preventDefault: () => void; }) => {
+                        onSubmit: async (event: { preventDefault: () => void; }) => {
                             event.preventDefault();
 
                             const {
@@ -1565,6 +1574,9 @@ export default function Payment() {
                                     }),
                                 });
 
+                                const apiClient = setupAPIClient();
+                                await apiClient.put(`/updateStockPayment${productsId}`);
+
                                 setTimeout(() => {
                                     clearAllCart();
                                 }, 2500);
@@ -1592,7 +1604,7 @@ export default function Payment() {
 
         initializeMercadoPago();
 
-    }, [valuePay, days]);
+    }, [valuePay, days, productsId]);
 
 
 
@@ -1638,6 +1650,9 @@ export default function Payment() {
                     notification_url: URL_NOTIFICATION
                 }),
             });
+
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStockPayment${productsId}`);
 
             setTimeout(() => {
                 clearAllCart();
@@ -1693,6 +1708,9 @@ export default function Payment() {
                     notification_url: URL_NOTIFICATION
                 }),
             });
+
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStockPayment${productsId}`);
 
             setTimeout(() => {
                 clearAllCart();
