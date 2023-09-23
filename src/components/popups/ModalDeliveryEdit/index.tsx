@@ -20,12 +20,16 @@ import { AiOutlineCompass } from 'react-icons/ai';
 import { InputUpdate } from '../../ui/InputUpdate';
 import { CartContext } from '../../../contexts/CartContext';
 import router from 'next/router';
+import { Loading } from '../../Loading';
 
 
 interface DeliverysRequest {
     isOpen: boolean;
     onRequestClose: () => void;
     deliverys: any;
+    lastCustomerDelivery: () => void;
+    refresh: () => void;
+    deliverysFunc: () => void;
 }
 
 type CepProps = {
@@ -37,9 +41,11 @@ type CepProps = {
     uf: string;
 }
 
-export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: DeliverysRequest) {
+export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys, lastCustomerDelivery, refresh, deliverysFunc }: DeliverysRequest) {
 
     const { cartProducts, productsCart, totalCart } = useContext(CartContext);
+
+    let apiClient = setupAPIClient();
 
     const customStyles = {
         content: {
@@ -64,20 +70,20 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
     const [cepBusca, setCepBusca] = useState("");
 
     const [cepLoadEdit, setCepLoadEdit] = useState(false);
+    const [loadingFreteEdit, setLoadingFreteEdit] = useState(false);
 
     const handleCepEdit = () => {
         setCepLoadEdit(!cepLoadEdit);
     }
 
     async function loadCep() {
-        const apiClient = setupAPIClient();
         try {
+            setLoadingFreteEdit(true);
             const response = await apiClient.post(`/findAddressCep`, {
                 cep: cepBusca
             });
-
+            setLoadingFreteEdit(false);
             setSearchAddress(response?.data);
-
             handleCepEdit();
 
         } catch (error) {
@@ -86,7 +92,6 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
     }
 
     async function updateDestinySelectedDelivery() {
-        const apiClient = setupAPIClient();
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
                 addressee: addresseeSelected,
@@ -99,7 +104,7 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
     }
 
     async function updateAddressSelectedDelivery() {
-        const apiClient = setupAPIClient();
+
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
                 address: searchAddress?.logradouro ? searchAddress?.logradouro : addressSelected
@@ -112,7 +117,7 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
     }
 
     async function updateNumberSelectedDelivery() {
-        const apiClient = setupAPIClient();
+
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
                 number: numeroSelected
@@ -125,7 +130,7 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
     }
 
     async function updateComplementSelectedDelivery() {
-        const apiClient = setupAPIClient();
+
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
                 complement: complementSelected
@@ -138,7 +143,7 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
     }
 
     async function updateBairroSelectedDelivery() {
-        const apiClient = setupAPIClient();
+
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
                 neighborhood: searchAddress?.bairro ? searchAddress?.bairro : bairroSelected
@@ -151,7 +156,7 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
     }
 
     async function updateReferenceSelectedDelivery() {
-        const apiClient = setupAPIClient();
+
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
                 reference: referenceSelected
@@ -185,10 +190,18 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
         totalLargura += dadosFrete[i].largura;
     }
 
+    const peso = Math.round(totalPeso > 30 ? 28 : totalPeso);
+    const comprimento = Math.round(totalComprimento > 82 ? 81 : totalComprimento);
+    const altura = Math.round(totalAltura > 37 ? 36 : totalAltura);
+    const largura = Math.round(totalLargura > 82 ? 81 : totalLargura);
+
     async function updateDelivery() {
-        const apiClient = setupAPIClient();
+
         const cep = searchAddress?.cep;
         try {
+
+            setLoadingFreteEdit(true);
+
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${deliverys?.id}`, {
                 cep: searchAddress?.cep,
                 neighborhood: searchAddress?.bairro ? searchAddress?.bairro : bairroSelected,
@@ -197,13 +210,13 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
             });
 
             const { data } = await apiClient.post('/freteCalculo', {
-                nCdServico: "04162",
-                sCepDestino: cep,
-                nVlPeso: totalPeso > 30 ? 28 : totalPeso,
-                nCdFormato: 1,
-                nVlComprimento: totalComprimento > 82 ? 81 : totalComprimento,
-                nVlAltura: totalAltura > 37 ? 36 : totalAltura,
-                nVlLargura: totalLargura > 82 ? 81 : totalLargura
+                /* nCdServico: "04162", */
+                sCepDestino: String(cep),
+                nVlPeso: String(peso),
+                /* nCdFormato: 1, */
+                nVlComprimento: String(comprimento),
+                nVlAltura: String(altura),
+                nVlLargura: String(largura)
             });
 
             var freteFormat = data[0]?.Valor;
@@ -234,8 +247,14 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
                 totalCartFinish: totalCart + frete
             });
 
-            toast.success("Endereço atual alterado com sucesso");
+            setLoadingFreteEdit(false);
 
+            lastCustomerDelivery();
+            refresh();
+            deliverysFunc();
+            onRequestClose();
+
+            toast.success("Endereço atual alterado com sucesso");
 
         } catch (error) {
             console.log(error);
@@ -257,6 +276,12 @@ export function ModalDeliveryEdit({ isOpen, onRequestClose, deliverys }: Deliver
             >
                 <FiX size={45} color="#f34748" />
             </ButtonClose>
+
+            {loadingFreteEdit ? (
+                <Loading />
+            ) :
+                null
+            }
 
             <ContainerContent>
 

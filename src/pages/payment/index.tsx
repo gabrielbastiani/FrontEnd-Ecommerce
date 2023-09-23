@@ -220,8 +220,10 @@ export default function Payment() {
     const [colorPay, setColorPay] = useState("");
 
     const [cardBrand, setCardBrand] = useState<any>({});
-    const [loading, setLoading] = useState(false);
+    const [loadingCupom, setLoadingCupom] = useState(false);
     const [loadingFrete, setLoadingFrete] = useState(false);
+    const [loadingNewFrete, setLoadingNewFrete] = useState(false);
+    const [loadingFreteEdit, setLoadingFreteEdit] = useState(false);
     const [loadingPayment, setLoadingPayment] = useState(false);
 
 
@@ -304,9 +306,11 @@ export default function Payment() {
 
     async function loadCep() {
         try {
+            setLoadingFreteEdit(true);
             const response = await apiClient.post(`/findAddressCep`, {
                 cep: cepBusca
             });
+            setLoadingFreteEdit(false);
             setSearchAddress(response?.data);
             handleCep();
         } catch (error) {
@@ -316,9 +320,11 @@ export default function Payment() {
 
     async function loadCepEdit() {
         try {
+            setLoadingFreteEdit(true);
             const response = await apiClient.post(`/findAddressCep`, {
                 cep: cepBusca
             });
+            setLoadingFreteEdit(false);
             setSearchAddressEdit(response?.data);
             handleCepEdit();
         } catch (error) {
@@ -409,6 +415,24 @@ export default function Payment() {
         lastDeliveryCustomer();
     }, [customer_id]);
 
+    async function lastCustomerDelivery() {
+        try {
+            const { data } = await apiClient.get(`/customer/delivery/findFirstDelivery?customer_id=${customer_id}`);
+            setIdSelected(data?.id);
+            setAddressSelected(data?.address);
+            setAddresseeSelected(data?.addressee);
+            setNumeroSelected(data?.number);
+            setBairroSelected(data?.neighborhood);
+            setCitySelected(data?.city);
+            setEstadosSelected(data?.state);
+            setCepSelected(data?.cep);
+            setReferenceSelected(data?.reference);
+            setComplementSelected(data?.complement);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         async function deliverys() {
             try {
@@ -420,6 +444,15 @@ export default function Payment() {
         }
         deliverys();
     }, [customer_id]);
+
+    async function deliverys() {
+        try {
+            const { data } = await apiClient.get(`/customer/findAlldeliveryCustomer?customer_id=${customer_id}`);
+            setDeliverysCustomer(data || []);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     async function updateName() {
         try {
@@ -494,6 +527,7 @@ export default function Payment() {
 
     async function removeCupomPayment() {
         try {
+            setLoadingCupom(false);
             await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
                 totalCartFinish: totalCart + fretePayment
             });
@@ -505,7 +539,11 @@ export default function Payment() {
                 new_value_products: [],
             });
 
-            toast.success("Você removeu o cupom aplicado para esse pedido");
+            setLoadingCupom(true);
+
+            setTimeout(() => {
+                Router.reload();
+            }, 3000);
 
         } catch (error) {
             console.log(error);
@@ -602,6 +640,9 @@ export default function Payment() {
         }
 
         try {
+
+            setLoadingFreteEdit(true);
+
             await apiClient.put(`/customer/delivery/updateCurrentDelivery?customer_id=${customer_id}&deliveryAddressCustomer_id=${id}`);
 
             const cepfrete = cep;
@@ -646,9 +687,13 @@ export default function Payment() {
                 totalCartFinish: totalCart + frete
             });
 
-            toast.success('Endereço de entrega escolhido com sucesso')
+            setLoadingFreteEdit(false);
 
+            lastCustomerDelivery();
             refresh();
+            deliverys();
+
+            toast.success('Endereço de entrega escolhido com sucesso')
 
         } catch (error) {
             console.log(error.response.data);
@@ -729,6 +774,9 @@ export default function Payment() {
         }
 
         const cep = searchAddressEdit?.cep;
+
+        setLoadingFreteEdit(true);
+
         try {
             await apiClient.put(`/customer/delivery/updateAllDateDeliveryAddressCustomer?deliveryAddressCustomer_id=${idSelected}`, {
                 cep: searchAddressEdit?.cep,
@@ -776,11 +824,15 @@ export default function Payment() {
                 totalCartFinish: totalCart + frete
             });
 
+            lastCustomerDelivery();
+            refresh();
+            deliverys();
+
+            setLoadingFreteEdit(false);
+
             toast.success("Endereço atual alterado com sucesso");
 
             handleDelivery();
-
-            refresh();
 
         } catch (error) {
             console.log(error);
@@ -796,6 +848,9 @@ export default function Payment() {
         const cep = searchAddress?.cep;
 
         try {
+
+            setLoadingNewFrete(true);
+
             await apiClient.post(`/customer/delivery/createDeliveryAddress`, {
                 customer_id: customer_id,
                 addressee: addresseeSelected,
@@ -848,11 +903,15 @@ export default function Payment() {
                 totalCartFinish: totalCart + frete
             });
 
+            lastCustomerDelivery();
+            refresh();
+            deliverys();
+
+            setLoadingNewFrete(false);
+
             toast.success("Novo endereço cadastrado com sucesso");
 
             closenewDelivery();
-
-            refresh();
 
         } catch (error) {
             console.log(error);
@@ -1664,6 +1723,24 @@ export default function Payment() {
             </Head>
 
             {loadingPayment ? (
+                <Loading />
+            ) :
+                null
+            }
+
+            {loadingCupom ? (
+                <Loading />
+            ) :
+                null
+            }
+
+            {loadingFreteEdit ? (
+                <Loading />
+            ) :
+                null
+            }
+
+            {loadingNewFrete ? (
                 <Loading />
             ) :
                 null
@@ -2676,8 +2753,10 @@ export default function Payment() {
                 <ModalDeliveryEdit
                     isOpen={modalVisible}
                     onRequestClose={handleCloseModal}
-                    /* @ts-ignore */
                     deliverys={modalItem}
+                    lastCustomerDelivery={lastCustomerDelivery}
+                    refresh={refresh}
+                    deliverysFunc={deliverys}
                 />
             )}
         </>
