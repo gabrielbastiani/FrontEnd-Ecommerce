@@ -23,7 +23,6 @@ type MyContextProps = {
   newDataProducts: any;
   newSubTotalCart: number;
   prazoEntrega: string;
-  loadingCart: boolean;
 };
 
 type AddCepProps = {
@@ -54,6 +53,7 @@ export const CartContext = createContext({} as MyContextProps);
 export function CartProviderProducts({ children }: Props) {
 
   const { customer } = useContext(AuthContext);
+  const apiClient = setupAPIClient();
 
   const idCart = generateUniqueId({
     useLetters: true,
@@ -72,7 +72,6 @@ export function CartProviderProducts({ children }: Props) {
   const [newDataProducts, setNewDataProducts] = useState<any[]>([]);
   const [newSubTotalCart, setNewSubTotalCart] = useState(0);
   const [prazoEntrega, setPrazoEntrega] = useState("");
-  const [loadingCart, setLoadingCart] = useState(false);
 
   const [cartCep, setCartCep] = useState<any>("");
 
@@ -88,11 +87,11 @@ export function CartProviderProducts({ children }: Props) {
     setCartProducts(arrayCart || []);
   }, []);
 
+  let storageId = String(cartProducts[0]?.store_cart_id);
+
   useEffect(() => {
     try {
-      const apiClient = setupAPIClient();
       async function loadCart() {
-        const storageId = String(cartProducts[0]?.store_cart_id);
         const { data } = await apiClient.get(`/findProductsCart?store_cart_id=${storageId}`);
         setProductsCart(data || []);
       }
@@ -100,13 +99,11 @@ export function CartProviderProducts({ children }: Props) {
     } catch (error) {
       console.log(error);
     }
-  }, [cartProducts]);
+  }, [storageId]);
 
   useEffect(() => {
     try {
-      const apiClient = setupAPIClient();
       async function loadCartTotal() {
-        const storageId = String(cartProducts[0]?.store_cart_id);
         const { data } = await apiClient.get(`/findTotalCart?store_cart_id=${storageId}`);
         setTotalCart(data?.total || 0);
         setFretePayment(data?.frete || 0);
@@ -120,13 +117,11 @@ export function CartProviderProducts({ children }: Props) {
     } catch (error) {
       console.log(error);
     }
-  }, [cartProducts]);
+  }, [storageId]);
 
   useEffect(() => {
     try {
-      const apiClient = setupAPIClient();
       async function loadFinishCart() {
-        const storageId = String(cartProducts[0]?.store_cart_id);
         const { data } = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
         setTotalFinishCart(data?.totalCartFinish || 0);
       }
@@ -134,7 +129,7 @@ export function CartProviderProducts({ children }: Props) {
     } catch (error) {
       console.log(error);
     }
-  }, [cartProducts]);
+  }, [storageId]);
 
 
 
@@ -142,13 +137,11 @@ export function CartProviderProducts({ children }: Props) {
 
   async function saveProductCart(id: string, count: any, prod: any) {
 
-    const apiClient = setupAPIClient();
     const findProduct = cartProducts.filter(item => item?.product_id === id);
     const mapFilter = findProduct.map(pro => pro?.product_id);
 
     if (mapFilter[0] === id) {
 
-      const storageId = String(cartProducts[0]?.store_cart_id);
       const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${id}`);
 
       let more_amount = data?.amount + count;
@@ -232,7 +225,6 @@ export function CartProviderProducts({ children }: Props) {
     const cart_total: number = prod?.product?.promotion ? prod?.product?.promotion * count + totalCart : prod?.promotion * count + totalCart
     let sumadd: number = productsCart[0]?.amount + count;
 
-    const storageId = String(cartProducts[0]?.store_cart_id);
     await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
       total: cart_total,
       amount_products: sumadd
@@ -252,13 +244,11 @@ export function CartProviderProducts({ children }: Props) {
 
   async function addMoreItemCart(product_id: string) {
 
-    const apiClient = setupAPIClient();
     const findProduct = cartProducts.filter(item => item?.product_id === product_id);
     const mapFilter = findProduct.map(pro => pro?.product_id);
 
     if (mapFilter[0] === product_id) {
 
-      const storageId = String(cartProducts[0]?.store_cart_id);
       const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
 
       let more_amountadd = data?.amount + 1;
@@ -293,11 +283,8 @@ export function CartProviderProducts({ children }: Props) {
 
   async function removeItemCart(product_id: string, prod: any) {
 
-    const apiClient = setupAPIClient();
-
     if (prod?.amount > 1) {
 
-      const storageId = String(cartProducts[0]?.store_cart_id);
       const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
 
       let sub_amount = Number(data?.amount) - 1;
@@ -322,8 +309,7 @@ export function CartProviderProducts({ children }: Props) {
 
       return;
     }
-
-    const storageId = String(cartProducts[0]?.store_cart_id);
+    
     const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
     const cart_total = totalCart - data?.product?.promotion;
 
@@ -355,9 +341,6 @@ export function CartProviderProducts({ children }: Props) {
   /*Remover o produto*/
 
   async function removeProductCart(product_id: string) {
-
-    const apiClient = setupAPIClient();
-    const storageId = String(cartProducts[0]?.store_cart_id);
 
     const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
     const cart_total = totalCart - data?.total;
@@ -392,9 +375,6 @@ export function CartProviderProducts({ children }: Props) {
 
   async function clearAllCart() {
 
-    const apiClient = setupAPIClient();
-    const storageId = String(cartProducts[0]?.store_cart_id);
-
     await apiClient.delete(`/clearCart?store_cart_id=${storageId}`);
 
     localStorage.removeItem('@cartProducts');
@@ -413,9 +393,6 @@ export function CartProviderProducts({ children }: Props) {
 
     setCartCep(cepfrete);
 
-    const apiClient = setupAPIClient();
-    const storageId = String(cartProducts[0]?.store_cart_id);
-
     await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
       cep: cepfrete,
       frete: frete,
@@ -429,7 +406,7 @@ export function CartProviderProducts({ children }: Props) {
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ loadingCart, prazoEntrega, newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ prazoEntrega, newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )

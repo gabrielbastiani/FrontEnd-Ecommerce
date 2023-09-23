@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { AuthProvider } from '../contexts/AuthContext';
 import AuthProviderProducts from '../contexts/AuthContextProducts';
 import { Router } from 'next/dist/client/router';
-import NProgress, { trickle } from "nprogress";
+import NProgress from "nprogress";
 import 'nprogress/nprogress.css';
 import { CartProviderProducts } from '../contexts/CartContext';
 
