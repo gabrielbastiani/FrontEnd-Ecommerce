@@ -143,7 +143,7 @@ export function CartProviderProducts({ children }: Props) {
     setNewSubTotalCart(data?.new_subTotal || 0);
     setPrazoEntrega(data?.days_delivery || '');
     const responseDataFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
-    setTotalFinishCart(responseDataFinish.data?.totalCartFinish || 0);
+    setTotalFinishCart(responseDataFinish?.data?.totalCartFinish || 0);
     let dadosCart = localStorage.getItem("@cartProducts");
     let arrayCart = JSON.parse(dadosCart);
     setCartProducts(arrayCart || []);
