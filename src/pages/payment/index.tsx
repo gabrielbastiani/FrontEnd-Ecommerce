@@ -212,6 +212,7 @@ export default function Payment() {
 
     const [cardBrand, setCardBrand] = useState<any>({});
     const [loading, setLoading] = useState(false);
+    const [loadingFrete, setLoadingFrete] = useState(false);
 
 
     let typesPayment = [
@@ -562,7 +563,7 @@ export default function Payment() {
         async function deliveryDays() {
             const apiClient = setupAPIClient();
             try {
-                setLoading(true);
+                setLoadingFrete(true);
                 const { data } = await apiClient.post('/freteCalculo', {
                     /* nCdServico: "04162", */
                     sCepDestino: String(cepSelected),
@@ -573,7 +574,7 @@ export default function Payment() {
                     nVlLargura: String(largura)
                 });
 
-                setLoading(false);
+                setLoadingFrete(false);
 
                 setDaysDelivery(data[0].PrazoEntrega);
 
@@ -2404,7 +2405,7 @@ export default function Payment() {
                                 ENTREGA EM:
                             </Total>
 
-                            {loading ? (
+                            {loadingFrete ? (
                                 <>
                                     <ErrorText>Espere um momento estamos calculando o frete para você se esse processo demorar muito, recarregue a página...</ErrorText>
                                     <br />
