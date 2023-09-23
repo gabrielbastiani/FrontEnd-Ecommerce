@@ -136,7 +136,6 @@ const AccordionItem: React.ExoticComponent<import('@szhsin/react-accordion').Acc
 export const HeaderStore = () => {
 
     const { customer } = useContext(AuthContext);
-    /* @ts-ignore */
     const { clearAllCart, totalCart, productsCart, cartProducts, removeItemCart, addMoreItemCart, removeProductCart } = useContext(CartContext);
 
     const [logo, setLogo] = useState('');

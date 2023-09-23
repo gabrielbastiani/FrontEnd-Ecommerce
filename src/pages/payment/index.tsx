@@ -130,6 +130,7 @@ type CuoponProps = {
 export default function Payment() {
 
     const {
+        refresh,
         clearAllCart,
         prazoEntrega,
         newSubTotalCart,
@@ -146,6 +147,10 @@ export default function Payment() {
 
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
+
+    useEffect(() => {
+        refresh();
+    }, [refresh]);
 
     const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
     const [searchAddress, setSearchAddress] = useState<CepProps>();
@@ -214,7 +219,7 @@ export default function Payment() {
     const [cardBrand, setCardBrand] = useState<any>({});
     const [loading, setLoading] = useState(false);
     const [loadingFrete, setLoadingFrete] = useState(false);
-    const [loadingPaymentTicket, setLoadingPaymentTicket] = useState(false);
+    const [loadingPayment, setLoadingPayment] = useState(false);
 
 
     let typesPayment = [
@@ -1548,7 +1553,7 @@ export default function Payment() {
 
                             try {
 
-                                setLoadingPaymentTicket(false);
+                                setLoadingPayment(false);
 
                                 fetch("http://localhost:3333/paymentCardResult", {
                                     method: "POST",
@@ -1583,7 +1588,7 @@ export default function Payment() {
                                 const apiClient = setupAPIClient();
                                 await apiClient.put(`/updateStockPayment${productsId}`);
 
-                                setLoadingPaymentTicket(true);
+                                setLoadingPayment(true);
 
                                 setTimeout(() => {
                                     clearAllCart();
@@ -1621,57 +1626,57 @@ export default function Payment() {
     async function handleRegisterBoleto(event: FormEvent) {
         event.preventDefault();
 
-        setLoadingPaymentTicket(false);
+        setLoadingPayment(false);
 
         try {
-        fetch("http://localhost:3333/paymentBoletoResult", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
-            },
-            body: JSON.stringify({
-                transaction_amount: Number(totalFinishCart.toFixed(2)),
-                description: store,
-                payment_method_id: 'bolbradesco',
-                payer: {
-                    first_name: nameCompletes,
-                    last_name: nameCompletes,
-                    email: emails,
-                    identification: {
-                        number: removerAcentos(cpfCnpj),
-                        type: tipo
+            fetch("http://localhost:3333/paymentBoletoResult", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
+                },
+                body: JSON.stringify({
+                    transaction_amount: Number(totalFinishCart.toFixed(2)),
+                    description: store,
+                    payment_method_id: 'bolbradesco',
+                    payer: {
+                        first_name: nameCompletes,
+                        last_name: nameCompletes,
+                        email: emails,
+                        identification: {
+                            number: removerAcentos(cpfCnpj),
+                            type: tipo
+                        },
+                        address: {
+                            zip_code: removerAcentos(ceps),
+                            street_name: locals,
+                            street_number: numeros,
+                            neighborhood: bairros,
+                            city: cidades,
+                            federal_unit: estados
+                        }
                     },
-                    address: {
-                        zip_code: removerAcentos(ceps),
-                        street_name: locals,
-                        street_number: numeros,
-                        neighborhood: bairros,
-                        city: cidades,
-                        federal_unit: estados
-                    }
-                },
-                metadata: {
-                    customer_id: customer_id,
-                    delivery_id: idSelected,
-                    order_data_delivery: days,
-                    cupom: cupomPayment,
-                    store_cart_id: cartProducts[0]?.store_cart_id
-                },
-                notification_url: URL_NOTIFICATION
-            })
-        });
+                    metadata: {
+                        customer_id: customer_id,
+                        delivery_id: idSelected,
+                        order_data_delivery: days,
+                        cupom: cupomPayment,
+                        store_cart_id: cartProducts[0]?.store_cart_id
+                    },
+                    notification_url: URL_NOTIFICATION
+                })
+            });
 
-        const apiClient = setupAPIClient();
-        await apiClient.put(`/updateStockPayment${productsId}`);
+            const apiClient = setupAPIClient();
+            await apiClient.put(`/updateStockPayment${productsId}`);
 
-        setLoadingPaymentTicket(true);
+            setLoadingPayment(true);
 
-        setTimeout(() => {
-            clearAllCart();
-        }, 2500);
+            setTimeout(() => {
+                clearAllCart();
+            }, 2500);
 
-        Router.push('/thanks');
+            Router.push('/thanks');
 
         } catch (error) {
             console.error("Erro ao fazer a requisição:", error);
@@ -1688,7 +1693,7 @@ export default function Payment() {
         event.preventDefault();
         try {
 
-            setLoadingPaymentTicket(false);
+            setLoadingPayment(false);
 
             fetch("http://localhost:3333/paymentPixResult", {
                 method: "POST",
@@ -1731,7 +1736,7 @@ export default function Payment() {
             const apiClient = setupAPIClient();
             await apiClient.put(`/updateStockPayment${productsId}`);
 
-            setLoadingPaymentTicket(true);
+            setLoadingPayment(true);
 
             setTimeout(() => {
                 clearAllCart();
@@ -1751,9 +1756,9 @@ export default function Payment() {
                 <title>Pagamento</title>
             </Head>
 
-            {loadingPaymentTicket ? (
+            {loadingPayment ? (
                 <Loading />
-            ) : 
+            ) :
                 null
             }
 

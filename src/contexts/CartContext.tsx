@@ -1,6 +1,5 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { CartDataContextType } from '../../@types/cart';
-import router from 'next/router';
 import { setupAPIClient } from '../services/api';
 import generateUniqueId from 'generate-unique-id';
 import { AuthContext } from './AuthContext';
@@ -15,6 +14,7 @@ type MyContextProps = {
   removeProductCart: (id: AddItemsProps) => Promise<void>;
   clearAllCart(): void;
   dataTotalCart: (cepfrete: AddCepProps) => Promise<void>;
+  refresh(): void;
   totalFinishCart: number;
   totalCart: number;
   fretePayment: number;
@@ -131,6 +131,24 @@ export function CartProviderProducts({ children }: Props) {
     }
   }, [storageId]);
 
+  async function refresh() {
+    const responseCart = await apiClient.get(`/findProductsCart?store_cart_id=${storageId}`);
+    setProductsCart(responseCart.data || []);
+    const { data } = await apiClient.get(`/findTotalCart?store_cart_id=${storageId}`);
+    setTotalCart(data?.total || 0);
+    setFretePayment(data?.frete || 0);
+    setFretePaymentCoupon(data?.frete_coupon || 0);
+    setCupomPayment(data?.coupon || "");
+    setNewDataProducts(data?.new_value_products || []);
+    setNewSubTotalCart(data?.new_subTotal || 0);
+    setPrazoEntrega(data?.days_delivery || '');
+    const responseDataFinish = await apiClient.get(`/findCartTotalFinish?store_cart_id=${storageId}`);
+    setTotalFinishCart(responseDataFinish.data?.totalCartFinish || 0);
+    let dadosCart = localStorage.getItem("@cartProducts");
+    let arrayCart = JSON.parse(dadosCart);
+    setCartProducts(arrayCart || []);
+  }
+
 
 
   /*Gravar o produto*/
@@ -160,9 +178,7 @@ export function CartProviderProducts({ children }: Props) {
         amount_products: somaMore
       });
 
-      setTimeout(() => {
-        router.reload();
-      }, 1500);
+      refresh();
 
       return;
     }
@@ -197,9 +213,7 @@ export function CartProviderProducts({ children }: Props) {
         amount_products: firstAmount
       });
 
-      setTimeout(() => {
-        router.reload();
-      }, 1500);
+      refresh();
 
       return;
 
@@ -230,9 +244,7 @@ export function CartProviderProducts({ children }: Props) {
       amount_products: sumadd
     });
 
-    setTimeout(() => {
-      router.reload();
-    }, 1500);
+    refresh();
 
     return;
 
@@ -267,9 +279,7 @@ export function CartProviderProducts({ children }: Props) {
         amount_products: sum
       });
 
-      setTimeout(() => {
-        router.reload();
-      }, 1500);
+      refresh();
 
       return;
 
@@ -303,13 +313,11 @@ export function CartProviderProducts({ children }: Props) {
         amount_products: removAmount
       });
 
-      setTimeout(() => {
-        router.reload();
-      }, 1500);
+      refresh();
 
       return;
     }
-    
+
     const { data } = await apiClient.get(`/findCart?store_cart_id=${storageId}&product_id=${product_id}`);
     const cart_total = totalCart - data?.product?.promotion;
 
@@ -330,9 +338,7 @@ export function CartProviderProducts({ children }: Props) {
     const removeItem = cartProducts.filter(item => item?.product_id !== product_id);
     localStorage.setItem('@cartProducts', JSON.stringify(removeItem));
 
-    setTimeout(() => {
-      router.reload();
-    }, 1500);
+    refresh();
 
   }
 
@@ -363,9 +369,7 @@ export function CartProviderProducts({ children }: Props) {
     const removeItem = cartProducts.filter(item => item.product_id !== product_id);
     localStorage.setItem('@cartProducts', JSON.stringify(removeItem));
 
-    setTimeout(() => {
-      router.reload();
-    }, 1500);
+    refresh();
 
   }
 
@@ -379,9 +383,7 @@ export function CartProviderProducts({ children }: Props) {
 
     localStorage.removeItem('@cartProducts');
 
-    setTimeout(() => {
-      router.reload();
-    }, 1500);
+    refresh();
 
   }
 
@@ -403,10 +405,12 @@ export function CartProviderProducts({ children }: Props) {
       days_delivery: prazoEntrega
     });
 
+    refresh();
+
   }
 
   return (/* @ts-ignore */
-    <CartContext.Provider value={{ prazoEntrega, newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+    <CartContext.Provider value={{ refresh, prazoEntrega, newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
       {children}
     </CartContext.Provider>
   )

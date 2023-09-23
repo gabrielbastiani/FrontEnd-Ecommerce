@@ -61,6 +61,7 @@ import { GiCancel } from "react-icons/gi";
 import router from "next/router";
 import { AuthContext } from "../../contexts/AuthContext";
 import Link from "next/link";
+import { Loading } from "../../components/Loading";
 
 
 export interface DataCart {
@@ -70,7 +71,6 @@ export interface DataCart {
 export default function Carrinho() {
 
     const { isAuthenticated, customer } = useContext(AuthContext);
-    /* @ts-ignore */
     const { cupomPayment, dataTotalCart, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
 
     const [desconto, setDesconto] = useState("");
@@ -1065,6 +1065,12 @@ export default function Carrinho() {
                 <title>Carrinho</title>
             </Head>
 
+            {loading ? (
+                <Loading />
+            ) :
+                null
+            }
+
             <HeaderCart />
 
             <PageSection
@@ -1237,32 +1243,22 @@ export default function Carrinho() {
                                     Calcular
                                 </ButtonCep>
                                 <br />
-                                {loading ? (
-                                    <>
-                                        <ErrorText>Espere um momento estamos calculando o frete para você se esse processo demorar muito,<br />recarregue a pagina e digite manualmente o frete no campo acima...</ErrorText>
-                                        <br />
-                                        <br />
-                                    </>
-                                ) :
-                                    <>
-                                        {dataFrete.map((item, index) => {
-                                            return (
-                                                <ContainerFrete key={index}>
-                                                    <BoxFrete>
-                                                        {item?.Valor === '' || item?.PrazoEntrega === '' ? (
-                                                            <ErrorText>Erro ao calcular o frete.</ErrorText>
-                                                        ) :
-                                                            <>
-                                                                <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
-                                                                <TextFrete><TextStrong>{item?.PrazoEntrega}</TextStrong></TextFrete>
-                                                            </>
-                                                        }
-                                                    </BoxFrete>
-                                                </ContainerFrete>
-                                            )
-                                        })}
-                                    </>
-                                }
+                                {dataFrete.map((item, index) => {
+                                    return (
+                                        <ContainerFrete key={index}>
+                                            <BoxFrete>
+                                                {item?.Valor === '' || item?.PrazoEntrega === '' ? (
+                                                    <ErrorText>Erro ao calcular o frete.</ErrorText>
+                                                ) :
+                                                    <>
+                                                        <TextFrete>Valor do frete: <TextStrong>R${item?.Valor}</TextStrong></TextFrete>
+                                                        <TextFrete><TextStrong>{item?.PrazoEntrega}</TextStrong></TextFrete>
+                                                    </>
+                                                }
+                                            </BoxFrete>
+                                        </ContainerFrete>
+                                    )
+                                })}
                             </BoxCep>
 
                             {formatedFrete ? (

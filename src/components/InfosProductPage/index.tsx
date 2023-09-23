@@ -141,20 +141,22 @@ const InfosProductPage = ({
 
         localStorage.setItem("@favoriteproduct", JSON.stringify(dados));
 
-        setTimeout(() => {
-            router.reload();
-        }, 2000);
+        refreshFavorite();
     }
 
     const [productsFavorites, setProductsFavorites] = useState<any[]>([]);
 
     useEffect(() => {
         let dadosFavorites = localStorage.getItem("@favoriteproduct");
-
         let arrayFavorites = JSON.parse(dadosFavorites);
-
         setProductsFavorites(arrayFavorites);
     }, []);
+
+    function refreshFavorite() {
+        let dadosFavorites = localStorage.getItem("@favoriteproduct");
+        let arrayFavorites = JSON.parse(dadosFavorites);
+        setProductsFavorites(arrayFavorites);
+    }
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisibleProposta, setModalVisibleProposta] = useState(false);
@@ -193,9 +195,7 @@ const InfosProductPage = ({
         const data = JSON.parse(localStorage.getItem("@favoriteproduct")).filter((item: string) => item != product_id);
         localStorage.setItem("@favoriteproduct", JSON.stringify(data));
         toast.success('Produto favorito excluido da sua lista.');
-        setTimeout(() => {
-            router.reload();
-        }, 2000);
+        refreshFavorite();
     }
 
     const [emails, setEmails] = useState('');

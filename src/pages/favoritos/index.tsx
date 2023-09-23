@@ -62,6 +62,12 @@ export default function Favoritos() {
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
+    function refreshFavorite() {
+        let dadosFavorites = localStorage.getItem("@favoriteproduct");
+        let arrayFavorites = JSON.parse(dadosFavorites);
+        setProductsFavorites(arrayFavorites);
+    }
+
     useEffect(() => {
         let dadosFavorites = localStorage.getItem("@favoriteproduct");
         let arrayFavorites = JSON.parse(dadosFavorites);
@@ -104,17 +110,15 @@ export default function Favoritos() {
         const data = JSON.parse(localStorage.getItem("@favoriteproduct")).filter((item: string) => item != id);
         localStorage.setItem("@favoriteproduct", JSON.stringify(data));
         toast.success('Produto favorito excluido da sua lista.');
-        setTimeout(() => {
-            router.reload();
-        }, 2000);
+        refreshFavorite();
     }
 
     function clearFavorites() {
         localStorage.removeItem("@favoriteproduct");
         toast.success('Todos seus produtos favoritos foram excluidos da sua lista.');
         setTimeout(() => {
-            Router.push('/');
-        }, 2000);
+            Router.back();
+        }, 3000);
     }
 
     return (
