@@ -1,10 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { canSSRAuthPayment } from '../../utils/canSSRAuthPayment';
-import {
-    ContLogin,
-    ContainerCenter,
-    ExitDelivery,
-} from './styles';
+import { ContLogin, ContainerCenter } from './styles';
 import { AuthContext } from '../../contexts/AuthContext';
 import Head from 'next/head';
 import Titulos from '../../components/Titulos';
@@ -22,7 +18,7 @@ import {
 } from '../payment/styles';
 import { AiOutlineCompass } from 'react-icons/ai';
 import Router from 'next/router';
-import Link from 'next/link';
+import { Loading } from '../../components/Loading';
 
 
 type CepProps = {
@@ -35,7 +31,6 @@ type CepProps = {
 }
 
 export default function registerNewDelivey() {
-    /* @ts-ignore */
     const { cartProducts } = useContext(CartContext);
     const { customer } = useContext(AuthContext);
     let customer_id = customer?.id;
@@ -48,6 +43,8 @@ export default function registerNewDelivey() {
     const [numeroSelected, setNumeroSelected] = useState("");
     const [referenceSelected, setReferenceSelected] = useState("");
     const [complementSelected, setComplementSelected] = useState("");
+
+    const [freteLoading, setFreteLoading] = useState(false);
 
     const [cepNew, setCepNew] = useState("");
 
@@ -81,6 +78,7 @@ export default function registerNewDelivey() {
     async function handleRegisterNewDelivery() {
         const apiClient = setupAPIClient();
         try {
+            setFreteLoading(true);
             await apiClient.post(`/customer/delivery/createDeliveryAddress`, {
                 customer_id: customer_id,
                 addressee: addresseeSelected,
@@ -93,6 +91,8 @@ export default function registerNewDelivey() {
                 city: searchAddress?.localidade,
                 state: searchAddress?.uf
             });
+
+            setFreteLoading(false);
 
             Router.push('/payment');
 
@@ -107,6 +107,12 @@ export default function registerNewDelivey() {
             <Head>
                 <title>Cadastro de endereço</title>
             </Head>
+
+            {freteLoading ? (
+                <Loading />
+            ) :
+                null
+            }
 
             <ContainerCenter>
 

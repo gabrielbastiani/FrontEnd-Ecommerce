@@ -129,6 +129,7 @@ type CuoponProps = {
 export default function Payment() {
 
     const {
+        updateCartAbandoned,
         refresh,
         clearAllCart,
         prazoEntrega,
@@ -537,6 +538,8 @@ export default function Payment() {
                 new_subTotal: 0,
                 new_value_products: [],
             });
+
+            updateCartAbandoned();
 
             setLoadingCupom(true);
 
@@ -1007,6 +1010,7 @@ export default function Payment() {
                     toast.success("Cupom aplicado com sucesso!");
 
                     refresh();
+                    updateCartAbandoned();
 
                 }
 
@@ -1083,6 +1087,7 @@ export default function Payment() {
                 toast.success("Cupom aplicado com sucesso!");
 
                 refresh();
+                updateCartAbandoned();
 
                 return;
             }
@@ -1126,6 +1131,7 @@ export default function Payment() {
                 toast.success("Cupom aplicado com sucesso!");
 
                 refresh();
+                updateCartAbandoned();
 
                 return;
             }
@@ -1153,6 +1159,7 @@ export default function Payment() {
                 toast.success("Cupom aplicado com sucesso!");
 
                 refresh();
+                updateCartAbandoned();
 
                 return;
             }
@@ -1180,6 +1187,7 @@ export default function Payment() {
                 toast.success("Cupom aplicado com sucesso!");
 
                 refresh();
+                updateCartAbandoned();
 
                 return;
             }
@@ -1207,6 +1215,7 @@ export default function Payment() {
                 toast.success("Cupom aplicado com sucesso!");
 
                 refresh();
+                updateCartAbandoned();
 
                 return;
             }
@@ -1285,6 +1294,7 @@ export default function Payment() {
                     toast.success("Cupom aplicado com sucesso!");
 
                     refresh();
+                    updateCartAbandoned();
 
                     return;
                 }
@@ -1331,6 +1341,7 @@ export default function Payment() {
                 toast.success("Cupom aplicado com sucesso!");
 
                 refresh();
+                updateCartAbandoned();
 
                 return;
             }
@@ -1406,6 +1417,7 @@ export default function Payment() {
                 toast.success("Cupom aplicado com sucesso!");
 
                 refresh();
+                updateCartAbandoned();
 
                 return;
             }

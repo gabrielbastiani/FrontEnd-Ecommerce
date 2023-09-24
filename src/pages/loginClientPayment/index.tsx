@@ -25,7 +25,7 @@ import { CartContext } from '../../contexts/CartContext';
 
 export default function loginClientPayment() {
     /* @ts-ignore */
-    const { cartProducts, cartCep } = useContext(CartContext);
+    const { cartProducts, cartCep, dataCart } = useContext(CartContext);
     const { signInPay } = useContext(AuthContext);
 
     const [email, setEmail] = useState('');
@@ -59,7 +59,8 @@ export default function loginClientPayment() {
             email,
             password,
             cartProducts,
-            cartCep
+            cartCep,
+            dataCart,
         }
 
         /* @ts-ignore */

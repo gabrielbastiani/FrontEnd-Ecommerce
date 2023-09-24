@@ -128,7 +128,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
   /* @ts-ignore */
-  async function signInPay({ email, password, cartProducts, cartCep }: SignInProps) {
+  async function signInPay({ email, password, cartProducts, cartCep, dataCart }: SignInProps) {
     const apiClient = setupAPIClient();
     try {
       const response = await api.post('/customer/session', {
@@ -156,6 +156,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (cartProducts.length >= 1) {
 
         const storageId = String(cartProducts[0]?.store_cart_id);
+
+        await apiClient.post(`/createAbandonedCart`, {
+          customer_id: id,
+          store_cart_id: storageId,
+          cart_abandoned: dataCart
+        });
+
         api.put(`/updateCartPaymentCustomer?store_cart_id=${storageId}`, {
           customer_id: String(id),
           cep: cartCep
@@ -175,7 +182,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       Router.push('/payment');
 
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error);
       toast.error("Usuario ou senha errado!!!")
     }
   }

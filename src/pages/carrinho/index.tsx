@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { PageSection } from "../../components/dateStoreUx/styles";
 import FooterAccount from "../../components/FooterAccount";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import Image from "next/image";
 import { BsFillTrashFill } from "react-icons/bs";
@@ -71,7 +71,20 @@ export interface DataCart {
 export default function Carrinho() {
 
     const { isAuthenticated, customer } = useContext(AuthContext);
-    const { cupomPayment, dataTotalCart, productsCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart, cartProducts, totalCart } = useContext(CartContext);
+    const {
+        getCartExist,
+        handleCartAbandoned,
+        updateCartAbandoned,
+        cupomPayment,
+        dataTotalCart,
+        productsCart,
+        addMoreItemCart,
+        removeItemCart,
+        removeProductCart,
+        clearAllCart,
+        cartProducts,
+        totalCart
+    } = useContext(CartContext);
 
     const [desconto, setDesconto] = useState("");
     const [totalDesconto, setTotalDesconto] = useState("");
@@ -106,7 +119,16 @@ export default function Carrinho() {
             const prazoEntrega = null;
             /* @ts-ignore */
             dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
-            router.reload();
+
+            if (getCartExist?.length === 0 && isAuthenticated === true) {
+                handleCartAbandoned();
+                Router.reload();
+            } else if (getCartExist?.length >= 1 && isAuthenticated === true) {
+                updateCartAbandoned();
+            } else {
+                Router.reload();
+            }
+
         } catch (error) {
             console.log(error);
         }
@@ -220,6 +242,14 @@ export default function Carrinho() {
             /* @ts-ignore */
             dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
+            if (getCartExist?.length === 0 && isAuthenticated === true) {
+                handleCartAbandoned();
+            } else if (getCartExist?.length >= 1 && isAuthenticated === true) {
+                updateCartAbandoned();
+            } else {
+                return;
+            }
+
         } catch (error) {
             console.log(error);
             toast.error("OPS!... Algum erro de comunicação por parte dos correios aqui com a loja, tente novamente por favor.");
@@ -292,6 +322,8 @@ export default function Carrinho() {
                     /* @ts-ignore */
                     dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
+                    updateCartAbandoned();
+
                     handleShowMenu();
 
                 }
@@ -345,6 +377,8 @@ export default function Carrinho() {
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
+                updateCartAbandoned();
+
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
                 setNewPriceArray(newvalue);
@@ -370,6 +404,8 @@ export default function Carrinho() {
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
+                updateCartAbandoned();
+
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
                 handleShowMenu();
@@ -390,6 +426,8 @@ export default function Carrinho() {
                 const newvalue = [];
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+
+                updateCartAbandoned();
 
                 setDesconto(data?.name);
                 setZero(zeroFrete);
@@ -412,6 +450,8 @@ export default function Carrinho() {
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
+                updateCartAbandoned();
+
                 setDesconto(data?.name);
                 setFreteCupom(valueFrete);
                 handleShowMenu();
@@ -432,6 +472,8 @@ export default function Carrinho() {
                 const newvalue = [];
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+
+                updateCartAbandoned();
 
                 setDesconto(data?.name);
                 setFreteCupom(percentShipping);
@@ -489,6 +531,8 @@ export default function Carrinho() {
                     /* @ts-ignore */
                     dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
 
+                    updateCartAbandoned();
+
                     setDesconto(data?.name);
                     setTotalDesconto(formated);
                     setNewSubTotalPrice(subTot);
@@ -516,6 +560,8 @@ export default function Carrinho() {
                 const newvalue = [];
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+
+                updateCartAbandoned();
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);
@@ -569,6 +615,8 @@ export default function Carrinho() {
                 const newvalue = newCartValue;
                 /* @ts-ignore */
                 dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+
+                updateCartAbandoned();
 
                 setDesconto(data?.name);
                 setTotalDesconto(formated);

@@ -15,6 +15,8 @@ type MyContextProps = {
   clearAllCart(): void;
   dataTotalCart: (cepfrete: AddCepProps) => Promise<void>;
   refresh(): void;
+  handleCartAbandoned(): void;
+  updateCartAbandoned(): void;
   totalFinishCart: number;
   totalCart: number;
   fretePayment: number;
@@ -23,6 +25,8 @@ type MyContextProps = {
   newDataProducts: any;
   newSubTotalCart: number;
   prazoEntrega: string;
+  getCartExist: any;
+  dataCart: any;
 };
 
 type AddCepProps = {
@@ -74,6 +78,7 @@ export function CartProviderProducts({ children }: Props) {
   const [prazoEntrega, setPrazoEntrega] = useState("");
 
   const [cartCep, setCartCep] = useState<any>("");
+  const [getCartExist, setGetCartExist] = useState<any[]>([]);
 
   const totalAmountProducts = productsCart.map(amo => amo?.amount);
   var somaProducts: number = 0;
@@ -88,6 +93,7 @@ export function CartProviderProducts({ children }: Props) {
   }, []);
 
   let storageId = String(cartProducts[0]?.store_cart_id);
+  let dataCart: any = newDataProducts?.length < 1 ? productsCart : newDataProducts;
 
   useEffect(() => {
     try {
@@ -148,6 +154,41 @@ export function CartProviderProducts({ children }: Props) {
     let arrayCart = JSON.parse(dadosCart);
     setCartProducts(arrayCart || []);
   }
+
+  useEffect(() => {
+    async function existAbandonedCart() {
+      try {
+        const { data } = await apiClient.get(`/getExistCartAbandoned?customer_id=${customer?.id}`);
+        setGetCartExist(data || []);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    existAbandonedCart();
+  },[customer]);
+
+  async function handleCartAbandoned() {
+    try {
+      await apiClient.post(`/createAbandonedCart`, {
+        customer_id: customer?.id,
+        store_cart_id: storageId,
+        cart_abandoned: dataCart
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function updateCartAbandoned() {
+    try {
+      await apiClient.put(`/updateCartAbandoned?customer_id=${customer?.id}`, {
+        cart_abandoned: dataCart
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
 
 
@@ -409,8 +450,32 @@ export function CartProviderProducts({ children }: Props) {
 
   }
 
-  return (/* @ts-ignore */
-    <CartContext.Provider value={{ refresh, prazoEntrega, newSubTotalCart, newDataProducts, cartCep, dataTotalCart, fretePayment, fretePaymentCoupon, cupomPayment, productsCart, cartProducts, totalCart, totalFinishCart, saveProductCart, addMoreItemCart, removeItemCart, removeProductCart, clearAllCart }}>
+  return (
+    <CartContext.Provider value={{
+      dataCart,
+      getCartExist,
+      handleCartAbandoned,
+      updateCartAbandoned,
+      refresh,
+      prazoEntrega,
+      newSubTotalCart,
+      newDataProducts,
+      cartCep,/* @ts-ignore */
+      dataTotalCart,
+      fretePayment,
+      fretePaymentCoupon,
+      cupomPayment,
+      productsCart,
+      cartProducts,
+      totalCart,
+      totalFinishCart,/* @ts-ignore */
+      saveProductCart,/* @ts-ignore */
+      addMoreItemCart,/* @ts-ignore */
+      removeItemCart,/* @ts-ignore */
+      removeProductCart,
+      clearAllCart
+      }}
+    >
       {children}
     </CartContext.Provider>
   )
