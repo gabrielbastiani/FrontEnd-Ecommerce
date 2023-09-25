@@ -3,6 +3,7 @@ import { CartDataContextType } from '../../@types/cart';
 import { setupAPIClient } from '../services/api';
 import generateUniqueId from 'generate-unique-id';
 import { AuthContext } from './AuthContext';
+import moment from 'moment';
 
 
 type MyContextProps = {
@@ -79,6 +80,8 @@ export function CartProviderProducts({ children }: Props) {
 
   const [cartCep, setCartCep] = useState<any>("");
   const [getCartExist, setGetCartExist] = useState<any[]>([]);
+
+  const dataCartMoment = moment(new Date()).format('DD/MM/YYYY');
 
   const totalAmountProducts = productsCart.map(amo => amo?.amount);
   var somaProducts: number = 0;
@@ -172,10 +175,11 @@ export function CartProviderProducts({ children }: Props) {
       await apiClient.post(`/createAbandonedCart`, {
         customer_id: customer?.id,
         store_cart_id: storageId,
+        created_at: String(dataCartMoment),
         cart_abandoned: dataCart
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
     }
   }
 

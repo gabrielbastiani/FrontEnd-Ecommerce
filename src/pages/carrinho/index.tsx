@@ -120,14 +120,9 @@ export default function Carrinho() {
             /* @ts-ignore */
             dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
-            if (getCartExist?.length === 0 && isAuthenticated === true) {
-                handleCartAbandoned();
-                Router.reload();
-            } else if (getCartExist?.length >= 1 && isAuthenticated === true) {
-                updateCartAbandoned();
-            } else {
-                Router.reload();
-            }
+            updateCartAbandoned();
+
+            Router.reload();
 
         } catch (error) {
             console.log(error);
