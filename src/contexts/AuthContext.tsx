@@ -4,6 +4,7 @@ import { destroyCookie, setCookie, parseCookies } from 'nookies';
 import Router from 'next/router';
 import { toast } from 'react-toastify';
 import { setupAPIClient } from '../services/api';
+import moment from 'moment';
 
 
 type AuthContextData = {
@@ -58,6 +59,8 @@ export function signOutPayment() {
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
+
+  const dataCartMoment = moment(new Date()).format('DD/MM/YYYY');
 
   const [customer, setCustomer] = useState<UserProps>();
   const isAuthenticated = !!customer;
@@ -160,6 +163,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         await apiClient.post(`/createAbandonedCart`, {
           customer_id: id,
           store_cart_id: storageId,
+          created_at: String(dataCartMoment),
           cart_abandoned: dataCart
         });
 
