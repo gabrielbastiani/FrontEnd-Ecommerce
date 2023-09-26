@@ -175,8 +175,8 @@ export function CartProviderProducts({ children }: Props) {
       await apiClient.post(`/createAbandonedCart`, {
         customer_id: customer?.id,
         store_cart_id: storageId,
-        created_at: String(dataCartMoment),
-        cart_abandoned: dataCart
+        cart_abandoned: dataCart,
+        total_cart: totalCart
       });
     } catch (error) {
       console.log(error.response.data);
@@ -186,10 +186,11 @@ export function CartProviderProducts({ children }: Props) {
   async function updateCartAbandoned() {
     try {
       await apiClient.put(`/updateCartAbandoned?customer_id=${customer?.id}`, {
-        cart_abandoned: dataCart
+        cart_abandoned: dataCart,
+        total_cart: totalCart
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data);
     }
   }
 

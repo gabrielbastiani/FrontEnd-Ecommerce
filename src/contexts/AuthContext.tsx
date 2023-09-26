@@ -131,7 +131,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
   /* @ts-ignore */
-  async function signInPay({ email, password, cartProducts, cartCep, dataCart }: SignInProps) {
+  async function signInPay({ email, password, cartProducts, cartCep, dataCart, totalFinishCart }: SignInProps) {
     const apiClient = setupAPIClient();
     try {
       const response = await api.post('/customer/session', {
@@ -164,7 +164,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           customer_id: id,
           store_cart_id: storageId,
           created_at: String(dataCartMoment),
-          cart_abandoned: dataCart
+          cart_abandoned: dataCart,
+          total_cart: totalFinishCart
         });
 
         api.put(`/updateCartPaymentCustomer?store_cart_id=${storageId}`, {
