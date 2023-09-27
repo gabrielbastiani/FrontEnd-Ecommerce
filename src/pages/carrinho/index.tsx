@@ -237,9 +237,11 @@ export default function Carrinho() {
             /* @ts-ignore */
             dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
+            console.log(getCartExist != null)
+
             if (getCartExist?.length === 0 && isAuthenticated === true) {
                 handleCartAbandoned();
-            } else if (getCartExist?.length >= 1 && isAuthenticated === true) {
+            } else if (getCartExist != null && isAuthenticated === true) {
                 updateCartAbandoned();
             } else {
                 return;
