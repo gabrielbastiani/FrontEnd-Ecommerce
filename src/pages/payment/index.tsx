@@ -539,13 +539,13 @@ export default function Payment() {
                 new_value_products: [],
             });
 
-            updateCartAbandoned();
-
             setLoadingCupom(true);
 
             setTimeout(() => {
                 Router.reload();
             }, 3000);
+
+            updateCartAbandoned();
 
         } catch (error) {
             console.log(error);

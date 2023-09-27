@@ -128,7 +128,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
   /* @ts-ignore */
-  async function signInPay({ email, password, cartProducts, cartCep, dataCart, totalFinishCart }: SignInProps) {
+  async function signInPay({ email, password, cartProducts, cartCep, dataCart, totalCart }: SignInProps) {
     const apiClient = setupAPIClient();
     try {
       const response = await api.post('/customer/session', {
@@ -156,12 +156,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       if (cartProducts.length >= 1) {
 
         const storageId = String(cartProducts[0]?.store_cart_id);
-
         await apiClient.post(`/createAbandonedCart`, {
           customer_id: id,
           store_cart_id: storageId,
           cart_abandoned: dataCart,
-          total_cart: totalFinishCart
+          total_cart: totalCart
         });
 
         api.put(`/updateCartPaymentCustomer?store_cart_id=${storageId}`, {
@@ -170,6 +169,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         });
 
         const { data } = await apiClient.get(`/findCepCart?customer_id=${id}&cep=${cartCep}`);
+
+        console.log("CEP da API", data?.cep)
+        console.log("CEP digitado", cartCep)
 
         if (data?.cep === cartCep) {
           await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${id}&cep=${cartCep}`);
