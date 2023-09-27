@@ -57,6 +57,19 @@ export default function thanks() {
         loadCustomerData();
     }, [customer_id]);
 
+    useEffect(() => {
+        async function deleteAbandonedCart() {
+            const apiClient = setupAPIClient();
+            try {
+                await apiClient.delete(`/deletePaymentCartAbandoned?customer_id=${customer_id}`);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        deleteAbandonedCart();
+    }, [customer_id]);
+
+
     return (
         <>
             <Head>
