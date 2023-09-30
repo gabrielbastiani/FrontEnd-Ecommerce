@@ -160,7 +160,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
           customer_id: id,
           store_cart_id: storageId,
           cart_abandoned: dataCart,
-          total_cart: totalCart
+          total_cart: totalCart,
+          email_customer: email
         });
 
         api.put(`/updateCartPaymentCustomer?store_cart_id=${storageId}`, {

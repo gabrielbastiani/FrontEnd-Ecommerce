@@ -176,7 +176,8 @@ export function CartProviderProducts({ children }: Props) {
         customer_id: customer?.id,
         store_cart_id: storageId,
         cart_abandoned: dataCart,
-        total_cart: totalCart
+        total_cart: totalCart,
+        email_customer: customer?.email
       });
     } catch (error) {
       console.log(error.response.data);
