@@ -12,10 +12,11 @@ import Newsletters from "../components/Newsletters";
 import { useContext } from "react";
 import { CartContext } from "../contexts/CartContext";
 import { Loading } from "../components/Loading";
+import ChatIA from "../components/ChatIA";
 
 
 export default function Home() {
-
+  /* @ts-ignore */
   const { loadingCart } = useContext(CartContext);
 
   return (
@@ -36,6 +37,7 @@ export default function Home() {
           <MosaicoHome />
           <DestaqueProducts title='Produtos destaques' />
           <VizualizadosRecentemete title="Vizualizados recentemente" />
+          <ChatIA />
           <FooterStore />
           <FooterAccount />
         </>

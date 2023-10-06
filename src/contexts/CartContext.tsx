@@ -80,8 +80,6 @@ export function CartProviderProducts({ children }: Props) {
   const [cartCep, setCartCep] = useState<any>("");
   const [getCartExist, setGetCartExist] = useState<any[]>([]);
 
-  console.log(productsCart)
-
   const totalAmountProducts = productsCart.map(amo => amo?.amount);
   var somaProducts: number = 0;
   for (var i = 0; i < totalAmountProducts.length; i++) {
