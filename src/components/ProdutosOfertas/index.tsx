@@ -67,6 +67,23 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
         setCount(1);
     }
 
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display = datasConfigs[0]?.offer_products === "Disponivel" ? "block" : "none";
+
     useEffect(() => {
         async function loadProducts() {
             const apiClient = setupAPIClient();
@@ -97,11 +114,15 @@ const ProdutosOfertas = ({ title }: DestaqueRequest) => {
 
     return (
         <>
-            <BoxTitle>
+            <BoxTitle
+                style={{ display: display }}
+            >
                 <Title>{title}</Title>
             </BoxTitle>
             <SectionDestaqueProducts>
-                <Container>
+                <Container
+                    style={{ display: display }}
+                >
                     <Carousel ref={carousel}>
                         {products.map((prod, index) => {
                             return (

@@ -7,10 +7,13 @@ interface SearchRequest {
     onKeyUp: () => void;
     onKeyDown: () => void;
     onClick(): void;
+    style: string;
 }
 
-const PesquisaHeaderStore = ({ valor, onChange, placeholder, onKeyUp, onKeyDown, onClick }: SearchRequest) => (
+const PesquisaHeaderStore = ({ style, valor, onChange, placeholder, onKeyUp, onKeyDown, onClick }: SearchRequest) => (
+
     <InputSearch
+    style={{ display: style }}
         value={valor}
         onChange={onChange}
         placeholder={placeholder}

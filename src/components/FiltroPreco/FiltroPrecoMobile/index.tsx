@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Router from "next/router";
 import { toast } from "react-toastify";
 import { ButtonFilter, EtiquetaPrice, RangeInput, TextTitle } from "./styles";
+import { setupAPIClient } from "../../../services/api";
 
 
 interface FiltroPrecoRequest {
@@ -12,7 +13,22 @@ const FiltroPrecoMobile = ({ products }: FiltroPrecoRequest) => {
 
     const [priceValueMin, setPriceValueMin] = useState(maxPrice);
     const [priceValueMax, setPriceValueMax] = useState(maxPrice);
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
 
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display = datasConfigs[0]?.filter_price === "Disponivel" ? "block" : "none";
 
     var arrPrice = [];
     arrPrice.push({
@@ -59,12 +75,14 @@ const FiltroPrecoMobile = ({ products }: FiltroPrecoRequest) => {
 
     return (
         <>
-            <TextTitle style={{ fontWeight: 'bold' }}>
+            <TextTitle style={{ fontWeight: 'bold', display: display }}>
                 Preço por:
             </TextTitle>
             <br />
             <br />
-            <EtiquetaPrice>
+            <EtiquetaPrice
+                style={{ display: display }}
+            >
                 Minimo:
                 <RangeInput
                     type='range'
@@ -79,7 +97,9 @@ const FiltroPrecoMobile = ({ products }: FiltroPrecoRequest) => {
             </EtiquetaPrice>
             <br />
             <br />
-            <EtiquetaPrice>
+            <EtiquetaPrice
+                style={{ display: display }}
+            >
                 Máximo:
                 <RangeInput
                     type='range'
@@ -94,7 +114,7 @@ const FiltroPrecoMobile = ({ products }: FiltroPrecoRequest) => {
             </EtiquetaPrice>
             <br />
             <br />
-            <ButtonFilter onClick={filterPrices}>
+            <ButtonFilter onClick={filterPrices} style={{ display: display }}>
                 Filtrar Preços
             </ButtonFilter>
         </>

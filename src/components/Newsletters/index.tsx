@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import {
     SectionContato,
     BlockContato,
-    TextNews
+    TextNews,
+    SectionDisplay
 } from './styles';
 import { toast } from 'react-toastify';
 import { setupAPIClient } from '../../services/api';
@@ -65,9 +66,29 @@ const Newsletters = () => {
         }
     }
 
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display = datasConfigs[0]?.newsllaters_section === "Disponivel" ? "block" : "none";
+
 
     return (
-        <SectionContato>
+        <SectionDisplay
+            style={{ display: display }}
+        >
+            <SectionContato>
             <BlockContato>
                 <TextNews>Receba nossas ofertas!</TextNews>
                 <Input
@@ -97,6 +118,8 @@ const Newsletters = () => {
                 </Button>
             </BlockContato>
         </SectionContato>
+        </SectionDisplay>
+        
     )
 }
 

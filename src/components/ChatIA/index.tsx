@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
 import { Button } from "../ui/Button";
-import { BlockIA, BoxIA, SectionIA, SectionVariable, TextAreaAI, TextResults, TextWait } from "./styles";
+import { BlockIA, BoxIA, SectionIA, TextAreaAI, TextResults, TextWait } from "./styles";
 import { toast } from "react-toastify";
 import Titulos from "../Titulos";
 
@@ -16,13 +16,26 @@ const ChatIA = () => {
     const [chatResults, setChatResults] = useState<ResultText>();
     const [error, setError] = useState("");
 
-    console.log(error)
-
     const [iaChat, setIaChat] = useState(false);
     const [loading, setLoading] = useState(false);
     const [buttonLimp, setButtonLimp] = useState(false);
 
-    const [habiltIA, setHabiltIA] = useState("block");
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display = datasConfigs[0]?.chat_ia === "Disponivel" ? "block" : "none";
 
     const toggleIaChat = () => {
         setIaChat(true);
@@ -105,17 +118,18 @@ const ChatIA = () => {
                     </BlockIA>
                 </SectionIA>
             ) :
-                <SectionVariable
-                    style={{ display: habiltIA }}
-                >
-                    <BlockIA>
+                <SectionIA>
+                    <BlockIA
+                        style={{ display: display }}
+                    >
                         <Button
+                            style={{ width: '100%' }}
                             onClick={toggleIaChat}
                         >
                             Use nossa IA
                         </Button>
                     </BlockIA>
-                </SectionVariable>
+                </SectionIA>
             }
         </>
     );

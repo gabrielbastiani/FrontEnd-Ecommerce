@@ -158,6 +158,8 @@ export const HeaderStore = () => {
 
     const [element, setElement] = useState(false);
 
+    const [datasConfigs, setDatasConfigs] = useState<any []>([]);
+
     const showOrHide = () => {
         setElement(!element);
     }
@@ -183,6 +185,19 @@ export const HeaderStore = () => {
         }
         setCount(count - 1);
     };
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
 
     useEffect(() => {
         let dadosFavorites = localStorage.getItem("@favoriteproduct");
@@ -320,6 +335,7 @@ export const HeaderStore = () => {
                             }
                         </Link>
                         <PesquisaHeaderStore
+                            style={datasConfigs[0]?.search_bar === "Disponivel" ? "block" : "none"}
                             /* @ts-ignore */
                             onChange={handleChange}
                             onKeyUp={search}
@@ -348,7 +364,9 @@ export const HeaderStore = () => {
                     <BlockItems>
                         <StyledUl>
                             <DropDownLi>
-                                <StyledA>
+                                <StyledA
+                                    style={{ display: datasConfigs[0]?.service_in_header === "Disponivel" ? "block" : "none" }}
+                                >
                                     <RiCustomerService2Fill color='white' size={20} />
                                     Atendimento
                                 </StyledA>

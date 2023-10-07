@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     MdExitToApp,
     MdClose,
@@ -25,6 +25,7 @@ import {
     ToggleMenu,
 } from './styles';
 import Link from 'next/link';
+import { setupAPIClient } from '../../../services/api';
 
 
 export const Aside = () => {
@@ -36,6 +37,24 @@ export const Aside = () => {
     const handleToggleMenu = () => {
         setToggleMenuIsOpened(!toggleMenuIsOpened);
     }
+
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display1 = datasConfigs[0]?.credits_customer_in_menu === "Disponivel" ? "block" : "none";
+    const display2 = datasConfigs[0]?.digital_products_customer_in_menu === "Disponivel" ? "block" : "none";
 
 
     return (
@@ -55,12 +74,16 @@ export const Aside = () => {
                     Meus Pedidos
                 </Link>
 
-                <Link href="/myAccount/meuscreditos">
+                <Link href="/myAccount/meuscreditos"
+                    style={{ display: display1 }}
+                >
                     <FaRegMoneyBillAlt />
                     Meus Créditos
                 </Link>
 
-                <Link href="/myAccount/meusprodutosdigitais">
+                <Link href="/myAccount/meusprodutosdigitais"
+                    style={{ display: display2 }}
+                >
                     <AiOutlineCloudDownload />
                     Meus Produtos Digitais
                 </Link>

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { PageSection } from "../../components/dateStoreUx/styles";
 import FooterAccount from "../../components/FooterAccount";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../../contexts/CartContext";
 import Image from "next/image";
 import { BsFillTrashFill } from "react-icons/bs";
@@ -1100,6 +1100,23 @@ export default function Carrinho() {
         }
     }
 
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display = datasConfigs[0]?.cupom_in_cart === "Disponivel" ? "block" : "none";
+
 
 
     return (
@@ -1306,9 +1323,15 @@ export default function Carrinho() {
 
                             {formatedFrete ? (
                                 <>
-                                    <TextCep>Possui um cupom de desconto? Insira o código do cupom abaixo, e clique em calcular para poder aplicar seu cupom, OBS: è possivel usar apenas um código de cupom por pedido!</TextCep>
+                                    <TextCep
+                                        style={{ display: display }}
+                                    >
+                                        Possui um cupom de desconto? Insira o código do cupom abaixo, e clique em calcular para poder aplicar seu cupom, OBS: è possivel usar apenas um código de cupom por pedido!
+                                    </TextCep>
 
-                                    <BoxCupom>
+                                    <BoxCupom
+                                        style={{ display: display }}
+                                    >
                                         <InputCupom
                                             placeholder="CÓDIGO"
                                             onChange={(e) => setCodePromotion(e.target.value)}

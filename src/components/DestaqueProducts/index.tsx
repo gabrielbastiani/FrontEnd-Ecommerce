@@ -80,6 +80,23 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
         loadDestaques();
     }, []);
 
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display = datasConfigs[0]?.emphasis_products === "Disponivel" ? "block" : "none";
+
     const carousel = useRef(null);
 
     function handleLeftClick(e: any) {
@@ -97,11 +114,15 @@ const DestaqueProducts = ({ title }: DestaqueRequest) => {
 
     return (
         <>
-            <BoxTitle>
+            <BoxTitle
+                style={{ display: display }}
+            >
                 <Title>{title}</Title>
             </BoxTitle>
             <SectionDestaqueProducts>
-                <Container>
+                <Container
+                    style={{ display: display }}
+                >
                     <Carousel ref={carousel}>
                         {productsDestaque.map((prod, index) => {
                             return (

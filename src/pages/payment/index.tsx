@@ -226,22 +226,45 @@ export default function Payment() {
     const [loadingFreteEdit, setLoadingFreteEdit] = useState(false);
     const [loadingPayment, setLoadingPayment] = useState(false);
 
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display1 = datasConfigs[0]?.cupom_in_payment === "Disponivel" ? "block" : "none";
+    const display2 = datasConfigs[0]?.payment_pix === "Disponivel" ? "block" : "none";
+    const display3 = datasConfigs[0]?.payment_boleto === "Disponivel" ? "block" : "none";
+    const display4 = datasConfigs[0]?.payment_cartao === "Disponivel" ? "block" : "none";
+
 
     let typesPayment = [
         {
             id: "boleto",
             icon_pay: boleto,
-            pay_name: "Boleto"
+            pay_name: "Boleto",
+            view: display3
         },
         {
             id: "cartao_de_credito",
             icon_pay: cartao,
-            pay_name: "Cartão de Crédito"
+            pay_name: "Cartão de Crédito",
+            view: display4
         },
         {
             id: "pix",
             icon_pay: pix,
-            pay_name: "PIX"
+            pay_name: "PIX",
+            view: display2
         }
     ];
 
@@ -1725,8 +1748,6 @@ export default function Payment() {
     }
 
 
-
-
     return (
         <>
             <Head>
@@ -2350,7 +2371,9 @@ export default function Payment() {
                         }
                     </BoxPayment>
 
-                    <BoxPayment>
+                    <BoxPayment
+                        style={{ display: display1 }}
+                    >
                         <Titulos tipo="h2" titulo="Cupom" />
                         <br />
                         {cupomPayment ?
@@ -2433,13 +2456,13 @@ export default function Payment() {
                                         <PayIcon
                                             key={index}
                                             style={{
-                                                backgroundColor: colorPay === item.id ? "orange" : "white"
+                                                backgroundColor: colorPay === item.id ? "orange" : "white", display: item.view
                                             }}
                                             onClick={() => handleChosePayment(item.id)}
                                         >
                                             <br />
                                             {item.pay_name}
-                                            <Image src={item.icon_pay} height={70} width={85} alt="pagar" />
+                                            <Image style={{ display: item.view }} src={item.icon_pay} height={70} width={85} alt="pagar" />
                                         </PayIcon>
                                     </>
                                 )

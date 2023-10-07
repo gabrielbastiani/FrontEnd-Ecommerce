@@ -12,6 +12,22 @@ interface FilterAtributesRequest {
 const AtributosFilter = ({ products, onClick }: FilterAtributesRequest) => {
 
     const [allProductsAttributes, setAllProductsAttributes] = useState([]);
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display = datasConfigs[0]?.filter_atributes === "Disponivel" ? "block" : "none";
 
     const filterObj = {};
     const arrayOb = allProductsAttributes.filter((typ) => {
@@ -47,8 +63,14 @@ const AtributosFilter = ({ products, onClick }: FilterAtributesRequest) => {
                 null
             ) :
                 <>
-                    <TextAtribute>Atributos:</TextAtribute>
-                    <SubCategsBlockExtra>
+                    <TextAtribute
+                        style={{ display: display }}
+                    >
+                        Atributos:
+                    </TextAtribute>
+                    <SubCategsBlockExtra
+                        style={{ display: display }}
+                    >
                         {arrayOb.map((item, index) => {
                             return (
                                 <>

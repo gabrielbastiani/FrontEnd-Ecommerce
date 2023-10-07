@@ -10,6 +10,22 @@ interface FilterCategoryRequest {
 const CategoriasFilterFilter = ({ onClick }: FilterCategoryRequest) => {
 
     const [categs, setCategs] = useState<any[]>([]);
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display = datasConfigs[0]?.filter_categorys === "Disponivel" ? "block" : "none";
 
     useEffect(() => {
         async function loadCategs() {
@@ -71,8 +87,14 @@ const CategoriasFilterFilter = ({ onClick }: FilterCategoryRequest) => {
 
     return (
         <>
-            <TextAtribute>Categorias:</TextAtribute>
-            <SubCategsBlockExtra>
+            <TextAtribute
+                style={{ display: display }}
+            >
+                Categorias:
+            </TextAtribute>
+            <SubCategsBlockExtra
+                style={{ display: display }}
+            >
 
                 <div id="treefilter"></div>
 

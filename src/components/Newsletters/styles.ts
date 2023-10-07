@@ -1,4 +1,6 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
+
+export const SectionDisplay = styled.div``
 
 export const SectionContato = styled.section`
   background-color: ${props => props?.theme?.colors?.black};

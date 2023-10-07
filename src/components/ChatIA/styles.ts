@@ -1,9 +1,5 @@
 import styled from 'styled-components'
 
-export const SectionVariable = styled.section`
-  margin-bottom: 55px;
-`
-
 export const SectionIA = styled.section`
   display: flex;
   justify-content: center;
@@ -13,7 +9,7 @@ export const SectionIA = styled.section`
 export const BlockIA = styled.div`
   display: flex;
   flex-direction: column;
-  width: 85vh;
+  width: 80%;
 `
 
 export const TextAreaAI = styled.textarea`

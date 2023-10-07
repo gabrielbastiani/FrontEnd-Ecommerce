@@ -17,6 +17,7 @@ import {
 import Image from 'next/image';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import Link from 'next/link';
+import { setupAPIClient } from '../../services/api';
 
 
 interface VizualizadosRequest {
@@ -24,6 +25,23 @@ interface VizualizadosRequest {
 }
 
 const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
+
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const apiClient = setupAPIClient();
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs()
+    }, []);
+
+    const display = datasConfigs[0]?.recent_products_views === "Disponivel" ? "block" : "none";
 
     const [productsVizualizados, setProductsVizualizados] = useState([]);
 
@@ -52,11 +70,15 @@ const VizualizadosRecentemete = ({ title }: VizualizadosRequest) => {
 
     return (
         <>
-            <BoxTitle>
+            <BoxTitle
+                style={{ display: display }}
+            >
                 <Title>{title}</Title>
             </BoxTitle>
             <SectionDestaqueProducts>
-                <Container>
+                <Container
+                    style={{ display: display }}
+                >
                     <Carousel ref={carousel}>
                         {productsVizualizados.map((item, index) => {
                             return (
