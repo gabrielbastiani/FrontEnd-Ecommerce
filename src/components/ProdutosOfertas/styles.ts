@@ -23,6 +23,7 @@ export const Title = styled.h1`
   color: ${props => props?.theme?.colors?.black};
   padding-left: 0;
   margin-left: 10vw;
+  margin-top: 200px;
 `
 
 export const Carousel = styled.div`

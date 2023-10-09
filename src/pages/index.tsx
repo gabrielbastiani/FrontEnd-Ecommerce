@@ -13,6 +13,7 @@ import { useContext } from "react";
 import { CartContext } from "../contexts/CartContext";
 import { Loading } from "../components/Loading";
 import ChatIA from "../components/ChatIA";
+import CountdownTimer from "../components/CountdownTimer";
 
 
 export default function Home() {
@@ -31,6 +32,7 @@ export default function Home() {
         <>
           <HeaderStore />
           <CarrosselBannerHome />
+          <CountdownTimer />
           <ProdutosOfertas title="Ofertas do mês" />
           <BlockCategoriasHome />
           <Newsletters />

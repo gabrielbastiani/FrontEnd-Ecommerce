@@ -13,7 +13,7 @@ export const Container = styled.section`
   position: relative;
   display: flex;
   top: 120px;
-  margin-bottom: 200px;
+  margin-bottom: 115px;
 
   @media (max-width: 900px) {
     top: unset;
