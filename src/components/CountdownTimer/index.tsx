@@ -68,7 +68,7 @@ function CountdownTimer() {
         };
     }, [targetDate]);
 
-    function calculateTimeLeft(targetDate) {
+    function calculateTimeLeft(targetDate: number) {
         const now = new Date().getTime();
         const difference = targetDate - now;
 
@@ -110,6 +110,20 @@ function CountdownTimer() {
         }
         reloadsConfigs();
     }, []);
+
+    useEffect(() => {
+        if (timeLeft.total === 0) {
+            async function handleUpdateStatusComponent() {
+                try {
+                    const apiClient = setupAPIClient();
+                    await apiClient.put(`/disaledCountDownTimer`);
+                } catch (error) {
+                    console.log(error.response.data);
+                }
+            }
+            handleUpdateStatusComponent();
+        }
+    }, [timeLeft.total]);
 
     const display = datasConfigs[0]?.count_down_timer === "Disponivel" ? "block" : "none";
 
