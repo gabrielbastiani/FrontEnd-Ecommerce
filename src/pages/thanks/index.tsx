@@ -9,7 +9,18 @@ import { HeaderThanks } from "../../components/HeaderThanks";
 import Titulos from "../../components/Titulos";
 import Link from "next/link";
 import { ContLogin } from "../loginClient/styles";
-import { BoxInstructions, BoxPix, ButtonPix, ButtonThanks, ContainerCenterThanks, InputPix, NumberOrder, StrongThanks, TextInstruction, TextThanks } from "./styles";
+import {
+    BoxInstructions,
+    BoxPix,
+    ButtonPix,
+    ButtonThanks,
+    ContainerCenterThanks,
+    InputPix,
+    NumberOrder,
+    StrongThanks,
+    TextInstruction,
+    TextThanks
+} from "./styles";
 import { toast } from "react-toastify";
 import { FaRegCopy } from "react-icons/fa";
 import Image from "next/image";

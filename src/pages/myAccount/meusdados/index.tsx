@@ -138,30 +138,28 @@ export default function Meusdados() {
     async function updateDataCustomer() {
         try {
             const apiClient = setupAPIClient();
-            if (cpfs === '') {
-                toast.error('Não deixe o campo em branco!!!');
-                return;
-            } else {
-                await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, {
-                    cpf: cpfs,
-                    cnpj: cnpjs,
-                    stateRegistration: stateRegistration,
-                    phone: phones,
-                    dateOfBirth: dataNascimentos,
-                    gender: generoSelected,
-                    newslatter: newslatters,
-                    address: locals,
-                    number: numeros,
-                    neighborhood: bairros,
-                    complement: complements,
-                    reference: references,
-                    cep: ceps,
-                    city: cidades,
-                    state: estadoSelected
-                });
-                toast.success('Dado atualizado com sucesso.');
-                refreshUser();
-            }
+
+            await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, {
+                cpf: cpfs,
+                cnpj: cnpjs,
+                stateRegistration: stateRegistration,
+                phone: phones,
+                dateOfBirth: dataNascimentos,
+                gender: generoSelected,
+                newslatter: newslatters,
+                address: locals,
+                number: numeros,
+                neighborhood: bairros,
+                complement: complements,
+                reference: references,
+                cep: ceps,
+                city: cidades,
+                state: estadoSelected
+            });
+            
+            toast.success('Dado atualizado com sucesso.');
+            refreshUser();
+
         } catch (error) {
             console.log(error);
             toast.error('Ops erro ao atualizar o dado.');
