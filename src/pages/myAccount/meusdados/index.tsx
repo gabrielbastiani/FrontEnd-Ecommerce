@@ -57,7 +57,7 @@ export default function Meusdados() {
     async function refreshUser() {
         const apiClient = setupAPIClient();
 
-        const { data } = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
+        const { data } = await apiClient.get(`/customer/listExactCustomerIDstore?customer_id=${customer_id}`);
 
         setNameCompletes(data?.name || "");
         setCpfs(data?.cpf || "");
@@ -83,7 +83,7 @@ export default function Meusdados() {
         async function loadUser() {
             const apiClient = setupAPIClient();
             try {
-                const { data } = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
+                const { data } = await apiClient.get(`/customer/listExactCustomerIDstore?customer_id=${customer_id}`);
 
                 setNameCompletes(data?.name || "");
                 setCnpjs(data?.cnpj || "");

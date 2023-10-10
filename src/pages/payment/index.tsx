@@ -1579,7 +1579,9 @@ export default function Payment() {
                                             customer_id: customer_id,
                                             order_data_delivery: days,
                                             cupom: cupomPayment,
-                                            store_cart_id: cartProducts[0]?.store_cart_id
+                                            store_cart_id: cartProducts[0]?.store_cart_id,
+                                            frete: fretePayment,
+                                            freteCupom: fretePaymentCoupon
                                         },
                                         notification_url: URL_NOTIFICATION
                                     }),
@@ -1660,7 +1662,8 @@ export default function Payment() {
                         delivery_id: idSelected,
                         order_data_delivery: days,
                         cupom: cupomPayment,
-                        store_cart_id: cartProducts[0]?.store_cart_id
+                        store_cart_id: cartProducts[0]?.store_cart_id,
+                        frete: fretePayment,freteCupom: fretePaymentCoupon
                     },
                     notification_url: URL_NOTIFICATION
                 })
@@ -1725,7 +1728,9 @@ export default function Payment() {
                         delivery_id: idSelected,
                         order_data_delivery: days,
                         cupom: cupomPayment,
-                        store_cart_id: cartProducts[0]?.store_cart_id
+                        store_cart_id: cartProducts[0]?.store_cart_id,
+                        frete: fretePayment,
+                        freteCupom: fretePaymentCoupon
                     },
                     notification_url: URL_NOTIFICATION
                 }),
@@ -2803,4 +2808,4 @@ export const getServerSideProps = canSSRAuthPayment(async (ctx) => {
     return {
         props: {}
     }
-});
+})
