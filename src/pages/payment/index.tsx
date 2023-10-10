@@ -362,7 +362,7 @@ export default function Payment() {
 
     async function loadDataCustomer() {
         try {
-            const { data } = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
+            const { data } = await apiClient.get(`/customer/listExactCustomerIDstore?customer_id=${customer_id}`);
 
             setNameCompletes(data?.name || "");
             setCnpjs(data?.cnpj || "");
@@ -390,7 +390,7 @@ export default function Payment() {
     useEffect(() => {
         async function loadCustomerData() {
             try {
-                const { data } = await apiClient.get(`/customer/listExactCustomerID?customer_id=${customer_id}`);
+                const { data } = await apiClient.get(`/customer/listExactCustomerIDstore?customer_id=${customer_id}`);
 
                 setNameCompletes(data?.name || "");
                 setCnpjs(data?.cnpj || "");
