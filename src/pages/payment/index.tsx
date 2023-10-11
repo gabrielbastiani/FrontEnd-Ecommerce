@@ -1581,7 +1581,8 @@ export default function Payment() {
                                             cupom: cupomPayment,
                                             store_cart_id: cartProducts[0]?.store_cart_id,
                                             frete: fretePayment,
-                                            freteCupom: fretePaymentCoupon
+                                            freteCupom: fretePaymentCoupon,
+                                            peso: peso
                                         },
                                         notification_url: URL_NOTIFICATION
                                     }),
@@ -1663,7 +1664,8 @@ export default function Payment() {
                         order_data_delivery: days,
                         cupom: cupomPayment,
                         store_cart_id: cartProducts[0]?.store_cart_id,
-                        frete: fretePayment,freteCupom: fretePaymentCoupon
+                        frete: fretePayment,freteCupom: fretePaymentCoupon,
+                        peso: peso
                     },
                     notification_url: URL_NOTIFICATION
                 })
@@ -1730,7 +1732,8 @@ export default function Payment() {
                         cupom: cupomPayment,
                         store_cart_id: cartProducts[0]?.store_cart_id,
                         frete: fretePayment,
-                        freteCupom: fretePaymentCoupon
+                        freteCupom: fretePaymentCoupon,
+                        peso: peso
                     },
                     notification_url: URL_NOTIFICATION
                 }),
@@ -1751,6 +1754,7 @@ export default function Payment() {
             console.error("Erro ao fazer a requisição:", error);
         }
     }
+
 
 
     return (
