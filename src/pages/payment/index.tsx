@@ -218,6 +218,7 @@ export default function Payment() {
 
     const [activePayment, setActivePayment] = useState("");
     const [colorPay, setColorPay] = useState("");
+    const [cupomOrderName, setCupomOrderName] = useState("");
 
     const [cardBrand, setCardBrand] = useState<any>({});
     const [loadingCupom, setLoadingCupom] = useState(false);
@@ -953,6 +954,8 @@ export default function Payment() {
         try {
             const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
 
+            setCupomOrderName(data?.name || "");
+
             if (data === null) {
                 toast.error("Não ha cupom promocional ativo, ou com esse nome.");
                 return;
@@ -1578,6 +1581,7 @@ export default function Payment() {
                                         metadata: {
                                             customer_id: customer_id,
                                             order_data_delivery: days,
+                                            name_cupom: cupomOrderName,
                                             cupom: cupomPayment,
                                             store_cart_id: cartProducts[0]?.store_cart_id,
                                             frete: fretePayment,
@@ -1662,6 +1666,7 @@ export default function Payment() {
                         customer_id: customer_id,
                         delivery_id: idSelected,
                         order_data_delivery: days,
+                        name_cupom: cupomOrderName,
                         cupom: cupomPayment,
                         store_cart_id: cartProducts[0]?.store_cart_id,
                         frete: fretePayment,freteCupom: fretePaymentCoupon,
@@ -1729,6 +1734,7 @@ export default function Payment() {
                         customer_id: customer_id,
                         delivery_id: idSelected,
                         order_data_delivery: days,
+                        name_cupom: cupomOrderName,
                         cupom: cupomPayment,
                         store_cart_id: cartProducts[0]?.store_cart_id,
                         frete: fretePayment,
