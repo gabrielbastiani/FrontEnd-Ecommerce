@@ -1745,7 +1745,6 @@ export default function Payment() {
                 }),
             });
 
-
             await apiClient.put(`/updateStockPayment${productsId}`);
 
             setLoadingPayment(true);
