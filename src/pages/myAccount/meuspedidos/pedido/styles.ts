@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const SectionOrder = styled.section`
   background-color: ${props => props?.theme?.colors?.white};
-  height: 270vh;
+  height: 100%;
 `
 
 export const StatusTop = styled.button`
@@ -39,7 +39,7 @@ export const TextDataOrder = styled.span`
 `
 
 export const TotalFrete = styled.button`
-  background-color: ${props => props?.theme?.colors?.white};
+  background-color: ${props => props?.theme?.colors?.info};
   color: ${props => props?.theme?.colors?.black};
   padding: 3px;
   display: inline-flex;
@@ -54,8 +54,8 @@ export const TotalFrete = styled.button`
 `
 
 export const TotalTop = styled.button`
-  background-color: ${props => props?.theme?.colors?.white};
-  color: ${props => props?.theme?.colors?.black};
+  background-color: ${props => props?.theme?.colors?.success};
+  color: ${props => props?.theme?.colors?.white};
   padding: 3px;
   display: inline-flex;
   justify-content: center;
@@ -64,7 +64,7 @@ export const TotalTop = styled.button`
   font-weight: 700;
   border: none;
   cursor: none;
-  width: 200px;
+  width: 300px;
 
   svg {
     margin-right: 5px;
@@ -132,6 +132,7 @@ export const ButtonPix = styled.button`
 export const ButtoQRCode = styled.button`
   background: transparent;
   color: ${props => props?.theme?.colors?.black};
+  border: none;
 `
 
 export const BoxProductCart = styled.div`

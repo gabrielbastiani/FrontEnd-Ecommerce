@@ -67,7 +67,7 @@ export default function Meuspedidos() {
     (search || []).forEach((item) => {
         dados.push({
             "Pedido": item.id_order_store,
-            "Cliente": item.customer.name,
+            "Nome": item.customer.name,
             "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment_juros ? item.payment.total_payment_juros : item.payment.total_payment),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "Situação": item.shipmentsTrackings[0].delivery_history,
@@ -112,7 +112,7 @@ export default function Meuspedidos() {
                         ) :
                             <>
                                 <TabelasAccount
-                                    cabecalho={["Pedido", "Cliente", "Valor Total", "Data", "Situação"]}
+                                    cabecalho={["Pedido", "Nome", "Valor Total", "Data", "Situação"]}
                                     dados={dados}
                                 />
 

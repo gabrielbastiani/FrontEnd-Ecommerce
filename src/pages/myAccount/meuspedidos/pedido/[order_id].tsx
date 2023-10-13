@@ -349,7 +349,7 @@ export default function Pedido() {
 
                         {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "master" ?
                             <TotalTop>
-                                <Image src={master} width={60} height={80} alt="pagamento" />
+                                <Image src={master} width={100} height={50} alt="pagamento" />
                                 Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                             </TotalTop>
                             :
@@ -358,7 +358,7 @@ export default function Pedido() {
 
                         {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "visa" ?
                             <TotalTop>
-                                <Image src={visa} width={60} height={80} alt="pagamento" />
+                                <Image src={visa} width={100} height={50} alt="pagamento" />
                                 Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                             </TotalTop>
                             :
@@ -367,7 +367,7 @@ export default function Pedido() {
 
                         {orderPayment?.type_payment === "Cartão de Crédito" && orderPayment.flag_credit_card === "amex" ?
                             <TotalTop>
-                                <Image src={american} width={60} height={80} alt="pagamento" />
+                                <Image src={american} width={100} height={50} alt="pagamento" />
                                 Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                             </TotalTop>
                             :
@@ -376,7 +376,7 @@ export default function Pedido() {
 
                         {orderPayment?.type_payment === "Boleto" ?
                             <TotalTop>
-                                <Image src={boleto} width={60} height={80} alt="pagamento" />
+                                <Image src={boleto} width={100} height={50} alt="pagamento" />
                                 Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                             </TotalTop>
                             :
@@ -385,7 +385,7 @@ export default function Pedido() {
 
                         {orderPayment?.type_payment === "PIX" ?
                             <TotalTop>
-                                <Image src={pix} width={60} height={80} alt="pagamento" />
+                                <Image src={pix} width={100} height={50} alt="pagamento" />
                                 Total + {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}
                             </TotalTop>
                             :
@@ -396,7 +396,7 @@ export default function Pedido() {
 
                     <GridOrder>
                         <Card>
-                            <Titulos tipo="h2" titulo="Cliente" />
+                            <Titulos tipo="h2" titulo="Dados do Pedido" />
 
                             <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                 <TextStrong>{customerDate?.cnpj ? "Empresa" : "Nome"}</TextStrong>
@@ -430,11 +430,6 @@ export default function Pedido() {
                             <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                 <TextStrong>Telefone</TextStrong>
                                 <TextDataOrder>{customerDate?.phone}</TextDataOrder>
-                                <Link href={`https://api.whatsapp.com/send?phone=55${tel}`} target="_blank">
-                                    <WhatsButton>
-                                        <BsWhatsapp /> WhatsApp
-                                    </WhatsButton>
-                                </Link>
                             </BlockData>
 
                         </Card>
@@ -459,7 +454,7 @@ export default function Pedido() {
 
                             <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                 <br />
-                                <TextDataOrder>CÓDIGO: {codeRastreio}</TextDataOrder>
+                                <TextDataOrder>CÓDIGO DE RASTREIO: {codeRastreio}</TextDataOrder>
                             </BlockData>
 
                         </Card>
@@ -474,7 +469,7 @@ export default function Pedido() {
                                     <>
                                         <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                             Cartão de Crédito = Master
-                                            <Image src={master} width={80} height={100} alt="pagamento" />
+                                            <Image src={master} width={150} height={85} alt="pagamento" />
                                         </TextDataOrder>
 
                                         <TextDataOrder style={{ marginBottom: '8px' }}>
@@ -490,11 +485,6 @@ export default function Pedido() {
                                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                             <TextStrong>Valor parcelado</TextStrong>
                                             <TextDataOrder>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextDataOrder>
-                                        </BlockData>
-
-                                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <TextStrong>ID Transação</TextStrong>
-                                            <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
                                         </BlockData>
 
                                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
@@ -510,7 +500,7 @@ export default function Pedido() {
                                     <>
                                         <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                             Cartão de Crédito = Visa
-                                            <Image src={visa} width={80} height={100} alt="pagamento" />
+                                            <Image src={visa} width={150} height={85} alt="pagamento" />
                                         </TextDataOrder>
 
                                         <TextDataOrder style={{ marginBottom: '8px' }}>
@@ -526,11 +516,6 @@ export default function Pedido() {
                                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                             <TextStrong>Valor parcelado</TextStrong>
                                             <TextDataOrder>{orderPayment?.installment}x {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(payInstallment)}</TextDataOrder>
-                                        </BlockData>
-
-                                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <TextStrong>ID Transação</TextStrong>
-                                            <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
                                         </BlockData>
 
                                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
@@ -546,12 +531,12 @@ export default function Pedido() {
                                     <>
                                         <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                             Cartão de Crédito = American Express
-                                            <Image src={american} width={80} height={100} alt="pagamento" />
+                                            <Image src={american} width={150} height={85} alt="pagamento" />
                                         </TextDataOrder>
 
                                         <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                             Cartão de Crédito = Visa
-                                            <Image src={visa} width={80} height={100} alt="pagamento" />
+                                            <Image src={visa} width={150} height={85} alt="pagamento" />
                                         </TextDataOrder>
 
                                         <TextDataOrder style={{ marginBottom: '8px' }}>
@@ -570,11 +555,6 @@ export default function Pedido() {
                                         </BlockData>
 
                                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <TextStrong>ID Transação</TextStrong>
-                                            <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
-                                        </BlockData>
-
-                                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                             <TextStrong>Valor Total</TextStrong>
                                             <TextDataOrder>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextDataOrder>
                                         </BlockData>
@@ -587,13 +567,8 @@ export default function Pedido() {
                                     <>
                                         <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                             Boleto
-                                            <Image src={boleto} width={80} height={100} alt="pagamento" />
+                                            <Image src={boleto} width={150} height={85} alt="pagamento" />
                                         </TextDataOrder>
-
-                                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <TextStrong>ID Transação</TextStrong>
-                                            <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
-                                        </BlockData>
 
                                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                             <TextStrong>Valor Total</TextStrong>
@@ -609,7 +584,7 @@ export default function Pedido() {
                                         <BoxPix>
                                             <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                                 PIX
-                                                <Image src={pix} width={80} height={100} alt="pagamento" />
+                                                <Image src={pix} width={150} height={85} alt="pagamento" />
                                             </TextData>
                                             <TextData>Chave Pix</TextData>
                                             <InputPix type="text" value={keyPix} />
@@ -630,11 +605,6 @@ export default function Pedido() {
                                         <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                             <TextStrong>Valor Total</TextStrong>
                                             <TextDataOrder>{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalPay)}</TextDataOrder>
-                                        </BlockData>
-
-                                        <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <TextStrong>ID Transação</TextStrong>
-                                            <TextDataOrder>{orderPayment?.transaction_id}</TextDataOrder>
                                         </BlockData>
                                     </>
                                     :
