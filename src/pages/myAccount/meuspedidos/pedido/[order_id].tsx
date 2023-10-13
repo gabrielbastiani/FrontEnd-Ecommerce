@@ -7,7 +7,7 @@ import { Card } from "../../../../components/dateClientUx/CardContent/styles";
 import Titulos from "../../../../components/Titulos";
 import { canSSRAuth } from "../../../../utils/canSSRAuth";
 import { setupAPIClient } from "../../../../services/api";
-import { AtributeProduct, BlockData, BoxComment, BoxData, BoxDataProduct, BoxPix, BoxPriceProductCart, BoxPrices, BoxPricesTotalProduct, BoxProductCart, BoxTopStatusGeral, BoxTotal, ButtoQRCode, ButtonPix, ButtonSendComment, Comments, ContainerComments, ContainerCommets, DataComment, GridOrder, ImageProductCart, InputPix, NameProduct, PriceProduct, PriceProductData, SectionOrder, Sku, StatusTop, TextComment, TextDataOrder, TextTotal, TextUser, TotalFrete, TotalOrder, TotalTop, WhatsButton } from "./styles";
+import { AtributeProduct, BlockData, BoxComment, BoxData, BoxDataProduct, BoxPix, BoxPriceProductCart, BoxPrices, BoxPricesTotalProduct, BoxProductCart, BoxTopStatusGeral, BoxTotal, ButtoQRCode, ButtonPix, ButtonSendComment, Comments, ContainerComments, ContainerCommets, DataComment, GridOrder, ImageProductCart, InputPix, NameProduct, PriceProduct, PriceProductData, SectionOrder, Sku, StatusTop, TextComment, TextData, TextDataOrder, TextTotal, TextUser, TotalFrete, TotalOrder, TotalTop, WhatsButton } from "./styles";
 import { toast } from "react-toastify";
 import Modal from 'react-modal';
 import copy from "copy-to-clipboard";
@@ -607,11 +607,11 @@ export default function Pedido() {
                                 {orderPayment?.type_payment === "PIX" ?
                                     <>
                                         <BoxPix>
-                                            <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
+                                            <TextData style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
                                                 PIX
                                                 <Image src={pix} width={80} height={100} alt="pagamento" />
-                                            </TextDataOrder>
-                                            <TextDataOrder>Chave Pix</TextDataOrder>
+                                            </TextData>
+                                            <TextData>Chave Pix</TextData>
                                             <InputPix type="text" value={keyPix} />
                                             <ButtonPix onClick={copyToClipboard}>
                                                 <FaRegCopy size={25} />

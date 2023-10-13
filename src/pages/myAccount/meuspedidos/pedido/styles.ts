@@ -30,7 +30,7 @@ export const BoxTopStatusGeral = styled.div`
 `
 
 export const TextDataOrder = styled.span`
-  color: ${props => props?.theme?.colors?.white};
+  color: ${props => props?.theme?.colors?.black};
   width: 95%;
   display: inline-block;
   white-space: nowrap;
@@ -125,13 +125,13 @@ export const ButtonPix = styled.button`
   }
 
   svg {
-    color: ${props => props?.theme?.colors?.white};
+    color: ${props => props?.theme?.colors?.black};
   }
 `
 
 export const ButtoQRCode = styled.button`
   background: transparent;
-  color: ${props => props?.theme?.colors?.white};
+  color: ${props => props?.theme?.colors?.black};
 `
 
 export const BoxProductCart = styled.div`
@@ -200,7 +200,9 @@ export const BoxData = styled.div`
 
 export const BoxPriceProductCart = styled.div``
 
-export const PriceProduct = styled.span``
+export const PriceProduct = styled.span`
+  color: ${props => props?.theme?.colors?.black};
+`
 
 export const BoxPricesTotalProduct = styled.div`
   display: flex;
@@ -221,9 +223,11 @@ export const BoxPrices = styled.div`
 export const PriceProductData = styled.strong`
   margin-bottom: 5px;
   font-size: 19px;
+  color: ${props => props?.theme?.colors?.black};
 `
 
 export const NameProduct = styled.strong`
+  color: ${props => props?.theme?.colors?.black};
   margin-bottom: 8px;
   width: 95%;
   display: inline-block;
@@ -252,7 +256,7 @@ export const BoxTotal = styled.div`
 `
 
 export const TextTotal = styled.span`
-  color: ${props => props?.theme?.colors?.white};
+  color: ${props => props?.theme?.colors?.black};
   font-size: 24px;
   font-weight: 900;
 `
@@ -267,7 +271,7 @@ export const ContainerComments = styled.div`
 `
 
 export const DataComment = styled.span`
-  color: ${props => props?.theme?.colors?.white};
+  color: ${props => props?.theme?.colors?.black};
 `
 
 export const ContainerCommets = styled.div`
@@ -276,7 +280,7 @@ export const ContainerCommets = styled.div`
 `
 
 export const EtiquetaComment = styled.span`
-  color: ${props => props?.theme?.colors?.white};
+  color: ${props => props?.theme?.colors?.black};
 `
 
 export const TextComment = styled.textarea`
@@ -324,4 +328,8 @@ export const Comments = styled.span`
 
 export const BlockData = styled.div`
   margin: 18px 0;
+`
+
+export const TextData = styled.span`
+  color: ${props => props?.theme?.colors?.black};
 `
