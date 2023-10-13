@@ -33,7 +33,7 @@ export default function Meuspedidos() {
 
     const [search, setSearch] = useState<any[]>([]);
     const [total, setTotal] = useState(0);
-    const [limit, setLimit] = useState(4);
+    const [limit, setLimit] = useState(10);
     const [pages, setPages] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -43,7 +43,7 @@ export default function Meuspedidos() {
         async function allPedidosUser() {
             try {
                 const apiClient = setupAPIClient();
-                const { data } = await apiClient.get(`/allPedidosPageUser?page=${currentPage}&limit=${limit}&customer_id=${customer_id}`);
+                const { data } = await apiClient.get(`/pageListOrdersCustomerStore?page=${currentPage}&limit=${limit}&customer_id=${customer_id}`);
 
                 setTotal(data.total);
                 const totalPages = Math.ceil(total / limit);
@@ -54,11 +54,10 @@ export default function Meuspedidos() {
                 }
 
                 setPages(arrayPages || []);
-                setSearch(data.pedidos || []);
+                setSearch(data.orders || []);
 
             } catch (error) {
                 console.error(error.response.data);
-                alert('Error call api list ALL pedidos');
             }
         }
         allPedidosUser();
@@ -67,11 +66,12 @@ export default function Meuspedidos() {
     const dados = [];
     (search || []).forEach((item) => {
         dados.push({
-            "ID": [item.id],/* @ts-ignore */
-            "Valor Total": [item.carrinhos[0].valorPagamento].toLocaleString('pt-br', { style: 'currency', currency: 'BRL' }),
+            "Pedido": item.id_order_store,
+            "Cliente": item.customer.name,
+            "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment_juros ? item.payment.total_payment_juros : item.payment.total_payment),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "Status": [item.pagamento.status] || "Iniciado",
-            "botaoDetalhes": `/pedido/${item.id}`
+            "Situação": item.shipmentsTrackings[0].delivery_history,
+            "botaoDetalhes": `/myAccount/meuspedidos/pedido/${item.id}`
         });
     });
 
@@ -112,8 +112,8 @@ export default function Meuspedidos() {
                         ) :
                             <>
                                 <TabelasAccount
-                                    cabecalho={["ID", "Valor Total", "Data", "Status"]}
-                                    dados={''}
+                                    cabecalho={["Pedido", "Cliente", "Valor Total", "Data", "Situação"]}
+                                    dados={dados}
                                 />
 
                                 <ContainerPagination>

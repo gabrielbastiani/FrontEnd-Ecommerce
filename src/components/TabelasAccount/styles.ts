@@ -18,6 +18,7 @@ export const Cabeca = styled.thead`
 `;
 
 export const Linha = styled.tr`
+  color: ${(props) => props.theme.colors.black};
   @media (max-width: 815px) {
     display: none;
   }
@@ -26,7 +27,7 @@ export const Linha = styled.tr`
 export const Celula = styled.th`
   background-color: ${(props) => props.theme.colors.info};
   padding: 10px;
-  color: ${(props) => props.theme.colors.white};
+  color: ${(props) => props.theme.colors.black};
   font-size: 1rem;
   &:nth-child(1) {
     border-top-left-radius: 10px;
@@ -51,7 +52,7 @@ export const BodyTable = styled.tbody`
 export const CelulaLinha = styled.td`
   padding: 10px;
   font-size: 0.9rem;
-  border-bottom: 1px solid ${(props) => props.theme.colors.white};
+  border-bottom: 1px solid ${(props) => props.theme.colors.black};
   text-align: center;
   letter-spacing: 0.7px;
 
@@ -118,6 +119,7 @@ export const LinhaResponsive = styled.tr`
     display: block;
     display: inline-block;
     margin-right: 8px;
+    color: ${(props) => props.theme.colors.black};
   }
 `;
 
@@ -131,7 +133,7 @@ export const CelulaResponsive = styled.th`
     display: inline-block;
     background-color: ${(props) => props.theme.colors.info};
     padding: 10px 0;
-    color: ${(props) => props.theme.colors.white};
+    color: ${(props) => props.theme.colors.black};
 
     &:nth-child(1) {
       border-top-left-radius: 10px;
@@ -153,7 +155,7 @@ export const BodyTableResponsive = styled.tbody`
     position: relative;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    white-space: nowrap;
+    black-space: nowrap;
     display: inline-block;
     text-align: center;
   }
