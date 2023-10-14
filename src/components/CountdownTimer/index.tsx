@@ -31,10 +31,11 @@ function CountdownTimer() {
     const [dataAll, setDataAll] = useState<ItemProps>();
     const [link_button, setLink_button] = useState(String);
 
+    const apiClient = setupAPIClient();
+
     useEffect(() => {
         async function loadCountDown() {
             try {
-                const apiClient = setupAPIClient();
                 const { data } = await apiClient.get('/findCountDownTime');
 
                 setDataAll(data || {});
@@ -53,6 +54,11 @@ function CountdownTimer() {
 
     const [timeLeft, setTimeLeft] = useState(calculateTimeLeft(targetDate));
 
+    async function endtime() {
+        await apiClient.put(`/disaledCountDownTimer`);
+        await apiClient.get(`/reloadDatasConfigsStore`);
+    }
+
     useEffect(() => {
         const interval = setInterval(() => {
             const updatedTimeLeft = calculateTimeLeft(targetDate);
@@ -60,6 +66,7 @@ function CountdownTimer() {
 
             if (updatedTimeLeft.total <= 0) {
                 clearInterval(interval);
+                endtime();
             }
         }, 1000);
 
@@ -101,7 +108,6 @@ function CountdownTimer() {
     useEffect(() => {
         async function reloadsConfigs() {
             try {
-                const apiClient = setupAPIClient();
                 const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
                 setDatasConfigs(data || []);
             } catch (error) {/* @ts-ignore */
@@ -110,20 +116,6 @@ function CountdownTimer() {
         }
         reloadsConfigs();
     }, []);
-
-    useEffect(() => {
-        if (timeLeft.total === 0) {
-            async function handleUpdateStatusComponent() {
-                try {
-                    const apiClient = setupAPIClient();
-                    await apiClient.put(`/disaledCountDownTimer`);
-                } catch (error) {
-                    console.log(error.response.data);
-                }
-            }
-            handleUpdateStatusComponent();
-        }
-    }, [timeLeft.total]);
 
     const display = datasConfigs[0]?.count_down_timer === "Disponivel" ? "block" : "none";
 

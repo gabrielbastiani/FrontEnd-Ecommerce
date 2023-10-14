@@ -146,6 +146,10 @@ export default function Payment() {
         fretePaymentCoupon
     } = useContext(CartContext);
 
+    useEffect(() => {
+        refresh();
+    });
+
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
 
@@ -167,6 +171,7 @@ export default function Payment() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [emails, setEmails] = useState('');
     const [dataNascimentos, setDataNascimentos] = useState('');
+    const [dateOfBirth, setDateOfBirth] = useState('');
     const [locals, setLocals] = useState('');
     const [numeros, setNumeros] = useState('');
     const [bairros, setBairros] = useState('');
@@ -227,6 +232,19 @@ export default function Payment() {
     const [loadingPayment, setLoadingPayment] = useState(false);
 
     const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    const handleDateChange = (e) => {
+        const inputDate = e.target.value;
+        const numericDate = inputDate.replace(/\D/g, '');
+
+        if (numericDate.length <= 2) {
+            setDateOfBirth(numericDate);
+        } else if (numericDate.length <= 4) {
+            setDateOfBirth(`${numericDate.slice(0, 2)}/${numericDate.slice(2)}`);
+        } else {
+            setDateOfBirth(`${numericDate.slice(0, 2)}/${numericDate.slice(2, 4)}/${numericDate.slice(4, 8)}`);
+        }
+    };
 
     const formatCnpj = (value: string) => {
         const numericValue = value.replace(/\D/g, '');
@@ -428,6 +446,7 @@ export default function Payment() {
             setPhoneNumber(data?.phone || "");
             setEmails(data?.email || "");
             setDataNascimentos(data?.dateOfBirth || "");
+            setDateOfBirth(data?.dateOfBirth || "");
             setLocals(data?.address || "");
             setNumeros(data?.number || "");
             setBairros(data?.neighborhood || "");
@@ -458,6 +477,7 @@ export default function Payment() {
                 setPhoneNumber(data?.phone || "");
                 setEmails(data?.email || "");
                 setDataNascimentos(data?.dateOfBirth || "");
+                setDateOfBirth(data?.dateOfBirth || "");
                 setLocals(data?.address || "");
                 setNumeros(data?.number || "");
                 setBairros(data?.neighborhood || "");
@@ -560,7 +580,7 @@ export default function Payment() {
                 cnpj: cnpj,
                 stateRegistration: stateRegistration,
                 phone: phoneNumber,
-                dateOfBirth: dataNascimentos,
+                dateOfBirth: dateOfBirth,
                 gender: generoSelected,
             });
 
@@ -1547,6 +1567,7 @@ export default function Payment() {
 
     let valuePay = String(totalFinishCart.toFixed(2));
     let days = prazoEntrega;
+    let cupomName = nameCupomPayment;
 
     useEffect(() => {
         const initializeMercadoPago = async () => {
@@ -1646,7 +1667,7 @@ export default function Payment() {
                                         metadata: {
                                             customer_id: customer_id,
                                             order_data_delivery: days,
-                                            name_cupom: nameCupomPayment,
+                                            name_cupom: cupomName,
                                             cupom: cupomPayment,
                                             store_cart_id: cartProducts[0]?.store_cart_id,
                                             frete: fretePayment,
@@ -1688,7 +1709,7 @@ export default function Payment() {
 
         initializeMercadoPago();
 
-    }, [valuePay, days, productsId]);
+    }, [cupomName, valuePay, days, productsId]);
 
 
 
@@ -1974,6 +1995,7 @@ export default function Payment() {
                                                         placeholder={cpfs}
                                                         value={cpf}
                                                         onChange={handleCPFChange}
+                                                        maxLength={14}
                                                         handleSubmit={updateDataCustomer}
                                                     />
                                                 }
@@ -2012,12 +2034,9 @@ export default function Payment() {
                                                     <InputUpdate
                                                         dado={dataNascimentos}
                                                         type="text"
-                                                        /* @ts-ignore */
-                                                        as={IMaskInput}
-                                                        mask="00/00/0000"
                                                         placeholder={dataNascimentos}
-                                                        value={dataNascimentos}
-                                                        onChange={(e) => setDataNascimentos(e.target.value)}
+                                                        value={dateOfBirth}
+                                                        onChange={handleDateChange}
                                                         handleSubmit={updateDataCustomer}
                                                     />
                                                 }

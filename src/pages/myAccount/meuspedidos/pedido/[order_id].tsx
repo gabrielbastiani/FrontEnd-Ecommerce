@@ -529,11 +529,6 @@ export default function Pedido() {
                                             <Image src={american} width={150} height={85} alt="pagamento" />
                                         </TextDataOrder>
 
-                                        <TextDataOrder style={{ display: 'inline-flex', alignItems: 'center', marginTop: '13px' }}>
-                                            Cartão de Crédito = Visa
-                                            <Image src={visa} width={150} height={85} alt="pagamento" />
-                                        </TextDataOrder>
-
                                         <TextDataOrder style={{ marginBottom: '8px' }}>
                                             {orderPayment?.cardholder_name}
                                         </TextDataOrder>
@@ -645,6 +640,16 @@ export default function Pedido() {
                                         })}
                                     </BoxData>
                                 </BoxDataProduct>
+
+                                <BoxPricesTotalProduct>
+                                    <BoxPrices>
+                                        <PriceProductData
+                                            style={{ fontSize: '16px' }}
+                                        >
+                                            {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(prod?.product?.promotion ? prod?.product?.promotion : prod?.product?.price)}
+                                        </PriceProductData>
+                                    </BoxPrices>
+                                </BoxPricesTotalProduct>
 
                                 <BoxPriceProductCart>
                                     <PriceProduct>Qtd: {prod?.amount}</PriceProduct>

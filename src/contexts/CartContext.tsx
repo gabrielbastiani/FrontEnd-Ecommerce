@@ -146,6 +146,7 @@ export function CartProviderProducts({ children }: Props) {
     const { data } = await apiClient.get(`/findTotalCart?store_cart_id=${storageId}`);
     setTotalCart(data?.total || 0);
     setFretePayment(data?.frete || 0);
+    setNameCupomPayment(data?.name_cupom || "");
     setFretePaymentCoupon(data?.frete_coupon || 0);
     setCupomPayment(data?.coupon || "");
     setNewDataProducts(data?.new_value_products || []);
