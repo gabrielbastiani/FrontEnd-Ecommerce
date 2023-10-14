@@ -420,9 +420,12 @@ export default function Payment() {
 
             setNameCompletes(data?.name || "");
             setCnpjs(data?.cnpj || "");
+            setCnpj(data?.cnpj || "");
             setCpfs(data?.cpf || "");
+            setCpf(data?.cpf || "");
             setStateRegistration(data?.stateRegistration || "");
             setPhones(data?.phone || "");
+            setPhoneNumber(data?.phone || "");
             setEmails(data?.email || "");
             setDataNascimentos(data?.dateOfBirth || "");
             setLocals(data?.address || "");
@@ -433,7 +436,6 @@ export default function Payment() {
             setCeps(data?.cep || "");
             setStore(data?.store?.name || "");
             setGeneros(data?.gender || "");
-
             setPaymentCupom(cupomPayment || "");
 
         } catch (error) {
@@ -448,9 +450,12 @@ export default function Payment() {
 
                 setNameCompletes(data?.name || "");
                 setCnpjs(data?.cnpj || "");
+                setCnpj(data?.cnpj || "");
                 setCpfs(data?.cpf || "");
+                setCpf(data?.cpf || "");
                 setStateRegistration(data?.stateRegistration || "");
                 setPhones(data?.phone || "");
+                setPhoneNumber(data?.phone || "");
                 setEmails(data?.email || "");
                 setDataNascimentos(data?.dateOfBirth || "");
                 setLocals(data?.address || "");
@@ -461,7 +466,6 @@ export default function Payment() {
                 setCeps(data?.cep || "");
                 setStore(data?.store?.name || "");
                 setGeneros(data?.gender || "");
-
                 setPaymentCupom(cupomPayment || "");
 
             } catch (error) {
@@ -1926,7 +1930,6 @@ export default function Payment() {
                                                         dado={cnpjs}
                                                         type="text"
                                                         placeholder={cnpjs}
-                                                        id="cnpj"
                                                         value={cnpj}
                                                         maxLength={18}
                                                         onChange={handleCnpjChange}
