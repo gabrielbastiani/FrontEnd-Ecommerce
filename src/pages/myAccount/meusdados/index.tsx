@@ -139,7 +139,7 @@ export default function Meusdados() {
         try {
             const apiClient = setupAPIClient();
 
-            await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, {
+            await apiClient.put(`/customer/updateDateCustomerStore?customer_id=${customer_id}`, {
                 cpf: cpfs,
                 cnpj: cnpjs,
                 stateRegistration: stateRegistration,

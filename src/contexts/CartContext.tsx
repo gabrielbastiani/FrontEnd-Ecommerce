@@ -21,6 +21,7 @@ type MyContextProps = {
   totalCart: number;
   fretePayment: number;
   fretePaymentCoupon: number;
+  nameCupomPayment: string;
   cupomPayment: string;
   newDataProducts: any;
   newSubTotalCart: number;
@@ -72,6 +73,7 @@ export function CartProviderProducts({ children }: Props) {
 
   const [fretePayment, setFretePayment] = useState(0);
   const [fretePaymentCoupon, setFretePaymentCoupon] = useState(0);
+  const [nameCupomPayment, setNameCupomPayment] = useState("");
   const [cupomPayment, setCupomPayment] = useState("");
   const [newDataProducts, setNewDataProducts] = useState<any[]>([]);
   const [newSubTotalCart, setNewSubTotalCart] = useState(0);
@@ -114,6 +116,7 @@ export function CartProviderProducts({ children }: Props) {
         setTotalCart(data?.total || 0);
         setFretePayment(data?.frete || 0);
         setFretePaymentCoupon(data?.frete_coupon || 0);
+        setNameCupomPayment(data?.name_cupom || "");
         setCupomPayment(data?.coupon || "");
         setNewDataProducts(data?.new_value_products || []);
         setNewSubTotalCart(data?.new_subTotal || 0);
@@ -435,13 +438,14 @@ export function CartProviderProducts({ children }: Props) {
 
   /*Dados gerais do carrinho*/
 
-  async function dataTotalCart(cepfrete: string, frete: number, code: string, frete_coupon: number, subTot: number, newvalue: any, prazoEntrega: string) {
+  async function dataTotalCart(cepfrete: string, frete: number, name_cupom: string, code: string, frete_coupon: number, subTot: number, newvalue: any, prazoEntrega: string) {
 
     setCartCep(cepfrete);
 
     await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
       cep: cepfrete,
       frete: frete,
+      name_cupom: name_cupom,
       coupon: code,
       frete_coupon: frete_coupon,
       new_subTotal: subTot,
@@ -467,6 +471,7 @@ export function CartProviderProducts({ children }: Props) {
       dataTotalCart,
       fretePayment,
       fretePaymentCoupon,
+      nameCupomPayment,
       cupomPayment,
       productsCart,
       cartProducts,

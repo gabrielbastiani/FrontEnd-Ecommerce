@@ -140,6 +140,7 @@ export default function Payment() {
         totalCart,
         totalFinishCart,
         dataTotalCart,
+        nameCupomPayment,
         cupomPayment,
         fretePayment,
         fretePaymentCoupon
@@ -151,10 +152,6 @@ export default function Payment() {
     let apiClient = setupAPIClient();
     let storageId = String(cartProducts[0]?.store_cart_id);
 
-    useEffect(() => {
-        refresh();
-    }, [refresh]);
-
     const [paymentCupom, setPaymentCupom] = useState(cupomPayment);
     const [searchAddress, setSearchAddress] = useState<CepProps>();
     const [searchAddressEdit, setSearchAddressEdit] = useState<CepProps>();
@@ -162,9 +159,12 @@ export default function Payment() {
 
     const [nameCompletes, setNameCompletes] = useState('');
     const [cpfs, setCpfs] = useState('');
+    const [cpf, setCpf] = useState('');
     const [cnpjs, setCnpjs] = useState('');
+    const [cnpj, setCnpj] = useState('');
     const [stateRegistration, setStateRegistration] = useState('');
     const [phones, setPhones] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [emails, setEmails] = useState('');
     const [dataNascimentos, setDataNascimentos] = useState('');
     const [locals, setLocals] = useState('');
@@ -218,7 +218,6 @@ export default function Payment() {
 
     const [activePayment, setActivePayment] = useState("");
     const [colorPay, setColorPay] = useState("");
-    const [cupomOrderName, setCupomOrderName] = useState("");
 
     const [cardBrand, setCardBrand] = useState<any>({});
     const [loadingCupom, setLoadingCupom] = useState(false);
@@ -228,6 +227,60 @@ export default function Payment() {
     const [loadingPayment, setLoadingPayment] = useState(false);
 
     const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
+
+    const formatCnpj = (value: string) => {
+        const numericValue = value.replace(/\D/g, '');
+        const formattedCnpj = numericValue.replace(
+            /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+            '$1.$2.$3/$4-$5'
+        );
+        setCnpj(formattedCnpj);
+    };
+
+    const handleCnpjChange = (e: { target: { value: string; }; }) => {
+        formatCnpj(e.target.value);
+    };
+
+    const formatCPF = (value: string) => {
+        const numericValue = value.replace(/\D/g, '');
+
+        let formattedValue = '';
+        for (let i = 0; i < numericValue.length; i++) {
+            if (i === 3 || i === 6) {
+                formattedValue += '.';
+            } else if (i === 9) {
+                formattedValue += '-';
+            }
+            formattedValue += numericValue[i];
+        }
+
+        return formattedValue;
+    };
+
+    const handleCPFChange = (event: { target: { value: any; }; }) => {
+        const inputValue = event.target.value;
+        const formattedCPF = formatCPF(inputValue);
+
+        setCpf(formattedCPF);
+    };
+
+    const formatPhoneNumber = (input: string) => {
+        const cleanedInput = input.replace(/\D/g, '');
+
+        if (cleanedInput.length <= 2) {
+            return `(${cleanedInput}`;
+        } else if (cleanedInput.length <= 6) {
+            return `(${cleanedInput.slice(0, 2)}) ${cleanedInput.slice(2)}`;
+        } else {
+            return `(${cleanedInput.slice(0, 2)}) ${cleanedInput.slice(2, 6)}-${cleanedInput.slice(6, 10)}`;
+        }
+    };
+
+    const handlePhoneNumberChange = (e: { target: { value: any; }; }) => {
+        const inputValue = e.target.value;
+        const formattedValue = formatPhoneNumber(inputValue);
+        setPhoneNumber(formattedValue);
+    };
 
     useEffect(() => {
         async function reloadsConfigs() {
@@ -498,11 +551,11 @@ export default function Payment() {
 
     async function updateDataCustomer() {
         try {
-            await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, {
-                cpf: cpfs,
-                cnpj: cnpjs,
+            await apiClient.put(`/customer/updateDateCustomerStore?customer_id=${customer_id}`, {
+                cpf: cpf,
+                cnpj: cnpj,
                 stateRegistration: stateRegistration,
-                phone: phones,
+                phone: phoneNumber,
                 dateOfBirth: dataNascimentos,
                 gender: generoSelected,
             });
@@ -527,7 +580,7 @@ export default function Payment() {
                 toast.error('Não deixe o email em branco!!!');
                 return;
             } else {
-                await apiClient.put(`/customer/updateDateCustomer?customer_id=${customer_id}`, { email: emails });
+                await apiClient.put(`/customer/updateDateCustomerStore?customer_id=${customer_id}`, { email: emails });
                 toast.success('Email atualizado com sucesso.');
                 loadDataCustomer();
             }
@@ -558,6 +611,7 @@ export default function Payment() {
 
             await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
                 frete_coupon: 0,
+                name_cupom: null,
                 coupon: null,
                 new_subTotal: 0,
                 new_value_products: [],
@@ -954,8 +1008,6 @@ export default function Payment() {
         try {
             const { data } = await apiClient.get(`/getCouponCart?code=${codePromotion}`);
 
-            setCupomOrderName(data?.name || "");
-
             if (data === null) {
                 toast.error("Não ha cupom promocional ativo, ou com esse nome.");
                 return;
@@ -1006,11 +1058,12 @@ export default function Payment() {
                     const frete = fretePayment;
                     const frete_coupon = fretePayment;
                     const cepfrete = cepSelected;
+                    const name_cupom = data?.name;
                     const code = codePromotion;
                     const subTot = totalPriceDesconto;
                     const newvalue = newCartValue;
                     /* @ts-ignore */
-                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+                    dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
                     setTotalDesconto(formated);
                     setNewPriceArray(newvalue);
                     setNewSubTotalPrice(subTot);
@@ -1083,11 +1136,12 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = descontoPriceTotal;
                 const newvalue = newCartValue;
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setTotalDesconto(formated);
                 setNewPriceArray(newvalue);
                 setNewSubTotalPrice(subTot);
@@ -1129,11 +1183,12 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -1171,11 +1226,12 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = 0;
                 const cepfrete = cepSelected;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setZero(zeroFrete);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1199,11 +1255,12 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = valueFrete;
                 const cepfrete = cepSelected;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setFreteCupom(valueFrete);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1227,11 +1284,12 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = percentShipping;
                 const cepfrete = cepSelected;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setFreteCupom(percentShipping);
 
                 await apiClient.put(`/updateCartTotalFinish?store_cart_id=${storageId}`, {
@@ -1289,11 +1347,12 @@ export default function Payment() {
                     const frete = fretePayment;
                     const frete_coupon = fretePayment;
                     const cepfrete = cepSelected;
+                    const name_cupom = data?.name;
                     const code = codePromotion;
                     const subTot = totalPriceDesconto;
                     const newvalue = newCart;
                     /* @ts-ignore */
-                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+                    dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
                     setTotalDesconto(formated);
                     setNewSubTotalPrice(subTot);
@@ -1339,11 +1398,12 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
                 setTotalDesconto(formated);
 
                 var formatedDesconto = String(formated);
@@ -1412,11 +1472,12 @@ export default function Payment() {
                 const frete = fretePayment;
                 const frete_coupon = fretePayment;
                 const cepfrete = cepSelected;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = totalPriceDesconto;
                 const newvalue = newCartValue;
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
                 setNewPriceArray(newvalue);
                 setNewSubTotalPrice(subTot);
@@ -1581,7 +1642,7 @@ export default function Payment() {
                                         metadata: {
                                             customer_id: customer_id,
                                             order_data_delivery: days,
-                                            name_cupom: cupomOrderName,
+                                            name_cupom: nameCupomPayment,
                                             cupom: cupomPayment,
                                             store_cart_id: cartProducts[0]?.store_cart_id,
                                             frete: fretePayment,
@@ -1666,10 +1727,10 @@ export default function Payment() {
                         customer_id: customer_id,
                         delivery_id: idSelected,
                         order_data_delivery: days,
-                        name_cupom: cupomOrderName,
+                        name_cupom: nameCupomPayment,
                         cupom: cupomPayment,
                         store_cart_id: cartProducts[0]?.store_cart_id,
-                        frete: fretePayment,freteCupom: fretePaymentCoupon,
+                        frete: fretePayment, freteCupom: fretePaymentCoupon,
                         peso: peso
                     },
                     notification_url: URL_NOTIFICATION
@@ -1734,7 +1795,7 @@ export default function Payment() {
                         customer_id: customer_id,
                         delivery_id: idSelected,
                         order_data_delivery: days,
-                        name_cupom: cupomOrderName,
+                        name_cupom: nameCupomPayment,
                         cupom: cupomPayment,
                         store_cart_id: cartProducts[0]?.store_cart_id,
                         frete: fretePayment,
@@ -1844,12 +1905,9 @@ export default function Payment() {
                                             <InputUpdate
                                                 dado={phones}
                                                 type="text"
-                                                /* @ts-ignore */
-                                                as={IMaskInput}
-                                                mask="(00) 0000-0000"
                                                 placeholder={phones}
-                                                value={phones}
-                                                onChange={(e) => setPhones(e.target.value)}
+                                                value={phoneNumber}
+                                                onChange={handlePhoneNumberChange}
                                                 handleSubmit={updateDataCustomer}
                                             />
                                         }
@@ -1866,13 +1924,12 @@ export default function Payment() {
                                                 dados={
                                                     <InputUpdate
                                                         dado={cnpjs}
-                                                        /* @ts-ignore */
-                                                        as={IMaskInput}
-                                                        mask="00.000.000/0000-00"
                                                         type="text"
                                                         placeholder={cnpjs}
-                                                        value={cnpjs}
-                                                        onChange={(e) => setCnpjs(e.target.value)}
+                                                        id="cnpj"
+                                                        value={cnpj}
+                                                        maxLength={18}
+                                                        onChange={handleCnpjChange}
                                                         handleSubmit={updateDataCustomer}
                                                     />
                                                 }
@@ -1910,13 +1967,10 @@ export default function Payment() {
                                                 dados={
                                                     <InputUpdate
                                                         dado={cpfs}
-                                                        /* @ts-ignore */
-                                                        as={IMaskInput}
-                                                        mask="000.000.000-00"
                                                         type="text"
                                                         placeholder={cpfs}
-                                                        value={cpfs}
-                                                        onChange={(e) => setCpfs(e.target.value)}
+                                                        value={cpf}
+                                                        onChange={handleCPFChange}
                                                         handleSubmit={updateDataCustomer}
                                                     />
                                                 }

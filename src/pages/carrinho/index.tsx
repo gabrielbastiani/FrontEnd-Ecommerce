@@ -113,12 +113,13 @@ export default function Carrinho() {
             const frete = formatedFrete;
             const frete_coupon = 0;
             const cepfrete = cep;
+            const name_cupom = null;
             const code = null;
             const subTot = 0;
             const newvalue = [];
             const prazoEntrega = null;
             /* @ts-ignore */
-            dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+            dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
             updateCartAbandoned();
 
@@ -230,12 +231,13 @@ export default function Carrinho() {
             const frete = formatedFrete;
             const frete_coupon = 0;
             const cepfrete = cep;
+            const name_cupom = null;
             const code = null;
             const subTot = 0;
             const newvalue = [];
             const prazoEntrega = data[0]?.PrazoEntrega;
             /* @ts-ignore */
-            dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue, prazoEntrega);
+            dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue, prazoEntrega);
 
             if (getCartExist?.length === 0 && isAuthenticated === true) {
                 handleCartAbandoned();
@@ -306,6 +308,7 @@ export default function Carrinho() {
                     const frete = formatedFrete;
                     const frete_coupon = formatedFrete;
                     const cepfrete = cep;
+                    const name_cupom = data?.name;
                     const code = codePromotion;
                     const subTot = totalPriceDesconto;
                     const newvalue = newCartValue;
@@ -315,7 +318,7 @@ export default function Carrinho() {
                     setNewPriceArray(newvalue);
                     setNewSubTotalPrice(subTot);
                     /* @ts-ignore */
-                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                    dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue);
 
                     updateCartAbandoned();
 
@@ -366,11 +369,12 @@ export default function Carrinho() {
                 const frete = formatedFrete;
                 const frete_coupon = formatedFrete;
                 const cepfrete = cep;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = descontoPriceTotal;
                 const newvalue = newCartValue;
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue);
 
                 updateCartAbandoned();
 
@@ -393,11 +397,12 @@ export default function Carrinho() {
                 const frete = formatedFrete;
                 const frete_coupon = formatedFrete;
                 const cepfrete = cep;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue);
 
                 updateCartAbandoned();
 
@@ -416,11 +421,12 @@ export default function Carrinho() {
                 const frete = formatedFrete;
                 const frete_coupon = zeroFrete;
                 const cepfrete = cep;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue);
 
                 updateCartAbandoned();
 
@@ -439,11 +445,12 @@ export default function Carrinho() {
                 const frete = formatedFrete;
                 const frete_coupon = valueFrete;
                 const cepfrete = cep;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue);
 
                 updateCartAbandoned();
 
@@ -462,11 +469,12 @@ export default function Carrinho() {
                 const frete = formatedFrete;
                 const frete_coupon = percentShipping;
                 const cepfrete = cep;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue);
 
                 updateCartAbandoned();
 
@@ -520,11 +528,12 @@ export default function Carrinho() {
                     const frete = formatedFrete;
                     const frete_coupon = formatedFrete;
                     const cepfrete = cep;
+                    const name_cupom = data?.name;
                     const code = codePromotion;
                     const subTot = totalPriceDesconto;
                     const newvalue = newCart;
                     /* @ts-ignore */
-                    dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                    dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue);
 
                     updateCartAbandoned();
 
@@ -550,11 +559,12 @@ export default function Carrinho() {
                 const frete = formatedFrete;
                 const frete_coupon = formatedFrete;
                 const cepfrete = cep;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = 0;
                 const newvalue = [];
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue);
 
                 updateCartAbandoned();
 
@@ -605,11 +615,12 @@ export default function Carrinho() {
                 const frete = formatedFrete;
                 const frete_coupon = formatedFrete;
                 const cepfrete = cep;
+                const name_cupom = data?.name;
                 const code = codePromotion;
                 const subTot = totalPriceDesconto;
                 const newvalue = newCartValue;
                 /* @ts-ignore */
-                dataTotalCart(cepfrete, frete, code, frete_coupon, subTot, newvalue);
+                dataTotalCart(cepfrete, frete, name_cupom, code, frete_coupon, subTot, newvalue);
 
                 updateCartAbandoned();
 
@@ -1076,6 +1087,7 @@ export default function Carrinho() {
 
             if (!cupomPayment) {
                 await apiClient.put(`/updateTotalCart?store_cart_id=${storageId}`, {
+                    name_cupom: null,
                     coupon: null,
                     frete_coupon: 0
                 });

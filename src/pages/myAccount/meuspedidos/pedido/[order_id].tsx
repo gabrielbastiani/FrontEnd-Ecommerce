@@ -106,6 +106,7 @@ export default function Pedido() {
     const [order, setOrder] = useState<OrderProps>();
     const [idOrder, setIdOrder] = useState(Number);
     const [dataOrder, setDataOrder] = useState();
+    const [orderStatus, setOrderStatus] = useState("");
     const [customerDate, setCustomerDate] = useState<CustomerProps>();
     const [cartItens, setCartItens] = useState<any[]>([]);
     const [orderPayment, setOrderPayment] = useState<PaymentProps>();
@@ -119,13 +120,6 @@ export default function Pedido() {
     const [logoStore, setLogoStore] = useState("");
     const [commentOrder, setCommentOrder] = useState("");
     const [comments, setComments] = useState<any[]>([]);
-
-    const [active, setActive] = useState('Nao');
-    const [check, setCheck] = useState(false);
-
-    const handleChecked = (e: any) => {
-        setCheck(e.target.checked);
-    };
 
     const [modalVisibleQRCode, setModalVisibleQRCode] = useState(false);
 
@@ -181,17 +175,18 @@ export default function Pedido() {
                 setDataOrder(data.created_at);
                 setCartItens(data.cart || []);
                 setOrderPayment(data.payment || {});
-                setDeliveryOrder(data.deliveryAddressCustomer || {});/* @ts-ignore */
-                setCodeRastreio(order?.shipmentsTrackings[0]?.code_tracking || "");
+                setDeliveryOrder(data.deliveryAddressCustomer || {});
+                setCodeRastreio(data?.shipmentsTrackings[0]?.code_tracking || "");
                 setKeyPix(data?.payment?.key_payment_pix || "");
                 setKeyPixQRCode(data?.payment?.qr_code_pix || "");
+                setOrderStatus(data?.statusOrder[0]?.status_order || "");
 
             } catch (error) {
                 console.log(error.response.data);
             }
         }
-        loadorderdata();/* @ts-ignore */
-    }, [order?.shipmentsTrackings, order_id]);
+        loadorderdata();
+    }, [order_id]);
 
     useEffect(() => {
         async function loadCommentsOrder() {
@@ -265,7 +260,7 @@ export default function Pedido() {
                     <Titulos tipo="h2" titulo={`Pedido - #${idOrder} | Data: ${moment(dataOrder).format('DD/MM/YYYY - HH:mm')}`} />
 
                     <BoxTopStatusGeral>
-                        {orderPayment?.status === "pending" ?
+                        {orderStatus === "pending" ?
                             <StatusTop style={{
                                 backgroundColor: 'yellow',
                                 color: 'black'
@@ -276,7 +271,7 @@ export default function Pedido() {
                             null
                         }
 
-                        {orderPayment?.status === "approved" ?
+                        {orderStatus === "approved" ?
                             <StatusTop style={{
                                 backgroundColor: 'green',
                                 color: 'white'
@@ -287,7 +282,7 @@ export default function Pedido() {
                             null
                         }
 
-                        {orderPayment?.status === "inprocess" || orderPayment?.status === "inmediation" ?
+                        {orderStatus === "inprocess" || orderStatus === "inmediation" ?
                             <StatusTop style={{
                                 backgroundColor: 'orange',
                                 color: 'white'
@@ -298,7 +293,7 @@ export default function Pedido() {
                             null
                         }
 
-                        {orderPayment?.status === "rejected" ?
+                        {orderStatus === "rejected" ?
                             <StatusTop style={{
                                 backgroundColor: 'red',
                                 color: 'white'
@@ -309,7 +304,7 @@ export default function Pedido() {
                             null
                         }
 
-                        {orderPayment?.status === "cancelled" ?
+                        {orderStatus === "cancelled" ?
                             <StatusTop style={{
                                 backgroundColor: 'red',
                                 color: 'white'
@@ -320,7 +315,7 @@ export default function Pedido() {
                             null
                         }
 
-                        {orderPayment?.status === "refunded" || orderPayment?.status === "chargedback" ?
+                        {orderStatus === "refunded" || orderStatus === "chargedback" ?
                             <StatusTop style={{
                                 backgroundColor: 'brown',
                                 color: 'white'
@@ -331,7 +326,7 @@ export default function Pedido() {
                             null
                         }
 
-                        {orderPayment?.status === "chargedback" ?
+                        {orderStatus === "chargedback" ?
                             <StatusTop style={{
                                 backgroundColor: 'white',
                                 color: 'black'
@@ -695,7 +690,7 @@ export default function Pedido() {
                                         <>
                                             <DataComment>{moment(item?.created_at).format('DD/MM/YYYY - HH:mm')}</DataComment>
                                             <BoxComment>
-                                                <Image src={item.active === "Sim" ? 'http://localhost:3333/files/' + logoStore : commentss} width={80} height={80} alt="foto-comentario" />
+                                                <Image src={commentss} width={80} height={80} alt="foto-comentario" />
                                                 <Comments><TextUser>{item?.user_comment} = </TextUser>{item?.comment}</Comments>
                                             </BoxComment>
                                         </>
