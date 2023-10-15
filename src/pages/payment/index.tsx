@@ -233,7 +233,7 @@ export default function Payment() {
 
     const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
 
-    const handleDateChange = (e) => {
+    const handleDateChange = (e: { target: { value: any; }; }) => {
         const inputDate = e.target.value;
         const numericDate = inputDate.replace(/\D/g, '');
 
