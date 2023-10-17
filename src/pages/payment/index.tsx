@@ -1715,51 +1715,21 @@ export default function Payment() {
 
     /* BOLETO BANCÁRIO */
 
-    async function handleRegisterBoleto(event: FormEvent) {
-        event.preventDefault();
 
-        setLoadingPayment(false);
 
+    async function handleRegisterBoleto() {
         try {
-            fetch("http://localhost:3333/paymentBoletoResult", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
-                },
-                body: JSON.stringify({
-                    transaction_amount: Number(totalFinishCart.toFixed(2)),
-                    description: store,
-                    payment_method_id: 'bolbradesco',
-                    payer: {
-                        first_name: nameCompletes,
-                        last_name: nameCompletes,
-                        email: emails,
-                        identification: {
-                            number: removerAcentos(cpfCnpj),
-                            type: tipo
-                        },
-                        address: {
-                            zip_code: removerAcentos(ceps),
-                            street_name: locals,
-                            street_number: numeros,
-                            neighborhood: bairros,
-                            city: cidades,
-                            federal_unit: estados
-                        }
-                    },
-                    metadata: {
-                        customer_id: customer_id,
-                        delivery_id: idSelected,
-                        order_data_delivery: days,
-                        name_cupom: nameCupomPayment,
-                        cupom: cupomPayment,
-                        store_cart_id: cartProducts[0]?.store_cart_id,
-                        frete: fretePayment, freteCupom: fretePaymentCoupon,
-                        peso: peso
-                    },
-                    notification_url: URL_NOTIFICATION
-                })
+            await apiClient.post("/paymentBoletoResult", {
+                customer_id: customer_id,
+                value_pay: Number(totalFinishCart.toFixed(2)),
+                store_cart_id: cartProducts[0]?.store_cart_id,
+                frete_cupom: fretePaymentCoupon,
+                frete: fretePayment,
+                delivery_id: idSelected,
+                order_data_delivery: days,
+                name_cupom: nameCupomPayment,
+                cupom: cupomPayment,
+                peso: peso
             });
 
             await apiClient.put(`/updateStockPayment${productsId}`);
@@ -1773,8 +1743,8 @@ export default function Payment() {
             Router.push('/thanks');
 
         } catch (error) {
-            console.error("Erro ao fazer a requisição:", error);
-            toast.error("OPS... Erro ao gerar seu boleto para pagamento, tente novamente por favor.")
+            console.log(error.response.data);
+            toast.error("OPS... Erro ao gerar seu boleto para pagamento, tente novamente por favor.");
         }
 
     }
@@ -2561,19 +2531,18 @@ export default function Payment() {
                         <br />
                         <br />
                         {activePayment === "boleto" ?
-                            <FormPayBoletPix id="form-checkoutBoleto" onSubmit={handleRegisterBoleto}>
+                            
                                 <BoxFinalCart>
                                     <TextCurrentBold style={{ fontSize: '19px', marginBottom: '10px' }}>Total a pagar: </TextCurrentBold>
                                     <TextCurrent style={{ color: 'red', fontSize: '19px' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}</TextCurrent>
                                     <Button
                                         style={{ margin: '30px', width: '80%' }}
-                                        id="form-checkoutBoleto"
-                                        type="submit"
+                                        onClick={handleRegisterBoleto}
                                     >
                                         FINALIZAR COMPRA<br />E GERAR BOLETO
                                     </Button>
                                 </BoxFinalCart>
-                            </FormPayBoletPix>
+                            
                             :
                             null
                         }
