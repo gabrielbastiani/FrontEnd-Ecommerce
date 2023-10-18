@@ -1612,6 +1612,44 @@ export default function Payment() {
 
     }, [totalFinishCart]);
 
+    const formatCnpjPay = (value: string) => {
+        const numericValue = value.replace(/\D/g, '');
+        const formattedCnpj = numericValue.replace(
+            /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+            '$1.$2.$3/$4-$5'
+        );
+        setCpfOrCnpjPay(formattedCnpj);
+    };
+
+    const handleCnpjPayChange = (e: { target: { value: string; }; }) => {
+        formatCnpjPay(e.target.value);
+    };
+
+    const formatCPFPay = (value: string) => {
+        const numericValue = value.replace(/\D/g, '');
+
+        let formattedValue = '';
+        for (let i = 0; i < numericValue.length; i++) {
+            if (i === 3 || i === 6) {
+                formattedValue += '.';
+            } else if (i === 9) {
+                formattedValue += '-';
+            }
+            formattedValue += numericValue[i];
+        }
+
+        return formattedValue;
+    };
+
+    const handleCPFPayChange = (event: { target: { value: any; }; }) => {
+        const inputValue = event.target.value;
+        const formattedCPF = formatCPFPay(inputValue);
+
+        setCpfOrCnpjPay(formattedCPF);
+    };
+
+    const formatCnpjOrCpf = cpfOrCnpjPay.replace(/[./-]/g, '');
+
     async function handleRegisterCardPay() {
         try {
             if (nomeTitular === "") {
@@ -1625,7 +1663,7 @@ export default function Payment() {
                 expiryYear: yaerExpirationCard,
                 ccv: numeroSeguranca,
                 cardholder_identification_cpfCnpj: tipoDocumento,
-                cpfCnpj: cpfOrCnpjPay,
+                cpfCnpj: formatCnpjOrCpf,
                 customer_id: customer_id,
                 value_pay: Number(totalFinishCart.toFixed(2)),
                 installmentCount: numParcela,
@@ -2540,16 +2578,31 @@ export default function Payment() {
                                     </SelectCardData>
                                 </BoxCard>
 
-                                <BoxCard>
-                                    <LabelForm>Número do Documento</LabelForm>
-                                    <BoxDataCardCode
-                                        type="text"
-                                        value={cpfOrCnpjPay}
-                                        onChange={(e) => setCpfOrCnpjPay(e.target.value)}
-                                    />
-                                </BoxCard>
+                                {tipoDocumento === "CNPJ" ?
+                                    <BoxCard>
+                                        <LabelForm>Número do Documento</LabelForm>
+                                        <BoxDataCardCode
+                                            type="text"
+                                            value={cpfOrCnpjPay}
+                                            placeholder="Digite o CNPJ"
+                                            maxLength={18}
+                                            onChange={handleCnpjPayChange}
+                                        />
+                                    </BoxCard>
+                                    :
+                                    <BoxCard>
+                                        <LabelForm>Número do Documento</LabelForm>
+                                        <BoxDataCardCode
+                                            type="text"
+                                            value={cpfOrCnpjPay}
+                                            placeholder="Digite o CPF"
+                                            maxLength={14}
+                                            onChange={handleCPFPayChange}
+                                        />
+                                    </BoxCard>
+                                }
 
-                                <BoxCard>
+                                <BoxCard style={{ display: 'inline-flex' }}>
                                     <LabelForm>Selecione o número de parcelas:</LabelForm>
                                     <SelectParcelasCardPay
                                         value={parcelaSelected}
