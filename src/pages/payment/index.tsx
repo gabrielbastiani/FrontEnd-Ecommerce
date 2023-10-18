@@ -1,5 +1,5 @@
 import { PUBLIC_KEY_TEST, URL_NOTIFICATION } from "../../utils/config";
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { FormEvent, SetStateAction, useContext, useEffect, useState } from "react";
 import { canSSRAuthPayment } from "../../utils/canSSRAuthPayment";
 import { setupAPIClient } from "../../services/api";
 import { loadMercadoPago } from "@mercadopago/sdk-js";
@@ -51,6 +51,7 @@ import {
     DeliverySpan,
     DestinyName,
     EditDelivery,
+    ErrorCard,
     FormCard,
     FormPayBoletPix,
     ImageProductPayment,
@@ -58,6 +59,7 @@ import {
     InputDelivery,
     InputEmail,
     InputPropetyNameCard,
+    LabelForm,
     PayIcon,
     ProgressPaymentCard,
     SectionPayment,
@@ -110,6 +112,8 @@ import {
 import { Button } from "../../components/ui/Button";
 import Router from "next/router";
 import { Loading } from "../../components/Loading";
+import CreditCardInput from 'react-credit-card-input';
+import SelectParcelasCardPay from "../../components/ui/Select";
 
 
 type CepProps = {
@@ -146,9 +150,9 @@ export default function Payment() {
         fretePaymentCoupon
     } = useContext(CartContext);
 
-    useEffect(() => {
+    /* useEffect(() => {
         refresh();
-    });
+    }); */
 
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
@@ -1565,151 +1569,93 @@ export default function Payment() {
 
     /* CARTÃO DE CRÉDITO */
 
-    let valuePay = String(totalFinishCart.toFixed(2));
-    let days = prazoEntrega;
-    let cupomName = nameCupomPayment;
+    const [nomeTitular, setNomeTitular] = useState('');
+    const [errorNameHolderCard, setErrorNameHolderCard] = useState("");
+    const [numeroCartao, setNumeroCartao] = useState('');
+    const [dataExpiracao, setDataExpiracao] = useState('');
+    const [numeroSeguranca, setNumeroSeguranca] = useState('');
+    const [tipoDocumento, setTipoDocumento] = useState('CPF');
+    const [cpfOrCnpjPay, setCpfOrCnpjPay] = useState('');
+    const [parcelaSelected, setParcelaSelected] = useState("");
+    const [parcelas, setParcelas] = useState([]);
+    const juros = 1.99;
+
+    const numberCard = numeroCartao.replace(/\s+/g, '');
+    const dataExpirationCard = dataExpiracao.replace(/\s+/g, '').split("/");
+    const yaerExpirationCard = "20" + dataExpirationCard[1];
+
+    function handleChangeParcela(e: any) {
+        setParcelaSelected(e.target.value)
+    }
+
+    const valueArray = parcelaSelected.split(",");
+    const numParcela = Number(valueArray[0]) === 0 || Number(valueArray[0]) === 1 ? null : Number(valueArray[0]);
+    const valueParcela = isNaN(Number(valueArray[1])) || Number(valueArray[1]) >= totalFinishCart ? null : Number(valueArray[1]);
 
     useEffect(() => {
-        const initializeMercadoPago = async () => {
-            await loadMercadoPago();
-            /* @ts-ignore */
-            const mp = new window.MercadoPago(
-                PUBLIC_KEY_TEST
-            );
+        const calcularParcelas = () => {
+            const parcelasCalculadas = [];
 
-            if (valuePay != '0.00') {
-
-                const cardForm = mp.cardForm({
-                    amount: valuePay,
-                    iframe: true,
-                    form: {
-                        id: "form-checkout",
-                        cardNumber: {
-                            id: "form-checkout__cardNumber",
-                            placeholder: "Número do cartão",
-                        },
-                        expirationDate: {
-                            id: "form-checkout__expirationDate",
-                            placeholder: "MM/YY",
-                        },
-                        securityCode: {
-                            id: "form-checkout__securityCode",
-                            placeholder: "Código de segurança",
-                        },
-                        cardholderName: {
-                            id: "form-checkout__cardholderName",
-                            placeholder: "Titular do cartão",
-                        },
-                        issuer: {
-                            id: "form-checkout__issuer",
-                            placeholder: "Banco emissor",
-                        },
-                        installments: {
-                            id: "form-checkout__installments",
-                            placeholder: "Parcelas",
-                        },
-                        identificationType: {
-                            id: "form-checkout__identificationType",
-                            placeholder: "Tipo de documento",
-                        },
-                        identificationNumber: {
-                            id: "form-checkout__identificationNumber",
-                            placeholder: "Número do documento",
-                        },
-                        cardholderEmail: {
-                            id: "form-checkout__cardholderEmail",
-                            placeholder: "E-mail",
-                        },
-                    },
-                    callbacks: {
-                        onFormMounted: (error: any) => {
-                            if (error) return console.warn("Form Mounted handling error: ", error);
-                            console.log("Form mounted");
-                        },
-                        onSubmit: async (event: { preventDefault: () => void; }) => {
-                            event.preventDefault();
-
-                            const {
-                                paymentMethodId: payment_method_id,
-                                issuerId: issuer_id,
-                                cardholderEmail: email,
-                                amount,
-                                token,
-                                installments,
-                                identificationNumber,
-                                identificationType
-                            } = cardForm.getCardFormData();
-
-                            try {
-
-                                setLoadingPayment(false);
-
-                                fetch("http://localhost:3333/paymentCardResult", {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/json",
-                                        "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
-                                    },
-                                    body: JSON.stringify({
-                                        token,
-                                        issuer_id,
-                                        payment_method_id,
-                                        transaction_amount: Number(amount),
-                                        installments: Number(installments),
-                                        description: store,
-                                        payer: {
-                                            email,
-                                            identification: {
-                                                type: identificationType,
-                                                number: identificationNumber,
-                                            },
-                                        },
-                                        metadata: {
-                                            customer_id: customer_id,
-                                            order_data_delivery: days,
-                                            name_cupom: cupomName,
-                                            cupom: cupomPayment,
-                                            store_cart_id: cartProducts[0]?.store_cart_id,
-                                            frete: fretePayment,
-                                            freteCupom: fretePaymentCoupon,
-                                            peso: peso
-                                        },
-                                        notification_url: URL_NOTIFICATION
-                                    }),
-                                })
-
-                                await apiClient.put(`/updateStockPayment${productsId}`);
-
-                                setLoadingPayment(true);
-
-                                setTimeout(() => {
-                                    clearAllCart();
-                                }, 2500);
-
-                                Router.push('/thanks');
-
-                            } catch (error) {
-                                console.error("Erro ao fazer a requisição:", error);
-                            }
-                        },
-                        onFetching: (resource: any) => {
-                            setCardBrand(cardForm.getCardFormData());
-                            console.log("Fetching resource: ", resource);
-                            // Animate progress bar
-                            const progressBar = document.querySelector(".progress-bar");
-                            progressBar.removeAttribute("value");
-                            return () => {
-                                progressBar.setAttribute("value", "0");
-                            };
-                        }
-                    }
+            for (let i = 1; i <= 12; i++) {
+                const valorComJuros = i > 8 ? totalFinishCart * (1 + juros / 100) : totalFinishCart;
+                const valorParcela = valorComJuros / i;
+                parcelasCalculadas.push({
+                    numeroParcelas: i,
+                    valor: valorParcela.toFixed(2),
                 });
             }
+
+            setParcelas(parcelasCalculadas);
         };
 
-        initializeMercadoPago();
+        calcularParcelas();
 
-    }, [cupomName, valuePay, days, productsId]);
+    }, [totalFinishCart]);
+
+    async function handleRegisterCardPay() {
+        try {
+            if (nomeTitular === "") {
+                setErrorNameHolderCard("Preencha o nome do titular do cartão");
+                return;
+            }
+            await apiClient.post("/paymentCardResult", {
+                holderName: nomeTitular,
+                number_card: numberCard,
+                expiryMonth: dataExpirationCard[0],
+                expiryYear: yaerExpirationCard,
+                ccv: numeroSeguranca,
+                cardholder_identification_cpfCnpj: tipoDocumento,
+                cpfCnpj: cpfOrCnpjPay,
+                customer_id: customer_id,
+                value_pay: Number(totalFinishCart.toFixed(2)),
+                installmentCount: numParcela,
+                installmentValue: valueParcela,
+                store_cart_id: cartProducts[0]?.store_cart_id,
+                frete_cupom: fretePaymentCoupon,
+                frete: fretePayment,
+                delivery_id: idSelected,
+                order_data_delivery: prazoEntrega,
+                name_cupom: nameCupomPayment,
+                cupom: cupomPayment,
+                peso: peso
+            });
+
+            await apiClient.put(`/updateStockPayment${productsId}`);
+
+            setLoadingPayment(true);
+
+            setTimeout(() => {
+                clearAllCart();
+            }, 2500);
+
+            Router.push('/thanks');
+
+        } catch (error) {
+            console.log(error.response.data);
+            toast.error("OPS... Erro ao gerar seu boleto para pagamento, tente novamente por favor.");
+        }
+
+    }
 
 
 
@@ -1726,7 +1672,7 @@ export default function Payment() {
                 frete_cupom: fretePaymentCoupon,
                 frete: fretePayment,
                 delivery_id: idSelected,
-                order_data_delivery: days,
+                order_data_delivery: prazoEntrega,
                 name_cupom: nameCupomPayment,
                 cupom: cupomPayment,
                 peso: peso
@@ -1789,7 +1735,7 @@ export default function Payment() {
                     metadata: {
                         customer_id: customer_id,
                         delivery_id: idSelected,
-                        order_data_delivery: days,
+                        order_data_delivery: prazoEntrega,
                         name_cupom: nameCupomPayment,
                         cupom: cupomPayment,
                         store_cart_id: cartProducts[0]?.store_cart_id,
@@ -2531,102 +2477,102 @@ export default function Payment() {
                         <br />
                         <br />
                         {activePayment === "boleto" ?
-                            
-                                <BoxFinalCart>
-                                    <TextCurrentBold style={{ fontSize: '19px', marginBottom: '10px' }}>Total a pagar: </TextCurrentBold>
-                                    <TextCurrent style={{ color: 'red', fontSize: '19px' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}</TextCurrent>
-                                    <Button
-                                        style={{ margin: '30px', width: '80%' }}
-                                        onClick={handleRegisterBoleto}
-                                    >
-                                        FINALIZAR COMPRA<br />E GERAR BOLETO
-                                    </Button>
-                                </BoxFinalCart>
-                            
+
+                            <BoxFinalCart>
+                                <TextCurrentBold style={{ fontSize: '19px', marginBottom: '10px' }}>Total a pagar: </TextCurrentBold>
+                                <TextCurrent style={{ color: 'red', fontSize: '19px' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}</TextCurrent>
+                                <Button
+                                    style={{ margin: '30px', width: '80%' }}
+                                    onClick={handleRegisterBoleto}
+                                >
+                                    FINALIZAR COMPRA<br />E GERAR BOLETO
+                                </Button>
+                            </BoxFinalCart>
+
                             :
                             null
                         }
 
                         {activePayment === "cartao_de_credito" ?
-                            <FormCard id="form-checkout">
-                                {cardBrand.paymentMethodId === "master" ?
-                                    <Image src={master} height={100} width={180} alt="cartao-credito" />
-                                    :
-                                    null
-                                }
-                                {cardBrand.paymentMethodId === "visa" ?
-                                    <Image src={visa} height={100} width={180} alt="cartao-credito" />
-                                    :
-                                    null
-                                }
-                                {cardBrand.paymentMethodId === "amex" ?
-                                    <Image src={american} height={100} width={180} alt="cartao-credito" />
-                                    :
-                                    null
-                                }
-                                <BoxDataCard id="form-checkout__cardNumber" className="container"></BoxDataCard>
+                            <BoxDataCard>
+                                <BoxCard>
+                                    <CreditCardInput
+                                        cardNumberInputProps={{ value: numeroCartao, onChange: (e: any) => setNumeroCartao(e.target.value) }}
+                                        cardExpiryInputProps={{ value: dataExpiracao, onChange: (e: any) => setDataExpiracao(e.target.value) }}
+                                        cardCVCInputProps={{ value: numeroSeguranca, onChange: (e: any) => setNumeroSeguranca(e.target.value) }}
+                                        fieldClassName="input"
+                                        customTextLabels={{
+                                            invalidCardNumber: 'Número de cartão inválido',
+                                            expiryError: {
+                                                invalidExpiryDate: 'A data de validade é inválida',
+                                                monthOutOfRange: 'O mês de validade deve ser entre 01 e 12',
+                                                yearOutOfRange: 'O ano de validade não pode estar no passado',
+                                                dateOutOfRange: 'A data de validade não pode estar no passado'
+                                            },
+                                            invalidCvc: 'O código de segurança é inválido',
+                                            invalidZipCode: 'O CEP é inválido',
+                                            cardNumberPlaceholder: 'Número do cartão',
+                                            expiryPlaceholder: 'MM/AA',
+                                            cvcPlaceholder: 'COD',
+                                            zipPlaceholder: 'C.P.'
+                                        }}
+                                    />
+                                </BoxCard>
+
+                                <BoxCardCustomer>
+                                    <InputPropetyNameCard
+                                        type="text"
+                                        placeholder="Nome do titular"
+                                        value={nomeTitular}
+                                        onChange={(e) => setNomeTitular(e.target.value)}
+                                    />
+                                    <ErrorCard>{errorNameHolderCard}</ErrorCard>
+                                </BoxCardCustomer>
+
+                                <BoxCard style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                    <LabelForm>Tipo de Documento:</LabelForm>
+                                    <SelectCardData
+                                        value={tipoDocumento}
+                                        onChange={(e) => setTipoDocumento(e.target.value)}
+                                    >
+                                        <option value="CPF">CPF</option>
+                                        <option value="CNPJ">CNPJ</option>
+                                    </SelectCardData>
+                                </BoxCard>
 
                                 <BoxCard>
-                                    <BoxDataCardExpiratio id="form-checkout__expirationDate" className="container"></BoxDataCardExpiratio>
-                                    <BoxDataCardCode id="form-checkout__securityCode" className="container"></BoxDataCardCode>
+                                    <LabelForm>Número do Documento</LabelForm>
+                                    <BoxDataCardCode
+                                        type="text"
+                                        value={cpfOrCnpjPay}
+                                        onChange={(e) => setCpfOrCnpjPay(e.target.value)}
+                                    />
                                 </BoxCard>
-                                <BoxCardCustomer>
-                                    <InputPropetyNameCard type="text" id="form-checkout__cardholderName" />
-                                    <InputEmail type="email" id="form-checkout__cardholderEmail" />
-                                </BoxCardCustomer>
+
                                 <BoxCard>
-                                    <SelectCardData id="form-checkout__identificationType"></SelectCardData>
-                                    <InputDataIndentification type="text" id="form-checkout__identificationNumber" />
+                                    <LabelForm>Selecione o número de parcelas:</LabelForm>
+                                    <SelectParcelasCardPay
+                                        value={parcelaSelected}
+                                        /* @ts-ignore */
+                                        onChange={handleChangeParcela}
+                                        opcoes={
+                                            [
+                                                ...(parcelas || []).map((item) => ({ label: item.numeroParcelas + "x - R$" + item.valor, value: [item.numeroParcelas, item.valor] }))
+                                            ]
+                                        }
+                                    />
                                 </BoxCard>
-                                <BoxCard>
-                                    <SelectCardData id="form-checkout__issuer"></SelectCardData>
-                                    <SelectCardData id="form-checkout__installments"></SelectCardData>
+
+                                <BoxCard style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                                    <Button
+                                        onClick={handleRegisterCardPay}
+                                    >
+                                        Efetuar Pagamento
+                                    </Button>
                                 </BoxCard>
-                                <BoxButtonPayment>
-                                    <Button type="submit" id="form-checkout__submit">Pagar</Button>
-                                    <ProgressPaymentCard value="0" className="progress-bar" style={{ display: 'none' }}>Carregando...</ProgressPaymentCard>
-                                </BoxButtonPayment>
-                            </FormCard>
+                            </BoxDataCard>
                             :
-                            <FormCard id="form-checkout" style={{ display: 'none' }}>
-                                {cardBrand.paymentMethodId === "master" ?
-                                    <Image src={master} height={100} width={180} alt="cartao-credito" />
-                                    :
-                                    null
-                                }
-                                {cardBrand.paymentMethodId === "visa" ?
-                                    <Image src={visa} height={100} width={180} alt="cartao-credito" />
-                                    :
-                                    null
-                                }
-                                {cardBrand.paymentMethodId === "amex" ?
-                                    <Image src={american} height={100} width={180} alt="cartao-credito" />
-                                    :
-                                    null
-                                }
-                                <BoxDataCard id="form-checkout__cardNumber" className="container"></BoxDataCard>
-
-                                <BoxCard>
-                                    <BoxDataCardExpiratio id="form-checkout__expirationDate" className="container"></BoxDataCardExpiratio>
-                                    <BoxDataCardCode id="form-checkout__securityCode" className="container"></BoxDataCardCode>
-                                </BoxCard>
-                                <BoxCardCustomer>
-                                    <InputPropetyNameCard type="text" id="form-checkout__cardholderName" />
-                                    <InputEmail type="email" id="form-checkout__cardholderEmail" />
-                                </BoxCardCustomer>
-                                <BoxCard>
-                                    <SelectCardData id="form-checkout__identificationType"></SelectCardData>
-                                    <InputDataIndentification type="text" id="form-checkout__identificationNumber" />
-                                </BoxCard>
-                                <BoxCard>
-                                    <SelectCardData id="form-checkout__issuer"></SelectCardData>
-                                    <SelectCardData id="form-checkout__installments"></SelectCardData>
-                                </BoxCard>
-                                <BoxButtonPayment>
-                                    <Button type="submit" id="form-checkout__submit">Pagar</Button>
-                                    <ProgressPaymentCard value="0" className="progress-bar" style={{ display: 'none' }}>Carregando...</ProgressPaymentCard>
-                                </BoxButtonPayment>
-                            </FormCard>
+                            null
                         }
 
                         {activePayment === "pix" ?

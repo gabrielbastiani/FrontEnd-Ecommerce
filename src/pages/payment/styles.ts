@@ -274,7 +274,12 @@ export const PayIcon = styled.button`
 export const FormPayment = styled.form``
 
 export const LabelForm = styled.label`
-  font-weight: bold;
+  color: gray;
+`
+
+export const ErrorCard = styled.small`
+  color: red;
+  font-size: 10px;
 `
 
 export const SelectFormPay = styled.select`
@@ -283,7 +288,6 @@ export const SelectFormPay = styled.select`
 
 export const FormPayBoletPix = styled.form``
 
-
 export const FormCard = styled.form`
   width: 100%;
 `
@@ -291,13 +295,6 @@ export const FormCard = styled.form`
 export const BoxDataCard = styled.div`
   width: 100%;
   padding: 11px;
-
-  iframe {
-    border: 2px solid;
-    height: 39px;
-    padding: 10px;
-    width: 100%;
-  }
 `
 
 export const BoxCard = styled.div`
@@ -306,26 +303,19 @@ export const BoxCard = styled.div`
   padding: 10px;
 `
 
-export const BoxDataCardExpiratio = styled.div`
+export const BoxDataCardExpiratio = styled.input`
   width: 100%;
-
-  iframe {
-    border: 2px solid;
-    height: 39px;
-    width: 80%;
-    padding: 10px;
-  }
+  border: 2px solid;
+  height: 39px;
+  width: 80%;
+  padding: 10px;
 `
 
-export const BoxDataCardCode = styled.div`
+export const BoxDataCardCode = styled.input`
+  border: none;
+  height: 39px;
   width: 100%;
-
-  iframe {
-    border: 2px solid;
-    height: 39px;
-    width: 100%;
-    padding: 10px;
-  }
+  padding: 10px;
 `
 
 export const BoxCardCustomer = styled.div`
@@ -333,7 +323,7 @@ export const BoxCardCustomer = styled.div`
 `
 
 export const InputPropetyNameCard = styled.input`
-  border: 2px solid;
+  border: none;
   height: 39px;
   width: 100%;
   padding: 10px;
@@ -348,9 +338,9 @@ export const InputEmail = styled.input`
 `
 
 export const SelectCardData = styled.select`
-  border: 2px solid;
+  border: none;
   height: 39px;
-  width: 80%;
+  width: 50%;
   padding: 10px;
   margin: 12px;
 `
