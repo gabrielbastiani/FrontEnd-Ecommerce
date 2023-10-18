@@ -171,9 +171,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
         const { data } = await apiClient.get(`/findCepCart?customer_id=${id}&cep=${cartCep}`);
 
-        console.log("CEP da API", data?.cep)
-        console.log("CEP digitado", cartCep)
-
         if (data?.cep === cartCep) {
           await apiClient.put(`/customer/cepCartCepDelivery?customer_id=${id}&cep=${cartCep}`);
         } else {
