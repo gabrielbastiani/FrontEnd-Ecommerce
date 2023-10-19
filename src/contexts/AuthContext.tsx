@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState, useEffect, useContext } from 'react';
+import { createContext, ReactNode, useState, useEffect } from 'react';
 import { api } from '../services/apiClient';
 import { destroyCookie, setCookie, parseCookies } from 'nookies';
 import Router from 'next/router';
@@ -20,6 +20,7 @@ type UserProps = {
   id: string;
   name: string;
   email: string;
+  id_customer_assas: string;
   store_id: string;
 }
 
@@ -69,12 +70,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (token) {
       api.get('/customer/me').then(response => {
-        const { id, name, email, store_id } = response.data;
+        const { id, name, email, id_customer_assas, store_id } = response.data;
 
         setCustomer({
           id,
           name,
           email,
+          id_customer_assas,
           store_id
         });
 
@@ -91,7 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password
       });
 
-      const { id, name, store_id, token } = response.data;
+      const { id, name, store_id, id_customer_assas, token } = response.data;
 
       setCookie(undefined, '@storevirtual.token', token, {
         maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
@@ -102,7 +104,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         id,
         name,
         email,
-        store_id
+        store_id,
+        id_customer_assas
       });
 
       //Passar para proximas requisiçoes o nosso token
@@ -136,7 +139,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password
       });
 
-      const { id, name, store_id, token } = response.data;
+      const { id, name, store_id, id_customer_assas, token } = response.data;
 
       setCookie(undefined, '@storevirtual.token', token, {
         maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
@@ -147,6 +150,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         id,
         name,
         email,
+        id_customer_assas,
         store_id
       });
 
@@ -195,7 +199,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password
       });
 
-      const { id, name, store_id, token } = response.data;
+      const { id, name, store_id, id_customer_assas, token } = response.data;
 
       setCookie(undefined, '@storevirtual.token', token, {
         maxAge: 60 * 60 * 24 * 30, // Expirar em 1 mes
@@ -206,6 +210,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         id,
         name,
         email,
+        id_customer_assas,
         store_id
       });
 

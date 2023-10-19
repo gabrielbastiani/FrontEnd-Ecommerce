@@ -1564,12 +1564,15 @@ export default function Payment() {
 
     const [nomeTitular, setNomeTitular] = useState('');
     const [errorNameHolderCard, setErrorNameHolderCard] = useState("");
-    const [errorDocumentHolderCard, setErrorDocumentHolderCard] = useState("");
     const [numeroCartao, setNumeroCartao] = useState('');
+    const [errorNumberCardHolderCard, setErrorNumberCardHolderCard] = useState("");
     const [dataExpiracao, setDataExpiracao] = useState('');
+    const [errorDataCardHolderCard, setErrorDataCardHolderCard] = useState("");
     const [numeroSeguranca, setNumeroSeguranca] = useState('');
+    const [errorCVCCardHolderCard, setErrorCVCCardHolderCard] = useState("");
     const [tipoDocumento, setTipoDocumento] = useState('CPF');
     const [cpfOrCnpjPay, setCpfOrCnpjPay] = useState('');
+    const [errorDocumentHolderCard, setErrorDocumentHolderCard] = useState("");
     const [parcelaSelected, setParcelaSelected] = useState("");
     const [parcelas, setParcelas] = useState([]);
     const juros = 1.99;
@@ -1652,6 +1655,19 @@ export default function Payment() {
             }
             if (cpfOrCnpjPay === "") {
                 setErrorDocumentHolderCard("Preencha o documento do titular do cartão");
+                return;
+            }
+            if (numberCard === "") {
+                setErrorNumberCardHolderCard("Preecha o número do cartão de crédito");
+                return;
+            }
+            if (dataExpiracao === "") {
+                setErrorDataCardHolderCard("Preencha a data de vencimento do cartão de crédito");
+                return;
+            }
+            if (numeroSeguranca === "") {
+                setErrorCVCCardHolderCard("Preencha o número de segurança do cartão de crédito");
+                return;
             }
             await apiClient.post("/paymentCardResult", {
                 holderName: nomeTitular,
@@ -1687,7 +1703,7 @@ export default function Payment() {
 
         } catch (error) {
             console.log(error.response.data);
-            toast.error("OPS... Erro ao gerar seu boleto para pagamento, tente novamente por favor.");
+            toast.error(`${error.response.data}`);
         }
 
     }
@@ -2553,6 +2569,9 @@ export default function Payment() {
                                         }}
                                     />
                                 </BoxCard>
+                                <ErrorCard>{errorNumberCardHolderCard}</ErrorCard>
+                                <ErrorCard>{errorDataCardHolderCard}</ErrorCard>
+                                <ErrorCard>{errorCVCCardHolderCard}</ErrorCard>
 
                                 <BoxCardCustomer>
                                     <InputPropetyNameCard
@@ -2588,17 +2607,19 @@ export default function Payment() {
                                         <ErrorCard>{errorDocumentHolderCard}</ErrorCard>
                                     </BoxCard>
                                     :
-                                    <BoxCard>
-                                        <LabelForm>Número do Documento</LabelForm>
-                                        <BoxDataCardCode
-                                            type="text"
-                                            value={cpfOrCnpjPay}
-                                            placeholder="Digite o CPF"
-                                            maxLength={14}
-                                            onChange={handleCPFPayChange}
-                                        />
+                                    <>
+                                        <BoxCard>
+                                            <LabelForm>Número do Documento</LabelForm>
+                                            <BoxDataCardCode
+                                                type="text"
+                                                value={cpfOrCnpjPay}
+                                                placeholder="Digite o CPF"
+                                                maxLength={14}
+                                                onChange={handleCPFPayChange}
+                                            />
+                                        </BoxCard>
                                         <ErrorCard>{errorDocumentHolderCard}</ErrorCard>
-                                    </BoxCard>
+                                    </>
                                 }
 
                                 <BoxCard style={{ display: 'inline-flex' }}>
