@@ -1,0 +1,29 @@
+CREDITCARD OBJECT
+
+Nome impresso no cartão = marcelo h almeida
+
+Número do cartão = 5162306219378829
+
+Mês de expiração = 05
+
+Ano de expiração com 4 dígitos = 2025
+
+Código de segurança = 318
+
+
+Informações do titular do cartão de crédito
+
+
+CREDITCARDHOLDERINFO OBJECT
+
+Nome do titular do cartão = Marcelo Henrique Almeida
+
+Email do titular do cartão = marcelo.almeida@gmail.com
+
+CPF ou CNPJ do titular do cartão = 24971563792
+
+CEP do titular do cartão = 89223-005
+
+Número do endereço do titular do cartão = 277
+
+Fone com DDD do titular do cartão = 4738010919
