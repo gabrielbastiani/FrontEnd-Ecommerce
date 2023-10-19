@@ -244,6 +244,8 @@ export default function Pedido() {
 
     Modal.setAppElement('body');
 
+    
+
 
     return (
         <>

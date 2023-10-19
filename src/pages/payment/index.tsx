@@ -1,5 +1,5 @@
 import { PUBLIC_KEY_TEST, URL_NOTIFICATION } from "../../utils/config";
-import { FormEvent, SetStateAction, useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { canSSRAuthPayment } from "../../utils/canSSRAuthPayment";
 import { setupAPIClient } from "../../services/api";
 import { loadMercadoPago } from "@mercadopago/sdk-js";
@@ -13,14 +13,10 @@ import logoCorreios from "../../assets/correios-logo.png";
 import boleto from "../../assets/pagamento-boleto.png";
 import cartao from "../../assets/pagamento-cartao.png";
 import pix from "../../assets/pagamento-pix.png";
-import master from "../../assets/cartao-master.png";
-import visa from "../../assets/cartao-visa.jpg";
-import american from "../../assets/cartao-american-express.png";
 import {
     AddressTextIcon,
     AmountProduct,
     BackButton,
-    BoxButtonPayment,
     BoxButtons,
     BoxButtonsData,
     BoxButtonsFunctions,
@@ -31,7 +27,6 @@ import {
     BoxData,
     BoxDataCard,
     BoxDataCardCode,
-    BoxDataCardExpiratio,
     BoxDataProductPayment,
     BoxDelivery,
     BoxDeliverySelected,
@@ -52,16 +47,12 @@ import {
     DestinyName,
     EditDelivery,
     ErrorCard,
-    FormCard,
     FormPayBoletPix,
     ImageProductPayment,
-    InputDataIndentification,
     InputDelivery,
-    InputEmail,
     InputPropetyNameCard,
     LabelForm,
     PayIcon,
-    ProgressPaymentCard,
     SectionPayment,
     SelectCardData,
     TextCupom,
@@ -113,7 +104,7 @@ import { Button } from "../../components/ui/Button";
 import Router from "next/router";
 import { Loading } from "../../components/Loading";
 import CreditCardInput from 'react-credit-card-input';
-import SelectParcelasCardPay from "../../components/ui/Select";
+import SelectParcelasCardPay from "../../components/ui/SelectParcelasCardPay";
 
 
 type CepProps = {
@@ -150,9 +141,9 @@ export default function Payment() {
         fretePaymentCoupon
     } = useContext(CartContext);
 
-    /* useEffect(() => {
+    useEffect(() => {
         refresh();
-    }); */
+    });
 
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
@@ -1569,8 +1560,11 @@ export default function Payment() {
 
     /* CARTÃO DE CRÉDITO */
 
+
+
     const [nomeTitular, setNomeTitular] = useState('');
     const [errorNameHolderCard, setErrorNameHolderCard] = useState("");
+    const [errorDocumentHolderCard, setErrorDocumentHolderCard] = useState("");
     const [numeroCartao, setNumeroCartao] = useState('');
     const [dataExpiracao, setDataExpiracao] = useState('');
     const [numeroSeguranca, setNumeroSeguranca] = useState('');
@@ -1655,6 +1649,9 @@ export default function Payment() {
             if (nomeTitular === "") {
                 setErrorNameHolderCard("Preencha o nome do titular do cartão");
                 return;
+            }
+            if (cpfOrCnpjPay === "") {
+                setErrorDocumentHolderCard("Preencha o documento do titular do cartão");
             }
             await apiClient.post("/paymentCardResult", {
                 holderName: nomeTitular,
@@ -2588,6 +2585,7 @@ export default function Payment() {
                                             maxLength={18}
                                             onChange={handleCnpjPayChange}
                                         />
+                                        <ErrorCard>{errorDocumentHolderCard}</ErrorCard>
                                     </BoxCard>
                                     :
                                     <BoxCard>
@@ -2599,6 +2597,7 @@ export default function Payment() {
                                             maxLength={14}
                                             onChange={handleCPFPayChange}
                                         />
+                                        <ErrorCard>{errorDocumentHolderCard}</ErrorCard>
                                     </BoxCard>
                                 }
 

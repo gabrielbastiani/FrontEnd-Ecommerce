@@ -427,8 +427,6 @@ export function CartProviderProducts({ children }: Props) {
 
   async function clearAllCart() {
 
-    await apiClient.delete(`/clearCart?store_cart_id=${storageId}`);
-
     localStorage.removeItem('@cartProducts');
 
     refresh();

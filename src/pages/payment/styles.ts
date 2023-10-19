@@ -97,16 +97,6 @@ export const DestinyName = styled.span`
   margin-bottom: 10px;
 `
 
-export const AddressTextIcon = styled.span`
-  display: flex;
-  align-items: center;
-  margin-bottom: 5px;
-
-  svg {
-    margin-right: 8px;
-  }
-`
-
 export const TextCurrent = styled.span`
   margin-bottom: 5px;
 `
@@ -279,7 +269,7 @@ export const LabelForm = styled.label`
 
 export const ErrorCard = styled.small`
   color: red;
-  font-size: 10px;
+  font-size: 12px;
 `
 
 export const SelectFormPay = styled.select`
@@ -287,10 +277,6 @@ export const SelectFormPay = styled.select`
 `
 
 export const FormPayBoletPix = styled.form``
-
-export const FormCard = styled.form`
-  width: 100%;
-`
 
 export const BoxDataCard = styled.div`
   width: 100%;
@@ -300,14 +286,6 @@ export const BoxDataCard = styled.div`
 export const BoxCard = styled.div`
   display: flex;
   width: 100%;
-  padding: 10px;
-`
-
-export const BoxDataCardExpiratio = styled.input`
-  width: 100%;
-  border: 2px solid;
-  height: 39px;
-  width: 80%;
   padding: 10px;
 `
 
@@ -330,13 +308,6 @@ export const InputPropetyNameCard = styled.input`
   margin-bottom: 15px;
 `
 
-export const InputEmail = styled.input`
-  border: 2px solid;
-  height: 39px;
-  width: 100%;
-  padding: 10px;
-`
-
 export const SelectCardData = styled.select`
   border: none;
   height: 39px;
@@ -345,17 +316,12 @@ export const SelectCardData = styled.select`
   margin: 12px;
 `
 
-export const InputDataIndentification = styled.input`
-  border: 2px solid;
-  height: 39px;
-  width: 80%;
-  padding: 10px;
-  margin: 12px;
-`
-
-export const BoxButtonPayment = styled.div`
+export const AddressTextIcon = styled.span`
   display: flex;
-  flex-direction: column;
-`
+  align-items: center;
+  margin-bottom: 5px;
 
-export const ProgressPaymentCard = styled.progress``
+  svg {
+    margin-right: 8px;
+  }
+`
