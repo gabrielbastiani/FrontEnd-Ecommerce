@@ -105,6 +105,7 @@ import Router from "next/router";
 import { Loading } from "../../components/Loading";
 import CreditCardInput from 'react-credit-card-input';
 import SelectParcelasCardPay from "../../components/ui/SelectParcelasCardPay";
+import { ModalErrorPayment } from "../../components/popups/ModalErrorPayment";
 
 
 type CepProps = {
@@ -201,6 +202,8 @@ export default function Payment() {
 
     const [modalItem, setModalItem] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+    const [modalVisibleErrorPayment, setModalVisibleErrorPayment] = useState(false);
+    const [menssageErrorPayment, setMenssageErrorPayment] = useState("");
 
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
@@ -1535,12 +1538,17 @@ export default function Payment() {
 
     function handleCloseModal() {
         setModalVisible(false);
+        setModalVisibleErrorPayment(false);
     }
 
     async function handleOpenModal(id: string) {
         const { data } = await apiClient.get(`/customer/delivery/findUniqueDelivery?deliveryAddressCustomer_id=${id}`);
         setModalItem(data);
         setModalVisible(true);
+    }
+
+    async function handleOpenModalErrorPayment() {
+        setModalVisibleErrorPayment(true);
     }
 
     Modal.setAppElement('#__next');
@@ -1680,30 +1688,72 @@ export default function Payment() {
                 customer_id: customer_id,
                 value_pay: Number(totalFinishCart.toFixed(2)),
                 installmentCount: numParcela,
-                installmentValue: valueParcela,
-                store_cart_id: cartProducts[0]?.store_cart_id,
-                frete_cupom: fretePaymentCoupon,
-                frete: fretePayment,
-                delivery_id: idSelected,
-                order_data_delivery: prazoEntrega,
-                name_cupom: nameCupomPayment,
-                cupom: cupomPayment,
-                peso: peso
-            });
+                installmentValue: valueParcela
+            }).then(async (response) => {
 
-            await apiClient.put(`/updateStockPayment${productsId}`);
+                if (response.data.status === 400) {
 
-            setLoadingPayment(true);
+                    setMenssageErrorPayment("OPS... Algo deu de errado com o seu pagamento, porfavor verifique os dados dos seu cartão de crédito.");
+                    handleOpenModalErrorPayment();
 
-            setTimeout(() => {
-                clearAllCart();
-            }, 2500);
+                    return;
 
-            Router.push('/thanks');
+                } else {
+
+                    try {
+                        await apiClient.post("/createFinishPaymentCardOrder", {
+                            store_cart_id: cartProducts[0]?.store_cart_id,
+                            frete_cupom: fretePaymentCoupon,
+                            frete: fretePayment,
+                            delivery_id: idSelected,
+                            order_data_delivery: prazoEntrega,
+                            name_cupom: nameCupomPayment,
+                            cupom: cupomPayment,
+                            peso: peso,
+                            number_card: numberCard,
+                            value_pay: Number(totalFinishCart.toFixed(2)),
+                            installmentCount: numParcela,
+                            value_pay_finish: response.data.value,
+                            customer_id: customer_id,
+                            transaction_id: response.data.id,
+                            last_number_credit_card: response.data.creditCard.creditCardNumber,
+                            expiration_month: dataExpirationCard[0],
+                            expiration_year: yaerExpirationCard,
+                            date_created: response.data.dateCreated,
+                            cardholder_name: nomeTitular,
+                            cardholder_identification_cpfCnpj: tipoDocumento,
+                            cardholder_cpfCnpj: formatCnpjOrCpf,
+                            flag_credit_card: response.data.creditCard.creditCardBrand,
+                            status_order: response.data.status
+                        });
+
+                        await apiClient.put(`/updateStockPayment${productsId}`);
+
+                        setLoadingPayment(true);
+
+                        setTimeout(() => {
+                            clearAllCart();
+                        }, 3000);
+
+                        Router.push('/thanks');
+
+                    } catch (error) {
+                        setMenssageErrorPayment("OPS... Algum erro ao gerar seu pedido, favor, entre em contato conosco para saber detalhes da situação do seu pedido.");
+                        handleOpenModalErrorPayment();
+                    }
+                }
+
+            })
+                .catch((erro) => {
+                    console.error(erro);
+                    setMenssageErrorPayment("OPS... Algo deu de errado com o seu pagamento, porfavor verifique os dados dos seu cartão de crédito.");
+                    handleOpenModalErrorPayment();
+                });
 
         } catch (error) {
-            console.log(error.response.data);
-            toast.error(`${error.response.data}`);
+            console.log(error);
+            setMenssageErrorPayment("OPS... Algum erro ao gerar seu pedido, favor, entre em contato conosco para saber detalhes da situação do seu pedido.");
+            handleOpenModalErrorPayment();
         }
 
     }
@@ -1718,30 +1768,63 @@ export default function Payment() {
         try {
             await apiClient.post("/paymentBoletoResult", {
                 customer_id: customer_id,
-                value_pay: Number(totalFinishCart.toFixed(2)),
-                store_cart_id: cartProducts[0]?.store_cart_id,
-                frete_cupom: fretePaymentCoupon,
-                frete: fretePayment,
-                delivery_id: idSelected,
-                order_data_delivery: prazoEntrega,
-                name_cupom: nameCupomPayment,
-                cupom: cupomPayment,
-                peso: peso
-            });
+                value_pay: Number(totalFinishCart.toFixed(2))
+            }).then(async (response) => {
 
-            await apiClient.put(`/updateStockPayment${productsId}`);
+                if (response.data.status === 400) {
 
-            setLoadingPayment(true);
+                    setMenssageErrorPayment("OPS... Algo deu de errado ao gerar o seu boleto para pagar o pedido.");
+                    handleOpenModalErrorPayment();
 
-            setTimeout(() => {
-                clearAllCart();
-            }, 2500);
+                    return;
 
-            Router.push('/thanks');
+                } else {
+
+                    try {
+                        await apiClient.post("/createFinishPaymentBoletoOrder", {
+                            customer_id: customer_id,
+                            transaction_id: response.data.id,
+                            value_pay: Number(totalFinishCart.toFixed(2)),
+                            expiration_boleto: response.data.dueDate,
+                            store_cart_id: cartProducts[0]?.store_cart_id,
+                            external_resource_url: response.data.bankSlipUrl,
+                            status_order: response.data.status,
+                            frete_cupom: fretePaymentCoupon,
+                            frete: fretePayment,
+                            delivery_id: idSelected,
+                            order_data_delivery: prazoEntrega,
+                            name_cupom: nameCupomPayment,
+                            cupom: cupomPayment,
+                            peso: peso
+                        });
+
+                        await apiClient.put(`/updateStockPayment${productsId}`);
+
+                        setLoadingPayment(true);
+
+                        setTimeout(() => {
+                            clearAllCart();
+                        }, 3000);
+
+                        Router.push('/thanks');
+
+                    } catch (error) {
+                        setMenssageErrorPayment("OPS... Algum erro ao gerar seu pedido, favor, entre em contato conosco para saber detalhes da situação do seu pedido.");
+                        handleOpenModalErrorPayment();
+                    }
+                }
+
+            })
+                .catch((erro) => {
+                    console.error(erro);
+                    setMenssageErrorPayment("OPS... Algo deu de errado ao gerar o seu boleto para pagar o pedido.");
+                    handleOpenModalErrorPayment();
+                });
 
         } catch (error) {
-            console.log(error.response.data);
-            toast.error("OPS... Erro ao gerar seu boleto para pagamento, tente novamente por favor.");
+            console.log(error);
+            setMenssageErrorPayment("OPS... Algum erro ao gerar seu pedido, favor, entre em contato conosco para saber detalhes da situação do seu pedido.");
+            handleOpenModalErrorPayment();
         }
 
     }
@@ -2869,6 +2952,14 @@ export default function Payment() {
                     lastCustomerDelivery={lastCustomerDelivery}
                     refresh={refresh}
                     deliverysFunc={deliverys}
+                />
+            )}
+
+            {modalVisibleErrorPayment && (
+                <ModalErrorPayment
+                    isOpen={modalVisibleErrorPayment}
+                    onRequestClose={handleCloseModal}
+                    menssage={menssageErrorPayment}
                 />
             )}
         </>
