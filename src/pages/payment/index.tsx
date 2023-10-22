@@ -1833,66 +1833,83 @@ export default function Payment() {
 
     /* PIX */
 
-    async function handleRegisterPix(event: FormEvent) {
-        event.preventDefault();
+    
+
+    async function handleRegisterPix() {
         try {
+            await apiClient.post("/paymentPixResult", {
+                customer_id: customer_id,
+                value_pay: Number(totalFinishCart.toFixed(2))
+            }).then(async (response) => {
 
-            setLoadingPayment(false);
+                if (response.data.status === 400) {
 
-            fetch("http://localhost:3333/paymentPixResult", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${"Bearer " + PUBLIC_KEY_TEST}`
-                },
-                body: JSON.stringify({
-                    transaction_amount: Number(totalFinishCart.toFixed(2)),
-                    description: store,
-                    payment_method_id: 'pix',
-                    payer: {
-                        email: emails,
-                        first_name: nameCompletes,
-                        last_name: nameCompletes,
-                        identification: {
-                            type: tipo,
-                            number: removerAcentos(cpfCnpj)
-                        },
-                        address: {
-                            zip_code: removerAcentos(ceps),
-                            street_name: locals,
-                            street_number: numeros,
-                            neighborhood: bairros,
-                            city: cidades,
-                            federal_unit: estados
-                        }
-                    },
-                    metadata: {
-                        customer_id: customer_id,
-                        delivery_id: idSelected,
-                        order_data_delivery: prazoEntrega,
-                        name_cupom: nameCupomPayment,
-                        cupom: cupomPayment,
-                        store_cart_id: cartProducts[0]?.store_cart_id,
-                        frete: fretePayment,
-                        freteCupom: fretePaymentCoupon,
-                        peso: peso
-                    },
-                    notification_url: URL_NOTIFICATION
-                }),
-            });
+                    setMenssageErrorPayment("OPS... Algo deu de errado ao gerar a chave PIX e o QR Code para o pagamento do seu pedido.");
+                    handleOpenModalErrorPayment();
 
-            await apiClient.put(`/updateStockPayment${productsId}`);
+                    return;
 
-            setLoadingPayment(true);
+                } else {
 
-            setTimeout(() => {
-                clearAllCart();
-            }, 2500);
+                    try {
 
-            Router.push('/thanks');
+                        const id_pay_pix = response.data.id;
+
+                        await apiClient.get(`/findResultsPIXPayment?id_pay_pix=${id_pay_pix}`)
+                            .then(async (res) => {
+
+                                await apiClient.post("/createFinishPaymentPIXOrder", {
+                                    customer_id: customer_id,
+                                    transaction_id: response.data.id,
+                                    key_payment_pix: res.data.payload,
+                                    qr_code_pix: res.data.encodedImage,
+                                    key_valid_pix: res.data.expirationDate,
+                                    value_pay: Number(totalFinishCart.toFixed(2)),
+                                    status_order: response.data.status,
+                                    store_cart_id: cartProducts[0]?.store_cart_id,
+                                    frete_cupom: fretePaymentCoupon,
+                                    frete: fretePayment,
+                                    delivery_id: idSelected,
+                                    order_data_delivery: prazoEntrega,
+                                    name_cupom: nameCupomPayment,
+                                    cupom: cupomPayment,
+                                    peso: peso
+                                });
+
+                                await apiClient.put(`/updateStockPayment${productsId}`);
+
+                                setLoadingPayment(true);
+
+                                setTimeout(() => {
+                                    clearAllCart();
+                                }, 3000);
+
+                                Router.push('/thanks');
+
+                            })
+                            .catch((erro) => {
+                                console.error(erro);
+                                setMenssageErrorPayment("OPS... Algo deu de errado ao gerar a chave PIX e o QR Code para o pagamento do seu pedido.");
+                                handleOpenModalErrorPayment();
+                            });
+
+                    } catch (error) {
+                        setMenssageErrorPayment("OPS... Algum erro ao gerar seu pedido, favor, entre em contato conosco para saber detalhes da situação do seu pedido.");
+                        handleOpenModalErrorPayment();
+                    }
+                }
+
+            })
+                .catch((erro) => {
+                    console.error(erro);
+                    setMenssageErrorPayment("OPS... Algo deu de errado ao gerar a chave PIX e o QR Code para o pagamento do seu pedido.");
+                    handleOpenModalErrorPayment();
+                });
 
         } catch (error) {
-            console.error("Erro ao fazer a requisição:", error);
+            console.log(error);
+            setMenssageErrorPayment("OPS... Algum erro ao gerar seu pedido, favor, entre em contato conosco para saber detalhes da situação do seu pedido.");
+            handleOpenModalErrorPayment();
         }
     }
 
@@ -2732,18 +2749,16 @@ export default function Payment() {
                         }
 
                         {activePayment === "pix" ?
-                            <FormPayBoletPix id="form-checkoutPix" onSubmit={handleRegisterPix}>
-                                <BoxFinalCart>
-                                    <TextCurrentBold style={{ fontSize: '19px', marginBottom: '10px' }}>Total a pagar: </TextCurrentBold>
-                                    <TextCurrent style={{ color: 'red', fontSize: '19px' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}</TextCurrent>
-                                    <Button
-                                        style={{ margin: '30px', width: '80%' }}
-                                        id="form-checkoutPix" type="submit"
-                                    >
-                                        FINALIZAR COMPRA<br />E GERAR CHAVE PIX
-                                    </Button>
-                                </BoxFinalCart>
-                            </FormPayBoletPix>
+                            <BoxFinalCart>
+                                <TextCurrentBold style={{ fontSize: '19px', marginBottom: '10px' }}>Total a pagar: </TextCurrentBold>
+                                <TextCurrent style={{ color: 'red', fontSize: '19px' }}>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalFinishCart)}</TextCurrent>
+                                <Button
+                                    style={{ margin: '30px', width: '80%' }}
+                                    onClick={handleRegisterPix}
+                                >
+                                    FINALIZAR COMPRA<br />E GERAR CHAVE PIX
+                                </Button>
+                            </BoxFinalCart>
                             :
                             null
                         }
