@@ -1,8 +1,6 @@
-import { PUBLIC_KEY_TEST, URL_NOTIFICATION } from "../../utils/config";
-import { FormEvent, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { canSSRAuthPayment } from "../../utils/canSSRAuthPayment";
 import { setupAPIClient } from "../../services/api";
-import { loadMercadoPago } from "@mercadopago/sdk-js";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../contexts/AuthContext";
 import { CartContext } from "../../contexts/CartContext";
@@ -341,7 +339,6 @@ export default function Payment() {
     const handleChosePayment = (id: string) => {
         setActivePayment(id);
         setColorPay(id);
-        loadMercadoPago();
     };
 
     function isEmail(emails: string) {
