@@ -3,12 +3,18 @@ import { setupAPIClient } from "../../services/api";
 import Head from "next/head";
 import { HeaderStore } from "../../components/HeaderStore";
 import { PageSection } from "../../components/dateStoreUx/styles";
-import { Avisos } from "../../components/Avisos";
 import Titulos from "../../components/Titulos";
-import { ContentBox, EtiquetaContato, InputContact, MessageArea, OpcoesSector, SectionPage, SelectSector } from "./styles";
+import {
+    ContentBox,
+    EtiquetaContato,
+    InputContact,
+    MessageArea,
+    OpcoesSector,
+    SectionPage,
+    SelectSector
+} from "./styles";
 import { FooterStore } from "../../components/FooterStore";
 import FooterAccount from "../../components/FooterAccount";
-import { IMaskInput } from "react-imask";
 import { toast } from "react-toastify";
 import Router from "next/router";
 import { Button } from "../../components/ui/Button";
@@ -29,6 +35,23 @@ export default function Atendimento() {
 
     const [sectorSelected, setSectorSelected] = useState();
 
+    const formatPhoneNumber = (input: string) => {
+        const cleanedInput = input.replace(/\D/g, '');
+        if (cleanedInput.length <= 2) {
+            return `(${cleanedInput}`;
+        } else if (cleanedInput.length <= 6) {
+            return `(${cleanedInput.slice(0, 2)}) ${cleanedInput.slice(2)}`;
+        } else {
+            return `(${cleanedInput.slice(0, 2)}) ${cleanedInput.slice(2, 6)}-${cleanedInput.slice(6, 11)}`;
+        }
+    };
+
+    const handlePhoneNumberChange = (e: { target: { value: any; }; }) => {
+        const inputValue = e.target.value;
+        const formattedValue = formatPhoneNumber(inputValue);
+        setPhone(formattedValue);
+    };
+
     function handleChangeSector(e: any) {
         setSectorSelected(e.target.value);
     }
@@ -36,6 +59,8 @@ export default function Atendimento() {
     function isEmail(email: string) {
         return /^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/.test(email);
     };
+
+    console.log(phone)
 
     async function sendMessageStore() {
         try {
@@ -127,14 +152,10 @@ export default function Atendimento() {
                             <br />
                             <Input
                                 style={{ background: 'white', color: 'black' }}
-                                /* @ts-ignore */
-                                as={IMaskInput}
-                                /* @ts-ignore */
-                                mask="(00) 0000-0000"
                                 type="text"
-                                placeholder="(00) 0000-0000"
+                                placeholder="(00) 00000-0000"
                                 value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
+                                onChange={handlePhoneNumberChange}
                             />
                         </EtiquetaContato>
                         <br />

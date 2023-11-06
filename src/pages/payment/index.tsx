@@ -280,7 +280,6 @@ export default function Payment() {
 
     const formatPhoneNumber = (input: string) => {
         const cleanedInput = input.replace(/\D/g, '');
-
         if (cleanedInput.length <= 2) {
             return `(${cleanedInput}`;
         } else if (cleanedInput.length <= 6) {
