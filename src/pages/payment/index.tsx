@@ -45,7 +45,6 @@ import {
     DestinyName,
     EditDelivery,
     ErrorCard,
-    FormPayBoletPix,
     ImageProductPayment,
     InputDelivery,
     InputPropetyNameCard,
@@ -139,10 +138,6 @@ export default function Payment() {
         fretePayment,
         fretePaymentCoupon
     } = useContext(CartContext);
-
-    useEffect(() => {
-        refresh();
-    });
 
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
@@ -1805,20 +1800,21 @@ export default function Payment() {
                         Router.push('/thanks');
 
                     } catch (error) {
+                        console.log(error.response.data);
                         setMenssageErrorPayment("OPS... Algum erro ao gerar seu pedido, favor, entre em contato conosco para saber detalhes da situação do seu pedido.");
                         handleOpenModalErrorPayment();
                     }
                 }
 
             })
-                .catch((erro) => {
-                    console.error(erro);
+                .catch((error) => {
+                    console.log(error.response.data);
                     setMenssageErrorPayment("OPS... Algo deu de errado ao gerar o seu boleto para pagar o pedido.");
                     handleOpenModalErrorPayment();
                 });
 
         } catch (error) {
-            console.log(error);
+            console.log(error.response.data);
             setMenssageErrorPayment("OPS... Algum erro ao gerar seu pedido, favor, entre em contato conosco para saber detalhes da situação do seu pedido.");
             handleOpenModalErrorPayment();
         }

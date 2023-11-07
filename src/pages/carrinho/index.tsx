@@ -1415,7 +1415,7 @@ export default function Carrinho() {
                                                 <Total>{new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedCupom)}</Total>
                                             </BoxPricesFinal>
 
-                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format((formatedCupom) / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(formatedCupom / 12)} com juros de Cartão de Crédito</ConditionPrices>
                                         </>
                                     ) :
                                         <>
@@ -1473,7 +1473,7 @@ export default function Carrinho() {
                                                 }
                                             </BoxPricesFinal>
 
-                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalCart + formatedFrete / 12)} com juros de Cartão de Crédito</ConditionPrices>
+                                            <ConditionPrices>12x de {new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format((totalCart + formatedFrete) / 12)} com juros de Cartão de Crédito</ConditionPrices>
                                         </>
                                     }
                                 </>
