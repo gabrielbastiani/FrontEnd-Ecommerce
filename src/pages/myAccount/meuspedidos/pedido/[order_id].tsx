@@ -7,7 +7,7 @@ import { Card } from "../../../../components/dateClientUx/CardContent/styles";
 import Titulos from "../../../../components/Titulos";
 import { canSSRAuth } from "../../../../utils/canSSRAuth";
 import { setupAPIClient } from "../../../../services/api";
-import { AtributeProduct, BlockData, BoxComment, BoxData, BoxDataProduct, BoxPix, BoxPriceProductCart, BoxPrices, BoxPricesTotalProduct, BoxProductCart, BoxTopStatusGeral, BoxTotal, ButtoQRCode, ButtonPix, ButtonSendComment, Comments, ContainerComments, ContainerCommets, DataComment, GridOrder, ImageProductCart, InputPix, NameProduct, PriceProduct, PriceProductData, SectionOrder, Sku, StatusTop, TextComment, TextData, TextDataOrder, TextTotal, TextUser, TotalFrete, TotalOrder, TotalTop, WhatsButton } from "./styles";
+import { AtributeProduct, BlockData, BoxComment, BoxData, BoxDataProduct, BoxPix, BoxPriceProductCart, BoxPrices, BoxPricesTotalProduct, BoxProductCart, BoxTopStatusGeral, BoxTotal, BoxTracking, ButtoQRCode, ButtonPix, ButtonSendComment, Comments, ContainerComments, ContainerCommets, DataComment, DateTracking, GridOrder, ImageProductCart, InputPix, NameProduct, PriceProduct, PriceProductData, SectionOrder, Sku, StatusTop, TextComment, TextData, TextDataOrder, TextTotal, TextUser, TotalFrete, TotalOrder, TotalTop, WhatsButton } from "./styles";
 import { toast } from "react-toastify";
 import Modal from 'react-modal';
 import copy from "copy-to-clipboard";
@@ -22,6 +22,7 @@ import commentss from "../../../../assets/user-comment.png";
 import Image from "next/image";
 import { TextStrong } from "../../../carrinho/styles";
 import { ModalQRCodePayment } from "../../../../components/popups/ModalQRCodePayment";
+import { DivisorHorizontal } from "../../../../components/ui/DivisorHorizontal";
 
 
 interface CustomerProps {
@@ -118,6 +119,8 @@ export default function Pedido() {
 
     const [modalVisibleQRCode, setModalVisibleQRCode] = useState(false);
 
+    const [trackingHistory, setTrackingHistory] = useState<any[]>([]);
+
     const payFrete = Number(order?.frete);
     const totalPay = Number(orderPayment?.total_payment_juros ? orderPayment?.total_payment_juros : orderPayment?.total_payment);
     const payInstallment = Number(orderPayment?.installment_amount);
@@ -126,6 +129,24 @@ export default function Pedido() {
         copy(keyPix);
         toast.success(`Você copiou o código com sucesso!!!`);
     }
+
+    /* @ts-ignore */
+    const idShips = String(order?.shipmentsTrackings[0]?.id);
+
+    useEffect(() => {
+        async function loadRastreio() {
+            const apiClient = setupAPIClient();
+            try {
+                const { data } = await apiClient.get(`/findAllDateTracking?shippingTracking_id=${idShips}`);
+
+                setTrackingHistory(data || []);
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        loadRastreio();
+    }, [idShips]);
 
     useEffect(() => {
         async function loadorderdata() {
@@ -209,7 +230,7 @@ export default function Pedido() {
 
     Modal.setAppElement('body');
 
-    
+
 
 
     return (
@@ -416,8 +437,20 @@ export default function Pedido() {
 
                             <BlockData style={{ display: 'flex', flexDirection: 'column' }}>
                                 <br />
-                                <TextDataOrder>CÓDIGO DE RASTREIO: {codeRastreio}</TextDataOrder>
+                                <TextDataOrder>CÓDIGO DE RASTREIO: {trackingHistory[0]?.code_tracking}</TextDataOrder>
                             </BlockData>
+
+                            {trackingHistory.map((item, index) => {
+                                return (
+                                    <>
+                                        <BoxTracking key={index}>
+                                            <TextDataOrder>STATUS: {item.status_frete}</TextDataOrder>
+                                            <DateTracking>{moment(item.created_at).format('DD/MM/YYYY - HH:mm')}</DateTracking>
+                                            <DivisorHorizontal />
+                                        </BoxTracking>
+                                    </>
+                                )
+                            })}
 
                         </Card>
 
