@@ -292,6 +292,28 @@ export default function Pedido() {
                             null
                         }
 
+                        {orderStatus === "RECEIVED" ?
+                            <StatusTop style={{
+                                backgroundColor: 'orange',
+                                color: 'white'
+                            }}>
+                                Saldo creditado
+                            </StatusTop>
+                            :
+                            null
+                        }
+
+                        {orderStatus === "OVERDUE" ?
+                            <StatusTop style={{
+                                backgroundColor: 'blue',
+                                color: 'white'
+                            }}>
+                                Cobrança vencida
+                            </StatusTop>
+                            :
+                            null
+                        }
+
                         {orderStatus === "CANCELLED" ?
                             <StatusTop style={{
                                 backgroundColor: 'red',
@@ -320,6 +342,28 @@ export default function Pedido() {
                                 color: 'black'
                             }}>
                                 Estornado
+                            </StatusTop>
+                            :
+                            null
+                        }
+
+                        {orderStatus === "REFUND_REQUESTED" ?
+                            <StatusTop style={{
+                                backgroundColor: 'gray',
+                                color: 'white'
+                            }}>
+                                Estorno Solicitado
+                            </StatusTop>
+                            :
+                            null
+                        }
+
+                        {orderStatus === "REFUND_IN_PROGRESS" ?
+                            <StatusTop style={{
+                                backgroundColor: 'violet',
+                                color: 'white'
+                            }}>
+                                Estorno em processo
                             </StatusTop>
                             :
                             null
