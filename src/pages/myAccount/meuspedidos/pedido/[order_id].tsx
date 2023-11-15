@@ -735,7 +735,7 @@ export default function Pedido() {
                         {comments.map((item, index: Key) => {
                             return (
                                 <ContainerComments key={index}>
-                                    {item?.active === "Nao" ? (
+                                    {item?.active === "Sim" ? (
                                         <>
                                             <DataComment>{moment(item?.created_at).format('DD/MM/YYYY - HH:mm')}</DataComment>
                                             <BoxComment>
