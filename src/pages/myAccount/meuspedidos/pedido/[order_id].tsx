@@ -205,13 +205,13 @@ export default function Pedido() {
             await apiClient.post(`/createOrderCommentsStore`, {
                 comment: commentOrder,
                 order_id: order_id,
-                user_comment: storeCommentUser
+                user_comment: storeCommentUser,
+                active: "Sim"
             });
 
             toast.success("Comentários adicionado com sucesso");
 
             setCommentOrder("");
-
             loadCommentsOrder();
 
         } catch (error) {
