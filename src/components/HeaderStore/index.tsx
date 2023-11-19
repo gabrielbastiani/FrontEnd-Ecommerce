@@ -322,6 +322,8 @@ export const HeaderStore = () => {
             .replace(',', "")
     }
 
+    
+
     return (
         <>
             <ContainerHeaderStore>
