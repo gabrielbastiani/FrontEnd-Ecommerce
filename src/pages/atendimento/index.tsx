@@ -42,7 +42,7 @@ export default function Atendimento() {
         } else if (cleanedInput.length <= 6) {
             return `(${cleanedInput.slice(0, 2)}) ${cleanedInput.slice(2)}`;
         } else {
-            return `(${cleanedInput.slice(0, 2)}) ${cleanedInput.slice(2, 6)}-${cleanedInput.slice(6, 11)}`;
+            return `(${cleanedInput.slice(0, 2)}) ${cleanedInput.slice(2, 6)}-${cleanedInput.slice(6, 10)}`;
         }
     };
 
