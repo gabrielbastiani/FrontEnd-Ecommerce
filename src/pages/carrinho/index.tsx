@@ -263,6 +263,11 @@ export default function Carrinho() {
                 return;
             }
 
+            if (data?.amountCoupon === 0) {
+                toast.error("Desculpe... mas acabou a quantidade promovidas para esse cupom de desconto");
+                return;
+            }
+
             /*"Valor de desconto (Produto(s) selecionado(s) para essa promoção)", value: "productsValue"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "productsValue") {

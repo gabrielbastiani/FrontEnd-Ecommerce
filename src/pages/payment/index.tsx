@@ -1026,6 +1026,11 @@ export default function Payment() {
                 return;
             }
 
+            if (data?.amountCoupon === 0) {
+                toast.error("Desculpe... mas acabou a quantidade promovidas para esse cupom de desconto");
+                return;
+            }
+
             /*"Valor de desconto (Produto(s) selecionado(s) para essa promoção)", value: "productsValue"*/
 
             if (data?.coupomsconditionals[0]?.conditional === "productsValue") {
@@ -1718,6 +1723,10 @@ export default function Payment() {
                             status_order: response.data.status
                         });
 
+                        if (cupomPayment) {
+                            await apiClient.put(`/updateStockCoupon?code=${cupomPayment}`);
+                        }
+
                         await apiClient.put(`/updateStockPayment${productsId}`);
 
                         setLoadingPayment(true);
@@ -1788,6 +1797,10 @@ export default function Payment() {
                             cupom: cupomPayment,
                             peso: peso
                         });
+
+                        if (cupomPayment) {
+                            await apiClient.put(`/updateStockCoupon?code=${cupomPayment}`);
+                        }
 
                         await apiClient.put(`/updateStockPayment${productsId}`);
 
@@ -1867,6 +1880,10 @@ export default function Payment() {
                                     cupom: cupomPayment,
                                     peso: peso
                                 });
+
+                                if (cupomPayment) {
+                                    await apiClient.put(`/updateStockCoupon?code=${cupomPayment}`);
+                                }
 
                                 await apiClient.put(`/updateStockPayment${productsId}`);
 
