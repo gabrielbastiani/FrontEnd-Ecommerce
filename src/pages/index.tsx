@@ -14,6 +14,7 @@ import { CartContext } from "../contexts/CartContext";
 import { Loading } from "../components/Loading";
 import ChatIA from "../components/ChatIA";
 import CountdownTimer from "../components/CountdownTimer";
+import Chat from "../components/Chat";
 
 
 export default function Home() {
@@ -42,6 +43,7 @@ export default function Home() {
           <ChatIA />
           <FooterStore />
           <FooterAccount />
+          <Chat />
         </>
       }
     </>

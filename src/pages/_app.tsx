@@ -10,6 +10,15 @@ import { Router } from 'next/dist/client/router';
 import NProgress from "nprogress";
 import 'nprogress/nprogress.css';
 import { CartProviderProducts } from '../contexts/CartContext';
+import ChatLive from '../components/ChatLive';
+import { useEffect } from 'react';
+import { initGA, logPageView } from '../components/GoogleAnalytics';
+
+declare global {
+  interface Window {
+    GA_INITIALIZED: boolean;
+  }
+}
 
 NProgress.configure({ easing: 'ease', speed: 500 });
 
@@ -23,8 +32,18 @@ Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }: AppProps) {
+
+  useEffect(() => {
+    if (!window.GA_INITIALIZED) {
+      initGA();
+      window.GA_INITIALIZED = true;
+    }
+    logPageView();
+  }, []);
+
   return (
     <>
+      <ChatLive />
       <ThemeProvider theme={theme}>
         <AuthProvider>
           <CartProviderProducts>
