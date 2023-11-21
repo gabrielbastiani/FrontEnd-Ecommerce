@@ -13,6 +13,7 @@ import { CartProviderProducts } from '../contexts/CartContext';
 import ChatLive from '../components/ChatLive';
 import { useEffect } from 'react';
 import { initGA, logPageView } from '../components/GoogleAnalytics';
+import Chat from '../components/Chat';
 
 declare global {
   interface Window {
@@ -43,6 +44,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Chat />
       <ChatLive />
       <ThemeProvider theme={theme}>
         <AuthProvider>

@@ -5,17 +5,19 @@ import { Chats } from "./styles";
 
 const Chat = () => {
 
+    const apiClient = setupAPIClient();
+
     function removerSimbolos(str: string) {
         return str.replace(/[^a-zA-Z0-9]/g, '');
     }
 
     const [whats, setWhats] = useState("");
+    const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
 
     const phone = removerSimbolos(whats);
 
     useEffect(() => {
         async function loadStore() {
-            const apiClient = setupAPIClient();
             try {
                 const response = await apiClient.get(`/store`);
                 setWhats(response.data.cellPhone || "");
@@ -27,15 +29,30 @@ const Chat = () => {
     }, []);
 
     const openWhatsAppChat = () => {
-        const url = `https://api.whatsapp.com/send?phone=${phone}`;
+        const url = `https://api.whatsapp.com/send?phone=${datasConfigs[0]?.number_whatsapp ? datasConfigs[0]?.number_whatsapp : phone}`;
         window.open(url, '_blank');
     };
+
+    useEffect(() => {
+        async function reloadsConfigs() {
+            try {
+                const { data } = await apiClient.get(`/reloadDatasConfigsStore`);
+                setDatasConfigs(data || []);
+            } catch (error) {/* @ts-ignore */
+                console.log(error.response.data);
+            }
+        }
+        reloadsConfigs();
+    }, []);
+
+    const display = datasConfigs[0]?.chat_whatsapp === "Disponivel" ? "block" : "none";
 
 
 
     return (
         <Chats
             style={{
+                display: display,
                 position: 'fixed',
                 bottom: '20px',
                 right: '20px',
