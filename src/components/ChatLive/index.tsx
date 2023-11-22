@@ -19,8 +19,6 @@ const ChatLive = () => {
         reloadsConfigs();
     }, []);
 
-    console.log(datasConfigs[0]?.code_live_chat_tawkTo)
-
 
     return (
         <ChatsLive>
