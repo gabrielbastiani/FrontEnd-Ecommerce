@@ -63,12 +63,14 @@ export default function Meuspedidos() {
         allPedidosUser();
     }, [currentPage, limit, total, customer_id]);
 
+    console.log(search)
+
     const dados = [];
     (search || []).forEach((item) => {
         dados.push({
             "Pedido": item.id_order_store,
             "Nome": item.customer.name,
-            "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment_juros ? item.payment.total_payment_juros : item.payment.total_payment),
+            "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment_juros ? item.payment.total_payment_juros + item.frete : item.payment.total_payment + item.frete),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
             "Situação": item.statusOrder[0].status_order === "PENDING" ? "Pendente de pagamento" : item.statusOrder[0].status_order === "CONFIRMED" ? "Aprovado" : "Processando ou Cancelado",
             "botaoDetalhes": `/myAccount/meuspedidos/pedido/${item.id}`
