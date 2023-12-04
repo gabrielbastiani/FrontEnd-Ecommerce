@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { setupAPIClient } from "../../services/api";
-import { FaWhatsapp } from "react-icons/fa";
 import { Chats } from "./styles";
+import { FloatingWhatsApp } from "react-floating-whatsapp";
 
 const Chat = () => {
 
@@ -12,6 +12,8 @@ const Chat = () => {
     }
 
     const [whats, setWhats] = useState("");
+    const [storeName, setStoreName] = useState("");
+    const [logoStore, setLogoStore] = useState("");
     const [datasConfigs, setDatasConfigs] = useState<any[]>([]);
 
     const phone = removerSimbolos(whats);
@@ -20,18 +22,15 @@ const Chat = () => {
         async function loadStore() {
             try {
                 const response = await apiClient.get(`/store`);
-                setWhats(response.data.cellPhone || "");
+                setWhats(response?.data?.cellPhone || "");
+                setStoreName(response?.data?.name || "");
+                setLogoStore(response?.data?.logo || "");
             } catch (error) {
                 console.log(error);
             }
         }
         loadStore();
     }, []);
-
-    const openWhatsAppChat = () => {
-        const url = `https://api.whatsapp.com/send?phone=${datasConfigs[0]?.number_whatsapp ? datasConfigs[0]?.number_whatsapp : phone}`;
-        window.open(url, '_blank');
-    };
 
     useEffect(() => {
         async function reloadsConfigs() {
@@ -47,25 +46,28 @@ const Chat = () => {
 
     const display = datasConfigs[0]?.chat_whatsapp === "Disponivel" ? "block" : "none";
 
-
+    
 
     return (
         <Chats
             style={{
-                display: display,
-                position: 'fixed',
-                bottom: '20px',
-                right: '20px',
-                backgroundColor: '#25d366',
-                padding: '10px',
-                borderRadius: '50%',
-                cursor: 'pointer',
-                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                zIndex: '9999',
+                display: display
             }}
-            onClick={openWhatsAppChat}
         >
-            <FaWhatsapp size={38} color="#fff" />
+            <FloatingWhatsApp
+                phoneNumber={datasConfigs[0]?.number_whatsapp ? datasConfigs[0]?.number_whatsapp : phone}
+                accountName={storeName}
+                allowEsc
+                allowClickAway
+                notification
+                notificationSound
+                chatMessage='Olá, em que posso ajudar?'
+                placeholder='Escreva aqui!'
+                statusMessage='Respondemos rápido'
+                avatar={"http://localhost:3333/files/" + logoStore}
+                buttonStyle={{ left: '50px' }}
+                chatboxStyle={{ left: '20px' }}
+            />
         </Chats>
     );
 };

@@ -70,10 +70,11 @@ export default function Meuspedidos() {
             "Nome": item.customer.name,
             "Valor Total": new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.payment.total_payment_juros ? item.payment.total_payment_juros : item.payment.total_payment),
             "Data": moment(item.created_at).format('DD/MM/YYYY - HH:mm'),
-            "Situação": item.statusOrder[0].status_order === "PENDING" ? "Pendente de pagamento" : item.statusOrder[0].status_order === "CONFIRMED" ? "Aprovado" : "Reprovado ou Cancelado",
+            "Situação": item.statusOrder[0].status_order === "PENDING" ? "Pendente de pagamento" : item.statusOrder[0].status_order === "CONFIRMED" ? "Aprovado" : "Processando ou Cancelado",
             "botaoDetalhes": `/myAccount/meuspedidos/pedido/${item.id}`
         });
     });
+    
 
 
     return (

@@ -2,6 +2,7 @@ import Head from "next/head";
 import { setupAPIClient } from "../../../services/api";
 import { canSSRAuth } from "../../../utils/canSSRAuth";
 import { HeaderAccount } from "../../../components/HeaderAccount";
+import Modal from 'react-modal';
 import { Grid } from "../../../components/dateClientUx/Estrutura/styles";
 import MainHeader from "../../../components/dateClientUx/MainHeader";
 import Aside from "../../../components/dateClientUx/Aside";
@@ -22,6 +23,8 @@ import { toast } from "react-toastify";
 import Titulos from "../../../components/Titulos";
 import { ButtonSelect } from "../../../components/ui/ButtonSelect";
 import Router from "next/router";
+import { Button } from "../../../components/ui/Button";
+import { ModalDesabledCustomer } from "../../../components/popups/ModalDesabledCustomer";
 
 
 export default function Meusdados() {
@@ -46,6 +49,8 @@ export default function Meusdados() {
     const [estadoSelected, setEstadoSelected] = useState();
     const [ceps, setCeps] = useState('');
     const [newslatters, setNewslatters] = useState("");
+
+    const [modalVisible, setModalVisible] = useState(false);
 
     const [generos, setGeneros] = useState([]);
     const [generoSelected, setGeneroSelected] = useState();
@@ -156,7 +161,7 @@ export default function Meusdados() {
                 city: cidades,
                 state: estadoSelected
             });
-            
+
             toast.success('Dado atualizado com sucesso.');
             refreshUser();
 
@@ -211,6 +216,17 @@ export default function Meusdados() {
         }
     }
 
+    function handleCloseModalDelete() {
+        setModalVisible(false);
+    }
+
+    async function handleOpenModalDelete() {
+        setModalVisible(true);
+    }
+
+    Modal.setAppElement('#__next');
+
+
 
     return (
         <>
@@ -230,7 +246,15 @@ export default function Meusdados() {
                                 tipo="h1"
                                 titulo="Meus Dados"
                             />
+
+                            <Button
+                                style={{ backgroundColor: '#FB451E' }}
+                                onClick={handleOpenModalDelete}
+                            >
+                                Desativar conta
+                            </Button>
                         </BlockTop>
+
                         <GridDate>
                             <SectionDate>
                                 <BlockDados>
@@ -574,6 +598,13 @@ export default function Meusdados() {
                     </Card>
                 </Container>
             </Grid>
+            {modalVisible && (
+                <ModalDesabledCustomer
+                    isOpen={modalVisible}
+                    onRequestClose={handleCloseModalDelete}
+                    customerID={customer_id}
+                />
+            )}
         </>
     )
 }
