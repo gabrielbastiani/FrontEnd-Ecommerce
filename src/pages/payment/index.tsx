@@ -1729,13 +1729,6 @@ export default function Payment() {
 
                         await apiClient.put(`/updateStockPayment${productsId}`);
 
-                        const totalPayStore: number = numParcela >= 9 ? Number(response.data.value) * numParcela : totalFinishCart;
-
-                        await apiClient.post("/createTotalPaymentsStore", {
-                            total_payment: freteCupom === 0 ? totalPayStore + fretePayment : totalCart + freteCupom,
-                            type_payment: "Cartão de Crédito"
-                        });
-
                         setLoadingPayment(true);
 
                         setTimeout(() => {
