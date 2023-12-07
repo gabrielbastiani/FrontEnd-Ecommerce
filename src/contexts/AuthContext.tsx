@@ -64,6 +64,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const isAuthenticated = !!customer;
 
   useEffect(() => {
+    async function storeVisited() {
+      await api.post('/createVisitedStore');
+    }
+    storeVisited();
+  }, []);
+
+  useEffect(() => {
 
     // tentar pegar algo no cookie
     const { '@storevirtual.token': token } = parseCookies();
