@@ -61,7 +61,6 @@ interface PaymentProps {
     flag_credit_card: string;
     installment: number;
     installment_amount: number;
-    total_payment_juros: number;
     total_payment: number;
     status: string;
 }
@@ -122,7 +121,7 @@ export default function Pedido() {
     const [trackingHistory, setTrackingHistory] = useState<any[]>([]);
 
     const payFrete = Number(order?.frete);
-    const totalPay = Number(orderPayment?.total_payment_juros ? orderPayment?.total_payment_juros : orderPayment?.total_payment);
+    const totalPay = Number(orderPayment?.total_payment);
     const payInstallment = Number(orderPayment?.installment_amount);
 
     const copyToClipboard = () => {
