@@ -180,6 +180,10 @@ export default function createAccountPayment() {
                 store_id: lojas_id
             });
 
+            if(news === "Sim") {
+                await apiClient.post('/createNewsletter', {name: names, email: email, store_id: lojas_id});
+            }
+
             toast.success('Cadastrado realizado com sucesso!!!');
 
             setLoading(false);
@@ -258,6 +262,10 @@ export default function createAccountPayment() {
                 newslatter: news,
                 store_id: lojas_id
             });
+
+            if(news === "Sim") {
+                await apiClient.post('/createNewsletter', {name: names, email: email, store_id: lojas_id});
+            }
 
             toast.success('Cadastrado realizado com sucesso!!!');
 
