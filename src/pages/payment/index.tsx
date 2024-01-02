@@ -215,7 +215,6 @@ export default function Payment() {
     const [activePayment, setActivePayment] = useState("");
     const [colorPay, setColorPay] = useState("");
 
-    const [cardBrand, setCardBrand] = useState<any>({});
     const [loadingCupom, setLoadingCupom] = useState(false);
     const [loadingFrete, setLoadingFrete] = useState(false);
     const [loadingNewFrete, setLoadingNewFrete] = useState(false);
