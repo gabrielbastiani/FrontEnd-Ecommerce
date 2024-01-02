@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { canSSRAuthPayment } from "../../utils/canSSRAuthPayment";
 import { setupAPIClient } from "../../services/api";
 import { toast } from "react-toastify";
@@ -103,6 +103,7 @@ import { Loading } from "../../components/Loading";
 import CreditCardInput from 'react-credit-card-input';
 import SelectParcelasCardPay from "../../components/ui/SelectParcelasCardPay";
 import { ModalErrorPayment } from "../../components/popups/ModalErrorPayment";
+import router from "next/router";
 
 
 type CepProps = {
@@ -138,6 +139,23 @@ export default function Payment() {
         fretePayment,
         fretePaymentCoupon
     } = useContext(CartContext);
+
+    const timeoutRef = useRef(null);
+
+    useEffect(() => {
+        if (!timeoutRef.current) {
+            timeoutRef.current = setTimeout(() => {
+                refresh();
+                timeoutRef.current = null;
+            }, 2500);
+        }
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+                timeoutRef.current = null;
+            }
+        };
+    }, []);
 
     const { customer, signOutPayment } = useContext(AuthContext);
     let customer_id = customer?.id;
@@ -1837,7 +1855,7 @@ export default function Payment() {
 
     /* PIX */
 
-    
+
 
     async function handleRegisterPix() {
         try {
